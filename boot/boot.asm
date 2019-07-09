@@ -66,7 +66,7 @@ cli
 
 lgdt [gdtPtr]
 mov eax, cr0
-or eax,0x1
+inc eax
 mov cr0, eax
 
 mov ax, dataSeg
@@ -77,6 +77,9 @@ mov gs, ax
 mov ss, ax
 
 sti
+
+mov dl, [bootDisk]
+mov cl, [numSectors]
 
 ; go to the second-stage bootloader
 jmp codeSeg:0x7E00
