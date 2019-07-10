@@ -4,6 +4,8 @@ MEMORY_MAP_MAGIC_WORD	equ	0x534D4150
 MEMORY_MAP_BIOS_FUNC	equ	0xE820
 MEMORY_MAP_DI_INC	equ	24
 
+STACK_POINTER_INIT	equ	0x9C00
+
 BITS 16
 
 ORG 0x7C00
@@ -19,6 +21,34 @@ int 0x10
 ; save boot disk
 mov [bootDisk], dl
 
+; set up segment selectors and stack
+xor ax, ax
+mov ds, ax
+mov ss, ax
+mov sp, STACK_POINTER_INIT
+
+cli
+
+push ds
+
+lgdt [gdtPtr]
+
+mov  eax, cr0
+inc eax
+mov  cr0, eax
+
+jmp $+2
+
+mov  bx, 0x08
+mov  ds, bx
+
+mov eax, cr0
+dec eax
+mov cr0, eax
+
+pop ds
+sti
+
 ; move bootloader sectors into memory
 mov ah, 0x2		; BIOS function - read sectors
 mov al, [numSectors] 	; # of sectors
@@ -29,85 +59,20 @@ mov dl, [bootDisk]	; disk
 mov bx, [loadTarget]	;location to load into
 int 0x13
 
-; get BIOS memory map
-
-getMemMap:
-
-xor ebx, ebx
-mov es, bx
-mov di, 0x0500		; beginning of first free-memory area
-mov edx, MEMORY_MAP_MAGIC_WORD
-xor eax, eax
-mov eax, MEMORY_MAP_BIOS_FUNC
-mov ecx, MEMORY_MAP_DI_INC
-int 0x15
-
-contMemMap:
-
-cmp eax, MEMORY_MAP_MAGIC_WORD
-jne failMemMap
-mov eax, MEMORY_MAP_BIOS_FUNC
-add di, MEMORY_MAP_DI_INC
-int 0x15
-cmp ebx, 0
-jz doneMemMap
-jc doneMemMap
-jmp contMemMap
-
-failMemMap:	; add some sort of error message
-hlt
-
-doneMemMap:
-
-
-; set up a basic protected mode environment
-; we're just here to get to long mode, so we can keep it simple
-cli
-
-lgdt [gdtPtr]
-mov eax, cr0
-inc eax
-mov cr0, eax
-
-mov ax, dataSeg
-mov ds, ax
-mov es, ax
-mov fs, ax
-mov gs, ax
-mov ss, ax
-
-sti
-
 mov dl, [bootDisk]
 mov cl, [numSectors]
 
-; go to the second-stage bootloader
-jmp codeSeg:0x7E00
+jmp 0x7E00
 
-gdtStart:
-  dq 0x0;
-gdtCodeSeg:
-  dw 0xFFFF
-  dw 0x0
-  db 0x0
-  db 10011010b
-  db 11001111b
-  db 0x0
-gdtDataSeg:
-  dw 0xFFFF
-  dw 0x0
-  db 0x0
-  db 10010010b
-  db 11001111b
-  db 0x0
-gdtEnd:
+hlt
 
 gdtPtr:
-  dw gdtEnd - gdtStart
-  dd gdtStart
-  
-codeSeg equ gdtCodeSeg - gdtStart
-dataSeg equ gdtDataSeg - gdtStart
+	dw gdt_end - gdt - 1
+	dd gdt
+	gdt		dd 0,0
+	flatdesc	db 0xff, 0xff, 0, 0, 0, 10010010b, 11001111b, 0
+
+gdt_end:
 
 bootDisk	db	0x0
 numSectors	db	0x1

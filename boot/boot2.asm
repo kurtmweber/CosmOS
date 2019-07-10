@@ -1,10 +1,9 @@
 ; kate: syntax Intel x86 (NASM);
 
-PMODE_MSG_BASE	equ	0xB8000
-KERNEL_MSG_BASE	equ	0xB80A0
-DONE_MSG_BASE	equ	0xB80C2
+KERNEL_MSG_BASE	equ	0xB8000
+DONE_MSG_BASE	equ	0xB8022
 
-BITS 32
+BITS 16
 
 ORG 0x7E00
 
@@ -21,18 +20,6 @@ mov byte [bootDisk], dl
 ; (sector #s start at 1 rather than 0, for some weird reason)
 add cl, 2
 mov byte [kernelBaseSector], cl
-
-mov esi, pModeMsg
-mov ebx, PMODE_MSG_BASE
-
-pModeMsgLoop:
-	lodsb
-	or al, al
-	jz kernelLoadMsgSetup
-	or eax, 0x0F00
-	mov word [ebx], ax
-	add ebx, 2
-	jmp pModeMsgLoop
   
 kernelLoadMsgSetup:
 	mov esi, kernelLoadMsg
@@ -52,13 +39,10 @@ kernelLoad:
 	xor ecx, ecx
 	mov cl, byte [numKernelSectors]
 	xor ebx, ebx
+	xor edx, edx
 	
 	.loadLoop:
 		push ecx
-
-		mov eax, cr0
-		dec eax
-		mov cr0, eax
 		
 		mov ah, 0x2
 		mov al, 1
@@ -71,12 +55,7 @@ kernelLoad:
 		mov bx, 0x500
 		int 0x13
 		pop ebx
-		
-		mov eax, cr0
-		inc eax
-		mov cr0, eax
 
-BITS 32
 		; after loading each sector from disk, copy it byte-by-byte into the proper location
 		mov ecx, 512
 		
@@ -122,8 +101,6 @@ kernelDoneMsgLoop:
 pagingMsg:
 	cli
 	hlt
-
-pModeMsg	db	"In 32-bit protected-mode...", 0
   
 kernelLoadMsg	db	"Loading kernel...", 0
 
