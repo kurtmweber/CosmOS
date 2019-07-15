@@ -37,7 +37,9 @@ mov  eax, cr0
 inc eax
 mov  cr0, eax
 
-jmp $+2
+jmp $+3
+nop
+nop
 
 mov  bx, 0x08
 mov  ds, bx

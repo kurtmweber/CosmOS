@@ -1,7 +1,10 @@
 ; kate: syntax Intel x86 (NASM);
 
-KERNEL_MSG_BASE	equ	0xB8000
-DONE_MSG_BASE	equ	0xB8022
+[map all boot2.map]
+
+MEMORY_MAP_MAGIC_WORD	equ	0x534D4150
+MEMORY_MAP_BIOS_FUNC	equ	0xE820
+MEMORY_MAP_DI_INC	equ	24
 
 BITS 16
 
@@ -19,21 +22,7 @@ mov byte [bootDisk], dl
 ; formula = sectors of second-stage bootloader + 1 for first-stage bootloader + 1 for the first sector of the kernel
 ; (sector #s start at 1 rather than 0, for some weird reason)
 add cl, 2
-mov byte [kernelBaseSector], cl
-  
-kernelLoadMsgSetup:
-	mov esi, kernelLoadMsg
-	mov ebx, KERNEL_MSG_BASE
-
-kernelLoadMsgLoop:
-	lodsb
-	or al, al
-	jz kernelLoad
-	or eax, 0x0F00
-	mov word [ebx], ax
-	add ebx, 2
-	jmp kernelLoadMsgLoop
-	
+mov byte [kernelBaseSector], cl	
 	
 kernelLoad:
 	xor ecx, ecx
@@ -85,31 +74,162 @@ kernelLoad:
 		pop ecx
 		
 		loop .loadLoop
-		
-mov esi, kernelDoneMsg
-mov ebx, DONE_MSG_BASE
+	
+getMemMap:
+	xor ebx, ebx
+	mov es, bx
+	mov di, 0x0500		; beginning of first free-memory area
+	mov edx, MEMORY_MAP_MAGIC_WORD
+	xor eax, eax
+	mov eax, MEMORY_MAP_BIOS_FUNC
+	mov ecx, MEMORY_MAP_DI_INC
+	int 0x15
 
-kernelDoneMsgLoop:
-	lodsb
-	or al, al
-	jz pagingMsg
-	or eax, 0x0F00
-	mov word [ebx], ax
-	add ebx, 2
-	jmp kernelDoneMsgLoop
+contMemMap:
+	cmp eax, MEMORY_MAP_MAGIC_WORD
+	jne failMemMap
+	mov eax, MEMORY_MAP_BIOS_FUNC
+	add di, MEMORY_MAP_DI_INC
+	int 0x15
+	cmp ebx, 0
+	jz doneMemMap
+	jc doneMemMap
+	jmp contMemMap
 
-pagingMsg:
-	cli
+failMemMap:	; TODO: add some sort of error message
 	hlt
-  
-kernelLoadMsg	db	"Loading kernel...", 0
 
-kernelDoneMsg	db	"done", 0
+doneMemMap:
+
+; switch back to pmode
+cli
+
+mov eax, cr0
+inc eax
+mov cr0, eax
+
+;[BITS 32]
+
+; load page table address into cr3
+mov edi, [pml4Base]
+mov cr3, edi
+
+; clear the PML4 area
+xor eax, eax
+mov ecx, 4096
+rep stosb
+
+mov edi, cr3
+
+; PML4 entry
+mov eax, [pml4Entry]
+mov [edi], eax
+
+mov edi, [pdptBase]
+
+; PDPT entry
+mov eax, [pdptEntry]
+mov [edi], eax
+
+mov edi, [pdtBase]
+
+; PDT entry
+mov eax, [pdtEntry]
+mov [edi], eax
+
+mov edi, [ptBase]
+
+; identity-map first
+mov ecx, 256
+mov ebx, 0x00000003
+
+idMap1:
+	mov DWORD [edi], ebx
+	add ebx, 0x1000
+	add edi, 8
+	loop idMap1
+
+; enable PAE
+mov eax, cr4
+or eax, 1 << 5	; pae is bit 5
+mov cr4, eax
+
+; set EFER.LME
+mov ecx, DWORD 0xC0000080
+rdmsr
+or eax, 1 << 8
+wrmsr
+
+; turn on paging
+mov eax, cr0
+or eax, 1 << 31
+mov cr0, eax
+
+jmp clr64
+
+nop
+
+nop
+
+clr64:
+
+; go to pure 64-bit mode
+lgdt [gdt64.ptr]
+
+jmp enter64
+
+
+enter64:
+
+mov edi, 0xB8000
+
+mov eax, "H"
+mov [edi], eax
+inc edi
+mov eax, 0x0F
+mov [edi], eax
+
+hlt
 
 bootDisk 		db	0
 numKernelSectors	db	1
 kernelBaseSector	db	0
 loadTarget		dd	0x100000
 
-times 510 - ($-$$) db 0
-dw 0xAA55
+pml4Base	dd	0x00010000
+pml4Entry	dd	0x00011003
+pdptBase	dd	0x00011000
+pdptEntry	dd	0x00012003
+pdtBase		dd	0x00012000
+pdtEntry	dd	0x00013003
+ptBase		dd	0x00013000
+
+; 64-bit GDT
+gdt64:
+	.null:	equ	$ - gdt64
+		dw	0xFFFF
+		dw	0
+		db	0
+		db	0
+		db	1
+		db	0
+	.code:	equ	$ - gdt64
+		dw	0
+		dw	0
+		db	0
+		db	10011010b
+		db	10101111b
+		db	0
+	.data:	equ	$ - gdt64
+		dw	0
+		dw	0
+		db	0
+		db	10010010b
+		db	0
+		db	0
+	.ptr:	equ	$ - gdt64
+		dw	$ - gdt64 - 1
+		dq	gdt64
+		
+
+times 512 - ($-$$) db 0

@@ -1,4 +1,4 @@
-NASM=nasm -f bin
+NASM=nasm -O0 -f bin
 RM=rm -f
 
 all: boot
