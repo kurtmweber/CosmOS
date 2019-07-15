@@ -125,21 +125,33 @@ mov edi, cr3
 mov eax, [pml4Entry]
 mov [edi], eax
 
+; clear the pdpt area
+mov edi, [pdptBase]
+mov ecx, 4096
+rep stosb
 mov edi, [pdptBase]
 
 ; PDPT entry
 mov eax, [pdptEntry]
 mov [edi], eax
 
+; clear the pdt area
+mov edi, [pdtBase]
+mov ecx, 4096
+rep stosb
 mov edi, [pdtBase]
 
 ; PDT entry
 mov eax, [pdtEntry]
 mov [edi], eax
 
+; clear the pt area
+mov edi, [ptBase]
+mov ecx, 4096
+rep stosb
 mov edi, [ptBase]
 
-; identity-map first
+; identity-map first megabyte
 mov ecx, 256
 mov ebx, 0x00000003
 
