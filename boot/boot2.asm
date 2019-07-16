@@ -122,8 +122,8 @@ rep stosb
 mov edi, cr3
 
 ; PML4 entry
-mov eax, [pml4Entry]
-mov [edi], eax
+mov ebx, [pml4Entry]
+mov [edi], ebx
 
 ; clear the pdpt area
 mov edi, [pdptBase]
@@ -132,8 +132,8 @@ rep stosb
 mov edi, [pdptBase]
 
 ; PDPT entry
-mov eax, [pdptEntry]
-mov [edi], eax
+mov ebx, [pdptEntry]
+mov [edi], ebx
 
 ; clear the pdt area
 mov edi, [pdtBase]
@@ -142,8 +142,8 @@ rep stosb
 mov edi, [pdtBase]
 
 ; PDT entry
-mov eax, [pdtEntry]
-mov [edi], eax
+mov ebx, [pdtEntry]
+mov [edi], ebx
 
 ; clear the pt area
 mov edi, [ptBase]
@@ -193,6 +193,54 @@ jmp enter64
 
 enter64:
 
+; now that we're in pure 64-bit mode, we'll set up the page tables for our
+; higher-half kernel and our kernel stack (immediately below the permanent
+; page table area at -1 TB, though the permanent page table area will be done
+; in the kernel)
+
+; kernel PML4 entry
+mov edi, [pml4KernelBase]
+mov ebx, [pml4KernelEntry]
+mov [edi], ebx
+
+xor eax, eax
+
+; clear PDPT area
+mov edi, [pdptKernelBase]
+mov ecx, 4096
+rep stosb
+
+; kernel PDPT entry
+mov edi, [pdptKernelBase]
+mov ebx, [pdptKernelEntry]
+mov [edi], ebx
+
+; clear PDT area
+mov edi, [pdtKernelBase]
+mov ecx, 4096
+rep stosb
+
+; kernel PDT entry
+mov edi, [pdtKernelBase]
+mov ebx, [pdtKernelEntry]
+mov [edi], ebx
+
+; clear PT area
+mov edi, [ptKernelBase]
+mov ecx, 4096
+rep stosb
+
+; load kernel PT area
+mov edi, [ptKernelBase]
+mov ecx, 512
+mov ebx, 0x00100003
+
+loadKernel:
+	mov DWORD [edi], ebx
+	add ebx, 0x1000
+	add edi, 8
+	loop loadKernel
+
 mov edi, 0xB8000
 
 mov eax, "H"
@@ -215,6 +263,14 @@ pdptEntry	dd	0x00012003
 pdtBase		dd	0x00012000
 pdtEntry	dd	0x00013003
 ptBase		dd	0x00013000
+
+pml4KernelBase	dq	0x00010800
+pml4KernelEntry	dq	0x00014003
+pdptKernelBase	dq	0x00014000
+pdptKernelEntry	dq	0x00015003
+pdtKernelBase	dq	0x00015000
+pdtKernelEntry	dq	0x00016003
+ptKernelBase	dq	0x00016000
 
 ; 64-bit GDT
 gdt64:
@@ -244,4 +300,4 @@ gdt64:
 		dq	gdt64
 		
 
-times 512 - ($-$$) db 0
+times 1024 - ($-$$) db 0

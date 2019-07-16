@@ -77,7 +77,7 @@ gdtPtr:
 gdt_end:
 
 bootDisk	db	0x0
-numSectors	db	0x1
+numSectors	db	0x2
 loadTarget	dw	0x7E00
   
 times 510 - ($-$$) db 0
