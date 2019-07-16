@@ -194,9 +194,7 @@ jmp enter64
 enter64:
 
 ; now that we're in pure 64-bit mode, we'll set up the page tables for our
-; higher-half kernel and our kernel stack (immediately below the permanent
-; page table area at -1 TB, though the permanent page table area will be done
-; in the kernel)
+; higher-half kernel
 
 ; kernel PML4 entry
 mov edi, [pml4KernelBase]
@@ -241,6 +239,11 @@ loadKernel:
 	add edi, 8
 	loop loadKernel
 
+; set stack pointers
+
+mov ebp, 0x80000
+mov esp, 0x80000
+
 mov edi, 0xB8000
 
 mov eax, "H"
@@ -271,6 +274,8 @@ pdptKernelEntry	dq	0x00015003
 pdtKernelBase	dq	0x00015000
 pdtKernelEntry	dq	0x00016003
 ptKernelBase	dq	0x00016000
+
+pml4StackBase	dq	0x00010FE8
 
 ; 64-bit GDT
 gdt64:
