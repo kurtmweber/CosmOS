@@ -15,8 +15,8 @@ mov ax, 0x2401
 int 0x15
   
 ; set VGA mode 3
-mov ax, 0x3
-int 0x10
+;mov ax, 0x3
+;int 0x10
 
 ; save boot disk
 mov [bootDisk], dl
@@ -77,7 +77,7 @@ gdtPtr:
 gdt_end:
 
 bootDisk	db	0x0
-numSectors	db	0x2
+numSectors	db	0x3
 loadTarget	dw	0x7E00
   
 times 510 - ($-$$) db 0

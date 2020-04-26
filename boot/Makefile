@@ -3,13 +3,16 @@ RM=rm -f
 
 all: boot
 
-boot: boot.bin boot2.bin
+boot: boot.bin boot2.bin boot3.bin
 
 boot.bin: boot.asm
 	$(NASM) boot.asm -o boot.bin
 	
 boot2.bin: boot2.asm
 	$(NASM) boot2.asm -o boot2.bin
+
+boot3.bin: boot3.asm
+	$(NASM) boot3.asm -o boot3.bin
 	
 clean: boot-clean
 

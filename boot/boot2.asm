@@ -110,10 +110,6 @@ mov cr0, eax
 
 ;[BITS 32]
 
-; load page table address into cr3
-mov edi, [pml4Base]
-mov cr3, edi
-
 ; clear the PML4 area
 xor eax, eax
 mov ecx, 4096
@@ -160,41 +156,8 @@ idMap1:
 	add ebx, 0x1000
 	add edi, 8
 	loop idMap1
-
-; enable PAE
-mov eax, cr4
-or eax, 1 << 5	; pae is bit 5
-mov cr4, eax
-
-; set EFER.LME
-mov ecx, DWORD 0xC0000080
-rdmsr
-or eax, 1 << 8
-wrmsr
-
-; turn on paging
-mov eax, cr0
-or eax, 1 << 31
-mov cr0, eax
-
-jmp clr64
-
-nop
-
-nop
-
-clr64:
-
-; go to pure 64-bit mode
-lgdt [gdt64.ptr]
-
-jmp enter64
-
-
-enter64:
-
-; now that we're in pure 64-bit mode, we'll set up the page tables for our
-; higher-half kernel
+	
+; set up the page tables for our higher-half kernel
 
 ; kernel PML4 entry
 mov edi, [pml4KernelBase]
@@ -233,11 +196,56 @@ mov edi, [ptKernelBase]
 mov ecx, 512
 mov ebx, 0x00100003
 
-loadKernel:
+; map the two megabytes starting at 0x100000 to the bottom of the available
+; higher-half area
+	
+mapKernel:
 	mov DWORD [edi], ebx
 	add ebx, 0x1000
 	add edi, 8
-	loop loadKernel
+	loop mapKernel
+	
+; load page table address into cr3
+mov edi, [pml4Base]
+mov cr3, edi
+
+; enable PAE
+mov eax, cr4
+or eax, 1 << 5	; pae is bit 5
+mov cr4, eax
+
+; set EFER.LME
+mov ecx, DWORD 0xC0000080
+rdmsr
+or eax, 1 << 8
+wrmsr
+
+; turn on paging
+mov eax, cr0
+or eax, 1 << 31
+mov cr0, eax
+
+;jmp clr64
+
+;nop
+
+;nop
+
+clr64:
+
+; go to pure 64-bit mode
+lgdt [gdt64.pointer]
+
+mov ax, gdt64.data
+mov ss, ax
+mov ds, ax
+mov es, ax
+
+jmp gdt64.code:enter64
+
+BITS 64
+
+enter64:
 
 ; set stack pointers
 
@@ -246,11 +254,7 @@ mov esp, 0x80000
 
 mov edi, 0xB8000
 
-mov eax, "H"
-mov [edi], eax
-inc edi
-mov eax, 0x0F
-mov [edi], eax
+jmp 0x8200
 
 hlt
 
@@ -267,42 +271,24 @@ pdtBase		dd	0x00012000
 pdtEntry	dd	0x00013003
 ptBase		dd	0x00013000
 
-pml4KernelBase	dq	0x00010800
-pml4KernelEntry	dq	0x00014003
-pdptKernelBase	dq	0x00014000
-pdptKernelEntry	dq	0x00015003
-pdtKernelBase	dq	0x00015000
-pdtKernelEntry	dq	0x00016003
-ptKernelBase	dq	0x00016000
-
-pml4StackBase	dq	0x00010FE8
+pml4KernelBase	dd	0x00010800
+pml4KernelEntry	dd	0x00014003
+pdptKernelBase	dd	0x00014000
+pdptKernelEntry	dd	0x00015003
+pdtKernelBase	dd	0x00015000
+pdtKernelEntry	dd	0x00016003
+ptKernelBase	dd	0x00016000
 
 ; 64-bit GDT
 gdt64:
-	.null:	equ	$ - gdt64
-		dw	0xFFFF
-		dw	0
-		db	0
-		db	0
-		db	1
-		db	0
-	.code:	equ	$ - gdt64
-		dw	0
-		dw	0
-		db	0
-		db	10011010b
-		db	10101111b
-		db	0
-	.data:	equ	$ - gdt64
-		dw	0
-		dw	0
-		db	0
-		db	10010010b
-		db	0
-		db	0
-	.ptr:	equ	$ - gdt64
-		dw	$ - gdt64 - 1
-		dq	gdt64
+	dq	0
+	.code: equ $ - gdt64
+		dq (1<<44) | (1<<47) | (1<<41) | (1<<43) | (1<<53)
+	.data: equ $ - gdt64
+		dq (1<<44) | (1<<47) | (1<<41)
+	.pointer:
+		dw .pointer - gdt64 - 1
+		dq gdt64
 		
 
 times 1024 - ($-$$) db 0
