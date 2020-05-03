@@ -16,10 +16,13 @@ boot3.bin: boot3.asm
 	
 clean: boot-clean
 
-boot-clean: boot-bin-clean boot2-bin-clean
+boot-clean: boot-bin-clean boot2-bin-clean boot3-bin-clean
 
 boot-bin-clean:
 	$(RM) boot.bin
 
 boot2-bin-clean:
 	$(RM) boot2.bin
+
+boot3-bin-clean:
+	$(RM) boot3.bin
