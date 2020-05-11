@@ -218,7 +218,7 @@ Realm64:
 	; load kernel PT area
 	mov edi, [ptKernelBase]
 	mov ecx, 512
-	mov ebx, 0x00100003
+	mov ebx, 0x00900003
 
 	; map the two megabytes starting at 0x100000 to the bottom of the available
 	; higher-half area
@@ -241,7 +241,7 @@ Realm64:
 bootDisk 		db	0
 numKernelSectors	db	1
 kernelBaseSector	db	0
-loadTarget		dd	0x100000
+loadTarget		dd	0x900000
 boot3			dq	0x8200
 
 pml4Base	dd	0x00010000

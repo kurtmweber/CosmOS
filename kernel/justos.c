@@ -1,27 +1,19 @@
 /*****************************************************************
  * This file is part of JustOS                                   *
- * Copyright (C) 2019 Kurt M. Weber                              *
- * Released under he terms of the Social Justice License         *
+ * Copyright (C) 2019-2020 Kurt M. Weber                         *
+ * Released under the terms of the Social Justice License        *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include "asm/asm.h"
+#include <asm/asm.h>
+#include <console/video.h>
+#include <interrupts/interrupts.h>
+#include <types.h>
+
+extern char _end[];
 
 void JustOS(){
-	volatile char *vidMem = (volatile char *)0xB8000;
-	
-	*vidMem++ = 'J';
-	*vidMem++ = 0x0F;
-	*vidMem++ = 'u';
-	*vidMem++ = 0x0F;
-	*vidMem++ = 's';
-	*vidMem++ = 0x0F;
-	*vidMem++ = 't';
-	*vidMem++ = 0x0F;
-	*vidMem++ = 'O';
-	*vidMem++ = 0x0F;
-	*vidMem++ = 'S';
-	*vidMem++ = 0x0F;
+	//initVideoConsole();
 	
 	asm_hlt();
 }

@@ -1,7 +1,7 @@
 NASM=nasm -f bin
 RM=rm -f
 CC=gcc
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0
+CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -I. -I../include
 MAKE=make
 
 all: asm.o
