@@ -1,15 +1,22 @@
 /*****************************************************************
  * This file is part of JustOS                                   *
- * Copyright (C) 2019 Kurt M. Weber                              *
+ * Copyright (C) 2020 Kurt M. Weber                              *
  * Released under the terms of the Social Justice License        *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
+#ifndef _DE_C
+#define _DE_C
 
-#ifndef _ASM_H
-#define _ASM_H
+#include <types.h>
+#include <interrupts/interrupts.h>
 
-void asm_cli();
-void asm_hlt();
-void asm_sti();
+__attribute__ ((interrupt)) void isrDE(stackFrame *frame){
+	volatile char *vidMem;
+	
+	vidMem = (volatile char *)0xB8000;
+	
+	*vidMem++ = 'J';
+	*vidMem++ = 0x7F;
+}
 
 #endif

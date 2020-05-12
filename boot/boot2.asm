@@ -181,6 +181,12 @@ jmp GDT64.Code:Realm64       ; Set the code segment and enter 64-bit long mode.
 [BITS 64]
  
 Realm64:
+	mov ax, GDT64.Data
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ss, ax
 
 	; map kernel area
 	; kernel PML4 entry
@@ -269,7 +275,7 @@ GDT64:                           ; Global Descriptor Table (64-bit).
     db 1                         ; Granularity.
     db 0                         ; Base (high).
     .Code: equ $ - GDT64         ; The code descriptor.
-    dw 0                         ; Limit (low).
+    dw 0xFFFF                         ; Limit (low).
     dw 0                         ; Base (low).
     db 0                         ; Base (middle)
     db 10011010b                 ; Access (exec/read).

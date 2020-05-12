@@ -13,6 +13,7 @@
 extern char _end[];
 
 void JustOS(){
+	initIDT();
 	//initVideoConsole();
 	
 	asm_hlt();

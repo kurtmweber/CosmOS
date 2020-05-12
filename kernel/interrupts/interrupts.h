@@ -10,7 +10,7 @@
 
 #include <types.h>
 
-struct idtEntry{
+typedef struct idtEntry{
 	uint16_t offsetWordLow;		// offset bits 0-15
 	uint16_t selector;		// per bootloader, should be 0x08
 	uint8_t ist;			// always zero, we don't use ist
@@ -22,10 +22,32 @@ struct idtEntry{
 	uint32_t offsetDwordHigh;	// offset bits 32-63
 	uint32_t reserved;		// 0
 	
-	} __attribute__((packed));
+	}__attribute__((packed)) idtEntry;
+	
+typedef struct idtr{
+	uint16_t limit;
+	uint64_t base;
+	}__attribute__((packed)) idtr;
+	
+typedef struct stackFrame{
+	uint64_t rip;
+	uint64_t cs;
+	uint64_t fflags;
+	uint64_t rsp;
+	uint64_t ss;
+	}__attribute__((packed)) stackFrame;
+	
+typedef enum intVectors{
+	DE = 0
+	} intVectors;
 	
 #ifndef _IDT_C
 void initIDT();
+#else
+idtEntry idt[256];
+
+void addISR(void *func, intVectors vector);
+void isrDE(stackFrame *frame);
 #endif
 
 #endif

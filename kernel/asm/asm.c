@@ -12,3 +12,19 @@ void asm_hlt(){
 	
 	return;
 }
+
+void asm_cli(){
+	asm volatile(
+		"cli"
+	    );
+	
+	return;
+}
+
+void asm_sti(){
+	asm volatile(
+		"sti"
+	    );
+	
+	return;
+}

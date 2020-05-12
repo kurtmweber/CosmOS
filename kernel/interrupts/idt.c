@@ -8,7 +8,32 @@
 #ifndef _IDT_C
 #define _IDT_C
 
+#include <types.h>
+#include <asm/asm.h>
+#include <interrupts/interrupts.h>
+
 void initIDT(){
+	idtr idtr;
+	addISR(isrDE, DE);
+	
+	idtr.limit = (256 * sizeof(idtEntry)) - 1;
+	idtr.base = (uint64_t)&idt;
+	
+	asm volatile(
+		"lidt %0" :: "m"(idtr)
+	    );
+	
+	//asm_sti()
+}
+
+void addISR(void *func, intVectors vector){
+	idt[vector].offsetWordLow = (uint16_t)((uint64_t)func & 0xFFFF);
+	idt[vector].selector = 8;
+	idt[vector].ist = 0;
+	idt[vector].attrs = 0x8E;
+	idt[vector].offsetWordMiddleLow = (uint16_t)(((uint64_t)func >> 16) & 0xFFFF);
+	idt[vector].offsetDwordHigh = (uint32_t)(((uint64_t)func >> 32) & 0xFFFFFFFF);
+	idt[vector].reserved = 0;
 }
 
 #endif

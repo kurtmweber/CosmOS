@@ -5,7 +5,7 @@ CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=la
 MAKE=make
 LD=ld
 #LDFLAGS=-e JustOS --oformat binary -Ttext 0xFFFF800000000000 -nostdlib
-LDFLAGS=-T justos.ld
+LDFLAGS=-T justos.ld -Map justos.map
 
 all: kernel
 
