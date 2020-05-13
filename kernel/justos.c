@@ -6,15 +6,18 @@
  *****************************************************************/
 
 #include <asm/asm.h>
-#include <console/video.h>
+#include <console/console.h>
 #include <interrupts/interrupts.h>
 #include <types.h>
 
 extern char _end[];
 
 void JustOS(){
+	initVideoConsole();
+	consWriteLine("JustOS");
+	consWriteLine("Initializing IDT");
 	initIDT();
-	//initVideoConsole();
+	
 	
 	asm_hlt();
 }

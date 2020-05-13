@@ -19,4 +19,9 @@ typedef int int32_t;
 
 typedef unsigned long int uint64_t;
 typedef long int int64_t;
+
+typedef enum bool{
+	false = 0,
+	true = 1
+} bool;
 #endif

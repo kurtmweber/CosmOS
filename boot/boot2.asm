@@ -24,7 +24,7 @@ mov byte [kernelBaseSector], cl
 
 kernelLoad:
 	xor ecx, ecx
-	mov cl, byte [numKernelSectors]
+	mov cx, word [numKernelSectors]
 	xor ebx, ebx
 	xor edx, edx
 	
@@ -35,8 +35,8 @@ kernelLoad:
 		mov al, 1
 		mov ch, 0
 		mov dh, 0
-		mov cl, byte [kernelBaseSector]
-		add cl, bl
+		mov cx, word [kernelBaseSector]
+		add cx, bx
 		push ebx
 		mov dl, byte [bootDisk]
 		mov bx, 0x500
@@ -245,7 +245,7 @@ Realm64:
 
 ; data definitions
 bootDisk 		db	0
-numKernelSectors	db	1
+numKernelSectors	dw	32
 kernelBaseSector	db	0
 loadTarget		dd	0x900000
 boot3			dq	0x8200

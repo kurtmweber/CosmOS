@@ -8,22 +8,28 @@ MAKE=make
 
 all: console.a
 
-console.a: video.o printk.o
-	$(AR) $(AFLAGS) console.a video.o
-	
-printk.o: printk.c
-	$(CC) $(CFLAGS) -o printk.o printk.c
+console.a: console.o consoleprint.o consoleutil.o
+	$(AR) $(AFLAGS) $@ $^
 
-video.o: video.c
-	$(CC) $(CFLAGS) -o video.o video.c
+console.o: console.c
+	$(CC) $(CFLAGS) -o $@ $^
 	
-clean: console-a-clean printk-o-clean video-o-clean
+consoleprint.o: consoleprint.c
+	$(CC) $(CFLAGS) -o $@ $^
+	
+consoleutil.o: consoleutil.c
+	$(CC) $(CFLAGS) -o $@ $^
+	
+clean: console-a-clean console-o-clean consoleprint-o-clean consoleutil-o-clean
 
 console-a-clean:
 	$(RM) console.a
-	
-printk-o-clean:
-	$(RM) printk.o
 
-video-o-clean:
-	$(RM) video.o
+console-o-clean:
+	$(RM) console.o
+	
+consoleprint-o-clean:
+	$(RM) consoleprint.o
+	
+consoleutil-o-clean:
+	$(RM) consoleutil.o

@@ -14,20 +14,36 @@ typedef struct cursorLoc{
 	uint8_t x;
 	uint8_t y;
 	} cursorLoc;
-
-#ifndef _PRINTK_C
-void printk(const char *s);
-#else
-#endif
 	
-#ifndef _VIDEO_C
+#ifndef _CONSOLE_C
+void initVideoConsole();
+void refreshConsole();
+
+extern const char *vidMemBase;
 extern volatile char *vidMem;
 extern cursorLoc consoleCursorLoc;
-
-void initVideoConsole();
+extern char consoleBuffer[25][81];
 #else
-volatile char *vidMem = (volatile char *)0xB8000;
+void clearConsoleBuffer();
+
+const char *vidMemBase = (const char *)0xB8000;
+volatile char *vidMem;
 cursorLoc consoleCursorLoc = {0, 0};
+
+// does not support setting attributes - for now assumed to be 0x0F
+// should change this at some point
+char consoleBuffer[25][81];
+#endif
+
+#ifndef _CONSOLEPRINT_C
+void consWriteLine(const char *s);
+#else
+#endif
+
+#ifndef _CONSOLEUTIL_C
+uint8_t findBlankLine();
+void scrollConsoleUp();
+#else
 #endif
 
 #endif
