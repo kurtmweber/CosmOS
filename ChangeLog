@@ -1,2 +1,8 @@
+2020-05-13:
+	* added uitoa3() (kmw)
+	|> this converts 64-bit unsigned integers (can be cast if shorter) to
+	|> strings w/o needing dynamic memory allocation, which means it can be
+	|> used before the mmu is initialized
+
 2020-05-12:
 	* added consWriteLine() (kmw)

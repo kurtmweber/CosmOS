@@ -8,11 +8,14 @@
 #include <asm/asm.h>
 #include <console/console.h>
 #include <interrupts/interrupts.h>
+#include <string/string.h>
 #include <types.h>
 
 extern char _end[];
 
 void JustOS(){
+	char testString[UINT64_DECIMAL_STRING_LENGTH];
+	
 	initVideoConsole();
 	consWriteLine("JustOS");
 	consWriteLine("Initializing IDT");

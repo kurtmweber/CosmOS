@@ -11,8 +11,8 @@ all: kernel
 
 kernel: justos
 
-justos: justos.o asm-dir console-dir interrupts-dir mm-dir
-	$(LD) $(LDFLAGS) -o justos justos.o asm/asm.o console/console.a interrupts/interrupts.a mm/mm.a
+justos: justos.o asm-dir console-dir interrupts-dir mm-dir string-dir
+	$(LD) $(LDFLAGS) -o justos justos.o asm/asm.o console/console.a interrupts/interrupts.a mm/mm.a string/string.a
 
 justos.o: justos.c
 	$(CC) $(CFLAGS) -o justos.o justos.c
@@ -28,8 +28,11 @@ interrupts-dir:
 	
 mm-dir:
 	cd mm && $(MAKE)
+
+string-dir:
+	cd string && $(MAKE)
 	
-clean: kernel-clean asm-dir-clean console-dir-clean interrupts-dir-clean
+clean: kernel-clean asm-dir-clean console-dir-clean interrupts-dir-clean string-dir-clean
 
 kernel-clean: justos-o-clean
 	$(RM) justos
@@ -48,3 +51,6 @@ interrupts-dir-clean:
 	
 memory-dir-clean:
 	cd memory && $(MAKE) clean
+
+string-dir-clean:
+	cd string && $(MAKE) clean
