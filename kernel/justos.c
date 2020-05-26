@@ -14,6 +14,7 @@
 #include <string/string.h>
 
 void JustOS(){
+	void *p, *q;
 	
 	init_video_console();
 	
@@ -23,7 +24,7 @@ void JustOS(){
 	initIDT();
 	
 	console_write_line("Initializing MMU");
-	mmu_init();	
+	mmu_init();
 	
 	asm_hlt();
 }

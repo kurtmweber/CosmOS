@@ -66,6 +66,22 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
 	return new_kmalloc_block(last, size);
 }
 
+void kfree(void *p){
+	kmalloc_block *b;
+	
+	// The following is arithmetic on a void pointer, which is not permitted per C standard.
+	// However, per GCC documentation, as a nonstandard extension GCC permits pointer arithmetic
+	// on void pointers with an assumption that the object size is 1.
+	// At time of writing (2020-05-25), this is documented at https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
+	b = p - sizeof(kmalloc_block);
+	
+	b->used = false;
+	
+	// later on we'll add logic to combine with successive free blocks
+	// but for now, for testing, keep it simple
+	return;	
+}
+
 void *kmalloc(uint64_t size){
 	kmalloc_block *cur_block;
 	

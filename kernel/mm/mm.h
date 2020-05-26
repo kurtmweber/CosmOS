@@ -52,7 +52,7 @@ typedef enum ptt_levels{
 typedef struct int_15_map{
 	void *base;
 	uint64_t len;
-	uint32_t type;		// read this as int15MapRegionType, but we store it as uint32_t in the struct to get the size right
+	uint32_t type;		// read this as int_15_map_region_type, but we store it as uint32_t in the struct to get the size right
 	uint32_t acpi;
 }__attribute__((packed)) int_15_map;
 
@@ -87,6 +87,7 @@ void mmu_init();
 #endif
 
 #ifndef _KMALLOC_C
+void kfree(void *p);
 void *kmalloc(uint64_t size);
 
 extern kmalloc_block *kmalloc_block_list;
