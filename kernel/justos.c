@@ -5,22 +5,25 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#include <types.h>
 #include <asm/asm.h>
 #include <console/console.h>
+#include <debug_error/debug_error.h>
 #include <interrupts/interrupts.h>
+#include <mm/mm.h>
 #include <string/string.h>
-#include <types.h>
-
-extern char _end[];
 
 void JustOS(){
-	char testString[UINT64_DECIMAL_STRING_LENGTH];
 	
-	initVideoConsole();
-	consWriteLine("JustOS");
-	consWriteLine("Initializing IDT");
+	init_video_console();
+	
+	console_write_line("JustOS");
+	
+	console_write_line("Initializing IDT");
 	initIDT();
 	
+	console_write_line("Initializing MMU");
+	mmu_init();	
 	
 	asm_hlt();
 }

@@ -11,23 +11,23 @@
 #include <types.h>
 #include <console/console.h>
 
-uint8_t findBlankLine(){
+uint8_t find_blank_line(){
 	// return the 0-based array index of the first line in consoleBuffer that is empty
 	// an empty line is one that is all NULL values
 	// if no lines are empty, return 24 (row 25 on screen); caller will use this to bump off the top line
 	// and scroll the rest of the screen up before printing
 	
 	uint8_t i, j;
-	bool inUse = false;
+	bool in_use = false;
 	
 	for (i = 0; i < 25; i++){
-		inUse = false;
+		in_use = false;
 		for (j = 0; j < 81; j++){
-			if (consoleBuffer[i][j] != 0){
-				inUse = true;
+			if (console_buffer[i][j] != 0){
+				in_use = true;
 			}
 		}
-		if (!inUse){
+		if (!in_use){
 			return i;
 		}
 	}
@@ -38,18 +38,18 @@ uint8_t findBlankLine(){
 	return 25;
 }
 
-void scrollConsoleUp(){
+void scroll_console_up(){
 	uint8_t i, j;
 	
 	// don't do this on the last line!
 	for (i = 0; i < 24; i++){
 		for (j = 0; j < 81; j++){
-			consoleBuffer[i][j] = consoleBuffer[i+1][j];
+			console_buffer[i][j] = console_buffer[i+1][j];
 		}
 	}
 	
 	for (j = 0; j < 81; j++){
-		consoleBuffer[24][j] = 0;
+		console_buffer[24][j] = 0;
 	}
 	
 	return;

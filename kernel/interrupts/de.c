@@ -8,15 +8,11 @@
 #define _DE_C
 
 #include <types.h>
+#include <debug_error/debug_error.h>
 #include <interrupts/interrupts.h>
 
 __attribute__ ((interrupt)) void isrDE(stackFrame *frame){
-	volatile char *vidMem;
-	
-	vidMem = (volatile char *)0xB8000;
-	
-	*vidMem++ = 'J';
-	*vidMem++ = 0x7F;
+	panic("Division by zero!");
 }
 
 #endif

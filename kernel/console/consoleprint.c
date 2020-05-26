@@ -11,17 +11,17 @@
 #include <types.h>
 #include <console/console.h>
 
-void consWriteLine(const char *s){
-	uint8_t lineNo;
+void console_write_line(const char *s){
+	uint8_t line_no;
 	uint8_t i = 0;
 	
-	lineNo = findBlankLine();
+	line_no = find_blank_line();
 	
 	// if we're writing on screen line 25 (array index 24, which is what is returned by findBlankLine())
 	// then we need to scroll the screen up a line
-	if (lineNo == 25){
-		scrollConsoleUp();
-		lineNo--;
+	if (line_no == 25){
+		scroll_console_up();
+		line_no--;
 	}
 	
 	while(s[i]){
@@ -29,11 +29,11 @@ void consWriteLine(const char *s){
 			break;
 		}
 		
-		consoleBuffer[lineNo][i] = s[i];
+		console_buffer[line_no][i] = s[i];
 		i++;
 	}
 	
-	refreshConsole();
+	refresh_console();
 
 	return;
 }

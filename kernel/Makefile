@@ -11,8 +11,8 @@ all: kernel
 
 kernel: justos
 
-justos: justos.o asm-dir console-dir interrupts-dir mm-dir string-dir
-	$(LD) $(LDFLAGS) -o justos justos.o asm/asm.o console/console.a interrupts/interrupts.a mm/mm.a string/string.a
+justos: justos.o asm-dir console-dir debug_error-dir interrupts-dir mm-dir string-dir
+	$(LD) $(LDFLAGS) -o justos justos.o asm/asm.o console/console.a interrupts/interrupts.a mm/mm.a debug_error/debug_error.a string/string.a
 
 justos.o: justos.c
 	$(CC) $(CFLAGS) -o justos.o justos.c
@@ -22,6 +22,9 @@ asm-dir:
 	
 console-dir:
 	cd console && $(MAKE)
+	
+debug_error-dir:
+	cd debug_error && $(MAKE)
 
 interrupts-dir:
 	cd interrupts && $(MAKE)
@@ -32,7 +35,7 @@ mm-dir:
 string-dir:
 	cd string && $(MAKE)
 	
-clean: kernel-clean asm-dir-clean console-dir-clean interrupts-dir-clean string-dir-clean
+clean: kernel-clean asm-dir-clean console-dir-clean debug_error-dir-clean interrupts-dir-clean mm-dir-clean string-dir-clean
 
 kernel-clean: justos-o-clean
 	$(RM) justos
@@ -46,11 +49,14 @@ asm-dir-clean:
 console-dir-clean:
 	cd console && $(MAKE) clean
 	
+debug_error-dir-clean:
+	cd debug_error && $(MAKE) clean
+	
 interrupts-dir-clean:
 	cd interrupts && $(MAKE) clean
 	
-memory-dir-clean:
-	cd memory && $(MAKE) clean
+mm-dir-clean:
+	cd mm && $(MAKE) clean
 
 string-dir-clean:
 	cd string && $(MAKE) clean

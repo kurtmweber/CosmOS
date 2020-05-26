@@ -1,1 +1,3 @@
-Base virtual address of higher-half kernel stack: FFFF FEFF FFFF FFFF
+Base virtual address of higher-half kernel stack: FFFF FEFF FFFF FFF8 (it grows down)
+
+int 15h memory map is placed at 0x500

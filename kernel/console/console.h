@@ -10,39 +10,39 @@
 
 #include <types.h>
 
-typedef struct cursorLoc{
+typedef struct cursor_loc{
 	uint8_t x;
 	uint8_t y;
-	} cursorLoc;
+	} cursor_loc;
 	
 #ifndef _CONSOLE_C
-void initVideoConsole();
-void refreshConsole();
+void init_video_console();
+void refresh_console();
 
-extern const char *vidMemBase;
-extern volatile char *vidMem;
-extern cursorLoc consoleCursorLoc;
-extern char consoleBuffer[25][81];
+extern const char *vid_mem_base;
+extern volatile char *vid_mem;
+extern cursor_loc console_cursor_loc;
+extern char console_buffer[25][81];
 #else
-void clearConsoleBuffer();
+void clear_console_buffer();
 
-const char *vidMemBase = (const char *)0xB8000;
-volatile char *vidMem;
-cursorLoc consoleCursorLoc = {0, 0};
+const char *vid_mem_base = (const char *)0xB8000;
+volatile char *vid_mem;
+cursor_loc console_cursor_loc = {0, 0};
 
 // does not support setting attributes - for now assumed to be 0x0F
 // should change this at some point
-char consoleBuffer[25][81];
+char console_buffer[25][81];
 #endif
 
 #ifndef _CONSOLEPRINT_C
-void consWriteLine(const char *s);
+void console_write_line(const char *s);
 #else
 #endif
 
 #ifndef _CONSOLEUTIL_C
-uint8_t findBlankLine();
-void scrollConsoleUp();
+uint8_t find_blank_line();
+void scroll_console_up();
 #else
 #endif
 

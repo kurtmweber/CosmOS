@@ -1,20 +1,21 @@
 /*****************************************************************
  * This file is part of JustOS                                   *
- * Copyright (C) 2019 Kurt M. Weber                              *
+ * Copyright (C) 2020 Kurt M. Weber                              *
  * Released under the terms of the Social Justice License        *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _ASM_H
-#define _ASM_H
+#ifndef _DEBUG_ERROR_H
+#define _DEBUG_ERROR_H
 
 #include <types.h>
-#include <mm/mm.h>
 
-void asm_cli();
-void asm_hlt();
-void asm_sti();
+#ifndef _DEBUGINT_C
+void debug_print_uint64(uint64_t n);
+#endif
 
-pttentry asm_cr3_read();
+#ifndef _PANIC_C
+void panic(const char *s);
+#endif
 
 #endif

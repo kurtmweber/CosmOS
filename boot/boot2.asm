@@ -102,7 +102,7 @@ doneMemMap:
 ; write 24 clear bytes at end of map
 ; this will be our flag
 add di, MEMORY_MAP_DI_INC
-mov ax, 0xFF
+mov ax, 0x00
 mov ecx, MEMORY_MAP_DI_INC
 rep stosb
 

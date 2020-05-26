@@ -10,33 +10,33 @@
 
 #include <console/console.h>
 
-void initVideoConsole(){
-	clearConsoleBuffer();
+void init_video_console(){
+	clear_console_buffer();
 	
 	return;
 }
 	
-void clearConsoleBuffer(){
+void clear_console_buffer(){
 	uint8_t i, j;
 	
 	for (i = 0; i < 25; i++){
 		for (j = 0; j < 81; j++){
-			consoleBuffer[i][j] = 0;
+			console_buffer[i][j] = 0;
 		}
 	}
 	
 	return;
 }
 
-void refreshConsole(){
+void refresh_console(){
 	uint8_t i, j;
 	
-	vidMem = (volatile char *)vidMemBase;
+	vid_mem = (volatile char *)vid_mem_base;
 	
 	for (i = 0; i < 25; i++){
 		for (j = 0; j < 80; j++){	// the 81st character in the buffer line (index 80) is not displayed
-			*vidMem++ = consoleBuffer[i][j];
-			*vidMem++ = 0x0F;
+			*vid_mem++ = console_buffer[i][j];
+			*vid_mem++ = 0x0F;
 		}
 	}
 

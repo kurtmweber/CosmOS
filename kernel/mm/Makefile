@@ -8,16 +8,37 @@ MAKE=make
 
 all: mm.a
 
-mm.a: map.o
+mm.a: blockmgmt.o init.o kmalloc.o map.o pagetables.o
 	$(AR) $(AFLAGS) $@ $?
 	
-map.o: map.c
+blockmgmt.o: blockmgmt.c mm.h
 	$(CC) $(CFLAGS) -o $@ $<
 	
-clean: mm-a-clean map-o-clean
+init.o: init.c mm.h
+	$(CC) $(CFLAGS) -o $@ $<
+	
+kmalloc.o: kmalloc.c mm.h
+	$(CC) $(CFLAGS) -o $@ $<
+	
+map.o: map.c mm.h
+	$(CC) $(CFLAGS) -o $@ $<
+	
+pagetables.o: pagetables.c mm.h
+	$(CC) $(CFLAGS) -o $@ $<
+	
+clean: mm-a-clean blockmgmt-o-clean init-o-clean map-o-clean pagetables-o-clean
 
-mm-a-clean: map-o-clean
+mm-a-clean:
 	$(RM) console.a
+	
+blockmgmt-o-clean:
+	$(RM) blockmgmt.o
+	
+init-o-clean:
+	$(RM) init.o
 
 map-o-clean:
 	$(RM) map.o
+	
+pagetables-o-clean:
+	$(RM) pagetables.o

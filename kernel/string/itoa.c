@@ -38,6 +38,8 @@ void uitoa3(uint64_t n, char *s, uint8_t len){
 		s--;
 		rev++;
 	}
+	
+	return;
 }
 
 #endif
