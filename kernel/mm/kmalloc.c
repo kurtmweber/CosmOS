@@ -9,6 +9,7 @@
 #define _KMALLOC_C
 
 #include <types.h>
+#include <console/console.h>
 #include <debug_error/debug_error.h>
 #include <mm/mm.h>
 
@@ -35,6 +36,12 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
 	cur_block = kmalloc_block_list;
 	
 	do {
+			
+		last = cur_block;	// We need to save this in case we have to add a new block.
+					// If we do, then without this we'd have to walk the list again from the beginning
+					// to find the existing last block and update its next pointer to the block we
+					// just added.
+					
 		if (cur_block->used != false){
 			continue;
 		}
@@ -52,11 +59,7 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
 				continue;
 			}
 		}
-	
-		last = cur_block;	// We need to save this in case we have to add a new block.
-					// If we do, then without this we'd have to walk the list again from the beginning
-					// to find the existing last block and update its next pointer to the block we
-					// just added.
+
 	} while (cur_block = cur_block->next);
 	
 	if (best){
@@ -77,8 +80,16 @@ void kfree(void *p){
 	
 	b->used = false;
 	
-	// later on we'll add logic to combine with successive free blocks
-	// but for now, for testing, keep it simple
+	if ((b->next) && (b->next->used == false)){
+		b->len = b->len + sizeof(kmalloc_block) + b->next->len;
+		b->next = b->next->next;
+	}
+	
+	if ((b->prev) && (b->prev->used == false)){
+		b->prev->len = b->prev->len + sizeof(kmalloc_block) + b->len;
+		b->prev->next = b->next;
+	}
+	
 	return;	
 }
 
@@ -119,6 +130,8 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size){
 	new->len = size;
 	new->used = true;
 	new->next = 0;
+	new->prev = last;
+	new->owner = 0;
 	
 	if (last){
 		last->next = new;

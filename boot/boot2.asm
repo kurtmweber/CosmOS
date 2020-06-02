@@ -245,7 +245,7 @@ Realm64:
 
 ; data definitions
 bootDisk 		db	0
-numKernelSectors	dw	32
+numKernelSectors	dw	63
 kernelBaseSector	db	0
 loadTarget		dd	0x900000
 boot3			dq	0x8200

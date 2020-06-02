@@ -14,7 +14,7 @@
 #include <string/string.h>
 
 void JustOS(){
-	void *p, *q;
+	void *p, *q, *r, *s, *t, *u;
 	
 	init_video_console();
 	

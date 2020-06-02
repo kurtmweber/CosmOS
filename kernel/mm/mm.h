@@ -56,30 +56,25 @@ typedef struct int_15_map{
 	uint32_t acpi;
 }__attribute__((packed)) int_15_map;
 
-typedef struct kmalloc_block{
-	void *base;
-	uint64_t len;
-	bool used;
-	struct kmalloc_block *next;
-} kmalloc_block;
-
 typedef struct mem_block{
 	struct mem_block *prev;
 	void *base;
 	uint64_t len;
-	bool free;
+	bool used;
 	uint64_t owner;		// ignored for free blocks
 	struct mem_block *next;
 } mem_block;
 
+typedef mem_block kmalloc_block;
+
 #ifndef _BLOCKMGMT_C
-void init_free_phys_blocks(int_15_map base);
+void init_usable_phys_blocks(int_15_map base);
 
 extern mem_block init_phys_block;
-extern mem_block *free_phys_blocks;
+extern mem_block *usable_phys_blocks;
 #else
 mem_block init_phys_block;
-mem_block *free_phys_blocks;
+mem_block *usable_phys_blocks;
 #endif
 
 #ifndef _INIT_C

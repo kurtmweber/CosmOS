@@ -13,14 +13,23 @@
 
 void mmu_init(){
 	int_15_map *map;
-	uint8_t num_blocks, lrg_block;
+	uint8_t num_blocks, lrg_block, num_usable_blocks = 0;
+	uint8_t i;
 	
 	brk = &_end;
 	kmalloc_block_list = 0;
 	
 	map = read_int_15_map(&num_blocks, &lrg_block);
 	
-	init_free_phys_blocks(map[lrg_block]);
+	init_usable_phys_blocks(map[lrg_block]);
+	
+	for (i = 0; i < num_blocks; i++){
+		if (map[i].type == USABLE){
+			num_usable_blocks++;
+		}
+	}
+	
+	
 }
 
 #endif

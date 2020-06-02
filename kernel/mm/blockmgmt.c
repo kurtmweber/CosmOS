@@ -11,7 +11,7 @@
 #include <types.h>
 #include <mm/mm.h>
 
-void init_free_phys_blocks(int_15_map block){
+void init_usable_phys_blocks(int_15_map block){
 	if (!is_page_aligned(block.base)){
 		// clear the lower 12 bits of block.base so we get the first page boundary less than the block base
 		// then add 4096 to get the first page boundary within the block
@@ -22,13 +22,13 @@ void init_free_phys_blocks(int_15_map block){
 	
 	init_phys_block.len = block.len - (block.len % PAGE_SIZE);
 	
-	init_phys_block.free = true;
+	init_phys_block.used = false;
 	init_phys_block.owner = 0;	// ignored for free blocks, but we'll set it to a defined value.
 	
 	init_phys_block.prev = 0;
 	init_phys_block.next = 0;
 	
-	free_phys_blocks = &init_phys_block;
+	usable_phys_blocks = &init_phys_block;
 	
 	return;
 }
