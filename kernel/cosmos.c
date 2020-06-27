@@ -18,7 +18,7 @@ void JustOS(){
 	
 	init_video_console();
 	
-	console_write_line("JustOS");
+	console_write_line("CosmOS");
 	
 	console_write_line("Initializing IDT");
 	initIDT();

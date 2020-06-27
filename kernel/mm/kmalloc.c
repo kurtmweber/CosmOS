@@ -1,7 +1,7 @@
 /*****************************************************************
  * This file is part of JustOS                                   *
  * Copyright (C) 2020 Kurt M. Weber                              *
- * Released under the terms of the Social Justice License        *
+ * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
@@ -112,6 +112,13 @@ void *kmalloc(uint64_t size){
 	}
 }
 
+void kmalloc_init(){
+	kmalloc_block_list = 0;
+	kmalloc_block_list_end = 0;
+	
+	return;
+}
+
 kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size){
 	kmalloc_block *new;
 	
@@ -139,6 +146,8 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size){
 	
 	// more void pointer arithmetic
 	brk += (sizeof(kmalloc_block) + size);
+	
+	kmalloc_block_list_end = new;
 	
 	return new;
 }

@@ -1,7 +1,7 @@
 /*****************************************************************
  * This file is part of JustOS                                   *
  * Copyright (C) 2020 Kurt M. Weber                              *
- * Released under the terms of the Social Justice License        *
+ * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
@@ -11,6 +11,7 @@
 #include <types.h>
 
 #define PTTENTRY_BASE_MASK 0x000FFFFFFFFFF000
+#define INIT_UNMAPPED_PHYS_BASE	0xB00000
 
 // AND these masks w/virtual addresses and then shift them right to get the index into the respective level of the page translation tables
 #define PML4_INDEX_MASK 0x0000FF8000000000
@@ -68,7 +69,9 @@ typedef struct mem_block{
 typedef mem_block kmalloc_block;
 
 #ifndef _BLOCKMGMT_C
+void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks);
 void init_usable_phys_blocks(int_15_map base);
+void sort_usable_phys_blocks();
 
 extern mem_block init_phys_block;
 extern mem_block *usable_phys_blocks;
@@ -84,14 +87,15 @@ void mmu_init();
 #ifndef _KMALLOC_C
 void kfree(void *p);
 void *kmalloc(uint64_t size);
+void kmalloc_init();
 
-extern kmalloc_block *kmalloc_block_list;
 extern void *brk;
 #else
 kmalloc_block *find_avail_kmalloc_block_list(uint64_t size);
 kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size);
 
 kmalloc_block *kmalloc_block_list;
+kmalloc_block *kmalloc_block_list_end;
 void *brk;
 #endif
 

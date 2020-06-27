@@ -11,7 +11,7 @@ kernel-subsystem:
 	cd kernel && $(MAKE)
 	
 clean: boot-clean kernel-clean
-	$(RM) -f JustOS
+	$(RM) -f CosmOS
 
 kernel-clean:
 	cd kernel && $(MAKE) clean

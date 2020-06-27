@@ -1,7 +1,7 @@
 /*****************************************************************
  * This file is part of JustOS                                   *
  * Copyright (C) 2020 Kurt M. Weber                              *
- * Released under the terms of the Social Justice License        *
+ * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
@@ -10,6 +10,30 @@
 
 #include <types.h>
 #include <mm/mm.h>
+
+void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks){
+	mem_block *b;
+	uint8_t i;
+	
+	b = usable_phys_blocks;
+	
+	for (i = 0; i < num_blocks; i++){
+		if (map[i].type == USABLE){
+			if (map[i].base != usable_phys_blocks->base){	// so we don't double up on the block we've already started the list with
+				b->next = kmalloc(sizeof(mem_block));
+				b->next->prev = b;
+				b = b->next;
+				b->next = 0;
+				b->base = map[i].base;
+				b->len = map[i].len - (map[i].len % PAGE_SIZE);
+				b->used = false;
+				b->owner = 0;
+			}
+		}
+	}
+	
+	return;
+}
 
 void init_usable_phys_blocks(int_15_map block){
 	if (!is_page_aligned(block.base)){
@@ -29,6 +53,33 @@ void init_usable_phys_blocks(int_15_map block){
 	init_phys_block.next = 0;
 	
 	usable_phys_blocks = &init_phys_block;
+	
+	return;
+}
+
+void sort_usable_phys_blocks(){
+	mem_block *cur, *tmp;
+	
+	// just us a bubble sort, no point making it more complex than it has to be
+	// there shouldn't ever be more than a handful of blocks, and this only runs once
+	
+	cur = usable_phys_blocks;
+	
+	while (cur){
+		if (cur->next->base < cur->base){
+			tmp = cur->next;
+			cur->next = tmp->next;
+			tmp->prev = cur->prev;
+			tmp->next = cur;
+			cur->prev = tmp;
+			
+			if (!tmp->prev){	// this means we've switched out the first element, so we need to update usable_phys_blocks
+				usable_phys_blocks = tmp;
+			}
+			
+			cur = tmp;
+		}
+	}
 	
 	return;
 }

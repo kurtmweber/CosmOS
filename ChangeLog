@@ -1,3 +1,6 @@
+2020-06-01:
+	* kfree() will now join contiguous free blocks together (kmw)
+
 2020-05-13:
 	* added uitoa3() (kmw)
 	|> this converts 64-bit unsigned integers (can be cast if shorter) to

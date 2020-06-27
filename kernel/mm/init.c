@@ -1,7 +1,7 @@
 /*****************************************************************
  * This file is part of JustOS                                   *
  * Copyright (C) 2020 Kurt M. Weber                              *
- * Released under the terms of the Social Justice License        *
+ * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
@@ -13,23 +13,23 @@
 
 void mmu_init(){
 	int_15_map *map;
-	uint8_t num_blocks, lrg_block, num_usable_blocks = 0;
+	uint8_t num_blocks, lrg_block;
 	uint8_t i;
+	mem_block *b;
 	
 	brk = &_end;
-	kmalloc_block_list = 0;
+	
+	kmalloc_init();
 	
 	map = read_int_15_map(&num_blocks, &lrg_block);
 	
 	init_usable_phys_blocks(map[lrg_block]);
 	
-	for (i = 0; i < num_blocks; i++){
-		if (map[i].type == USABLE){
-			num_usable_blocks++;
-		}
-	}
+	enum_usable_phys_blocks(map, num_blocks);
 	
+	sort_usable_phys_blocks();
 	
+	return;
 }
 
 #endif

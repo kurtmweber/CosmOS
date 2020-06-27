@@ -4,18 +4,18 @@ CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I.
 MAKE=make
 LD=ld
-#LDFLAGS=-e JustOS --oformat binary -Ttext 0xFFFF800000000000 -nostdlib
-LDFLAGS=-T justos.ld -Map justos.map
+#LDFLAGS=-e CosmOS --oformat binary -Ttext 0xFFFF800000000000 -nostdlib
+LDFLAGS=-T cosmos.ld -Map cosmos.map
 
 all: kernel
 
-kernel: justos
+kernel: cosmos
 
-justos: justos.o asm-dir console-dir debug_error-dir interrupts-dir mm-dir string-dir
-	$(LD) $(LDFLAGS) -o justos justos.o asm/asm.o console/console.a interrupts/interrupts.a mm/mm.a debug_error/debug_error.a string/string.a
+cosmos: cosmos.o asm-dir console-dir debug_error-dir interrupts-dir mm-dir string-dir
+	$(LD) $(LDFLAGS) -o cosmos cosmos.o asm/asm.o console/console.a interrupts/interrupts.a mm/mm.a debug_error/debug_error.a string/string.a
 
-justos.o: justos.c
-	$(CC) $(CFLAGS) -o justos.o justos.c
+cosmos.o: cosmos.c
+	$(CC) $(CFLAGS) -o cosmos.o cosmos.c
 
 asm-dir:
 	cd asm && $(MAKE)
@@ -37,11 +37,11 @@ string-dir:
 	
 clean: kernel-clean asm-dir-clean console-dir-clean debug_error-dir-clean interrupts-dir-clean mm-dir-clean string-dir-clean
 
-kernel-clean: justos-o-clean
-	$(RM) justos
+kernel-clean: cosmos-o-clean
+	$(RM) cosmos
 
-justos-o-clean:
-	$(RM) justos.o
+cosmos-o-clean:
+	$(RM) cosmos.o cosmos.map
 	
 asm-dir-clean:
 	cd asm && $(MAKE) clean
