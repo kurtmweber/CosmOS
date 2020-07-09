@@ -1,7 +1,7 @@
 /*****************************************************************
- * This file is part of JustOS                                   *
- * Copyright (C) 2019 Kurt M. Weber                              *
- * Released under the terms of the Social Justice License        *
+ * This file is part of CosmOS                                   *
+ * Copyright (C) 2019-2020 Kurt M. Weber                         *
+ * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
@@ -24,14 +24,6 @@ void asm_cli(){
 	return;
 }
 
-void asm_sti(){
-	asm volatile(
-		"sti"
-	    );
-	
-	return;
-}
-
 pttentry asm_cr3_read(){
 	pttentry cr3;
 	
@@ -41,4 +33,32 @@ pttentry asm_cr3_read(){
 	    );
 	
 	return cr3;
+}
+
+void asm_out_b(uint16_t port, uint8_t data){
+	asm volatile(
+		"outb %0, %1"
+		:
+		: "Nd"(port), "a"(data)
+	    );
+	
+	return;
+}
+
+void asm_out_w(uint16_t port, uint16_t data){
+	asm volatile(
+		"outw %0, %1"
+		:
+		: "Nd"(port), "a"(data)
+	    );
+	
+	return;
+}
+
+void asm_sti(){
+	asm volatile(
+		"sti"
+	    );
+	
+	return;
 }

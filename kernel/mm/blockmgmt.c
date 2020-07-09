@@ -1,6 +1,6 @@
 /*****************************************************************
- * This file is part of JustOS                                   *
- * Copyright (C) 2020 Kurt M. Weber                              *
+ * This file is part of CosmOS                                   *
+ * Copyright (C) 2019-2020 Kurt M. Weber                         *
  * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
@@ -8,6 +8,7 @@
 #ifndef _BLOCKMGMT_C
 #define _BLOCKMGMT_C
 
+#include <console/console.h>
 #include <types.h>
 #include <mm/mm.h>
 
@@ -59,27 +60,34 @@ void init_usable_phys_blocks(int_15_map block){
 
 void sort_usable_phys_blocks(){
 	mem_block *cur, *tmp;
+	bool swapped = false;
 	
 	// just us a bubble sort, no point making it more complex than it has to be
 	// there shouldn't ever be more than a handful of blocks, and this only runs once
 	
-	cur = usable_phys_blocks;
-	
-	while (cur){
-		if (cur->next->base < cur->base){
-			tmp = cur->next;
-			cur->next = tmp->next;
-			tmp->prev = cur->prev;
-			tmp->next = cur;
-			cur->prev = tmp;
+	do {
+		cur = usable_phys_blocks;
+		swapped = false;
+		while (cur){
+			if (cur->next->base < cur->base){
+				tmp = cur->next;
+				cur->next = tmp->next;
+				tmp->prev = cur->prev;
+				tmp->next = cur;
+				cur->prev = tmp;
 			
-			if (!tmp->prev){	// this means we've switched out the first element, so we need to update usable_phys_blocks
-				usable_phys_blocks = tmp;
+				if (!tmp->prev){	// this means we've switched out the first element, so we need to update usable_phys_blocks
+					usable_phys_blocks = tmp;
+				}
+			
+				cur = tmp;
+				
+				swapped = true;
+			} else {
+				cur = cur->next;
 			}
-			
-			cur = tmp;
 		}
-	}
+	} while (swapped == false);
 	
 	return;
 }

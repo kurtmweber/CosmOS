@@ -1,7 +1,7 @@
 /*****************************************************************
- * This file is part of JustOS                                   *
+ * This file is part of CosmOS                                   *
  * Copyright (C) 2019-2020 Kurt M. Weber                         *
- * Released under the terms of the Social Justice License        *
+ * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
@@ -13,7 +13,7 @@
 #include <mm/mm.h>
 #include <string/string.h>
 
-void JustOS(){
+void CosmOS(){
 	void *p, *q, *r, *s, *t, *u;
 	
 	init_video_console();

@@ -1,7 +1,7 @@
-ENTRY(JustOS)
+ENTRY(CosmOS)
 OUTPUT_ARCH(i386:x86-64)
 OUTPUT_FORMAT(binary)
-OUTPUT(justos)
+OUTPUT(cosmos)
 
 SECTIONS
 {

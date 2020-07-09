@@ -30,13 +30,14 @@ kernelLoad:
 	
 	.loadLoop:
 		push ecx
+		xor ecx, ecx
 		
 		mov ah, 0x2
 		mov al, 1
 		mov ch, 0
 		mov dh, 0
-		mov cx, word [kernelBaseSector]
-		add cx, bx
+		mov cl, byte [kernelBaseSector]
+		add cl, bl
 		push ebx
 		mov dl, byte [bootDisk]
 		mov bx, 0x500
@@ -245,8 +246,8 @@ Realm64:
 
 ; data definitions
 bootDisk 		db	0
-numKernelSectors	dw	63
-kernelBaseSector	db	0
+numKernelSectors	dw	59
+kernelBaseSector	db	1
 loadTarget		dd	0x900000
 boot3			dq	0x8200
 

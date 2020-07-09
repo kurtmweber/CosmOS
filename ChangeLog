@@ -1,3 +1,7 @@
+2020-07-08:
+	* fixed issue in bootloader (kmw)
+	|> int 13h had been instructed to load beyond the 63 sector-per-track limit
+
 2020-06-01:
 	* kfree() will now join contiguous free blocks together (kmw)
 
