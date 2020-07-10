@@ -35,26 +35,6 @@ pttentry asm_cr3_read(){
 	return cr3;
 }
 
-void asm_out_b(uint16_t port, uint8_t data){
-	asm volatile(
-		"outb %0, %1"
-		:
-		: "Nd"(port), "a"(data)
-	    );
-	
-	return;
-}
-
-void asm_out_w(uint16_t port, uint16_t data){
-	asm volatile(
-		"outw %0, %1"
-		:
-		: "Nd"(port), "a"(data)
-	    );
-	
-	return;
-}
-
 void asm_sti(){
 	asm volatile(
 		"sti"
