@@ -10,11 +10,30 @@
 
 #include <types.h>
 #include <asm/asm.h>
+#include <debug_error/debug_error.h>
 #include <interrupts/interrupts.h>
 
 void initIDT(){
 	idtr idtr;
 	addISR(isrDE, DE);
+	
+	// IRQs
+	addISR(irq0, IRQ0);
+	addISR(irq1, IRQ1);
+	addISR(irq2, IRQ2);
+	addISR(irq3, IRQ3);
+	addISR(irq4, IRQ4);
+	addISR(irq5, IRQ5);
+	addISR(irq6, IRQ6);
+	addISR(irq7, IRQ7);
+	addISR(irq8, IRQ8);
+	addISR(irq9, IRQ9);
+	addISR(irq10, IRQ10);
+	addISR(irq11, IRQ11);
+	addISR(irq12, IRQ12);
+	addISR(irq13, IRQ13);
+	addISR(irq14, IRQ14);
+	addISR(irq15, IRQ15);
 	
 	idtr.limit = (256 * sizeof(idtEntry)) - 1;
 	idtr.base = (uint64_t)&idt;
@@ -27,6 +46,7 @@ void initIDT(){
 }
 
 void addISR(void *func, intVectors vector){
+	debug_print_uint64((uint64_t)vector);
 	idt[vector].offsetWordLow = (uint16_t)((uint64_t)func & 0xFFFF);
 	idt[vector].selector = 8;
 	idt[vector].ist = 0;

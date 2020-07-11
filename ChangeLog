@@ -1,3 +1,6 @@
+2020-07-11:
+	* remap PIC, add skeleton IRQ handlers (kmw)
+
 2020-07-09:
 	* added asm_[in, out]* functions (kmw)
 

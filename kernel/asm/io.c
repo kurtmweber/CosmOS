@@ -5,9 +5,12 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#ifndef _IO_C
+#define _IO_C
+
 #include <types.h>
 
-uint8_t asm_in_b(uint16_t port){
+static inline uint8_t asm_in_b(uint16_t port){
 	uint8_t data;
 	
 	asm volatile(
@@ -19,7 +22,7 @@ uint8_t asm_in_b(uint16_t port){
 	return data;
 }
 
-uint32_t asm_in_d(uint16_t port){
+static inline uint32_t asm_in_d(uint16_t port){
 	uint32_t data;
 	
 	asm volatile(
@@ -31,7 +34,7 @@ uint32_t asm_in_d(uint16_t port){
 	return data;
 }
 
-uint16_t asm_in_w(uint16_t port){
+static inline uint16_t asm_in_w(uint16_t port){
 	uint16_t data;
 	
 	asm volatile(
@@ -43,7 +46,7 @@ uint16_t asm_in_w(uint16_t port){
 	return data;
 }
 
-void asm_out_b(uint16_t port, uint8_t data){
+static inline void asm_out_b(uint16_t port, uint8_t data){
 	asm volatile(
 		"out %0, %1"
 		:
@@ -53,7 +56,8 @@ void asm_out_b(uint16_t port, uint8_t data){
 	return;
 }
 
-void asm_out_d(uint16_t port, uint32_t data){
+
+static inline void asm_out_d(uint16_t port, uint32_t data){
 	asm volatile(
 		"out %0, %1"
 		:
@@ -63,7 +67,7 @@ void asm_out_d(uint16_t port, uint32_t data){
 	return;
 }
 
-void asm_out_w(uint16_t port, uint16_t data){
+static inline void asm_out_w(uint16_t port, uint16_t data){
 	asm volatile(
 		"out %0, %1"
 		:
@@ -73,3 +77,4 @@ void asm_out_w(uint16_t port, uint16_t data){
 	return;
 }
 
+#endif

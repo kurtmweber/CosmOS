@@ -26,5 +26,12 @@ void CosmOS(){
 	console_write_line("Initializing MMU");
 	mmu_init();
 	
-	asm_hlt();
+	console_write_line("Initializing PIC");
+	pic_init();
+	
+	asm_sti();
+	
+	while (1){
+		asm_hlt();
+	}
 }

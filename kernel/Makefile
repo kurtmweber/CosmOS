@@ -12,7 +12,7 @@ all: kernel
 kernel: cosmos
 
 cosmos: cosmos.o asm-dir console-dir debug_error-dir interrupts-dir mm-dir string-dir
-	$(LD) $(LDFLAGS) -o cosmos cosmos.o asm/asm.o console/console.a interrupts/interrupts.a mm/mm.a debug_error/debug_error.a string/string.a
+	$(LD) $(LDFLAGS) -o cosmos cosmos.o console/console.a interrupts/interrupts.a mm/mm.a debug_error/debug_error.a string/string.a asm/asm.a
 
 cosmos.o: cosmos.c
 	$(CC) $(CFLAGS) -o cosmos.o cosmos.c
