@@ -8,7 +8,7 @@ MAKE=make
 
 all: console.a
 
-console.a: console.o consoleprint.o consoleutil.o
+console.a: console.o consoleprint.o consoleutil.o cursor.o keyboard.o
 	$(AR) $(AFLAGS) $@ $^
 
 console.o: console.c
@@ -19,8 +19,14 @@ consoleprint.o: consoleprint.c
 	
 consoleutil.o: consoleutil.c
 	$(CC) $(CFLAGS) -o $@ $^
+
+cursor.o: cursor.c
+	$(CC) $(CFLAGS) -o $@ $^
 	
-clean: console-a-clean console-o-clean consoleprint-o-clean consoleutil-o-clean
+keyboard.o: keyboard.c
+	$(CC) $(CFLAGS) -o $@ $^
+	
+clean: console-a-clean console-o-clean consoleprint-o-clean consoleutil-o-clean cursor-o-clean keyboard-o-clean
 
 console-a-clean:
 	$(RM) console.a
@@ -33,3 +39,9 @@ consoleprint-o-clean:
 	
 consoleutil-o-clean:
 	$(RM) consoleutil.o
+
+cursor-o-clean:
+	$(RM) cursor.o
+	
+keyboard-o-clean:
+	$(RM) keyboard.o

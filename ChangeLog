@@ -1,5 +1,9 @@
+2020-07-12:
+	* update cursor location after writing to system console (kmw)
+
 2020-07-11:
 	* remap PIC, add skeleton IRQ handlers (kmw)
+	* read system date and time from CMOS RTC (kmw)
 
 2020-07-09:
 	* added asm_[in, out]* functions (kmw)

@@ -16,6 +16,7 @@ __attribute__ ((interrupt)) void irq0(stackFrame *frame){
 }
 
 __attribute__ ((interrupt)) void irq1(stackFrame *frame){
+	keyboard_irq_read();
 	pic_send_eoi(1);
 }
 

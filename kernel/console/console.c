@@ -39,6 +39,8 @@ void refresh_console(){
 			*vid_mem++ = 0x0F;
 		}
 	}
+	
+	cursor_set_position(cursor_position);
 
 }
 

@@ -10,6 +10,17 @@
 
 #include <types.h>
 
+// CRT control I/O ports
+#define CRT_INDEX_REGISTER	0x3D4
+#define CRT_DATA_REGISTER	0x3D5
+
+// cursor control commands
+#define CURSOR_LOCATION_HIBYTE	0x0E
+#define CURSOR_LOCATION_LOBYTE	0x0F
+
+#define KBD_PORT		0x60
+#define KBD_CTRL_PORT		0x64
+
 typedef struct cursor_loc{
 	uint8_t x;
 	uint8_t y;
@@ -44,6 +55,18 @@ void console_write_line(const char *s);
 uint8_t find_blank_line();
 void scroll_console_up();
 #else
+#endif
+
+#ifndef _CURSOR_C
+extern uint16_t cursor_position;
+
+void cursor_set_position(uint16_t loc);
+#else
+uint16_t cursor_position;
+#endif
+
+#ifndef _KEYBOARD_C
+void keyboard_irq_read();
 #endif
 
 #endif
