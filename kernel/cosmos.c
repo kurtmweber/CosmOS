@@ -12,6 +12,7 @@
 #include <interrupts/interrupts.h>
 #include <mm/mm.h>
 #include <string/string.h>
+#include <timing/timing.h>
 
 void CosmOS(){
 	void *p, *q, *r, *s, *t, *u;

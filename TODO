@@ -1,1 +1,2 @@
 * Support custom attributes in consolebuffer/console display (kmw, 2020-05-12)
+* Check whether CMOS RTC is binary/BCD and 12/24 hours, and convert to standard format accordingly (kmw, 2020-07-11)

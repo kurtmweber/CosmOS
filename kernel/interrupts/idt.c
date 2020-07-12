@@ -46,7 +46,6 @@ void initIDT(){
 }
 
 void addISR(void *func, intVectors vector){
-	debug_print_uint64((uint64_t)vector);
 	idt[vector].offsetWordLow = (uint16_t)((uint64_t)func & 0xFFFF);
 	idt[vector].selector = 8;
 	idt[vector].ist = 0;
