@@ -11,8 +11,17 @@ all: kernel
 
 kernel: cosmos
 
-cosmos: cosmos.o asm-dir console-dir debug_error-dir interrupts-dir mm-dir string-dir timing-dir
-	$(LD) $(LDFLAGS) -o cosmos cosmos.o interrupts/interrupts.a console/console.a mm/mm.a debug_error/debug_error.a string/string.a timing/timing.a asm/asm.a
+cosmos: cosmos.o asm-dir console-dir debug_error-dir interrupts-dir keyboard-dir mm-dir string-dir timing-dir
+	$(LD) $(LDFLAGS) -o cosmos \
+	cosmos.o \
+	interrupts/interrupts.a \
+	console/console.a \
+	mm/mm.a \
+	timing/timing.a \
+	asm/asm.a \
+	keyboard/keyboard.a \
+	debug_error/debug_error.a \
+	string/string.a
 
 cosmos.o: cosmos.c
 	$(CC) $(CFLAGS) -o cosmos.o cosmos.c
@@ -29,6 +38,9 @@ debug_error-dir:
 interrupts-dir:
 	cd interrupts && $(MAKE)
 	
+keyboard-dir:
+	cd keyboard && $(MAKE)
+	
 mm-dir:
 	cd mm && $(MAKE)
 
@@ -38,7 +50,7 @@ string-dir:
 timing-dir:
 	cd timing && $(MAKE)
 	
-clean: kernel-clean asm-dir-clean console-dir-clean debug_error-dir-clean interrupts-dir-clean mm-dir-clean string-dir-clean
+clean: kernel-clean asm-dir-clean console-dir-clean debug_error-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean string-dir-clean
 
 kernel-clean: cosmos-o-clean
 	$(RM) cosmos
@@ -57,6 +69,9 @@ debug_error-dir-clean:
 	
 interrupts-dir-clean:
 	cd interrupts && $(MAKE) clean
+	
+keyboard-dir-clean:
+	cd keyboard && $(MAKE) clean
 	
 mm-dir-clean:
 	cd mm && $(MAKE) clean

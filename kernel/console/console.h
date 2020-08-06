@@ -18,9 +18,6 @@
 #define CURSOR_LOCATION_HIBYTE	0x0E
 #define CURSOR_LOCATION_LOBYTE	0x0F
 
-#define KBD_PORT		0x60
-#define KBD_CTRL_PORT		0x64
-
 typedef struct cursor_loc{
 	uint8_t x;
 	uint8_t y;
@@ -65,8 +62,5 @@ void cursor_set_position(uint16_t loc);
 uint16_t cursor_position;
 #endif
 
-#ifndef _KEYBOARD_C
-void keyboard_irq_read();
-#endif
 
 #endif

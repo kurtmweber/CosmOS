@@ -10,11 +10,15 @@
 #include <console/console.h>
 #include <debug_error/debug_error.h>
 #include <interrupts/interrupts.h>
+#include <keyboard/keyboard.h>
 #include <mm/mm.h>
 #include <string/string.h>
 #include <timing/timing.h>
 
+#define P(row, col)	((row << 5) + col)
+
 void CosmOS(){
+	key_action_t k;
 	void *p, *q, *r, *s, *t, *u;
 	
 	init_video_console();
@@ -30,9 +34,13 @@ void CosmOS(){
 	console_write_line("Initializing PIC");
 	pic_init();
 	
+	keyboard_init();
+	
 	asm_sti();
 	
 	while (1){
 		asm_hlt();
 	}
 }
+
+#undef P

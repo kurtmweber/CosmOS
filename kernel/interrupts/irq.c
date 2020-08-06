@@ -9,6 +9,7 @@
 #define _IRQ_C
 
 #include <console/console.h>
+#include <keyboard/keyboard.h>
 #include <interrupts/interrupts.h>
 
 __attribute__ ((interrupt)) void irq0(stackFrame *frame){
