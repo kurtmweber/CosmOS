@@ -33,7 +33,7 @@ void console_write_line(const char *s){
 		i++;
 	}
 	
-	cursor_position = (line_no * 80) + i;
+	//cursor_position = (line_no * 80) + i;
 	
 	refresh_console();
 

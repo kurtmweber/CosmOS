@@ -40,7 +40,7 @@ void refresh_console(){
 		}
 	}
 	
-	cursor_set_position(cursor_position);
+	//cursor_set_position(cursor_position);
 
 }
 

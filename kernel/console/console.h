@@ -5,8 +5,8 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _VIDEO_H
-#define _VIDEO_H
+#ifndef _CONSOLE_H
+#define _CONSOLE_H
 
 #include <types.h>
 
@@ -53,14 +53,5 @@ uint8_t find_blank_line();
 void scroll_console_up();
 #else
 #endif
-
-#ifndef _CURSOR_C
-extern uint16_t cursor_position;
-
-void cursor_set_position(uint16_t loc);
-#else
-uint16_t cursor_position;
-#endif
-
 
 #endif

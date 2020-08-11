@@ -6,14 +6,16 @@
  *****************************************************************/
 
 #include <types.h>
-#include <asm/asm.h>
 #include <console/console.h>
+#include <asm/asm.h>
 #include <debug_error/debug_error.h>
 #include <interrupts/interrupts.h>
 #include <keyboard/keyboard.h>
 #include <mm/mm.h>
 #include <string/string.h>
 #include <timing/timing.h>
+#include <video/video.h>
+#include <video/vga/vga.h>
 
 #define P(row, col)	((row << 5) + col)
 
@@ -35,6 +37,10 @@ void CosmOS(){
 	pic_init();
 	
 	keyboard_init();
+	
+	video_init();
+	video_select_driver(VIDEO_DRIVER_VGA);
+	video_select_mode(VIDEO_MODE_TEXT);
 	
 	asm_sti();
 	

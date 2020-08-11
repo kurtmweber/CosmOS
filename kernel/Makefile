@@ -11,11 +11,12 @@ all: kernel
 
 kernel: cosmos
 
-cosmos: cosmos.o asm-dir console-dir debug_error-dir interrupts-dir keyboard-dir mm-dir string-dir timing-dir
+cosmos: cosmos.o asm-dir console-dir debug_error-dir interrupts-dir keyboard-dir mm-dir string-dir timing-dir video-dir
 	$(LD) $(LDFLAGS) -o cosmos \
 	cosmos.o \
-	interrupts/interrupts.a \
 	console/console.a \
+	video/video.a \
+	interrupts/interrupts.a \
 	mm/mm.a \
 	timing/timing.a \
 	asm/asm.a \
@@ -50,7 +51,10 @@ string-dir:
 timing-dir:
 	cd timing && $(MAKE)
 	
-clean: kernel-clean asm-dir-clean console-dir-clean debug_error-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean string-dir-clean
+video-dir:
+	cd video && $(MAKE)
+	
+clean: kernel-clean asm-dir-clean console-dir-clean debug_error-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean string-dir-clean timing-dir-clean video-dir-clean
 
 kernel-clean: cosmos-o-clean
 	$(RM) cosmos
@@ -78,3 +82,9 @@ mm-dir-clean:
 
 string-dir-clean:
 	cd string && $(MAKE) clean
+	
+timing-dir-clean:
+	cd timing && $(MAKE) clean
+	
+video-dir-clean:
+	cd video && $(MAKE) clean

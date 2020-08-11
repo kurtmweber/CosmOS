@@ -1,3 +1,9 @@
+2020-08-10
+	* kernel video interface and vga text-mode driver (kmw)
+
+2020-08-05
+	* added raw keyboard driver (kmw)
+
 2020-07-12:
 	* update cursor location after writing to system console (kmw)
 
