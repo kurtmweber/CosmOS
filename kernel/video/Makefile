@@ -3,12 +3,12 @@ RM=rm -f
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
 AR=ar
-AFLAGS=-crs
+AFLAGS=-crsT
 MAKE=make
 
 all: vga-dir video.a
 
-video.a: text.o video.o vga/cursor.o vga/mode.o vga/text.o vga/vga.o
+video.a: text.o video.o vga/vga.a
 	$(AR) $(AFLAGS) $@ $^
 
 text.o: text.c

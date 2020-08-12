@@ -63,7 +63,7 @@ uint8_t vga_set_mode(video_mode mode);
 #ifndef _VGA_TEXT_C
 uint8_t vga_write_text(const char *txt, uint8_t start_row, uint8_t start_col, uint8_t attrib, video_text_color fg_color, video_text_color bg_color);
 #else
-const void *vga_text_mem_base = (const char *)0xB8000;
+const char *vga_text_mem_base = (const char *)0xB8000;
 #endif
 
 #ifndef _VGA_C

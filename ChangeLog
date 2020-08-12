@@ -1,3 +1,6 @@
+2020-08-11
+	* put check in vga text-mode driver to prevent writing past end of text-mode memory area (kmw)
+
 2020-08-10
 	* kernel video interface and vga text-mode driver (kmw)
 

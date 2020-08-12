@@ -21,6 +21,11 @@ uint8_t vga_write_text(const char *txt, uint8_t start_row, uint8_t start_col, ui
 	startpoint = (char *)vga_text_mem_base + ((start_row * vga_mode_params[VIDEO_MODE_TEXT].x_width * 2) + (start_col * 2));
 	
 	while (txt[i]){
+		// make sure we don't write past the end of the vga text mode memory area
+		if (startpoint >= (vga_text_mem_base + (vga_mode_params[VIDEO_MODE_TEXT].x_width * vga_mode_params[VIDEO_MODE_TEXT].y_height * 2))){
+			return 0;
+		}
+		
 		*startpoint = txt[i];
 		
 		startpoint++;
@@ -32,7 +37,9 @@ uint8_t vga_write_text(const char *txt, uint8_t start_row, uint8_t start_col, ui
 		i++;
 	}
 	
-	cursor_set_position((uint16_t)((uint64_t)(startpoint - (char *)vga_text_mem_base) / 2));
+	cursor_set_position((uint16_t)((uint64_t)(startpoint - vga_text_mem_base) / 2));
+	
+	return 1;
 }
 
 #endif

@@ -6,7 +6,10 @@ AR=ar
 AFLAGS=-crs
 MAKE=make
 
-all: cursor.o mode.o text.o vga.o
+all: vga.a
+
+vga.a: cursor.o mode.o text.o vga.o
+	$(AR) $(AFLAGS) $@ $^
 	
 cursor.o: cursor.c
 	$(CC) $(CFLAGS) -o $@ $^
