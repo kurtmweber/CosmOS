@@ -3,12 +3,12 @@ RM=rm -f
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
 AR=ar
-AFLAGS=-crs
+AFLAGS=-crsT
 MAKE=make
 
-all: console.a
+all: drivers-dir console.a
 
-console.a: console.o consoleprint.o consoleutil.o
+console.a: console.o consoleprint.o consoleutil.o drivers/drivers.a
 	$(AR) $(AFLAGS) $@ $^
 
 console.o: console.c
@@ -20,7 +20,13 @@ consoleprint.o: consoleprint.c
 consoleutil.o: consoleutil.c
 	$(CC) $(CFLAGS) -o $@ $^
 	
-clean: console-a-clean console-o-clean consoleprint-o-clean consoleutil-o-clean cursor-o-clean
+drivers-dir:
+	cd drivers && $(MAKE)
+	
+clean: drivers-dir-clean console-a-clean console-o-clean consoleprint-o-clean consoleutil-o-clean cursor-o-clean
+
+drivers-dir-clean:
+	cd drivers && $(MAKE) clean
 
 console-a-clean:
 	$(RM) console.a

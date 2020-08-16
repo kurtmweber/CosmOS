@@ -7,6 +7,7 @@
 
 #include <types.h>
 #include <console/console.h>
+#include <console/drivers/drivers.h>
 #include <asm/asm.h>
 #include <debug_error/debug_error.h>
 #include <interrupts/interrupts.h>
@@ -19,28 +20,25 @@
 
 #define P(row, col)	((row << 5) + col)
 
-void CosmOS(){
-	key_action_t k;
-	void *p, *q, *r, *s, *t, *u;
-	
-	init_video_console();
-	
-	console_write_line("CosmOS");
-	
-	console_write_line("Initializing IDT");
-	initIDT();
-	
-	console_write_line("Initializing MMU");
-	mmu_init();
-	
-	console_write_line("Initializing PIC");
-	pic_init();
-	
-	keyboard_init();
-	
+void CosmOS(){	
 	video_init();
 	video_select_driver(VIDEO_DRIVER_VGA);
 	video_select_mode(VIDEO_MODE_TEXT);
+	
+	console_driver_interface_init();
+	
+	console_write("Loading CosmOS 0.1\n");
+	
+	console_write("Initializing IDT...\n");
+	initIDT();
+	
+	console_write("Initializing MMU...\n");
+	mmu_init();
+	
+	console_write("Initializing PIC...\n");
+	pic_init();
+	
+	keyboard_init();
 	
 	asm_sti();
 	

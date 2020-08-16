@@ -23,6 +23,14 @@ void video_init(){
 	}
 }
 
+uint8_t video_query_resolution(uint16_t *x, uint16_t *y){
+	uint8_t r;
+	
+	return video_interfaces[video_active_driver].query_resolution(x, y);
+	
+	
+}
+
 uint8_t video_select_driver(video_driver driver){
 	if (driver >= VIDEO_DRIVER_LAST){
 		return 0;

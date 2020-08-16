@@ -10,7 +10,7 @@
 
 #include <types.h>
 #include <asm/asm.h>
-#include <console/console.h>
+#include <console/drivers/drivers.h>
 #include <debug_error/debug_error.h>
 #include <keyboard/keyboard.h>
 
@@ -20,7 +20,7 @@ void keyboard_add_command_queue(uint8_t command){
 }
 
 void keyboard_init(){
-	console_write_line("Initializing keyboard...");
+	console_write("Initializing keyboard...\n");
 	keyboard_buffer_start = 0;
 	keyboard_buffer_end = 0;
 	

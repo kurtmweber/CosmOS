@@ -61,9 +61,10 @@ uint8_t vga_set_mode(video_mode mode);
 #endif
 
 #ifndef _VGA_TEXT_C
+void vga_scroll_text(void);
 uint8_t vga_write_text(const char *txt, uint8_t start_row, uint8_t start_col, uint8_t attrib, video_text_color fg_color, video_text_color bg_color);
 #else
-const char *vga_text_mem_base = (const char *)0xB8000;
+char *vga_text_mem_base = (char *)0xB8000;
 #endif
 
 #ifndef _VGA_C
@@ -74,6 +75,7 @@ void vga_driver_register();
 vga_mode_params_t vga_mode_params[VIDEO_MODE_MAX];
 
 void vga_init();
+uint8_t vga_query_resolution(uint16_t *x, uint16_t *y);
 #endif
 
 #endif

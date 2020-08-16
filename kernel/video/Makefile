@@ -20,7 +20,7 @@ video.o: video.c
 vga-dir:
 	cd vga && $(MAKE)
 	
-clean: vga-dir-clean video-a-clean video-o-clean
+clean: vga-dir-clean video-a-clean text-o-clean video-o-clean
 
 video-a-clean:
 	$(RM) video.a

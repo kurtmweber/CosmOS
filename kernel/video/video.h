@@ -41,6 +41,8 @@ typedef enum video_text_color{
 typedef struct video_driver_interface_t{
 	void (*cursor_loc)(uint8_t row, uint8_t col);
 	void (*init)();
+	uint8_t (*query_resolution)(uint16_t *x, uint16_t *y);
+	void (*scroll_text)(void);
 	uint8_t (*set_mode)(video_mode);
 	uint8_t (*write_text)(const char *text, uint8_t start_row, uint8_t start_col, uint8_t attrib, video_text_color fg_color, video_text_color bg_color);
 } video_driver_interface_t;
@@ -51,6 +53,7 @@ extern video_driver video_active_driver;
 extern video_mode video_active_mode;
 
 void video_init();
+uint8_t video_query_resolution(uint16_t *x, uint16_t *y);
 uint8_t video_select_driver(video_driver driver);
 uint8_t video_select_mode(video_mode mode);
 #else
@@ -60,6 +63,7 @@ video_mode video_active_mode;
 #endif
 
 #ifndef _VIDEO_TEXT_C
+void video_scroll_text(void);
 uint8_t video_write_text(const char *txt, uint8_t start_row, uint8_t start_col, uint8_t attrib, video_text_color fg_color, video_text_color bg_color);
 #endif
 

@@ -8,6 +8,8 @@
 #ifndef _TYPES_H
 #define _TYPES_H
 
+#define NULL 0
+
 // simple typedefs for generic types that are needed throughout kernel
 // definitions for more complex or subsystem-specific types should go in the
 // header for the appropriate subsystem

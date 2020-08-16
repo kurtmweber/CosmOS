@@ -9,11 +9,11 @@
 #define _PANIC_C
 
 #include <asm/asm.h>
-#include <console/console.h>
+#include <console/drivers/drivers.h>
 
 void panic(const char *s){
-	console_write_line("!!!PANIC!!!");
-	console_write_line(s);
+	console_write("!!!PANIC!!!");
+	console_write(s);
 	
 	asm_hlt();
 }

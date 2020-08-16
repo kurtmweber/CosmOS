@@ -9,8 +9,36 @@
 #define _VGA_TEXT_C
 
 #include <types.h>
+#include <console/console.h>
+#include <debug_error/debug_error.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
+
+void vga_scroll_text(void){
+	uint16_t i;
+	uint16_t row_size;
+	uint16_t screen_size;
+	uint16_t last_row_loc;
+	
+	screen_size = (vga_mode_params[VIDEO_MODE_TEXT].x_width * vga_mode_params[VIDEO_MODE_TEXT].y_height * 2);
+	
+	row_size = vga_mode_params[VIDEO_MODE_TEXT].x_width * 2;
+	
+	last_row_loc = screen_size - row_size;
+	
+	// start at the beginning of the second row (row 1 in zero-based numbering) and copy each value (character and attribute) to the location
+	// x_width * 2 positions before it.
+	for (i = row_size; i < screen_size; i++){
+		vga_text_mem_base[i - row_size] = vga_text_mem_base[i];		
+	}
+	
+	// and now we blank the last line
+	for (i = 0; i < row_size; i++){
+		vga_text_mem_base[last_row_loc + i] = '\0';
+	}
+	
+	return;
+}
 
 uint8_t vga_write_text(const char *txt, uint8_t start_row, uint8_t start_col, uint8_t attrib, video_text_color fg_color, video_text_color bg_color){
 	// ignore attrib for now, but I went ahead and put it in the API to minimize breaking things when I add support for it
