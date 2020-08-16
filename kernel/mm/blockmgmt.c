@@ -8,7 +8,6 @@
 #ifndef _BLOCKMGMT_C
 #define _BLOCKMGMT_C
 
-#include <console/console.h>
 #include <types.h>
 #include <mm/mm.h>
 

@@ -1,3 +1,6 @@
+2020-08-16
+	* basic kprintf implementation--no format strings yet (kmw)
+
 2020-08-15
 	* console driver infrastructure and vga console driver (kmw)
 	* removed old, superseded console subsystem (kmw)

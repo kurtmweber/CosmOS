@@ -27,7 +27,7 @@ void CosmOS(){
 	
 	console_driver_interface_init();
 	
-	console_write("Loading CosmOS 0.1\n");
+	kprintf("Loading CosmOS 0.1\n");
 	
 	console_write("Initializing IDT...\n");
 	initIDT();

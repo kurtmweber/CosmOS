@@ -18,6 +18,7 @@ void debug_print_uint64(uint64_t n){
 	uitoa3(n, s, UINT64_DECIMAL_STRING_LENGTH);
 	
 	console_write(s);
+	console_write("\n");
 	
 	return;
 	

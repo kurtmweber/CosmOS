@@ -8,16 +8,22 @@ MAKE=make
 
 all: drivers-dir console.a
 
-console.a: drivers/drivers.a
+console.a: kprintf.o drivers/drivers.a
 	$(AR) $(AFLAGS) $@ $^
+
+kprintf.o: kprintf.c
+	$(CC) $(CFLAGS) -o $@ $<
 	
 drivers-dir:
 	cd drivers && $(MAKE)
 	
-clean: drivers-dir-clean console-a-clean
+clean: drivers-dir-clean console-a-clean kprintf-o-clean
 
 drivers-dir-clean:
 	cd drivers && $(MAKE) clean
 
 console-a-clean:
 	$(RM) console.a
+	
+kprintf-o-clean:
+	$(RM) kprintf.o

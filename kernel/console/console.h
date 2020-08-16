@@ -16,4 +16,8 @@
 #define CURSOR_LOCATION_HIBYTE	0x0E
 #define CURSOR_LOCATION_LOBYTE	0x0F
 
+#ifndef _KPRINTF_C
+uint64_t kprintf(const char *s, ...);
+#endif
+
 #endif
