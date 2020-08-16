@@ -1,23 +1,23 @@
 /*****************************************************************
  * This file is part of CosmOS                                   *
- * Copyright (C) 2019-2020 Kurt M. Weber                         *
+ * Copyright (C) 2020 Kurt M. Weber                              *
  * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _STRING_H
-#define _STRING_H
+#ifndef _STRING_C
+#define _STRING_C
 
 #include <types.h>
 
-#define UINT64_DECIMAL_STRING_LENGTH 21
-
-#ifndef _ITOA_C
-void uitoa3(uint64_t n, char *s, uint8_t len);
-#endif
-
-#ifndef _STRING_C
-uint64_t strlen(const char *s);
-#endif
+uint64_t strlen(const char *s){
+	uint64_t i = 0;
+	
+	while (s[i]){
+		i++;
+	}
+	
+	return i;
+}
 
 #endif

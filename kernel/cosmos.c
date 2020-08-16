@@ -29,13 +29,13 @@ void CosmOS(){
 	
 	kprintf("Loading CosmOS 0.1\n");
 	
-	console_write("Initializing IDT...\n");
+	kprintf("Initializing IDT...\n");
 	initIDT();
 	
-	console_write("Initializing MMU...\n");
+	kprintf("Initializing MMU...\n");
 	mmu_init();
 	
-	console_write("Initializing PIC...\n");
+	kprintf("Initializing PIC...\n");
 	pic_init();
 	
 	keyboard_init();

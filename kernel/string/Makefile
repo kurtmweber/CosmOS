@@ -8,16 +8,22 @@ MAKE=make
 
 all: string.a
 
-string.a: itoa.o
+string.a: itoa.o string.o
 	$(AR) $(AFLAGS) $@ $^
 	
 itoa.o: itoa.c
 	$(CC) $(CFLAGS) -o $@ $^
 	
-clean: string-a-clean itoa-o-clean
+string.o: string.c
+	$(CC) $(CFLAGS) -o $@ $^
+	
+clean: string-a-clean itoa-o-clean string-o-clean
 
 string-a-clean:
 	$(RM) string.a
 
 itoa-o-clean:
 	$(RM) itoa.o
+	
+string-o-clean:
+	$(RM) string.o

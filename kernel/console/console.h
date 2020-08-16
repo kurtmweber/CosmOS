@@ -18,6 +18,8 @@
 
 #ifndef _KPRINTF_C
 uint64_t kprintf(const char *s, ...);
+#else
+uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __builtin_va_list ap);
 #endif
 
 #endif
