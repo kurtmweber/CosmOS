@@ -8,37 +8,16 @@ MAKE=make
 
 all: drivers-dir console.a
 
-console.a: console.o consoleprint.o consoleutil.o drivers/drivers.a
+console.a: drivers/drivers.a
 	$(AR) $(AFLAGS) $@ $^
-
-console.o: console.c
-	$(CC) $(CFLAGS) -o $@ $^
-	
-consoleprint.o: consoleprint.c
-	$(CC) $(CFLAGS) -o $@ $^
-	
-consoleutil.o: consoleutil.c
-	$(CC) $(CFLAGS) -o $@ $^
 	
 drivers-dir:
 	cd drivers && $(MAKE)
 	
-clean: drivers-dir-clean console-a-clean console-o-clean consoleprint-o-clean consoleutil-o-clean cursor-o-clean
+clean: drivers-dir-clean console-a-clean
 
 drivers-dir-clean:
 	cd drivers && $(MAKE) clean
 
 console-a-clean:
 	$(RM) console.a
-
-console-o-clean:
-	$(RM) console.o
-	
-consoleprint-o-clean:
-	$(RM) consoleprint.o
-	
-consoleutil-o-clean:
-	$(RM) consoleutil.o
-
-cursor-o-clean:
-	$(RM) cursor.o

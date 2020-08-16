@@ -8,6 +8,7 @@
 #ifndef _IRQ_C
 #define _IRQ_C
 
+#include <types.h>
 #include <console/console.h>
 #include <keyboard/keyboard.h>
 #include <interrupts/interrupts.h>

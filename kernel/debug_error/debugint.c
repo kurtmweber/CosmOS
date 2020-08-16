@@ -9,7 +9,7 @@
 #define _DEBUGINT_C
 
 #include <types.h>
-#include <console/console.h>
+#include <console/drivers/drivers.h>
 #include <string/string.h>
 
 void debug_print_uint64(uint64_t n){
@@ -17,7 +17,7 @@ void debug_print_uint64(uint64_t n){
 	
 	uitoa3(n, s, UINT64_DECIMAL_STRING_LENGTH);
 	
-	console_write_line(s);
+	console_write(s);
 	
 	return;
 	

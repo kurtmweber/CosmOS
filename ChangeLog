@@ -1,3 +1,7 @@
+2020-08-15
+	* console driver infrastructure and vga console driver (kmw)
+	* removed old, superseded console subsystem (kmw)
+
 2020-08-11
 	* put check in vga text-mode driver to prevent writing past end of text-mode memory area (kmw)
 

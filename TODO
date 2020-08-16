@@ -1,2 +1,3 @@
 * Support custom attributes in consolebuffer/console display (kmw, 2020-05-12)
 * Check whether CMOS RTC is binary/BCD and 12/24 hours, and convert to standard format accordingly (kmw, 2020-07-11)
+* Speed up vga_console_write by sending chunks that run to end of line, rather than individual characters, to minimize calls to vga driver
