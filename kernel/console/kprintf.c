@@ -63,6 +63,28 @@ uint64_t kprintf(const char *s, ...){
 	return chars_written;
 }
 
+uint64_t kprintf_do_uint(uint8_t width, char *output, uint8_t base, __builtin_va_list ap){
+	// conversion variables
+	unsigned int conv_uint;
+	unsigned long conv_ulong;
+	
+	switch(width){
+		// fallthrough is intentional, as 8-bit and 16-bit unsigned ints are promoted by compiler to 32-bit unsigned int
+		case 8:
+		case 16:
+		case 32:
+			conv_uint = __builtin_va_arg(ap, unsigned int);
+			uitoa3(conv_uint, output, 66, base);
+			break;
+		case 64:
+			conv_ulong = __builtin_va_arg(ap, unsigned long);
+			uitoa3(conv_ulong, output, 66, base);
+			break;
+	}
+	console_write(output);
+	return strlen(output);
+}
+
 uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __builtin_va_list ap){
 	// maximum length of an output string is 66 bytes:
 	// 64 binary digits (for an unsigned 64-bit type) or 63 and a +/- sign (if signed)
@@ -72,6 +94,8 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
 	uint64_t i = 0;
 	uint64_t consumed = 0;
 	uint8_t width = 0;
+	
+	bool hex_prefix = false;
 	
 	// conversion variables
 	unsigned int conv_uint;
@@ -94,22 +118,22 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
 				if (!width){
 					width = 16;
 				}
-				switch(width){
-					// fallthrough is intentional, as 8-bit and 16-bit unsigned ints are promoted by compiler to 32-bit unsigned int
-					case 8:
-					case 16:
-					case 32:
-						conv_uint = __builtin_va_arg(ap, unsigned int);
-						uitoa3(conv_uint, output, 66);
-						break;
-					case 64:
-						conv_ulong = __builtin_va_arg(ap, unsigned long);
-						uitoa3(conv_ulong, output, 66);
-						break;
-				}
-				console_write(output);
-				*chars_written += strlen(output);
+				*chars_written += kprintf_do_uint(width, output, 10, ap);
 				return consumed;
+			case 'X':
+				if (!width){
+					width = 16;
+				}
+				if (hex_prefix){
+					console_write("0x");
+					*chars_written += 2;
+				}
+				
+				*chars_written += kprintf_do_uint(width, output, 16, ap);
+				return consumed;
+			case '#':
+				hex_prefix = true;
+				break;
 			default:
 				return consumed;
 		}

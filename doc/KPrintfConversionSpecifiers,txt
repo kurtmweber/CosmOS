@@ -11,3 +11,8 @@ may not function exactly like they do in standard C printf.
 %u	uint16_t converted to unsigned decimal notation
 %lu	uint32_t converted to unsigned decimal notation
 %llu	uint64_t converted to unsigned decimal notation
+
+%hX	uint8_t converted to unsigned hexadecimal notation
+%X	uint16_t converted to unsigned hexadecimal notation
+%lX	uint32_t converted to unsigned hexadecimal notation
+%llX	uint64_t converted to unsigned hexadecimal notation

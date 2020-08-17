@@ -23,6 +23,7 @@ typedef struct console_driver_interface_t{
 extern console_driver_interface_t console_interfaces[CONSOLE_DRIVER_LAST];
 
 void console_driver_interface_init();
+uint8_t console_select_driver(console_driver d);
 uint8_t console_setpos(uint8_t x, uint8_t y);
 uint8_t console_write(const char *c);
 #else

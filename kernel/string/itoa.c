@@ -10,17 +10,16 @@
 
 #include <types.h>
 
-void uitoa3(uint64_t n, char *s, uint8_t len){
-	// use this function before mmu is set up or, maybe
-	// when debugging mmu
-	
+void uitoa3(uint64_t n, char *s, uint8_t len, uint8_t base){
 	uint8_t i = 0;
 	char *rev = s;
 	char tmp;
 	
+	char c_array[] = "0123456789ABCDEF";
+	
 	do {
-		*s = (n % 10) + '0';
-		n /= 10;
+		*s = c_array[n % base];
+		n /= base;
 		s++;
 		i++;
 	} while ((n) && (i < len));
@@ -30,7 +29,7 @@ void uitoa3(uint64_t n, char *s, uint8_t len){
 	// decrement s because otherwise it will point to the terminating \0
 	// which will mean that the reversed string that we build next will begin with \0
 	s--;
-	
+
 	while (rev < s){
 		tmp = *rev;
 		*rev = *s;

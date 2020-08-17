@@ -13,7 +13,7 @@
 #define UINT64_DECIMAL_STRING_LENGTH 21
 
 #ifndef _ITOA_C
-void uitoa3(uint64_t n, char *s, uint8_t len);
+void uitoa3(uint64_t n, char *s, uint8_t len, uint8_t base);
 #endif
 
 #ifndef _STRING_C
