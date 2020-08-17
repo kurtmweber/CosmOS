@@ -10,8 +10,8 @@
 
 #include <types.h>
 #include <asm/asm.h>
-#include <debug_error/debug_error.h>
 #include <mm/mm.h>
+#include <panic/panic.h>
 #include <string/string.h>
 
 pttentry *extract_cr3_base_address(pttentry cr3) __attribute__((alias("extract_pttentry_base_address")));

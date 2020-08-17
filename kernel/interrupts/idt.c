@@ -10,7 +10,6 @@
 
 #include <types.h>
 #include <asm/asm.h>
-#include <debug_error/debug_error.h>
 #include <interrupts/interrupts.h>
 
 void initIDT(){

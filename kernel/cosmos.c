@@ -9,7 +9,6 @@
 #include <console/console.h>
 #include <console/drivers/drivers.h>
 #include <asm/asm.h>
-#include <debug_error/debug_error.h>
 #include <interrupts/interrupts.h>
 #include <keyboard/keyboard.h>
 #include <mm/mm.h>

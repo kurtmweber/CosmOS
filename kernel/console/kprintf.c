@@ -11,7 +11,6 @@
 #include <types.h>
 #include <console/console.h>
 #include <console/drivers/drivers.h>
-#include <debug_error/debug_error.h>
 #include <string/string.h>
 
 uint64_t kprintf(const char *s, ...){

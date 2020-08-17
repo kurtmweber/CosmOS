@@ -5,23 +5,11 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _DEBUGINT_C
-#define _DEBUGINT_C
+#ifndef _PANIC_H
+#define _PANIC_H
 
-#include <types.h>
-#include <console/drivers/drivers.h>
-#include <string/string.h>
-
-void debug_print_uint64(uint64_t n){
-	char s[UINT64_DECIMAL_STRING_LENGTH];
-	
-	uitoa3(n, s, UINT64_DECIMAL_STRING_LENGTH, 10);
-	
-	console_write(s);
-	console_write("\n");
-	
-	return;
-	
-}
+#ifndef _PANIC_C
+void panic(const char *s);
+#endif
 
 #endif

@@ -10,7 +10,6 @@
 
 #include <types.h>
 #include <console/console.h>
-#include <debug_error/debug_error.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
 

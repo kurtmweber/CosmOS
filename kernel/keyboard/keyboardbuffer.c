@@ -9,7 +9,6 @@
 #define _KEYBOARDBUFFER_H
 
 #include <types.h>
-#include <debug_error/debug_error.h>
 #include <keyboard/keyboard.h>
 
 void keyboard_buffer_add(key_action_t add){

@@ -2,6 +2,7 @@
 	* basic kprintf implementation--no format strings yet (kmw)
 	* kprintf now supports unsigned integer-to-decimal conversions (kmw)
 	* uint->hexadecimal conversion added to kprintf (kmw)
+	* removed superseded debug_print_uint64 function now that kprintf is working (kmw)
 
 2020-08-15
 	* console driver infrastructure and vga console driver (kmw)

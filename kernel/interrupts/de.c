@@ -9,7 +9,7 @@
 #define _DE_C
 
 #include <types.h>
-#include <debug_error/debug_error.h>
+#include <panic/panic.h>
 #include <interrupts/interrupts.h>
 
 __attribute__ ((interrupt)) void isrDE(stackFrame *frame){

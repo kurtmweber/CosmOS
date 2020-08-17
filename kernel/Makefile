@@ -11,7 +11,7 @@ all: kernel
 
 kernel: cosmos
 
-cosmos: cosmos.o asm-dir console-dir debug_error-dir interrupts-dir keyboard-dir mm-dir string-dir timing-dir video-dir
+cosmos: cosmos.o asm-dir console-dir panic-dir interrupts-dir keyboard-dir mm-dir string-dir timing-dir video-dir
 	$(LD) $(LDFLAGS) -o cosmos \
 	cosmos.o \
 	console/console.a \
@@ -21,7 +21,7 @@ cosmos: cosmos.o asm-dir console-dir debug_error-dir interrupts-dir keyboard-dir
 	timing/timing.a \
 	asm/asm.a \
 	keyboard/keyboard.a \
-	debug_error/debug_error.a \
+	panic/panic.a \
 	string/string.a
 
 cosmos.o: cosmos.c
@@ -32,9 +32,6 @@ asm-dir:
 	
 console-dir:
 	cd console && $(MAKE)
-	
-debug_error-dir:
-	cd debug_error && $(MAKE)
 
 interrupts-dir:
 	cd interrupts && $(MAKE)
@@ -45,6 +42,9 @@ keyboard-dir:
 mm-dir:
 	cd mm && $(MAKE)
 
+panic-dir:
+	cd panic && $(MAKE)
+
 string-dir:
 	cd string && $(MAKE)
 	
@@ -54,7 +54,7 @@ timing-dir:
 video-dir:
 	cd video && $(MAKE)
 	
-clean: kernel-clean asm-dir-clean console-dir-clean debug_error-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean string-dir-clean timing-dir-clean video-dir-clean
+clean: kernel-clean asm-dir-clean console-dir-clean panic-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean string-dir-clean timing-dir-clean video-dir-clean
 
 kernel-clean: cosmos-o-clean
 	$(RM) cosmos
@@ -68,8 +68,8 @@ asm-dir-clean:
 console-dir-clean:
 	cd console && $(MAKE) clean
 	
-debug_error-dir-clean:
-	cd debug_error && $(MAKE) clean
+panic-dir-clean:
+	cd panic && $(MAKE) clean
 	
 interrupts-dir-clean:
 	cd interrupts && $(MAKE) clean
