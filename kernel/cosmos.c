@@ -40,6 +40,8 @@ void CosmOS(){
 	
 	keyboard_init();
 	
+	kmalloc(69);
+	
 	asm_sti();
 	
 	while (1){

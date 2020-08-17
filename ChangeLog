@@ -3,6 +3,7 @@
 	* kprintf now supports unsigned integer-to-decimal conversions (kmw)
 	* uint->hexadecimal conversion added to kprintf (kmw)
 	* removed superseded debug_print_uint64 function now that kprintf is working (kmw)
+	* memory blocks returned by kmalloc() are 8-byte aligned (kmw)
 
 2020-08-15
 	* console driver infrastructure and vga console driver (kmw)

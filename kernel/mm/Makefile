@@ -29,7 +29,7 @@ pagealloc.o: pagealloc.c mm.h
 pagetables.o: pagetables.c mm.h
 	$(CC) $(CFLAGS) -o $@ $<
 	
-clean: mm-a-clean blockmgmt-o-clean init-o-clean map-o-clean pagealloc-o-clean pagetables-o-clean
+clean: mm-a-clean blockmgmt-o-clean init-o-clean kmalloc-o-clean map-o-clean pagealloc-o-clean pagetables-o-clean
 
 mm-a-clean:
 	$(RM) console.a
@@ -39,6 +39,9 @@ blockmgmt-o-clean:
 	
 init-o-clean:
 	$(RM) init.o
+	
+kmalloc-o-clean:
+	$(RM) kmalloc.o
 
 map-o-clean:
 	$(RM) map.o

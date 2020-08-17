@@ -10,7 +10,7 @@
 
 #include <types.h>
 #include <console/console.h>
-#include <debug_error/debug_error.h>
+#include <panic/panic.h>
 #include <mm/mm.h>
 
 kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
@@ -96,8 +96,17 @@ void kfree(void *p){
 void *kmalloc(uint64_t size){
 	kmalloc_block *cur_block;
 	
+	if (size % KMALLOC_ALIGN_BYTES){
+		size += (KMALLOC_ALIGN_BYTES - (size % KMALLOC_ALIGN_BYTES));
+	}
+	
 	if (!kmalloc_block_list){
-		cur_block = (kmalloc_block *)brk;
+		if ((uint64_t)brk % KMALLOC_ALIGN_BYTES){
+			cur_block = (kmalloc_block *)(brk + (KMALLOC_ALIGN_BYTES - ((uint64_t)brk % KMALLOC_ALIGN_BYTES)));
+		} else {
+			cur_block = (kmalloc_block *)brk;
+		}
+		
 		kmalloc_block_list = cur_block;
 		
 		cur_block = new_kmalloc_block(0, size);

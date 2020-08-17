@@ -23,6 +23,8 @@
 #define PT_INDEX_MASK 0x00000000001FF000
 #define PT_INDEX_SHIFT 12
 
+#define KMALLOC_ALIGN_BYTES	8
+
 #define PAGE_SIZE 4096
 
 extern uint64_t _end;
@@ -64,7 +66,7 @@ typedef struct mem_block{
 	bool used;
 	uint64_t owner;		// ignored for free blocks
 	struct mem_block *next;
-} mem_block;
+}__attribute__((aligned(8))) mem_block;
 
 typedef mem_block kmalloc_block;
 
