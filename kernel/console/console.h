@@ -16,6 +16,8 @@
 #define CURSOR_LOCATION_HIBYTE	0x0E
 #define CURSOR_LOCATION_LOBYTE	0x0F
 
+#define CONSOLE_TAB_WIDTH	5
+
 #ifndef _KPRINTF_C
 uint64_t kprintf(const char *s, ...);
 #else

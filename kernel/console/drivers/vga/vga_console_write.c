@@ -9,6 +9,7 @@
 #define _VGA_CONSOLE_WRITE_C
 
 #include <types.h>
+#include <console/console.h>
 #include <console/drivers/vga/vga.h>
 #include <video/video.h>
 
@@ -22,6 +23,17 @@ uint8_t vga_console_write(const char *c){
 		if (c[i] == '\n'){
 			vga_console_xpos = 0;
 			vga_console_ypos++;
+			i++;
+			
+			continue;
+		} else if (c[i] == '\t'){
+			vga_console_xpos += (CONSOLE_TAB_WIDTH - (vga_console_xpos % CONSOLE_TAB_WIDTH));
+			
+			if (vga_console_xpos >= vga_console_x_width){
+				vga_console_xpos = 0;
+				vga_console_ypos++;
+			}
+			
 			i++;
 			
 			continue;

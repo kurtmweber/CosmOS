@@ -42,7 +42,7 @@ void pci_scan(){
 					register_dword = asm_in_d(PCI_CONFIG_DATA_PORT);
 					header_code = (uint8_t)((register_dword >> 16) & 0x00FF);
 					
-					kprintf("Class %#hX, subclass %#hX, header type %#hX\n", class_code, subclass_code, header_code);
+					kprintf("\tClass %#hX, subclass %#hX, header type %#hX\n", class_code, subclass_code, header_code);
 				}
 			}
 		}
