@@ -1,3 +1,6 @@
+2020-08-19
+	* PCI bus scan (kmw)
+
 2020-08-16
 	* basic kprintf implementation--no format strings yet (kmw)
 	* kprintf now supports unsigned integer-to-decimal conversions (kmw)
