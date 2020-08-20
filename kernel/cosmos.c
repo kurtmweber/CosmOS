@@ -12,6 +12,7 @@
 #include <interrupts/interrupts.h>
 #include <keyboard/keyboard.h>
 #include <mm/mm.h>
+#include <pci/pci.h>
 #include <string/string.h>
 #include <timing/timing.h>
 #include <video/video.h>
@@ -40,7 +41,7 @@ void CosmOS(){
 	
 	keyboard_init();
 	
-	kmalloc(69);
+	pci_init();
 	
 	asm_sti();
 	
