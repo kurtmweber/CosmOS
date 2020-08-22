@@ -161,4 +161,44 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size){
 	return new;
 }
 
+void *krealloc(void *ptr, uint64_t size){
+	kmalloc_block *b;
+	void *new_block;
+	BYTE *dest, *src;
+	uint64_t i;
+	
+	b = ptr - sizeof(kmalloc_block);
+	
+	// to keep it simple, if the new size is less than the old size we just leave it alone
+	// we might fix this later if memory pressure becomes an issues
+	if (size <= b->len){
+		return ptr;
+	}
+	
+	// keep everything 8-byte aligned
+	if (size % KMALLOC_ALIGN_BYTES){
+		size += (KMALLOC_ALIGN_BYTES - (size % KMALLOC_ALIGN_BYTES));
+	}
+	
+	// if it's the last block, then instead of creating a new block we just extend the existing one	
+	if (!(b->next)){
+		b->len = size;
+		brk = ptr + size;
+		return ptr;
+	}
+	
+	// otherwise we grab a new block of the requested size, copy over the data, and free the old one
+	new_block = kmalloc(size);
+	src = (BYTE *)ptr;
+	dest = (BYTE *)new_block;
+	for (i = 0; i < b->len; i++){
+		*dest = *src;
+		src++;
+		dest++;
+	}
+	
+	kfree(ptr);
+	return new_block;
+}
+
 #endif

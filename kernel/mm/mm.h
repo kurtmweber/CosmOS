@@ -90,6 +90,7 @@ void mmu_init();
 void kfree(void *p);
 void *kmalloc(uint64_t size);
 void kmalloc_init();
+void *krealloc(void *ptr, uint64_t size);
 
 extern void *brk;
 #else

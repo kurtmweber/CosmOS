@@ -10,10 +10,16 @@
 
 #include <types.h>
 #include <console/console.h>
+#include <mm/mm.h>
 #include <pci/pci.h>
+#include <pci/devicetree.h>
 
 void pci_init(){
+	uint16_t i;
+	
 	kprintf("Initializing PCI bus...\n");
+	
+	pci_devices = 0;
 	
 	pci_scan();
 	

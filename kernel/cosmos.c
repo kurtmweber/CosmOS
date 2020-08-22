@@ -20,7 +20,9 @@
 
 #define P(row, col)	((row << 5) + col)
 
-void CosmOS(){	
+void CosmOS(){
+	char *a, *b, *c;
+	
 	video_init();
 	video_select_driver(VIDEO_DRIVER_VGA);
 	video_select_mode(VIDEO_MODE_TEXT);

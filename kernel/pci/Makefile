@@ -8,10 +8,13 @@ MAKE=make
 
 all: pci.a
 
-pci.a: pci_address.o pci_init.o pci_scan.o
+pci.a: pci_address.o pci_header.o pci_init.o pci_scan.o
 	$(AR) $(AFLAGS) $@ $^
 	
 pci_address.o: pci_address.c pci.h
+	$(CC) $(CFLAGS) -o $@ $<
+	
+pci_header.o: pci_header.c pci.h
 	$(CC) $(CFLAGS) -o $@ $<
 	
 pci_init.o: pci_init.c pci.h
@@ -27,6 +30,9 @@ pci-a-clean:
 	
 pci_address-o-clean:
 	$(RM) pci_address.o
+	
+pci_header-o-clean:
+	$(RM) pci_header.o
 	
 pci_init-o-clean:
 	$(RM) pci_init.o
