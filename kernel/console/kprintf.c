@@ -103,6 +103,12 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
 	while (s[i]){
 		consumed++;
 		switch(s[i++]){
+			case 'c':
+				output[0] = __builtin_va_arg(ap, int);
+				output[1] = '\0';
+				console_write(output);
+				(*chars_written)++;
+				return consumed;
 			case 'h':
 				width = 8;
 				break;

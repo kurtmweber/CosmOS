@@ -1,6 +1,7 @@
 2020-08-22
 	* added krealloc (kmw)
 	* record PCI device info when scanning bus (kmw)
+	* char conversion class specifier for kprintf (kmw)
 
 2020-08-19
 	* VGA console driver now interprets tab characters (kmw)
