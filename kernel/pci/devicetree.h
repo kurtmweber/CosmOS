@@ -21,7 +21,7 @@ typedef enum pci_class_codes{
 	PCI_CLASS_INPUT		= 0x09,
 	PCI_CLASS_DOCKING	= 0x0A,
 	PCI_CLASS_PROCESSOR	= 0x0B,
-	PCI_CLASS_SERIAL_BUS	= 0x0C,
+	PCI_CLASS_SERIAL	= 0x0C,
 	PCI_CLASS_WIRELESS	= 0x0D,
 	PCI_CLASS_INTELLIGENT	= 0x0E,
 	PCI_CLASS_SATELLITE	= 0x0F,
@@ -99,13 +99,7 @@ typedef struct pci_device_t pci_device_t;
 
 typedef struct pci_device_t{
 	pci_class_codes pci_class;
-	union {
-		pci_bridge_subclass_codes bridge;
-		pci_display_subclass_codes display;
-		pci_mass_storage_subclass_codes mass_storage;
-		pci_network_subclass_codes network;
-		pci_serial_subclass_codes serial;
-	} pci_subclass;
+	uint8_t pci_subclass;
 	uint8_t bus;
 	uint8_t device;
 	uint8_t function;
@@ -113,8 +107,10 @@ typedef struct pci_device_t{
 
 #ifndef _PCI_INIT_C
 extern pci_device_t *pci_devices;
+extern uint64_t num_pci_devices;
 #else
 pci_device_t *pci_devices;
+uint64_t num_pci_devices;
 #endif
 
 #endif

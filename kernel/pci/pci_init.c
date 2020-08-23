@@ -20,6 +20,7 @@ void pci_init(){
 	kprintf("Initializing PCI bus...\n");
 	
 	pci_devices = 0;
+	num_pci_devices = 0;
 	
 	pci_scan();
 	

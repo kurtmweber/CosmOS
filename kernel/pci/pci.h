@@ -18,7 +18,10 @@ uint32_t pci_config_address_build(uint8_t bus, uint8_t device, uint8_t function,
 #endif
 
 #ifndef _PCI_HEADER_C
-uint16_t pci_header_read_vendor(uint8_t bus, uint8_t device);
+pci_class_codes pci_header_read_class(uint8_t bus, uint8_t device, uint8_t function);
+uint8_t pci_header_read_subclass(uint8_t bus, uint8_t device, uint8_t function);
+uint8_t pci_header_read_type(uint8_t bus, uint8_t device, uint8_t function);
+uint16_t pci_header_read_vendor(uint8_t bus, uint8_t device, uint8_t function);
 #endif
 
 #ifndef _PCI_INIT_C
@@ -28,8 +31,10 @@ void pci_init();
 #ifndef _PCI_SCAN_C
 void pci_scan();
 #else
+pci_device_t fill_pci_device(uint8_t bus, uint8_t device, uint8_t function);
+void pci_found_device(uint8_t bus, uint8_t device, uint8_t function);
 void pci_scan_bus(uint8_t bus);
-bool pci_device_exists(uint8_t bus, uint8_t device);
+bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function);
 #endif
 
 
