@@ -103,6 +103,7 @@ typedef struct pci_device_t{
 	uint8_t bus;
 	uint8_t device;
 	uint8_t function;
+	uint8_t header_type;
 } pci_device_t;
 
 #ifndef _PCI_INIT_C

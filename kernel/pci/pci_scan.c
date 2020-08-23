@@ -24,6 +24,7 @@ pci_device_t fill_pci_device(uint8_t bus, uint8_t device, uint8_t function){
 	tmp.function = function;
 	tmp.pci_class = pci_header_read_class(bus, device, function);
 	tmp.pci_subclass = pci_header_read_subclass(bus, device, function);
+	tmp.header_type = pci_header_read_type(bus, device, function);
 	
 	return tmp;
 }
