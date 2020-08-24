@@ -99,6 +99,7 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
 	// conversion variables
 	unsigned int conv_uint;
 	unsigned long conv_ulong;
+	const char *conv_str;
 	
 	while (s[i]){
 		consumed++;
@@ -119,6 +120,11 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
 					width = 32;
 				}
 				break;
+			case 's':
+				conv_str = __builtin_va_arg(ap, const char *);
+				console_write(conv_str);
+				*chars_written += strlen(conv_str);
+				return consumed;
 			case 'u':
 				if (!width){
 					width = 16;
