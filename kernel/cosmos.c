@@ -9,6 +9,7 @@
 #include <console/console.h>
 #include <console/drivers/drivers.h>
 #include <asm/asm.h>
+#include <ata/ata.h>
 #include <interrupts/interrupts.h>
 #include <keyboard/keyboard.h>
 #include <mm/mm.h>
@@ -20,9 +21,7 @@
 
 #define P(row, col)	((row << 5) + col)
 
-void CosmOS(){
-	char *a, *b, *c;
-	
+void CosmOS(){	
 	video_init();
 	video_select_driver(VIDEO_DRIVER_VGA);
 	video_select_mode(VIDEO_MODE_TEXT);
@@ -44,6 +43,8 @@ void CosmOS(){
 	keyboard_init();
 	
 	pci_init();
+	
+	ata_init();
 	
 	asm_sti();
 	

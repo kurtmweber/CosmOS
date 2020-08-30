@@ -104,14 +104,15 @@ typedef struct pci_device_t{
 	uint8_t device;
 	uint8_t function;
 	uint8_t header_type;
+	uint8_t irq;
 } pci_device_t;
 
 #ifndef _PCI_INIT_C
 extern pci_device_t *pci_devices;
-extern uint64_t num_pci_devices;
+extern uint16_t num_pci_devices;
 #else
 pci_device_t *pci_devices;
-uint64_t num_pci_devices;
+uint16_t num_pci_devices;
 #endif
 
 #endif
