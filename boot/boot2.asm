@@ -21,6 +21,7 @@ mov byte [bootDisk], dl
 ; (sector #s start at 1 rather than 0, for some weird reason)
 add cl, 2
 mov byte [kernelBaseSector], cl
+mov byte [curLoadSector], cl
 
 kernelLoad:
 	xor ecx, ecx
@@ -28,22 +29,58 @@ kernelLoad:
 	xor ebx, ebx
 	xor edx, edx
 	
-	.loadLoop:
+	loadLoop:
 		push ecx
 		xor ecx, ecx
 		
 		mov ah, 0x2
 		mov al, 1
-		mov ch, 0
-		mov dh, 0
-		mov cl, byte [kernelBaseSector]
-		add cl, bl
+		
+		; cylinder is 10 bits, high 8 bits are in ch, low 2 bits are the high 2 bits of cl
+		mov cx, word [curLoadCylinder]
+		shl cx, 6
+		; and then the low 6 bits of cl are the sector, so we or them so we don't clear the upper 2 bits as we might if we moved an entire byte
+		or cl, byte [curLoadSector]
+		;add cl, bl
 		push ebx
+		mov dh, [curLoadHead]
 		mov dl, byte [bootDisk]
 		mov bx, 0x500
 		int 0x13
 		pop ebx
-
+		
+		; now we want the sector number itself, so we increment the memory location and move it into cl for comparison purposes
+		inc byte [curLoadSector]
+		mov cl, [curLoadSector]
+		cmp cl, [secPerTrack]
+		jbe contCopy	; jbe instead of jb because sector numbering starts at 1, so sector = 63 is a valid condition
+		
+		; otherwise...we reset the sector # to 1, and increment the head #
+		mov byte [curLoadSector], 1
+		inc byte [curLoadHead]
+		
+		; and now we need to see if we're at the max sector #, and if so reset it and increment the cylinder #
+		mov cl, byte [curLoadSector]
+		cmp cl, [numHeads]
+		jb contCopy	; jb here since heads start at 0, so head maxes out at 15
+		
+		inc word [curLoadCylinder]
+		
+	contCopy:
+		
+		jmp doSectorCopy
+		
+	retSectorCopy:
+			
+		pop ebx
+		inc ebx
+		pop ecx
+		
+		loop loadLoop
+		
+		jmp getMemMap
+		
+doSectorCopy:
 		; after loading each sector from disk, copy it byte-by-byte into the proper location
 		mov ecx, 512
 		
@@ -68,11 +105,7 @@ kernelLoad:
 			inc edx
 			loop .sectorCopy
 			
-		pop ebx
-		inc ebx
-		pop ecx
-		
-		loop .loadLoop
+		jmp retSectorCopy
 
 getMemMap:
 	xor ebx, ebx
@@ -246,8 +279,13 @@ Realm64:
 
 ; data definitions
 bootDisk 		db	0
-numKernelSectors	dw	59
+numKernelSectors	dw	79
 kernelBaseSector	db	1
+curLoadSector		db	0
+curLoadHead		db	0
+curLoadCylinder		dw	0
+numHeads		db	16
+secPerTrack		db	63
 loadTarget		dd	0x900000
 boot3			dq	0x8200
 
