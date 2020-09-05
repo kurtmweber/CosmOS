@@ -58,10 +58,19 @@ pci_class_codes pci_header_read_class(uint8_t bus, uint8_t device, uint8_t funct
 	return (pci_class_codes)(register_dword >> 24);
 }
 
+uint16_t pci_header_read_device_id(uint8_t bus, uint8_t device, uint8_t function){
+	uint32_t register_dword;
+	
+	asm_out_d(PCI_CONFIG_ADDRESS_PORT, pci_config_address_build(bus, device, function, 0, 1));
+	register_dword = asm_in_d(PCI_CONFIG_DATA_PORT);
+	
+	return (uint16_t)(register_dword >> 16);
+}
+
 uint8_t pci_header_read_irq(uint8_t bus, uint8_t device, uint8_t function){
 	uint32_t register_dword;
 	
-	// interrupt line is found in dword at offset 0x08 in all header types
+	// interrupt line is found in dword at offset 0x3C in all header types
 	asm_out_d(PCI_CONFIG_ADDRESS_PORT, pci_config_address_build(bus, device, function, 0x3C, 1));
 	register_dword = asm_in_d(PCI_CONFIG_DATA_PORT);
 	
@@ -95,6 +104,14 @@ uint16_t pci_header_read_vendor(uint8_t bus, uint8_t device, uint8_t function){
 	register_dword = asm_in_d(PCI_CONFIG_DATA_PORT);
 	
 	return (uint16_t)(register_dword & 0x0000FFFF);
+}
+
+void pci_header_set_irq(uint8_t bus, uint8_t device, uint8_t function, uint8_t irq){
+	// interrupt line is found in dword at offset 0x3C in all header types
+	asm_out_d(PCI_CONFIG_ADDRESS_PORT, pci_config_address_build(bus, device, function, 0x3C, 1));
+	asm_out_b(PCI_CONFIG_DATA_PORT, irq);
+	
+	return;
 }
 
 #endif

@@ -32,10 +32,13 @@ uint32_t pci_header_read_bar3(uint8_t bus, uint8_t device, uint8_t function);
 uint32_t pci_header_read_bar4(uint8_t bus, uint8_t device, uint8_t function);
 uint32_t pci_header_read_bar5(uint8_t bus, uint8_t device, uint8_t function);
 pci_class_codes pci_header_read_class(uint8_t bus, uint8_t device, uint8_t function);
+uint16_t pci_header_read_device_id(uint8_t bus, uint8_t device, uint8_t function);
 uint8_t pci_header_read_irq(uint8_t bus, uint8_t device, uint8_t function);
 uint8_t pci_header_read_subclass(uint8_t bus, uint8_t device, uint8_t function);
 uint8_t pci_header_read_type(uint8_t bus, uint8_t device, uint8_t function);
 uint16_t pci_header_read_vendor(uint8_t bus, uint8_t device, uint8_t function);
+
+void pci_header_set_irq(uint8_t bus, uint8_t device, uint8_t function, uint8_t irq);
 #endif
 
 #ifndef _PCI_INIT_C

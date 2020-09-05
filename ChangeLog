@@ -1,3 +1,6 @@
+2020-08-05
+	* early ATA initialization, up to setting up and then turning off IRQs (kmw)
+
 2020-08-30
 	* in theory, bootloader should be able to handle kernels that go beyond the first track on disk (kmw)
 
