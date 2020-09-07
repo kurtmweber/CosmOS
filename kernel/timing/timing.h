@@ -32,13 +32,32 @@ typedef enum rtc_registers{
 	RTC_REGISTER_MONTHDAY = 0x07,
 	RTC_REGISTER_MONTH = 0x08,
 	RTC_REGISTER_YEAR = 0x09,
+	RTC_REGISTER_STATUS_A = 0x0A,
+	RTC_REGISTER_STATUS_B = 0x0B,
+	RTC_REGISTER_STATUS_C = 0x0C,
 	RTC_REGISTER_CENTURY = 0x32
 } rtc_registers;
 
 #ifndef _RTC_C
+extern uint16_t rtc_freq;
+
+void rtc_handle_irq();
+void rtc_init();
 rtc_time_t rtc_time();
 #else
+uint16_t rtc_freq;
+
 uint8_t rtc_read_register(uint8_t reg);
+void rtc_write_register(uint8_t reg, uint8_t val);
+#endif
+
+#ifndef _SLEEP_C
+extern volatile uint64_t sleep_countdown;
+
+void sleep_update();
+void sleep_wait(uint64_t milliseconds);
+#else
+volatile uint64_t sleep_countdown;
 #endif
 
 #endif

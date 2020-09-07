@@ -10,13 +10,40 @@
 
 #include <types.h>
 #include <asm/asm.h>
+#include <console/console.h>
 #include <timing/timing.h>
 
+void rtc_handle_irq(){
+#ifdef RTC_SLEEP
+	sleep_update();
+#endif
+	
+	// have to read status register C in order for irq to fire again
+	rtc_read_register(RTC_REGISTER_STATUS_C);
+	return;
+}
+
+void rtc_init(){
+	kprintf("Initializing RTC...\n");
+	rtc_freq = 1024;
+	
+	sleep_countdown = 0;
+	
+	asm_cli();
+	rtc_write_register(RTC_REGISTER_STATUS_B, 0x40);	// bit 6 turns on interrupt
+	
+	return;
+}
+
 uint8_t rtc_read_register(uint8_t reg){
+	uint8_t b;
+	
 	asm_cli();
 	asm_out_b(CMOS_REGISTER_SELECT_PORT, reg);
-	return asm_in_b(CMOS_REGISTER_DATA_PORT);
+	b = asm_in_b(CMOS_REGISTER_DATA_PORT);
 	asm_sti();
+	
+	return b;
 }
 
 rtc_time_t rtc_time(){
@@ -64,6 +91,21 @@ rtc_time_t rtc_time(){
 		(a.year != b.year) || (a.century != b.century));
 	
 	return b;	
+}
+
+void rtc_write_register(uint8_t reg, uint8_t val){
+	uint8_t pv;
+	
+	asm_cli();
+	asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x80 | reg);	// disable NMI so we don't screw up the CMOS RTC irreparably
+	pv = asm_in_b(CMOS_REGISTER_DATA_PORT);
+	asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x80 | reg);
+	asm_out_b(CMOS_REGISTER_DATA_PORT, pv | val);
+	
+	asm_out_b(CMOS_REGISTER_SELECT_PORT, asm_in_b(CMOS_REGISTER_SELECT_PORT) & 0x7F);	// re-enable nmi
+	asm_sti();
+	
+	return;
 }
 
 #endif

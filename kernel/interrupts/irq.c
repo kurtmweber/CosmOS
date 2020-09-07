@@ -12,6 +12,7 @@
 #include <console/console.h>
 #include <keyboard/keyboard.h>
 #include <interrupts/interrupts.h>
+#include <timing/timing.h>
 
 __attribute__ ((interrupt)) void irq0(stackFrame *frame){
 	pic_send_eoi(0);
@@ -47,6 +48,7 @@ __attribute__ ((interrupt)) void irq7(stackFrame *frame){
 }
 
 __attribute__ ((interrupt)) void irq8(stackFrame *frame){
+	rtc_handle_irq();
 	pic_send_eoi(8);
 }
 

@@ -40,6 +40,8 @@ void CosmOS(){
 	kprintf("Initializing PIC...\n");
 	pic_init();
 	
+	rtc_init();
+	
 	keyboard_init();
 	
 	pci_init();
