@@ -14,8 +14,8 @@
 #include <console/console.h>
 #include <panic/panic.h>
 
-void ata_register_write(uint8_t controller, uint8_t channel, ata_registers reg, uint8_t value){
-	uint16_t port_prim_base = 0, port_prim_ctrl = 0, port_sec_base = 0, port_sec_ctrl = 0;
+uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_registers reg){
+		uint16_t port_prim_base = 0, port_prim_ctrl = 0, port_sec_base = 0, port_sec_ctrl = 0;
 	uint16_t port_base = 0, port_ctrl = 0;
 	uint16_t out_port_base = 0, out_offset = 0;
 	
@@ -104,10 +104,27 @@ void ata_register_write(uint8_t controller, uint8_t channel, ata_registers reg, 
 			break;
 	}
 	
+	return out_offset + out_port_base;
+}
+
+uint8_t ata_register_read(uint8_t controller, uint8_t channel, ata_registers reg){
 	//kprintf("Preparing to write value %#X to port %#X\n", value, out_port_base + out_offset);	
-	asm_out_b(out_port_base + out_offset, value);
+	return asm_in_b(ata_register_port_number(controller, channel, reg));
+}
+
+uint32_t ata_register_read_dword(uint8_t controller, uint8_t channel, ata_registers reg){
+	return asm_in_d(ata_register_port_number(controller, channel, reg));
+}
+
+uint16_t ata_register_read_word(uint8_t controller, uint8_t channel, ata_registers reg){
+	return asm_in_w(ata_register_port_number(controller, channel, reg));
+}
+
+void ata_register_write(uint8_t controller, uint8_t channel, ata_registers reg, uint8_t value){
+	//kprintf("Preparing to write value %#X to port %#X\n", value, out_port_base + out_offset);	
+	asm_out_b(ata_register_port_number(controller, channel, reg), value);
 	
-	return;	
+	return;
 }
 
 #endif

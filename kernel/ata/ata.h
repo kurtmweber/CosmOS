@@ -15,7 +15,22 @@
 
 #define IDE_SERIAL_IRQ		14
 
-// ATA registers
+typedef enum ata_errors {
+	ATA_ERROR_NO_ADDRESS_MARK = 0x01,
+	ATA_ERROR_NO_TRACK_0 = 0x02,
+	ATA_ERROR_ABORT = 0x04,
+	ATA_ERROR_MEDIA_CHANGE_REQUEST = 0x08,
+	ATA_ERROR_NO_ID_MARK = 0x10,
+	ATA_ERROR_MEDIA_CHANGED = 0x20,
+	ATA_ERROR_UNCORRECTABLE = 0x40,
+	ATA_ERROR_BAD_BLOCK = 0x80
+} ata_errors;
+
+typedef enum ata_commands {
+	ATA_COMMAND_IDENTIFY_PACKET = 0xA1,
+	ATA_COMMAND_IDENTIFY = 0xEC
+} ata_commands;
+
 typedef enum ata_registers {
 	ATA_REGISTER_DATA,
 	ATA_REGISTER_ERROR,	// read-only
@@ -35,6 +50,17 @@ typedef enum ata_registers {
 	ATA_REGISTER_ALT_STATUS,
 	ATA_REGISTER_DEVICE_ADDRESS
 } ata_registers;
+
+typedef enum ata_status {
+	ATA_STATUS_ERROR = 0x01,
+	ATA_STATUS_INDEX = 0x02,
+	ATA_STATUS_CORRECTED_DATA = 0x04,
+	ATA_STATUS_DRQ = 0x08,
+	ATA_STATUS_DSC = 0x10,
+	ATA_STATUS_WRITE_FAULT = 0x20,
+	ATA_STATUS_DRIVE_READY = 0x40,
+	ATA_STATUS_BUSY = 0x80
+} ata_status;
 
 typedef struct ata_device_t{
 	bool exists;
@@ -67,8 +93,20 @@ void ata_setup_irq(uint16_t num_ide);
 void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled);
 #endif
 
+#ifndef _ATA_DETECT_C
+void ata_detect_devices(uint8_t controller);
+#else
+void ata_detect_atapi(uint8_t controller, uint8_t channel);
+char *ata_detect_read_identify(uint8_t controller, uint8_t channel);
+#endif
+
 #ifndef _ATA_REGISTERS_C
+uint8_t ata_register_read(uint8_t controller, uint8_t channel, ata_registers reg);
+uint16_t ata_register_read_dword(uint8_t controller, uint8_t channel, ata_registers reg);
+uint16_t ata_register_read_word(uint8_t controller, uint8_t channel, ata_registers reg);
 void ata_register_write(uint8_t controller, uint8_t channel, ata_registers reg, uint8_t value);
+#else
+uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_registers reg);
 #endif
 
 #endif

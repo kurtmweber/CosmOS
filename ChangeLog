@@ -1,4 +1,10 @@
-2020-08-05
+2020-09-11
+	* execute and read buffer from ATA IDENTIFY (PACKET) command (kmw)
+
+2020-09-06
+	* sleep_wait function (kmw)
+
+2020-09-05
 	* early ATA initialization, up to setting up and then turning off IRQs (kmw)
 
 2020-08-30

@@ -60,6 +60,10 @@ void ata_init(){
 		ata_interrupt_enable(i, IDE_CHANNEL_SECONDARY, false);
 	}
 	
+	for (i = 0; i < num_ide; i++){
+		ata_detect_devices(i);
+	}
+	
 	return;
 }
 
