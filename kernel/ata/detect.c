@@ -74,10 +74,12 @@ void ata_detect_devices(uint8_t controller){
 			if (ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_COMMAND_SET_2) & (1 << 10)){
 				CUR_ATA.size = ata_detect_extract_dword(identify_buf, ATA_IDENTIFY_OFFSET_LBA) * 512;
 			} else {
-				ATA_DEVICE(controller, i, j).size = ata_detect_extract_qword(identify_buf, ATA_IDENTIFY_OFFSET_LBA_EXT) * 512;
+				CUR_ATA.size = ata_detect_extract_qword(identify_buf, ATA_IDENTIFY_OFFSET_LBA_EXT) * 512;
 			}
 			
-			kprintf("ata%hu.%hu: %s #%s, %llu bytes\n", i, j, strtrim(CUR_ATA.model), strtrim(CUR_ATA.serial), CUR_ATA.size);
+			CUR_ATA.removable = (ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_GENERAL) & (1 << 7)) >> 7;
+			
+			kprintf("ata%hu.%hu: %s #%s, %s, %llu bytes\n", i, j, strtrim(CUR_ATA.model), strtrim(CUR_ATA.serial), CUR_ATA.removable ? "removable" : "fixed", CUR_ATA.size);
 		}
 	}
 	

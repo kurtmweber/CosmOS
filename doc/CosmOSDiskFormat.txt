@@ -1,0 +1,31 @@
+CosmOS Disk Format
+
+Revision 1 - 12 September 2020
+
+All data is little-endian.
+
+CONCEPTS:
+
+	1) Data Space
+	A data space is the atomic unit of storage in the CosmOS Disk Format.  
+	These are the on-disk structures that hold user data, and are designed 
+	to be transcluded within multiple presentations.  This enables not just 
+	reuse of data (space efficiency is NOT a design goal here, and in fact 
+	the fragmentation means that this will probably be less space-efficient 
+	than a traditional filesystem except in extreme cases of repetitive 
+	transclusion), but also (more importantly) automatic updating of shared 
+	contents between multiple presentations.  For example, if a particular 
+	data space contains a person's phone number, then if that person's phone number 
+	changes only the data space itself has to be updated, and all presentations 
+	that transclude the data space will reflect the change.  Data spaces can also 
+	be forked, which is useful e.g. if a data space's content changes but it 
+	is also important to keep the original content accessible for transclusion.
+
+SUPERBLOCK - at LBA 1
+	qword #		Description
+	0		Magic word = 0x303244594C4F4647
+	1		Last mount time (in seconds since midnight UTC January 
+			1, 1900 - NTP epoch)
+	3		location of primary data space directory (LBA block)
+	4		location of primary presentation directory (LBA block)
+	5		location of primary group directory (LBA block)

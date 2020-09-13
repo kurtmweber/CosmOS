@@ -15,7 +15,8 @@
 
 #define IDE_SERIAL_IRQ		14
 
-#define ATA_DEVICE(x, y, z) ide_controllers[x].channels[y].devices[z]
+#define ATA_DEVICE(x, y, z) (ide_controllers[x].channels[y].devices[z])
+#define ATA_SECTORS(x) (x / 512)
 
 typedef enum ata_commands {
 	ATA_COMMAND_IDENTIFY_PACKET = 0xA1,
@@ -35,6 +36,7 @@ typedef enum ata_errors {
 
 typedef enum ata_identify_offsets {
 	// specification gives offsets in 16-bit words, but we're treating it as a char buffer so we're using byte offsets
+	ATA_IDENTIFY_OFFSET_GENERAL = 0,
 	ATA_IDENTIFY_OFFSET_SERIAL = 20,
 	ATA_IDENTIFY_OFFSET_MODEL = 54,
 	ATA_IDENTIFY_OFFSET_LBA = 120,
@@ -76,6 +78,7 @@ typedef enum ata_status {
 typedef struct ata_device_t{
 	bool exists;
 	const char *model;
+	bool removable;
 	const char *serial;
 	uint64_t size;
 } ata_device_t;
