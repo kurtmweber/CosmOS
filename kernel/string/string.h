@@ -18,6 +18,7 @@ void uitoa3(uint64_t n, char *s, uint8_t len, uint8_t base);
 
 #ifndef _STRING_C
 uint64_t strlen(const char *s);
+char *strtrim(const char *s);
 #endif
 
 #endif

@@ -15,6 +15,13 @@
 
 #define IDE_SERIAL_IRQ		14
 
+#define ATA_DEVICE(x, y, z) ide_controllers[x].channels[y].devices[z]
+
+typedef enum ata_commands {
+	ATA_COMMAND_IDENTIFY_PACKET = 0xA1,
+	ATA_COMMAND_IDENTIFY = 0xEC
+} ata_commands;
+
 typedef enum ata_errors {
 	ATA_ERROR_NO_ADDRESS_MARK = 0x01,
 	ATA_ERROR_NO_TRACK_0 = 0x02,
@@ -26,10 +33,14 @@ typedef enum ata_errors {
 	ATA_ERROR_BAD_BLOCK = 0x80
 } ata_errors;
 
-typedef enum ata_commands {
-	ATA_COMMAND_IDENTIFY_PACKET = 0xA1,
-	ATA_COMMAND_IDENTIFY = 0xEC
-} ata_commands;
+typedef enum ata_identify_offsets {
+	// specification gives offsets in 16-bit words, but we're treating it as a char buffer so we're using byte offsets
+	ATA_IDENTIFY_OFFSET_SERIAL = 20,
+	ATA_IDENTIFY_OFFSET_MODEL = 54,
+	ATA_IDENTIFY_OFFSET_LBA = 120,
+	ATA_IDENTIFY_OFFSET_COMMAND_SET_2 = 166,
+	ATA_IDENTIFY_OFFSET_LBA_EXT = 200
+} ata_identify_offsets;
 
 typedef enum ata_registers {
 	ATA_REGISTER_DATA,
@@ -64,6 +75,9 @@ typedef enum ata_status {
 
 typedef struct ata_device_t{
 	bool exists;
+	const char *model;
+	const char *serial;
+	uint64_t size;
 } ata_device_t;
 
 typedef struct ide_channel_t{
@@ -96,7 +110,13 @@ void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled);
 #ifndef _ATA_DETECT_C
 void ata_detect_devices(uint8_t controller);
 #else
+#define CUR_ATA ide_controllers[controller].channels[i].devices[j]
+
 void ata_detect_atapi(uint8_t controller, uint8_t channel);
+uint32_t ata_detect_extract_dword(char *identify_buf, ata_identify_offsets offset);
+uint64_t ata_detect_extract_qword(char *identify_buf, ata_identify_offsets offset);
+char *ata_detect_extract_string(char *identify_buf, uint8_t len, ata_identify_offsets offset);
+uint16_t ata_detect_extract_word(char *identify_buf, ata_identify_offsets offset);
 char *ata_detect_read_identify(uint8_t controller, uint8_t channel);
 #endif
 

@@ -12,6 +12,8 @@
 #include <ata/ata.h>
 #include <console/console.h>
 #include <mm/mm.h>
+#include <panic/panic.h>
+#include <string/string.h>
 #include <timing/timing.h>
 
 void ata_detect_atapi(uint8_t controller, uint8_t channel){
@@ -24,9 +26,9 @@ void ata_detect_atapi(uint8_t controller, uint8_t channel){
 
 void ata_detect_devices(uint8_t controller){
 	uint8_t i, j;
-	uint16_t k;
 	uint8_t status;
 	char *identify_buf;
+	ata_device_t *tmp;
 	
 	for (i = 0; i < 2; i++){
 		for (j = 0; j < 2; j++){
@@ -38,8 +40,12 @@ void ata_detect_devices(uint8_t controller){
 			
 			status = ata_register_read(controller, i, ATA_REGISTER_STATUS);
 			if (!status){		// no device found
+				ide_controllers[controller].channels[i].devices[j].exists = false;
 				continue;
 			}
+			
+			// set the exists flag to true
+			ide_controllers[controller].channels[i].devices[j].exists = true;
 			
 			// status isn't 0, so the device exists--so we poll until ready
 			while (1){
@@ -55,10 +61,60 @@ void ata_detect_devices(uint8_t controller){
 			}
 			
 			identify_buf = ata_detect_read_identify(controller, i);
+			
+			if (!(CUR_ATA.serial = ata_detect_extract_string(identify_buf, 20, ATA_IDENTIFY_OFFSET_SERIAL))){
+				panic("Invalid length specified for ATA serial number field!");
+			}
+			
+			if (!(CUR_ATA.model = ata_detect_extract_string(identify_buf, 40, ATA_IDENTIFY_OFFSET_MODEL))){
+				panic("Invalid length specified for ATA model field!");
+			}
+			
+			
+			if (ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_COMMAND_SET_2) & (1 << 10)){
+				CUR_ATA.size = ata_detect_extract_dword(identify_buf, ATA_IDENTIFY_OFFSET_LBA) * 512;
+			} else {
+				ATA_DEVICE(controller, i, j).size = ata_detect_extract_qword(identify_buf, ATA_IDENTIFY_OFFSET_LBA_EXT) * 512;
+			}
+			
+			kprintf("ata%hu.%hu: %s #%s, %llu bytes\n", i, j, strtrim(CUR_ATA.model), strtrim(CUR_ATA.serial), CUR_ATA.size);
 		}
 	}
 	
 	return;
+}
+
+uint32_t ata_detect_extract_dword(char *identify_buf, ata_identify_offsets offset){
+	return *((uint32_t *)(&identify_buf[offset]));
+}
+
+uint64_t ata_detect_extract_qword(char *identify_buf, ata_identify_offsets offset){
+	return *((uint64_t *)(&identify_buf[offset]));
+}
+
+char *ata_detect_extract_string(char *identify_buf, uint8_t len, ata_identify_offsets offset){
+	char *c;
+	uint8_t i;
+	
+	if (len % 2){
+		return (char *)0;
+	}
+	
+	c = (char *)kmalloc((len + 1) * sizeof(char));
+	
+	for (i = 0; i < (len / 2); i++){
+		// for whatever reason, ATA IDENTIFY character string data is big-endian words, so we've got to flip every set of two bytes
+		c[(2 * i)] = identify_buf[(2 * i) + offset + 1];
+		c[(2 * i) + 1] = identify_buf[(2 * i) + offset];
+	}
+	
+	c[len] = '\0';
+	
+	return c;
+}
+
+uint16_t ata_detect_extract_word(char *identify_buf, ata_identify_offsets offset){
+	return *((uint16_t *)(&identify_buf[offset]));
 }
 
 char *ata_detect_read_identify(uint8_t controller, uint8_t channel){

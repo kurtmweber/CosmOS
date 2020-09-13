@@ -279,7 +279,7 @@ Realm64:
 
 ; data definitions
 bootDisk 		db	0
-numKernelSectors	dw	79
+numKernelSectors	dw	1024
 kernelBaseSector	db	1
 curLoadSector		db	0
 curLoadHead		db	0

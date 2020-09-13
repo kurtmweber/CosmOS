@@ -15,6 +15,7 @@ void panic(const char *s){
 	console_write("!!!PANIC!!!");
 	console_write(s);
 	
+	asm_cli();
 	asm_hlt();
 }
 

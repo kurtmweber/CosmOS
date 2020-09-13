@@ -1,3 +1,6 @@
+2020-09-12
+	* detect model, serial, and size of ATA devices (kmw)
+
 2020-09-11
 	* execute and read buffer from ATA IDENTIFY (PACKET) command (kmw)
 
