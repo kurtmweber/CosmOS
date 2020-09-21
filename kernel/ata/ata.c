@@ -47,6 +47,11 @@ void ata_init(){
 		return;
 	}
 	
+	for (i = 0; i < num_ide; i++){
+		ide_controllers[i].channels[IDE_CHANNEL_PRIMARY].selected_device = ATA_DRIVE_SELECT_NONE;
+		ide_controllers[i].channels[IDE_CHANNEL_SECONDARY].selected_device = ATA_DRIVE_SELECT_NONE;
+	}
+	
 	ata_detect_addresses(num_ide);
 	for (i = 0; i < num_ide; i++){
 		kprintf("Primary IDE I/O at %#X, control at %#X\n", ide_controllers[i].channels[IDE_CHANNEL_PRIMARY].base_io, ide_controllers[i].channels[IDE_CHANNEL_PRIMARY].base_io_ctrl);

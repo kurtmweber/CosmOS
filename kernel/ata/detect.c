@@ -31,9 +31,9 @@ void ata_detect_devices(uint8_t controller){
 	ata_device_t *tmp;
 	
 	for (i = 0; i < 2; i++){
+		ATA_CHANNEL(controller, i).selected_device = ATA_DRIVE_SELECT_NONE;
 		for (j = 0; j < 2; j++){
-			ata_register_write(controller, i, ATA_REGISTER_DEVICE_SELECT, 0xA0 | (j << 4));
-			sleep_wait(1);
+			ata_select_device(controller, i, j);
 			
 			ata_register_write(controller, i, ATA_REGISTER_COMMAND, ATA_COMMAND_IDENTIFY);
 			sleep_wait(1);
@@ -78,6 +78,8 @@ void ata_detect_devices(uint8_t controller){
 			}
 			
 			CUR_ATA.removable = (ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_GENERAL) & (1 << 7)) >> 7;
+			
+			CUR_ATA.bytes_per_sector = ata_detect_sector_size(identify_buf);
 			
 			kprintf("ata%hu.%hu: %s #%s, %s, %llu bytes\n", i, j, strtrim(CUR_ATA.model), strtrim(CUR_ATA.serial), CUR_ATA.removable ? "removable" : "fixed", CUR_ATA.size);
 		}
@@ -131,6 +133,29 @@ char *ata_detect_read_identify(uint8_t controller, uint8_t channel){
 	}
 	
 	return (char *)buf;
+}
+
+uint32_t ata_detect_sector_size(char *identify_buf){
+	uint16_t plss_word, version_word;
+	
+	version_word = ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_MAJOR_VERSION);
+	if (!(version_word & (1 << 7))){		// if major version is not 7 or greater (signified by bit 7 being set), then the device definitely does not support large sectors
+		return 512;
+	}
+	
+	plss_word = ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_PLSS);
+	
+	if ((plss_word & 0x4000) != 0x4000){	// if bit 15 = 0 and bit 14 = 1, then the word contains valid data; if it doesn't, then we know the device does not support large sectors, which is an optional feature in versions 7+
+		return 512;
+	}
+	
+	if (!(plss_word & (1 << 12))){		// bit 12 being set signifies support for logical sector greater than 256 words (512 bytes), so if it's not set then we know it's 512
+		return 512;
+	}
+	
+	// If we reach this point then we know that the device supports logical sectors > 512 bytes, so we check to see what it is
+	
+	return ata_detect_extract_dword(identify_buf, ATA_IDENTIFY_OFFSET_SECTOR_SIZE);
 }
 
 #endif

@@ -1,3 +1,6 @@
+2020-09-20
+	* determine logical sector size, moved ata device select into dedicated function (kmw)
+
 2020-09-12
 	* detect model, serial, and size of ATA devices (kmw)
 

@@ -16,12 +16,19 @@
 #define IDE_SERIAL_IRQ		14
 
 #define ATA_DEVICE(x, y, z) (ide_controllers[x].channels[y].devices[z])
+#define ATA_CHANNEL(x, y) (ide_controllers[x].channels[y])
 #define ATA_SECTORS(x) (x / 512)
 
 typedef enum ata_commands {
 	ATA_COMMAND_IDENTIFY_PACKET = 0xA1,
 	ATA_COMMAND_IDENTIFY = 0xEC
 } ata_commands;
+
+typedef enum ata_drive_selector {
+	ATA_DRIVE_SELECT_0 = 0,
+	ATA_DRIVE_SELECT_1 = 1,
+	ATA_DRIVE_SELECT_NONE = 2
+} ata_drive_selector;
 
 typedef enum ata_errors {
 	ATA_ERROR_NO_ADDRESS_MARK = 0x01,
@@ -40,8 +47,11 @@ typedef enum ata_identify_offsets {
 	ATA_IDENTIFY_OFFSET_SERIAL = 20,
 	ATA_IDENTIFY_OFFSET_MODEL = 54,
 	ATA_IDENTIFY_OFFSET_LBA = 120,
+	ATA_IDENTIFY_OFFSET_MAJOR_VERSION = 160,
 	ATA_IDENTIFY_OFFSET_COMMAND_SET_2 = 166,
-	ATA_IDENTIFY_OFFSET_LBA_EXT = 200
+	ATA_IDENTIFY_OFFSET_LBA_EXT = 200,
+	ATA_IDENTIFY_OFFSET_PLSS = 212,		// Physical Sector Size / Logical Sector Size
+	ATA_IDENTIFY_OFFSET_SECTOR_SIZE = 234
 } ata_identify_offsets;
 
 typedef enum ata_registers {
@@ -81,12 +91,14 @@ typedef struct ata_device_t{
 	bool removable;
 	const char *serial;
 	uint64_t size;
+	uint32_t bytes_per_sector;
 } ata_device_t;
 
 typedef struct ide_channel_t{
 	uint16_t base_io;
 	uint16_t base_io_ctrl;
 	ata_device_t devices[2];
+	ata_drive_selector selected_device;
 } ide_channel_t;
 
 typedef struct ide_controller_t{
@@ -108,6 +120,7 @@ void ata_setup_irq(uint16_t num_ide);
 
 #ifndef _ATA_CONTROL_C
 void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled);
+void ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector device);
 #endif
 
 #ifndef _ATA_DETECT_C
@@ -121,6 +134,7 @@ uint64_t ata_detect_extract_qword(char *identify_buf, ata_identify_offsets offse
 char *ata_detect_extract_string(char *identify_buf, uint8_t len, ata_identify_offsets offset);
 uint16_t ata_detect_extract_word(char *identify_buf, ata_identify_offsets offset);
 char *ata_detect_read_identify(uint8_t controller, uint8_t channel);
+uint32_t ata_detect_sector_size(char *identify_buf);
 #endif
 
 #ifndef _ATA_REGISTERS_C
