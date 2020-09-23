@@ -8,7 +8,7 @@ MAKE=make
 
 all: ata.a
 
-ata.a: ata.o control.o detect.o registers.o
+ata.a: ata.o control.o detect.o registers.o transfer.o
 	$(AR) $(AFLAGS) $@ $^
 	
 ata.o: ata.c
@@ -22,8 +22,11 @@ detect.o: detect.c
 
 registers.o: registers.c
 	$(CC) $(CFLAGS) -o $@ $^
+
+transfer.o: transfer.c
+	$(CC) $(CFLAGS) -o $@ $^
 	
-clean: ata-a-clean ata-o-clean control-o-clean detect-o-clean registers-o-clean
+clean: ata-a-clean ata-o-clean control-o-clean detect-o-clean registers-o-clean transfer-o-clean
 
 ata-a-clean:
 	$(RM) ata.a
@@ -39,3 +42,6 @@ detect-o-clean:
 	
 registers-o-clean:
 	$(RM) registers.o
+	
+transfer-o-clean:
+	$(RM) transfer.o

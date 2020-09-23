@@ -10,6 +10,7 @@
 
 #include <types.h>
 #include <ata/ata.h>
+#include <console/console.h>
 #include <timing/timing.h>
 
 void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled){
@@ -20,9 +21,19 @@ void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled){
 	return;
 }
 
-void ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector device){
+bool ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector device){
+	BYTE status;
+		
 	if (ATA_CHANNEL(controller, channel).selected_device == device){
-		return;
+		return true;
+	}
+	
+	status = ata_register_read(controller, channel, ATA_REGISTER_STATUS);
+	// bit 7 of status register indicates busy--if it's set then nothing else matters, if not then we check bit 3
+	// which indicates ready for data, and we can't change the device on the channel if the already-selected device is waiting for data
+	if ((status & 0x80) || (status & 0x08)){
+		kprintf("false\n");
+		return false;
 	}
 	
 	ATA_CHANNEL(controller, channel).selected_device = device;
@@ -30,7 +41,7 @@ void ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector d
 	ata_register_write(controller, channel, ATA_REGISTER_DEVICE_SELECT, 0xA0 | (device << 4));
 	sleep_wait(1);
 	
-	return;
+	return true;
 }
 
 #endif

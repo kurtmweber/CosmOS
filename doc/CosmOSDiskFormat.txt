@@ -58,7 +58,8 @@ SUPERBLOCK - at block 1, block 1,000,001, block 2,000,001, etc.
 DATA SPACE/PRESENTATION/GROUP DIRECTORY
 	qword #		Description
 	0		Magic word = 0x30324D4C424D4C42 for data space 
-			directory, 0x4E45444942454F4A for presentation directory)
+			directory, 0x4E45444942454F4A for presentation 
+			directory, 0x535241484E444942 for group directory)
 	1		address of previous data space/presentation/group 
 			directory (0 if this is the first directory)
 	2		address of next data space/presentation/group directory 

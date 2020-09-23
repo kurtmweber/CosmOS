@@ -120,7 +120,7 @@ void ata_setup_irq(uint16_t num_ide);
 
 #ifndef _ATA_CONTROL_C
 void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled);
-void ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector device);
+bool ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector device);
 #endif
 
 #ifndef _ATA_DETECT_C
