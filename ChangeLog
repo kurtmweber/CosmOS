@@ -1,3 +1,6 @@
+2020-9-24
+	* added ata_channel_ready() to check if an ATA channel is ready for commands (kmw)
+
 2020-09-22
 	* begin DMA setup (kmw)
 

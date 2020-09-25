@@ -119,6 +119,7 @@ void ata_setup_irq(uint16_t num_ide);
 #endif
 
 #ifndef _ATA_CONTROL_C
+bool ata_channel_ready(uint8_t controller, uint8_t channel);
 void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled);
 bool ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector device);
 #endif

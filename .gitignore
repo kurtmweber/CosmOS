@@ -6,6 +6,8 @@
 *.ko
 *.obj
 *.elf
+*.bin
+kernel/cosmos
 
 # Linker output
 *.ilk

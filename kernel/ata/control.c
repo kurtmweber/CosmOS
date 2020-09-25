@@ -13,6 +13,25 @@
 #include <console/console.h>
 #include <timing/timing.h>
 
+bool ata_channel_ready(uint8_t controller, uint8_t channel){
+	BYTE status;
+
+	status = ata_register_read(controller, channel, ATA_REGISTER_ALT_STATUS);
+	if (status & ATA_STATUS_BUSY){		// BSY set (bit 7)
+		return false;
+	}
+
+	if ((status & ATA_STATUS_ERROR) || (status & ATA_STATUS_WRITE_FAULT)){
+		return false;
+	}
+
+	if (status & ATA_STATUS_DRIVE_READY){
+		return true;
+	}
+
+	return false;
+}
+
 void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled){
 	
 	// to clarify, because this may look backwards: yes, the correct thing to do is to clear bit 1 to enable IRQs, and set it to disable
@@ -31,8 +50,7 @@ bool ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector d
 	status = ata_register_read(controller, channel, ATA_REGISTER_STATUS);
 	// bit 7 of status register indicates busy--if it's set then nothing else matters, if not then we check bit 3
 	// which indicates ready for data, and we can't change the device on the channel if the already-selected device is waiting for data
-	if ((status & 0x80) || (status & 0x08)){
-		kprintf("false\n");
+	if ((status & ATA_STATUS_BUSY) || (status & ATA_STATUS_DRQ)){
 		return false;
 	}
 	
