@@ -8,7 +8,7 @@ MAKE=make
 
 all: mm.a
 
-mm.a: blockmgmt.o init.o kmalloc.o map.o pagealloc.o pagetables.o
+mm.a: blockmgmt.o init.o kmalloc.o map.o pagetables.o phys_alloc.o
 	$(AR) $(AFLAGS) $@ $?
 	
 blockmgmt.o: blockmgmt.c mm.h
@@ -22,17 +22,17 @@ kmalloc.o: kmalloc.c mm.h
 	
 map.o: map.c mm.h
 	$(CC) $(CFLAGS) -o $@ $<
-
-pagealloc.o: pagealloc.c mm.h
-	$(CC) $(CFLAGS) -o $@ $<
 	
 pagetables.o: pagetables.c mm.h
 	$(CC) $(CFLAGS) -o $@ $<
+
+phys_alloc.o: phys_alloc.c mm.h
+	$(CC) $(CFLAGS) -o $@ $<
 	
-clean: mm-a-clean blockmgmt-o-clean init-o-clean kmalloc-o-clean map-o-clean pagealloc-o-clean pagetables-o-clean
+clean: mm-a-clean blockmgmt-o-clean init-o-clean kmalloc-o-clean map-o-clean pagetables-o-clean phys_alloc-o-clean
 
 mm-a-clean:
-	$(RM) console.a
+	$(RM) mm.a
 	
 blockmgmt-o-clean:
 	$(RM) blockmgmt.o
@@ -46,8 +46,8 @@ kmalloc-o-clean:
 map-o-clean:
 	$(RM) map.o
 	
-pagealloc-o-clean:
-	$(RM) pagealloc.o
-	
 pagetables-o-clean:
 	$(RM) pagetables.o
+
+phys_alloc-o-clean:
+	$(RM) phys_alloc.o

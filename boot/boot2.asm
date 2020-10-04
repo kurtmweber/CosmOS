@@ -260,14 +260,44 @@ Realm64:
 	mov ecx, 512
 	mov ebx, 0x00900003
 
-	; map the two megabytes starting at 0x100000 to the bottom of the available
+	; map the two megabytes starting at 0x900000 to the bottom of the available
 	; higher-half area
 	
-	mapKernel:
+	.mapKernel1:
 		mov DWORD [edi], ebx
 		add ebx, 0x1000
 		add edi, 8
-		loop mapKernel
+		loop .mapKernel1
+
+	mov edi, [ptKernelBase2]
+	mov ecx, 512
+	mov ebx, 0x00B00003
+	
+	.mapKernel2:
+		mov DWORD [edi], ebx
+		add ebx, 0x1000
+		add edi, 8
+		loop .mapKernel2
+
+	mov edi, [ptKernelBase3]
+	mov ecx, 512
+	mov ebx, 0x00D00003
+	
+	.mapKernel3:
+		mov DWORD [edi], ebx
+		add ebx, 0x1000
+		add edi, 8
+		loop .mapKernel3
+
+	mov edi, [ptKernelBase4]
+	mov ecx, 512
+	mov ebx, 0x00F00003
+	
+	.mapKernel4:
+		mov DWORD [edi], ebx
+		add ebx, 0x1000
+		add edi, 8
+		loop .mapKernel4
 		
 	; and now we map the kernel stack area
 	
@@ -304,6 +334,9 @@ pdptKernelEntry	dd	0x00015003
 pdtKernelBase	dd	0x00015000
 pdtKernelEntry	dd	0x00016003
 ptKernelBase	dd	0x00016000
+ptKernelBase2	dd	0x00017000
+ptKernelBase3	dd	0x00018000
+ptKernelBase4	dd	0x00019000
 
 GDT64:                           ; Global Descriptor Table (64-bit).
     .Null: equ $ - GDT64         ; The null descriptor.

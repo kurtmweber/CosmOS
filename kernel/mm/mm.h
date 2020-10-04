@@ -110,6 +110,12 @@ extern const uint16_t page_size;
 const uint16_t page_size = 4096;
 #endif
 
+#ifndef _MM_PHYS_ALLOC_C
+mem_block *phys_alloc_slab(uint64_t size, uint64_t align);
+#else
+mem_block *phys_split_block(mem_block *src, void *base, uint64_t size);
+#endif
+
 #ifndef _PAGETABLES_C
 bool is_page_aligned(void *address);
 bool is_page_allocated(void *address);

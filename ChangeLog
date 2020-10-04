@@ -1,3 +1,6 @@
+2020-10-03
+	* expand mapped heap space to 8 MB, begin work on slab allocator (kmw)
+
 2020-9-24
 	* added ata_channel_ready() to check if an ATA channel is ready for commands (kmw)
 
