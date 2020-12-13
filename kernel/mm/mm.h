@@ -72,6 +72,7 @@ typedef mem_block kmalloc_block;
 
 #ifndef _BLOCKMGMT_C
 void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks);
+mem_block *find_containing_block(void *addr, mem_block *list);
 void init_usable_phys_blocks(int_15_map base);
 void sort_usable_phys_blocks();
 
@@ -112,6 +113,7 @@ const uint16_t page_size = 4096;
 
 #ifndef _MM_PHYS_ALLOC_C
 mem_block *phys_alloc_slab(uint64_t size, uint64_t align);
+mem_block *phys_split_block(mem_block *src, void *base, uint64_t size);
 #else
 mem_block *phys_split_block(mem_block *src, void *base, uint64_t size);
 #endif
