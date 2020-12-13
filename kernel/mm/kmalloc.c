@@ -60,7 +60,7 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
 			}
 		}
 
-	} while (cur_block = cur_block->next);
+	} while ((cur_block = cur_block->next));
 	
 	if (best){
 		return best;
