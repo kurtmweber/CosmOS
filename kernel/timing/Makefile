@@ -1,5 +1,5 @@
-NASM=nasm -f bin
-RM=rm -f
+include ../../mk/build.mk
+
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I.. -DRTC_SLEEP
 AR=ar
