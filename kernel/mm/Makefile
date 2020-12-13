@@ -15,7 +15,7 @@ init.o: init.c mm.h
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 kmalloc.o: kmalloc.c mm.h
-	$(CC) $(CFLAGS $(EXTRA_CFLAGS)) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS)) -o $@ $<
 	
 map.o: map.c mm.h
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
