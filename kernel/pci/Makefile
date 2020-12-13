@@ -3,13 +3,13 @@ RM=rm -f
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
 AR=ar
-AFLAGS=-crs
+ARFLAGS=-crs
 MAKE=make
 
 all: pci.a
 
 pci.a: pci_address.o pci_header.o pci_init.o pci_scan.o
-	$(AR) $(AFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 	
 pci_address.o: pci_address.c pci.h
 	$(CC) $(CFLAGS) -o $@ $<

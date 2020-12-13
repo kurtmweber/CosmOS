@@ -3,13 +3,13 @@ RM=rm -f
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
 AR=ar
-AFLAGS=-crs
+ARFLAGS=-crs
 MAKE=make
 
 all: panic.a
 
 panic.a: panic.o
-	$(AR) $(AFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 	
 panic.o: panic.c panic.h
 	$(CC) $(CFLAGS) -o $@ $<

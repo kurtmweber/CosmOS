@@ -3,13 +3,13 @@ RM=rm -f
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I../..
 AR=ar
-AFLAGS=-crs
+ARFLAGS=-crs
 MAKE=make
 
 all: vga.a
 
 vga.a: cursor.o mode.o text.o vga.o
-	$(AR) $(AFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 	
 cursor.o: cursor.c
 	$(CC) $(CFLAGS) -o $@ $^

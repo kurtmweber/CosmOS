@@ -4,13 +4,13 @@ CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
 ISRCFLAGS=-mgeneral-regs-only
 AR=ar
-AFLAGS=-crs
+ARFLAGS=-crs
 MAKE=make
 
 all: keyboard.a
 
 keyboard.a: keyboard.o keyboardbuffer.o
-	$(AR) $(AFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 	
 keyboard.o: keyboard.c
 	$(CC) $(CFLAGS) $(ISRCFLAGS) -o $@ $^

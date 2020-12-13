@@ -3,13 +3,13 @@ RM=rm -f
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
 AR=ar
-AFLAGS=-crsT
+ARFLAGS=-crsT
 MAKE=make
 
 all: drivers-dir console.a
 
 console.a: kprintf.o drivers/drivers.a
-	$(AR) $(AFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 
 kprintf.o: kprintf.c
 	$(CC) $(CFLAGS) -o $@ $<

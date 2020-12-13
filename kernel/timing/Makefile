@@ -3,13 +3,13 @@ RM=rm -f
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I.. -DRTC_SLEEP
 AR=ar
-AFLAGS=-crs
+ARFLAGS=-crs
 MAKE=make
 
 all: timing.a
 
 timing.a: rtc.o sleep.o
-	$(AR) $(AFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 	
 rtc.o: rtc.c
 	$(CC) $(CFLAGS) -o $@ $^

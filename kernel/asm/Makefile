@@ -3,13 +3,13 @@ RM=rm -f
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
 AR=ar
-AFLAGS=-crs
+ARFLAGS=-crs
 MAKE=make
 
 all: asm.a
 
 asm.a: misc.o
-	$(AR) $(AFLAGS) asm.a misc.o
+	$(AR) $(ARFLAGS) asm.a misc.o
 	
 #io.o: io.c
 #	$(CC) $(CFLAGS) -o $@ $<

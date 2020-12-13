@@ -3,13 +3,13 @@ RM=rm -f
 CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
 AR=ar
-AFLAGS=-crs
+ARFLAGS=-crs
 MAKE=make
 
 all: mm.a
 
 mm.a: blockmgmt.o init.o kmalloc.o map.o pagetables.o phys_alloc.o
-	$(AR) $(AFLAGS) $@ $?
+	$(AR) $(ARFLAGS) $@ $?
 	
 blockmgmt.o: blockmgmt.c mm.h
 	$(CC) $(CFLAGS) -o $@ $<
