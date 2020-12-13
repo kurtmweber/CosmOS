@@ -1,10 +1,7 @@
-NASM=nasm -f bin
-RM=rm -f
-CC=gcc
+include ../../mk/build.mk
+
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
-AR=ar
 ARFLAGS=-crs
-MAKE=make
 
 all: ata.a
 
