@@ -1,10 +1,7 @@
 include ../../mk/build.mk
 
-CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
-AR=ar
 ARFLAGS=-crsT
-MAKE=make
 
 all: vga-dir video.a
 
