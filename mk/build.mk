@@ -4,7 +4,7 @@ RM=rm -f
 MAKE=make
 
 # cc
-CC=gcc-10
+CC=gcc
 CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large 
 
 # ar
