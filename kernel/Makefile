@@ -1,6 +1,6 @@
 include ../mk/build.mk
 
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I.
+EXTRA_CFLAGS=-I.
 
 all: kernel
 
@@ -22,7 +22,7 @@ cosmos: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir 
 	string/string.a
 
 cosmos.o: cosmos.c
-	$(CC) $(CFLAGS) -o cosmos.o cosmos.c
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o cosmos.o cosmos.c
 
 asm-dir:
 	cd asm && $(MAKE)

@@ -1,6 +1,6 @@
 include ../../mk/build.mk
 
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
+EXTRA_CFLAGS= -I..
 ARFLAGS=-crsT
 
 all: drivers-dir console.a
@@ -9,7 +9,7 @@ console.a: kprintf.o drivers/drivers.a
 	$(AR) $(ARFLAGS) $@ $^
 
 kprintf.o: kprintf.c
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 drivers-dir:
 	cd drivers && $(MAKE)

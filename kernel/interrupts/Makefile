@@ -1,6 +1,6 @@
 include ../../mk/build.mk
 
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
+EXTRA_CFLAGS= -I..
 ISRCFLAGS=-mgeneral-regs-only
 ARFLAGS=-crs
 
@@ -10,16 +10,16 @@ interrupts.a: de.o idt.o irq.o pic.o
 	$(AR) $(ARFLAGS) interrupts.a de.o idt.o irq.o pic.o
 	
 de.o: de.c
-	$(CC) $(CFLAGS) $(ISRCFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $<
 
 idt.o: idt.c
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 irq.o: irq.c
-	$(CC) $(CFLAGS) $(ISRCFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $<
 	
 pic.o: pic.c
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 clean: de-o-clean interrupts-a-clean idt-o-clean irq-o-clean pic-o-clean
 

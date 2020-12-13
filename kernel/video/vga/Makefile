@@ -1,6 +1,6 @@
 include ../../../mk/build.mk
 
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I../..
+EXTRA_CFLAGS= -I../..
 ARFLAGS=-crs
 
 all: vga.a
@@ -9,16 +9,16 @@ vga.a: cursor.o mode.o text.o vga.o
 	$(AR) $(ARFLAGS) $@ $^
 	
 cursor.o: cursor.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 
 mode.o: mode.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 text.o: text.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 vga.o: vga.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 clean: vga-a-clean cursor-o-clean mode-o-clean text-o-clean vga-o-clean
 

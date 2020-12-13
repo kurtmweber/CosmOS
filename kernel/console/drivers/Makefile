@@ -1,6 +1,6 @@
 include ../../../mk/build.mk
 
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I../..
+EXTRA_CFLAGS=-I../..
 ARFLAGS=-crsT
 
 all: vga-dir drivers.a
@@ -9,7 +9,7 @@ drivers.a: driverinterface.o vga/vga.a
 	$(AR) $(ARFLAGS) $@ $^
 
 driverinterface.o: driverinterface.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 vga-dir:
 	cd vga && $(MAKE)

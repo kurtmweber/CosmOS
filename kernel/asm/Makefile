@@ -1,7 +1,7 @@
 include ../../mk/build.mk
 
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
 ARFLAGS=-crs
+EXTRA_CFLAGS=-I..
 
 all: asm.a
 
@@ -9,10 +9,10 @@ asm.a: misc.o
 	$(AR) $(ARFLAGS) asm.a misc.o
 	
 #io.o: io.c
-#	$(CC) $(CFLAGS) -o $@ $<
+#	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 misc.o: misc.c
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 clean: asm-a-clean io-o-clean misc-o-clean
 

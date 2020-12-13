@@ -1,6 +1,6 @@
 include ../../mk/build.mk
 
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I.. -DRTC_SLEEP
+EXTRA_CFLAGS= -I.. -DRTC_SLEEP
 ARFLAGS=-crs
 
 all: timing.a
@@ -9,10 +9,10 @@ timing.a: rtc.o sleep.o
 	$(AR) $(ARFLAGS) $@ $^
 	
 rtc.o: rtc.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 sleep.o: sleep.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 clean: timing-a-clean rtc-o-clean sleep-o-clean
 
