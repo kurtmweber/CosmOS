@@ -1,33 +1,30 @@
-NASM=nasm -f bin
-RM=rm -f
-CC=gcc
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
-AR=ar
-AFLAGS=-crs
-MAKE=make
+include ../../mk/build.mk
+
+EXTRA_CFLAGS= -I..
+ARFLAGS=-crs
 
 all: mm.a
 
 mm.a: blockmgmt.o init.o kmalloc.o map.o pagetables.o phys_alloc.o
-	$(AR) $(AFLAGS) $@ $?
+	$(AR) $(ARFLAGS) $@ $?
 	
 blockmgmt.o: blockmgmt.c mm.h
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 init.o: init.c mm.h
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 kmalloc.o: kmalloc.c mm.h
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 map.o: map.c mm.h
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 pagetables.o: pagetables.c mm.h
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 
 phys_alloc.o: phys_alloc.c mm.h
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 clean: mm-a-clean blockmgmt-o-clean init-o-clean kmalloc-o-clean map-o-clean pagetables-o-clean phys_alloc-o-clean
 

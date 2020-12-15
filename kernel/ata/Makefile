@@ -1,30 +1,27 @@
-NASM=nasm -f bin
-RM=rm -f
-CC=gcc
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
-AR=ar
-AFLAGS=-crs
-MAKE=make
+include ../../mk/build.mk
+
+EXTRA_CFLAGS=-I..
+ARFLAGS=-crs
 
 all: ata.a
 
 ata.a: ata.o control.o detect.o registers.o transfer.o
-	$(AR) $(AFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 	
 ata.o: ata.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 control.o: control.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 
 detect.o: detect.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 
 registers.o: registers.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 
 transfer.o: transfer.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 clean: ata-a-clean ata-o-clean control-o-clean detect-o-clean registers-o-clean transfer-o-clean
 

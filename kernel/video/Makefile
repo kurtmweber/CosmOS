@@ -1,21 +1,18 @@
-NASM=nasm -f bin
-RM=rm -f
-CC=gcc
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
-AR=ar
-AFLAGS=-crsT
-MAKE=make
+include ../../mk/build.mk
+
+EXTRA_CFLAGS= -I..
+ARFLAGS=-crsT
 
 all: vga-dir video.a
 
 video.a: text.o video.o vga/vga.a
-	$(AR) $(AFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 
 text.o: text.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 video.o: video.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 vga-dir:
 	cd vga && $(MAKE)

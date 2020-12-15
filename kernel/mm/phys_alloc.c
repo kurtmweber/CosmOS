@@ -37,7 +37,7 @@ mem_block *phys_alloc_slab(uint64_t size, uint64_t align){
         if ((t_base_adj + size) <= (t_base + tmp->len)){
             return phys_split_block(tmp, t_base_adj, size);
         }
-    } while (tmp = tmp->next);
+    } while ((tmp = tmp->next));
 
     // unable to find a block of the needed size, return NULL
     return NULL;

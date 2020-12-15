@@ -1,21 +1,18 @@
-NASM=nasm -f bin
-RM=rm -f
-CC=gcc
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
-AR=ar
-AFLAGS=-crs
-MAKE=make
+include ../../mk/build.mk
+
+ARFLAGS=-crs
+EXTRA_CFLAGS=-I..
 
 all: asm.a
 
 asm.a: misc.o
-	$(AR) $(AFLAGS) asm.a misc.o
+	$(AR) $(ARFLAGS) asm.a misc.o
 	
 #io.o: io.c
-#	$(CC) $(CFLAGS) -o $@ $<
+#	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 misc.o: misc.c
-	$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 clean: asm-a-clean io-o-clean misc-o-clean
 

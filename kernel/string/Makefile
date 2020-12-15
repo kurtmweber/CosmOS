@@ -1,21 +1,18 @@
-NASM=nasm -f bin
-RM=rm -f
-CC=gcc
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large -I..
-AR=ar
-AFLAGS=-crs
-MAKE=make
+include ../../mk/build.mk
+
+EXTRA_CFLAGS= -I..
+ARFLAGS=-crs
 
 all: string.a
 
 string.a: itoa.o string.o
-	$(AR) $(AFLAGS) $@ $^
+	$(AR) $(ARFLAGS) $@ $^
 	
 itoa.o: itoa.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 string.o: string.c
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 clean: string-a-clean itoa-o-clean string-o-clean
 
