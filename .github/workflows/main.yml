@@ -15,15 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: ilammy/setup-nasm@v1
     
-    - name: binutils
-      run: brew install i686-elf-binutils
-
-    - name: nasm
-      run: brew install nasm
-
-    - name: llvm
-      run: brew install llvm
-      
     - name: build
       run: make
