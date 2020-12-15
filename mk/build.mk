@@ -19,3 +19,15 @@ include $(SELF_DIR)/clang.mk
 else
 include $(SELF_DIR)/gcc.mk
 endif
+
+# qemu
+QEMU=qemu-system-x86_64
+QEMUARGS= -accel tcg,thread=single               \
+  -cpu core2duo                                  \
+  -m 1024                                        \
+  -no-reboot                                     \
+  -drive format=raw,file=hda.img                 \
+  -smp 1                                         \
+  -usb                                           \
+  -vga std					                     \
+  -monitor stdio

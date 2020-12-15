@@ -23,15 +23,3 @@ OBJCOPYFLAGS=-O binary
 AR=x86_64-elf-ar
 ARFLAGS=-crs
 
-# qemu
-QEMU=qemu-system-x86_64
-QEMUARGS= -accel tcg,thread=single               \
-  -cpu core2duo                                  \
-  -m 1024                                        \
-  -no-reboot                                     \
-  -drive format=raw,file=hda.img                 \
-  -smp 1                                         \
-  -usb                                           \
-  -vga std					                     \
-  -monitor stdio
-
