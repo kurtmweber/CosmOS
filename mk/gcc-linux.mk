@@ -14,7 +14,7 @@ CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(PLATFORM)
 
 # ld
 LD=ld
-LDFLAGS=-m elf_x86_64 -T cosmos.ld -Map cosmos.map -nostdlib  --no-relax
+LDFLAGS=-m elf_x86_64 -T $(LINKER_SCRIPT) -Map $(MAPFILE) -nostdlib --no-relax
 
 # objcopy
 OBJCOPY=objcopy
@@ -24,5 +24,4 @@ OBJCOPYFLAGS=-O binary
 AR=ar
 ARFLAGS=-crs
 
-# qemu
-QEMU=qemu-system-i386
+

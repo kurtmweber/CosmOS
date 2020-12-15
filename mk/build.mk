@@ -9,6 +9,8 @@ NASM=nasm -O0 -f bin
 RM=rm -f
 MAKE=make
 DD=dd
+MAPFILE=cosmos.map
+LINKER_SCRIPT=cosmos.ld
 
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
@@ -21,13 +23,12 @@ include $(SELF_DIR)/gcc-linux.mk
 endif
 
 # qemu
-QEMU=qemu-system-x86_64
-QEMUARGS= -accel tcg,thread=single               \
-  -cpu core2duo                                  \
-  -m 1024                                        \
-  -no-reboot                                     \
-  -drive format=raw,file=hda.img                 \
-  -smp 1                                         \
-  -usb                                           \
+QEMUARGS= -accel tcg,thread=single       \
+  -cpu core2duo                          \
+  -m 1024                                \
+  -no-reboot                             \
+  -drive format=raw,file=hda.img         \
+  -smp 1                                 \
+  -usb                                   \
   -vga std					                     \
   -monitor stdio
