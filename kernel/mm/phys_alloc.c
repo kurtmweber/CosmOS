@@ -45,25 +45,12 @@ mem_block *phys_alloc_slab(uint64_t size, uint64_t align){
 
 mem_block *phys_split_block(mem_block *src, void *base, uint64_t size){
     // this function does NOT set owner or used, this should be done upstream
+    // it also does not ensure that size is sufficient
     mem_block *new;
 
-    new = kmalloc(sizeof(mem_block));
-    if (!new){
-        return NULL;
+    if (base == src->base){
+        
     }
-
-    src->len = (uint64_t)(base - src->base);
-    if (src->next){
-        src->next->prev = new;
-        new->next = src->next;
-    }
-    src->next = new;
-    new->prev = src;
-
-    new->base = base;
-    new->len = size;
-
-    return new;
 }
 
 #endif

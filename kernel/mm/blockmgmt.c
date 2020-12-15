@@ -35,6 +35,22 @@ void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks){
 	return;
 }
 
+mem_block *find_containing_block(void *addr, mem_block *list){
+	// returns NULL if the requested address is not found within a block in the list
+	mem_block *tmp;
+
+	tmp = list;
+
+	do{
+		if ((addr >= tmp->base) && (addr <= (tmp->base + tmp->len - 1))){
+			return tmp;
+		}
+
+	} while (tmp = tmp->next);
+
+	return NULL;
+}
+
 void init_usable_phys_blocks(int_15_map block){
 	if (!is_page_aligned(block.base)){
 		// clear the lower 12 bits of block.base so we get the first page boundary less than the block base
