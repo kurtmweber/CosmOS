@@ -5,16 +5,23 @@
 # See the file "LICENSE" in the source distribution for details  *
 # ****************************************************************
 
-NASM=nasm -O0 -f bin
-RM=rm -f
-MAKE=make
+# build triplet is machine-vendor-operatingsystem
 
-SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+# cc (clang toolchain)
+CC=cc
+CFLAGS=-c -target x86_64-none-elf -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large 
 
-# detect build platform
-UNAME := $(shell uname)
-ifeq ($(UNAME),Darwin)
-include $(SELF_DIR)/clang.mk
-else
-include $(SELF_DIR)/gcc.mk
-endif
+# ld
+LD=x86_64-elf-ld 
+LDFLAGS=-m elf_x86_64 -T cosmos.ld -Map cosmos.map -nostdlib
+
+# objcopy
+OBJCOPY=x86_64-elf-objcopy
+OBJCOPYFLAGS=-O binary
+
+# ar
+AR=x86_64-elf-ar
+ARFLAGS=-crs
+
+# qemu
+QEMU=qemu-system-x86_64

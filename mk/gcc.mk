@@ -5,16 +5,21 @@
 # See the file "LICENSE" in the source distribution for details  *
 # ****************************************************************
 
-NASM=nasm -O0 -f bin
-RM=rm -f
-MAKE=make
+# cc (GCC tool chain)
+CC=gcc
+CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large 
 
-SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+# ld
+LD=ld
+LDFLAGS=-m elf_x86_64 -T cosmos.ld -Map cosmos.map -nostdlib
 
-# detect build platform
-UNAME := $(shell uname)
-ifeq ($(UNAME),Darwin)
-include $(SELF_DIR)/clang.mk
-else
-include $(SELF_DIR)/gcc.mk
-endif
+# objcopy
+OBJCOPY=objcopy
+OBJCOPYFLAGS=-O binary
+
+# ar
+AR=ar
+ARFLAGS=-crs
+
+# qemu
+QEMU=qemu-system-i386
