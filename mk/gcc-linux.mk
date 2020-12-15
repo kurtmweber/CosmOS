@@ -14,7 +14,7 @@ CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(PLATFORM)
 
 # ld
 LD=ld
-LDFLAGS=-m elf_x86_64 -T cosmos.ld -Map cosmos.map -nostdlib
+LDFLAGS=-m elf_x86_64 -T cosmos.ld -Map cosmos.map -nostdlib  --no-relax
 
 # objcopy
 OBJCOPY=objcopy
