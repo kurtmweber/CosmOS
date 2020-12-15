@@ -40,7 +40,7 @@ On Ubuntu apt can be used on Linux to install the prerequisites
 
 `sudo apt install nasm`
 
-`sudo apt install qemu`
+`sudo apt install qemu-system-x86`
 
 # Building
 
