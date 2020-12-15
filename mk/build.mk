@@ -23,7 +23,10 @@ include $(SELF_DIR)/gcc-linux.mk
 endif
 
 # qemu
-QEMUARGS= -cpu core2duo                  \
+# qemu
+QEMU=qemu-system-x86_64
+QEMUARGS= -accel tcg,thread=single       \
+  -cpu core2duo                          \
   -m 1024                                \
   -no-reboot                             \
   -drive format=raw,file=hda.img         \
