@@ -14,8 +14,6 @@
 #include <panic/panic.h>
 #include <string/string.h>
 
-pttentry *extract_cr3_base_address(pttentry cr3) __attribute__((alias("extract_pttentry_base_address")));
-
 pttentry *extract_pttentry_base_address(pttentry entry){
 	return (pttentry *)(entry & PTTENTRY_BASE_MASK);
 }
@@ -38,7 +36,7 @@ bool is_page_allocated(void *address){
 	
 	cr3 = asm_cr3_read();
 	
-	pml4_base = extract_cr3_base_address(cr3);
+	pml4_base = extract_pttentry_base_address(cr3);
 	pml4_index = vaddr_ptt_index(address, PML4);	
 	pml4_entry = pml4_base[pml4_index];
 	if (!pml4_entry){
