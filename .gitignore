@@ -7,6 +7,7 @@
 *.obj
 *.elf
 *.bin
+*.img
 kernel/cosmos
 
 # Linker output
@@ -52,8 +53,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-floppy.img
 
 # Temp files
 *.un*
 *.~
+
