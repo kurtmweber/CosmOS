@@ -10,7 +10,7 @@ bootimage: subsystems
 	$(DD) if=boot/boot.bin of=$(BOOTIMAGE) conv=notrunc bs=512 count=1
 	$(DD) if=boot/boot2.bin of=$(BOOTIMAGE) conv=notrunc bs=512 count=2 seek=1
 	$(DD) if=boot/boot3.bin of=$(BOOTIMAGE) conv=notrunc bs=512 count=1 seek=3
-	$(DD) if=kernel/cosmos of=$(BOOTIMAGE) conv=notrunc bs=512 count=2048 seek=4
+	$(DD) if=kernel/cosmos.bin of=$(BOOTIMAGE) conv=notrunc bs=512 count=2048 seek=4
 
 subsystems: boot-subsystem kernel-subsystem
 	
