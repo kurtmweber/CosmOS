@@ -23,7 +23,7 @@ include $(SELF_DIR)/gcc-linux.mk
 endif
 
 # qemu
-QEMUARGS= -cpu core2duo
+QEMUARGS= -cpu core2duo                  \
   -m 1024                                \
   -no-reboot                             \
   -drive format=raw,file=hda.img         \
