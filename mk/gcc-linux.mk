@@ -24,4 +24,6 @@ OBJCOPYFLAGS=-O binary
 AR=ar
 ARFLAGS=-crs
 
+# qemu
+QEMU=qemu-system-i386
 
