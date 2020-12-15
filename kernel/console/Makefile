@@ -14,13 +14,9 @@ kprintf.o: kprintf.c
 drivers-dir:
 	cd drivers && $(MAKE)
 	
-clean: drivers-dir-clean console-a-clean kprintf-o-clean
-
+clean: drivers-dir-clean
+	$(RM) *.o
+	$(RM) *.a	
+	
 drivers-dir-clean:
 	cd drivers && $(MAKE) clean
-
-console-a-clean:
-	$(RM) console.a
-	
-kprintf-o-clean:
-	$(RM) kprintf.o

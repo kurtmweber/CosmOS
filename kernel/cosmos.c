@@ -31,24 +31,24 @@ void CosmOS(){
 	
 	kprintf("Loading CosmOS 0.1\n");
 	
-	kprintf("Initializing IDT...\n");
-	initIDT();
+//	kprintf("Initializing IDT...\n");
+//	initIDT();
 	
-	kprintf("Initializing MMU...\n");
-	mmu_init();
+//	kprintf("Initializing MMU...\n");
+//	mmu_init();
 	
-	kprintf("Initializing PIC...\n");
-	pic_init();
+//	kprintf("Initializing PIC...\n");
+//	pic_init();
 	
-	rtc_init();
+//	rtc_init();
 	
-	keyboard_init();
+//	keyboard_init();
 	
-	pci_init();
+//	pci_init();
 
-	ata_init();
+//	ata_init();
 	
-	asm_sti();
+//	asm_sti();
 
 	mem_block *tmp;
 	tmp = usable_phys_blocks;

@@ -14,13 +14,6 @@ itoa.o: itoa.c
 string.o: string.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
-clean: string-a-clean itoa-o-clean string-o-clean
-
-string-a-clean:
-	$(RM) string.a
-
-itoa-o-clean:
-	$(RM) itoa.o
-	
-string-o-clean:
-	$(RM) string.o
+clean:
+	$(RM) *.o
+	$(RM) *.a

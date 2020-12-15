@@ -20,19 +20,6 @@ text.o: text.c
 vga.o: vga.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
-clean: vga-a-clean cursor-o-clean mode-o-clean text-o-clean vga-o-clean
-
-vga-a-clean:
-	$(RM) vga.a
-
-cursor-o-clean:
-	$(RM) cursor.o
-	
-mode-o-clean:
-	$(RM) mode.o
-	
-text-o-clean:
-	$(RM) text.o
-	
-vga-o-clean:
-	$(RM) vga.o
+clean: 
+	$(RM) *.o
+	$(RM) *.a

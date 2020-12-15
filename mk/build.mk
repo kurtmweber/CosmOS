@@ -8,6 +8,7 @@
 NASM=nasm -O0 -f bin
 RM=rm -f
 MAKE=make
+DD=dd
 
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 

@@ -14,13 +14,9 @@ driverinterface.o: driverinterface.c
 vga-dir:
 	cd vga && $(MAKE)
 	
-clean: vga-dir-clean drivers-a-clean driverinterface-o-clean
-
-drivers-a-clean:
-	$(RM) drivers.a
-
-driverinterface-o-clean:
-	$(RM) driverinterface.o
+clean: vga-dir-clean
+	$(RM) *.o
+	$(RM) *.a
 	
 vga-dir-clean:
 	cd vga && $(MAKE) clean

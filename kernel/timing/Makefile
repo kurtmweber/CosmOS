@@ -14,13 +14,6 @@ rtc.o: rtc.c
 sleep.o: sleep.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
-clean: timing-a-clean rtc-o-clean sleep-o-clean
-
-timing-a-clean:
-	$(RM) timing.a
-
-rtc-o-clean:
-	$(RM) rtc.o
-	
-sleep-o-clean:
-	$(RM) sleep.o
+clean:
+	$(RM) *.o
+	$(RM) *.a

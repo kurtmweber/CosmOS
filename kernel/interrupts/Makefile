@@ -21,19 +21,6 @@ irq.o: irq.c
 pic.o: pic.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
-clean: de-o-clean interrupts-a-clean idt-o-clean irq-o-clean pic-o-clean
-
-de-o-clean:
-	$(RM) de.o
-
-interrupts-a-clean:
-	$(RM) interrupts.a
-
-idt-o-clean:
-	$(RM) idt.o
-
-irq-o-clean:
-	$(RM) irq.o
-	
-pic-o-clean:
-	$(RM) pic.o
+clean:
+	$(RM) *.o
+	$(RM) *.a

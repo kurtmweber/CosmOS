@@ -23,22 +23,6 @@ registers.o: registers.c
 transfer.o: transfer.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
-clean: ata-a-clean ata-o-clean control-o-clean detect-o-clean registers-o-clean transfer-o-clean
-
-ata-a-clean:
-	$(RM) ata.a
-
-ata-o-clean:
-	$(RM) ata.o
-
-control-o-clean:
-	$(RM) control.o
-
-detect-o-clean:
-	$(RM) detect.o
-	
-registers-o-clean:
-	$(RM) registers.o
-	
-transfer-o-clean:
-	$(RM) transfer.o
+clean:
+	$(RM) *.o
+	$(RM) *.a
