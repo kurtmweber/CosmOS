@@ -14,11 +14,16 @@
 #include <panic/panic.h>
 #include <string/string.h>
 
-pttentry *extract_pttentry_base_address(pttentry entry){
+
+#ifdef __GNUC__ 
+pttentry *extract_cr3_base_address(pttentry cr3) __attribute__((alias("extract_pttentry_base_address")));
+#else
+pttentry *extract_cr3_base_address(pttentry entry){
 	return (pttentry *)(entry & PTTENTRY_BASE_MASK);
 }
+#endif
 
-pttentry *extract_cr3_base_address(pttentry entry){
+pttentry *extract_pttentry_base_address(pttentry entry){
 	return (pttentry *)(entry & PTTENTRY_BASE_MASK);
 }
 
