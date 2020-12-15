@@ -26,4 +26,3 @@ ARFLAGS=-crs
 
 # qemu
 QEMU=qemu-system-i386
-

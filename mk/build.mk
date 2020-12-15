@@ -23,7 +23,7 @@ include $(SELF_DIR)/gcc-linux.mk
 endif
 
 # qemu
-QEMUARGS= -accel tcg,thread=single       \
+QEMUARGS= -accel thread=single           \
   -cpu core2duo                          \
   -m 1024                                \
   -no-reboot                             \
