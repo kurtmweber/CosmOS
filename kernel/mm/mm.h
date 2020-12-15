@@ -122,6 +122,7 @@ mem_block *phys_split_block(mem_block *src, void *base, uint64_t size);
 bool is_page_aligned(void *address);
 bool is_page_allocated(void *address);
 #else
+pttentry *extract_cr3_base_address(pttentry entry);
 pttentry *extract_pttentry_base_address(pttentry entry);
 uint16_t vaddr_ptt_index(void *address, ptt_levels level);
 #endif
