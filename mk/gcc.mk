@@ -7,7 +7,7 @@
 
 # cc (GCC tool chain)
 CC=gcc-10
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large 
+CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large 
 
 # ld
 LD=ld
