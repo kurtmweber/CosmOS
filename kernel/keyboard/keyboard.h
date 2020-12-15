@@ -43,13 +43,14 @@ void keyboard_send_command_queue();
 #endif
 
 #ifndef _KEYBOARDBUFFER_H
-key_action_t keyboard_buffer[256];
-uint8_t keyboard_buffer_start, keyboard_buffer_end;
+extern key_action_t keyboard_buffer[256];
+extern uint8_t keyboard_buffer_start, keyboard_buffer_end;
 
 void keyboard_buffer_add(key_action_t add);
 key_action_t keyboard_buffer_consume(void);
 #else
-extern key_action_t keyboard_buffer[256];
+key_action_t keyboard_buffer[256];
+uint8_t keyboard_buffer_start, keyboard_buffer_end;
 #endif
 
 #endif
