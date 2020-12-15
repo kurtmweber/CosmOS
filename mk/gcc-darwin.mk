@@ -5,15 +5,16 @@
 # See the file "LICENSE" in the source distribution for details  *
 # ****************************************************************
 
-# build triplet is machine-vendor-operatingsystem
+# platform flag
+PLATFORM=COMPILE_PLATFORM_DARWIN
 
-# cc (clang toolchain)
-CC=cc
-CFLAGS=-c -target x86_64-none-elf -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large 
+# cc (GCC tool chain)
+CC=x86_64-elf-gcc
+CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(PLATFORM)
 
 # ld
 LD=x86_64-elf-ld 
-LDFLAGS=-m elf_x86_64 -T cosmos.ld -Map cosmos.map -nostdlib
+LDFLAGS=-m elf_x86_64 -T cosmos.ld -Map cosmos.map -nostdlib --no-relax
 
 # objcopy
 OBJCOPY=x86_64-elf-objcopy
@@ -23,3 +24,5 @@ OBJCOPYFLAGS=-O binary
 AR=x86_64-elf-ar
 ARFLAGS=-crs
 
+# qemu
+QEMU=qemu-system-i386

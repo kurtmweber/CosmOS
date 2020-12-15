@@ -22,6 +22,8 @@ CosmOS requires:
 
 `sudo brew install x86_64-elf-binutils`
 
+`sudo brew install x86_64-elf-gcc`
+
 `sudo brew install nasm`
 
 `sudo brew install qemu`

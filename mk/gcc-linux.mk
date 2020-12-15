@@ -5,9 +5,12 @@
 # See the file "LICENSE" in the source distribution for details  *
 # ****************************************************************
 
+# platform flag
+PLATFORM=COMPILE_PLATFORM_LINUX
+
 # cc (GCC tool chain)
 CC=gcc-10
-CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large 
+CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -D$(PLATFORM)
 
 # ld
 LD=ld
