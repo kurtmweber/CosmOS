@@ -10,7 +10,7 @@
 
 #include <types.h>
 
-typedef void (*deviceInit)();
+typedef void (*deviceInit)(struct device* dev);
 
 typedef struct device {
 	deviceInit init;

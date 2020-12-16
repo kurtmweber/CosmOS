@@ -12,7 +12,7 @@
 #include <console/console.h>
 #include <pci/pci.h>
 
-void deviceInitBridge(){
+void deviceInitBridge(struct device* dev){
     kprintf("Init Bridge\n");
 }
 

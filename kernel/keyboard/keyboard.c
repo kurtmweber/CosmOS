@@ -158,7 +158,7 @@ void keyboard_send_command_queue(){
 /*
 * perform device instance specific init here
 */
-void deviceInitKeyboard(){
+void deviceInitKeyboard(struct device* dev){
     kprintf("Init Keyboard\n");
 	registerInterruptHandler(KB_IRQ_NUMBER, &keyboard_irq_read);
 }

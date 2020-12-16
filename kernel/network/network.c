@@ -15,7 +15,7 @@
 /*
 * perform device instance specific init here
 */
-void deviceInitEthernet(){
+void deviceInitEthernet(struct device* dev){
     kprintf("Init Ethernet\n");
 }
 

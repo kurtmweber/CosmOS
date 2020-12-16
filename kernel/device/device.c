@@ -37,7 +37,7 @@ void initDevices(){
     for (uint16_t i=0; i<=device_index;i++){
         struct device* dev = (struct device*) arrayGet(devices, i);
         if (0!=dev){
-            dev->init();
+            dev->init(dev);
         }
     }
 }

@@ -53,7 +53,7 @@ void init_port(uint16_t portAddress) {
 /*
 * perform device instance specific init here
 */
-void deviceInitCOM1(){
+void deviceInitCOM1(struct device* dev){
     kprintf("Init COM1\n");
     init_port(COM1_ADDRESS);
 }

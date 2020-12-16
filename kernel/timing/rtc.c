@@ -31,7 +31,7 @@ void rtc_handle_irq(){
 /*
 * perform device instance specific init here
 */
-void deviceInitRTC(){
+void deviceInitRTC(struct device* dev){
     kprintf("Init RTC\n");
 	rtc_freq = RTC_FREQ;
 	sleep_countdown = 0;

@@ -12,7 +12,7 @@
 #include <console/console.h>
 #include <device/device.h>
 
-void deviceInitUSB(){
+void deviceInitUSB(struct device* dev){
     kprintf("Init USB\n");
 }
 
