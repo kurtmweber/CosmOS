@@ -59,14 +59,14 @@ void init_port(uint16_t portAddress) {
 }
 
 void deviceInitCOM1(){
-    kprintf("Init COM1");
+    kprintf("Init COM1\n");
     init_port(COM1_ADDRESS);
 }
 
 void serial_init() {
     // register com1
- //   com1deviceinstance.init = &deviceInitCOM1;
-  //  registerDevice(&com1deviceinstance);
+    com1deviceinstance.init = &deviceInitCOM1;
+    registerDevice(&com1deviceinstance);
 	registerInterruptHandler(SERIAL_IRQ1, &serial_irq_handler);
 	registerInterruptHandler(SERIAL_IRQ2, &serial_irq_handler);
 }

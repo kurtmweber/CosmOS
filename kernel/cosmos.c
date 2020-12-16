@@ -64,7 +64,6 @@ void CosmOS(){
 
 	kprintf("Initializing RS232...\n");
 	serial_init();
-	serial_write("Hello Serial 1\n");	
 	kprintf("There are %llX devices\n", deviceCount());
 
 	rtc_init();
@@ -80,7 +79,7 @@ void CosmOS(){
 	/*
 	* init all devices
 	*/
-//	initDevices();
+	initDevices();
 
 	asm_sti();
 

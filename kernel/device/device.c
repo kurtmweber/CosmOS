@@ -32,8 +32,11 @@ struct device* getDevice(uint16_t idx){
 }
 
 void initDevices(){
+    kprintf("Initializing Devices\n");
     for (uint16_t i=0; i<=device_index;i++){
         struct device* dev = (struct device*) arrayGet(devices, i);
-        dev->init();
+        if (0!=dev){
+            dev->init();
+        }
     }
 }
