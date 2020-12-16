@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: nasm
-      run: brew install nasm
+      run: sudo apt install nasm
     
     - name: build
       run: make
