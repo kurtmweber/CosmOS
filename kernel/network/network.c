@@ -19,6 +19,9 @@ void deviceInitEthernet(struct device* dev){
     kprintf("Init Ethernet\n");
 }
 
+/**
+* find all network devices and register them
+*/
 void network_register_devices() {
     uint16_t i = 0;
     for (i = 0; i < num_pci_devices; i++){

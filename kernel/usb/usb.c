@@ -12,10 +12,16 @@
 #include <console/console.h>
 #include <device/device.h>
 
+/*
+* perform device instance specific init here
+*/
 void deviceInitUSB(struct device* dev){
     kprintf("Init USB\n");
 }
 
+/**
+* find all USB devices and register them
+*/
 void usb_register_devices() {
     uint16_t i = 0;
     for (i = 0; i < num_pci_devices; i++){

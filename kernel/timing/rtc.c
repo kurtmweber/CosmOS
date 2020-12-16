@@ -41,6 +41,9 @@ void deviceInitRTC(struct device* dev){
 	registerInterruptHandler(RTC_IRQ_NUMBER, &rtc_handle_irq);
 }
 
+/*
+* find all RTC devices and register them
+*/
 void rtc_register_devices(){
 	/*
 	* register device

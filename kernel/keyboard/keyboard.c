@@ -164,6 +164,9 @@ void deviceInitKeyboard(struct device* dev){
 }
 
 
+/**
+* find all keyboard devices and register them
+*/
 void keyboard_register_devices(){
 	keyboard_buffer_start = 0;
 	keyboard_buffer_end = 0;

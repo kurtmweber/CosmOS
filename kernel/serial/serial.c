@@ -58,6 +58,9 @@ void deviceInitCOM1(struct device* dev){
     init_port(COM1_ADDRESS);
 }
 
+/**
+* find all RS232 devices and register them
+*/
 void serial_register_devices() {
     struct device* com1deviceinstance = newDevice();
     com1deviceinstance->init =  &deviceInitCOM1;

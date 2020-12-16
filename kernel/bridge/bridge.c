@@ -12,10 +12,16 @@
 #include <console/console.h>
 #include <pci/pci.h>
 
+/*
+* perform device instance specific init here
+*/
 void deviceInitBridge(struct device* dev){
     kprintf("Init Bridge\n");
 }
 
+/**
+* find all bridge devices and register them
+*/
 void bridge_register_devices() {
     uint16_t i = 0;
     for (i = 0; i < num_pci_devices; i++){
