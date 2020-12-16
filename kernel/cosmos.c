@@ -20,6 +20,10 @@
 #include <video/video.h>
 #include <video/vga/vga.h>
 #include <serial/serial.h>
+#include <usb/usb.h>
+#include <device/device.h>
+#include <network/network.h>
+#include <bridge/bridge.h>
 
 void CosmOS(){	
 	video_init();
@@ -43,16 +47,25 @@ void CosmOS(){
 	kprintf("Initializing Interrupt Routing...\n");
 	interrupt_router_init();
 
-	serial_init();
-	serial_write("Hello Serial 1\n");	
-
 	rtc_init();
 	keyboard_init();
 	
 	pci_init();
 
+	usb_init();
+	network_init();
+	bridge_init();
+
 	ata_init();
 	
+	serial_init();
+	serial_write("Hello Serial 1\n");	
+
+	/*
+	* init all devices
+	*/
+//	initDevices();
+
 	asm_sti();
 
 	mem_block *tmp;

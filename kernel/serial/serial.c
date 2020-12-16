@@ -8,6 +8,8 @@
 #include <serial/serial.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
+#include <device/device.h>
+#include <console/console.h>
 
 #define COM1_ADDRESS 0x3F8
 #define COM2_ADDRESS 0x2F8
@@ -16,6 +18,15 @@
 
 #define SERIAL_IRQ1 3
 #define SERIAL_IRQ2 4
+
+/*
+* device instances
+*/
+struct device com1deviceinstance;
+struct device com2deviceinstance;
+struct device com3deviceinstance;
+struct device com4deviceinstance;
+
 
 void serial_irq_handler(){
 
@@ -48,8 +59,15 @@ void init_port(uint16_t portAddress) {
    asm_out_b(portAddress + 4, 0x0B);    // IRQs enabled, RTS/DSR set
 }
 
-void serial_init() {
+void deviceInitCOM1(){
+    kprintf("Init COM1");
     init_port(COM1_ADDRESS);
+}
+
+void serial_init() {
+    // register com1
+ //   com1deviceinstance.init = &deviceInitCOM1;
+  //  registerDevice(&com1deviceinstance);
 	registerInterruptHandler(SERIAL_IRQ1, &serial_irq_handler);
 	registerInterruptHandler(SERIAL_IRQ2, &serial_irq_handler);
 }
