@@ -36,7 +36,6 @@ uint16_t arraySize(struct array* arr){
       return 0;
 }
 
-
 void  arraySet(struct array* arr, uint16_t position, void* value){
      if (0!=arr){
          if ((position>=0) &&(position< arr->size) ){
