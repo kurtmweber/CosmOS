@@ -31,8 +31,15 @@ void CosmOS(){
 	video_select_mode(VIDEO_MODE_TEXT);
 	
 	console_driver_interface_init();
+	/*
+	* Put a hello message on the video, just so we know it's ok....
+	*/
+	console_select_driver(CONSOLE_DRIVER_VGA);
+	kprintf("Welcome CosmOS 0.1\n");
+	/*
+	* ok, output to the serial console now
+	*/
 	console_select_driver(CONSOLE_DRIVER_SERIAL);
-//	console_select_driver(CONSOLE_DRIVER_VGA);
 	
 	kprintf("Loading CosmOS 0.1\n");
 	
