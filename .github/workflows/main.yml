@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: '*'
 jobs:
-  build-ubuntu-20.04:
+  build-ubuntu:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
