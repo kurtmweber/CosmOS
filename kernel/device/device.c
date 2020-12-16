@@ -8,7 +8,6 @@
 #include <device/device.h>
 #include <console/console.h>
 
-
 #define MAX_DEVICES 64
 
 struct device* devices[MAX_DEVICES];

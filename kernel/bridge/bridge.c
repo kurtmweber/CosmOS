@@ -12,7 +12,6 @@
 #include <console/console.h>
 #include <pci/pci.h>
 
-
 void bridge_init() {
     uint16_t i = 0;
     for (i = 0; i < num_pci_devices; i++){
