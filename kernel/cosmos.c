@@ -19,6 +19,7 @@
 #include <timing/timing.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
+#include <serial/serial.h>
 
 void CosmOS(){	
 	video_init();
@@ -41,6 +42,9 @@ void CosmOS(){
 
 	kprintf("Initializing Interrupt Routing...\n");
 	interrupt_router_init();
+
+	kprintf("Initializing Serial...\n");
+	serial_init();
 
 	rtc_init();
 	keyboard_init();
