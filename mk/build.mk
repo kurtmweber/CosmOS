@@ -18,6 +18,9 @@ SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 UNAME := $(shell uname)
 ifeq ($(UNAME),Darwin)
 include $(SELF_DIR)/gcc-darwin.mk
+
+# not quite yet
+#include $(SELF_DIR)/clang-darwin.mk
 else
 include $(SELF_DIR)/gcc-linux.mk
 endif
