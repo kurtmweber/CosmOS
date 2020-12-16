@@ -59,18 +59,21 @@ void CosmOS(){
 	kprintf("Initializing Interrupt Routing...\n");
 	interrupt_router_init();
 
+	/*
+	* get the PCI bus info
+	*/
+	pci_init();
+	/*
+	* register all devices.  this just makes a list of device instances
+	*/
 	kprintf("Initializing Device Registry...\n");
 	device_registry_init();
-
-	kprintf("Initializing RS232...\n");
+	/*
+	* devices
+	*/
 	serial_register_devices();
-
-
 	rtc_register_devices();
 	keyboard_register_devices();
-	
-	pci_init();
-
 	display_register_devices();
 	usb_register_devices();
 	network_register_devices();
