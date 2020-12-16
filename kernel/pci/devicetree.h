@@ -33,7 +33,7 @@ typedef enum pci_class_codes{
 	PCI_CLASS_UNASSIGNED	= 0xFF
 } pci_class_codes;
 
-typedef enum pci_bridge_sublcass_codes{
+typedef enum pci_bridge_subclass_codes{
 	PCI_BRIDGE_SUBCLASS_HOST	=	0x00,
 	PCI_BRIDGE_SUBCLASS_ISA		=	0x01,
 	PCI_BRIDGE_SUBCLASS_EISA	=	0x02,

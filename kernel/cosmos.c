@@ -47,6 +47,9 @@ void CosmOS(){
 	kprintf("Initializing Interrupt Routing...\n");
 	interrupt_router_init();
 
+	serial_init();
+	serial_write("Hello Serial 1\n");	
+
 	rtc_init();
 	keyboard_init();
 	
@@ -55,12 +58,8 @@ void CosmOS(){
 	usb_init();
 	network_init();
 	bridge_init();
-
 	ata_init();
 	
-	serial_init();
-	serial_write("Hello Serial 1\n");	
-
 	/*
 	* init all devices
 	*/
