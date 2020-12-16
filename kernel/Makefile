@@ -12,7 +12,7 @@ kernel: cosmos
 cosmos: cosmos.elf
 	$(OBJCOPY) $(OBJCOPYFLAGS) $(KERNEL_ELF) $(KERNEL_BIN)
 
-cosmos.elf: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir serial-dir device-dir usb-dir network-dir bridge-dir
+cosmos.elf: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir serial-dir device-dir usb-dir network-dir bridge-dir array-dir
 	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) \
 	cosmos.o \
 	ata/ata.a \
@@ -30,7 +30,8 @@ cosmos.elf: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-
 	device/device.a \
 	usb/usb.a \
 	network/network.a \
-	bridge/bridge.a
+	bridge/bridge.a \
+	array/array.a
 
 cosmos.o: cosmos.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o cosmos.o cosmos.c
@@ -83,7 +84,10 @@ network-dir:
 bridge-dir:
 	cd bridge && $(MAKE)
 
-clean: kernel-clean asm-dir-clean ata-dir-clean console-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean panic-dir-clean pci-dir-clean string-dir-clean timing-dir-clean video-dir-clean serial-dir-clean device-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean
+array-dir:
+	cd array && $(MAKE)
+
+clean: kernel-clean asm-dir-clean ata-dir-clean console-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean panic-dir-clean pci-dir-clean string-dir-clean timing-dir-clean video-dir-clean serial-dir-clean device-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean array-dir-clean
 
 kernel-clean: cosmos-o-clean
 	$(RM) cosmos
@@ -138,3 +142,6 @@ network-dir-clean:
 
 bridge-dir-clean:
 	cd bridge && $(MAKE) clean
+
+array-dir-clean:
+	cd array && $(MAKE) clean

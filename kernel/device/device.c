@@ -7,21 +7,20 @@
 
 #include <device/device.h>
 #include <console/console.h>
+#include <array/array.h>
 
 #define MAX_DEVICES 64
 
-struct device* devices[MAX_DEVICES];
+struct array* devices;
 uint16_t device_index = 0;
 
 void device_registry_init() {
-    for (uint16_t i=0; i<MAX_DEVICES;i++){
-        devices[i]=0;
-    }
+    devices = arrayNew(MAX_DEVICES);    
 }
 
 void registerDevice(struct device* dev) {
     kprintf("register");
-    devices[device_index++]=dev;
+    arraySet(devices,device_index++, dev );
 }
 
 uint16_t deviceCount() {
@@ -29,11 +28,12 @@ uint16_t deviceCount() {
 }
 
 struct device* getDevice(uint16_t idx){
-    return devices[idx];
+    return arrayGet(devices, idx);
 }
 
 void initDevices(){
     for (uint16_t i=0; i<=device_index;i++){
-        devices[i]->init();
+        struct device* dev = (struct device*) arrayGet(devices, i);
+        dev->init();
     }
 }
