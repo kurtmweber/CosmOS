@@ -49,8 +49,6 @@ void serial_irq_handler(){
     serial_write_char(data);
 }
 
-
-
 void serial_write(const uint8_t* c){
     uint16_t i =0;
     while(c[i]!=0){
