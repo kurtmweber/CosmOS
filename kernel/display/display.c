@@ -23,7 +23,6 @@ void deviceInitDisplay(struct device* dev){
 * find all Display devices and register them
 */
 void display_register_devices() {
-    kprintf("5555");
     uint16_t i = 0;
     for (i = 0; i < num_pci_devices; i++){
         if ((pci_devices[i].pci_class == PCI_CLASS_DISPLAY) && ((pci_display_subclass_codes)pci_devices[i].pci_subclass == PCI_DISPLAY_SUBCLASS_VGA)) {
