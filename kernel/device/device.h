@@ -14,8 +14,12 @@ typedef void (*deviceInit)();
 
 typedef struct device {
 	deviceInit init;
+	int8_t* description;
 	void* deviceData;
 } device_t;
+
+// new device, allocated on the kernel heap
+struct device* newDevice();
 
 // register a device
 void registerDevice(struct device* dev); 
@@ -31,5 +35,8 @@ struct device* getDevice(uint16_t idx);
 
 // init all devices
 void initDevices();
+
+// set description
+//void deviceSetDescription(struct device* dev, int8_t* description);
 
 #endif

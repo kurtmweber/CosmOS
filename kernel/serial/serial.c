@@ -19,14 +19,6 @@
 #define SERIAL_IRQ1 3
 #define SERIAL_IRQ2 4
 
-/*
-* device instances
-*/
-struct device com1deviceinstance;
-struct device com2deviceinstance;
-struct device com3deviceinstance;
-struct device com4deviceinstance;
-
 void serial_irq_handler(){
 
 }
@@ -64,9 +56,10 @@ void deviceInitCOM1(){
 }
 
 void serial_init() {
-    // register com1
-    com1deviceinstance.init = &deviceInitCOM1;
-    registerDevice(&com1deviceinstance);
+    struct device* com1deviceinstance = newDevice();
+    com1deviceinstance->init =  &deviceInitCOM1;
+    registerDevice(com1deviceinstance);
+
 	registerInterruptHandler(SERIAL_IRQ1, &serial_irq_handler);
 	registerInterruptHandler(SERIAL_IRQ2, &serial_irq_handler);
 }
