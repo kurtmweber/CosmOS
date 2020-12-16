@@ -8,8 +8,11 @@
 #ifndef _CONSOLE_DRIVERS_H
 #define _CONSOLE_DRIVERS_H
 
+#include <types.h>
+
 typedef enum console_driver{
 	CONSOLE_DRIVER_VGA = 0,
+	CONSOLE_DRIVER_SERIAL=1,
 	CONSOLE_DRIVER_LAST
 } console_driver;
 

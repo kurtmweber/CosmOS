@@ -8,7 +8,6 @@
 #ifndef _VGA_CONSOLE_C
 #define _VGA_CONSOLE_C
 
-#include <types.h>
 #include <console/drivers/drivers.h>
 #include <console/drivers/vga/vga.h>
 #include <video/video.h>

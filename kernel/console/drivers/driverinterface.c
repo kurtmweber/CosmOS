@@ -12,10 +12,12 @@
 #include <console/console.h>
 #include <console/drivers/drivers.h>
 #include <console/drivers/vga/vga.h>
+#include <console/drivers/serial/serial_console.h>
 
 void console_driver_interface_init(){
 	uint8_t i;
-	
+
+	serial_console_register();
 #ifdef VGA_CONSOLE_ENABLED
 	vga_console_register();
 #endif

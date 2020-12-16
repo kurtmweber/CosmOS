@@ -27,7 +27,6 @@ struct device com2deviceinstance;
 struct device com3deviceinstance;
 struct device com4deviceinstance;
 
-
 void serial_irq_handler(){
 
 }
@@ -36,12 +35,12 @@ int is_transmit_empty() {
    return asm_in_b(COM1_ADDRESS + 5) & 0x20;
 }
 
-void serial_write_char(uint8_t c){
+void serial_write_char(const uint8_t c){
    while (is_transmit_empty() == 0);
    asm_out_b(COM1_ADDRESS,c);
 }
 
-void serial_write(uint8_t* c){
+void serial_write(const uint8_t* c){
     uint16_t i =0;
     while(c[i]!=0){
         serial_write_char(c[i++]);

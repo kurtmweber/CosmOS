@@ -5,12 +5,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _SERIAL_H
-#define _SERIAL_H
+#ifndef _SERIAL_CONSOLE_H
+#define _SERIAL_CONSOLE_H
 
-#include <types.h>
-
-void serial_init();
-void serial_write(const uint8_t* c);
+void serial_console_register();
 
 #endif
