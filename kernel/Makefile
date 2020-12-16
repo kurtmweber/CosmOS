@@ -89,7 +89,7 @@ kernel-clean: cosmos-o-clean
 	$(RM) cosmos
 
 cosmos-o-clean:
-	$(RM) cosmos.o cosmos.map
+	$(RM) cosmos.o cosmos.map cosmos.elf
 	
 asm-dir-clean:
 	cd asm && $(MAKE) clean
