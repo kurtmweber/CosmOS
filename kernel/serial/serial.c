@@ -19,18 +19,37 @@
 #define SERIAL_IRQ1 3
 #define SERIAL_IRQ2 4
 
-void serial_irq_handler(){
-
-}
+struct rs232_16550 {
+    uint8_t data;
+    uint8_t interrupt;
+    uint8_t fifocontrol;
+    uint8_t linecontrol;
+    uint8_t modemcontrol;
+    uint8_t linestatus;
+    uint8_t modemstatus;
+    uint8_t scratch;    
+} rs232_16550_t;
 
 int is_transmit_empty() {
-   return asm_in_b(COM1_ADDRESS + 5) & 0x20;
+    return asm_in_b(COM1_ADDRESS + 5) & 0x20;
 }
 
 void serial_write_char(const uint8_t c){
-   while (is_transmit_empty() == 0);
-   asm_out_b(COM1_ADDRESS,c);
+    struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
+
+    while (is_transmit_empty() == 0);
+    asm_out_b((uint16_t) &(com1->data),c);
 }
+
+void serial_irq_handler(){
+    struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
+    uint8_t data = asm_in_b((uint16_t)&(com1->data));
+
+    // echo the data
+    serial_write_char(data);
+}
+
+
 
 void serial_write(const uint8_t* c){
     uint16_t i =0;
@@ -41,13 +60,23 @@ void serial_write(const uint8_t* c){
 
 // https://wiki.osdev.org/Serial_Ports
 void init_port(uint16_t portAddress) {
-   asm_out_b(portAddress + 1, 0x00);    // Disable all interrupts
-   asm_out_b(portAddress + 3, 0x80);    // Enable DLAB (set baud rate divisor)
-   asm_out_b(portAddress + 0, 0x03);    // Set divisor to 3 (lo byte) 38400 baud
-   asm_out_b(portAddress + 1, 0x00);    //                  (hi byte)
-   asm_out_b(portAddress + 3, 0x03);    // 8 bits, no parity, one stop bit
-   asm_out_b(portAddress + 2, 0xC7);    // Enable FIFO, clear them, with 14-byte threshold
-   asm_out_b(portAddress + 4, 0x0B);    // IRQs enabled, RTS/DSR set
+
+    struct rs232_16550* com1 = (struct rs232_16550*) portAddress;
+
+    // enable interrupt on received data
+    asm_out_b((uint16_t)&(com1->interrupt),0x01);
+
+    // set 38400 baud
+    asm_out_b((uint16_t)&(com1->linecontrol),0x80);
+    asm_out_b((uint16_t)&(com1->data),0x03);
+    asm_out_b((uint16_t)&(com1->interrupt),0x00);
+    asm_out_b((uint16_t)&(com1->linecontrol),0x03);
+
+    // FIFO on
+    asm_out_b((uint16_t)&(com1->fifocontrol),0xC7);
+
+    // IRQ on, RTD/DSR set
+    asm_out_b((uint16_t)&(com1->modemcontrol),0x0B);
 }
 
 /*
