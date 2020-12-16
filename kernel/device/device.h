@@ -10,6 +10,8 @@
 
 #include <types.h>
 
+struct device;
+
 typedef void (*deviceInit)(struct device* dev);
 
 typedef struct device {

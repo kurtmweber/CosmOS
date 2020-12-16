@@ -24,8 +24,9 @@
 #include <device/device.h>
 #include <network/network.h>
 #include <bridge/bridge.h>
+#include <display/display.h>
 
-void CosmOS(){	
+void CosmOS(){
 	video_init();
 	video_select_driver(VIDEO_DRIVER_VGA);
 	video_select_mode(VIDEO_MODE_TEXT);
@@ -64,11 +65,13 @@ void CosmOS(){
 	kprintf("Initializing RS232...\n");
 	serial_register_devices();
 
+
 	rtc_register_devices();
 	keyboard_register_devices();
 	
 	pci_init();
 
+	display_register_devices();
 	usb_register_devices();
 	network_register_devices();
 	bridge_register_devices();
