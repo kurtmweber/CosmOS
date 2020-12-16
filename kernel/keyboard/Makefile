@@ -15,13 +15,6 @@ keyboard.o: keyboard.c
 keyboardbuffer.o: keyboardbuffer.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 	
-clean: keyboard-a-clean keyboard-o-clean keyboardbuffer-o-clean
-
-keyboard-a-clean:
-	$(RM) keyboard.a
-
-keyboard-o-clean:
-	$(RM) keyboard.o
-	
-keyboardbuffer-o-clean:
-	$(RM) keyboardbuffer.o
+clean:
+	$(RM) *.o
+	$(RM) *.a

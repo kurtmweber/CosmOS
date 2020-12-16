@@ -5,8 +5,8 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _ASM_C
-#define _ASM_C
+#ifndef _MISC_C
+#define _MISC_C
 
 #include <types.h>
 #include <mm/mm.h>
@@ -31,7 +31,7 @@ pttentry asm_cr3_read(){
 	pttentry cr3;
 	
 	asm volatile(
-		"mov %0, cr3"
+		"mov %%cr3 ,%0"
 		: "=r" (cr3)
 	    );
 	

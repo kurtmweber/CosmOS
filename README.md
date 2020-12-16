@@ -22,6 +22,8 @@ CosmOS requires:
 
 `sudo brew install x86_64-elf-binutils`
 
+`sudo brew install x86_64-elf-gcc`
+
 `sudo brew install nasm`
 
 `sudo brew install qemu`
@@ -40,7 +42,7 @@ On Ubuntu apt can be used on Linux to install the prerequisites
 
 `sudo apt install nasm`
 
-`sudo apt install qemu`
+`sudo apt install qemu-system-x86`
 
 # Building
 

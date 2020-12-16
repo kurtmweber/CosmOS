@@ -2,12 +2,18 @@ include ../mk/build.mk
 
 EXTRA_CFLAGS=-I.
 
+KERNEL_ELF=cosmos.elf
+KERNEL_BIN=cosmos.bin
+
 all: kernel
 
 kernel: cosmos
 
-cosmos: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir
-	$(LD) $(LDFLAGS) -o cosmos \
+cosmos: cosmos.elf
+	$(OBJCOPY) $(OBJCOPYFLAGS) $(KERNEL_ELF) $(KERNEL_BIN)
+
+cosmos.elf: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir
+	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) \
 	cosmos.o \
 	ata/ata.a \
 	pci/pci.a \

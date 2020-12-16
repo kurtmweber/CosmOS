@@ -20,16 +20,6 @@ pci_init.o: pci_init.c pci.h
 pci_scan.o: pci_scan.c pci.h
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
-clean: pci-a-clean pci_address-o-clean pci_init-o-clean
-
-pci-a-clean:
-	$(RM) pci.a
-	
-pci_address-o-clean:
-	$(RM) pci_address.o
-	
-pci_header-o-clean:
-	$(RM) pci_header.o
-	
-pci_init-o-clean:
-	$(RM) pci_init.o
+clean:
+	$(RM) *.o
+	$(RM) *.a

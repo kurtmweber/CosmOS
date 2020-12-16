@@ -5,21 +5,21 @@
 # See the file "LICENSE" in the source distribution for details  *
 # ****************************************************************
 
+# platform flag
+PLATFORM=COMPILE_PLATFORM_DARWIN
+
 # cc (GCC tool chain)
-CC=gcc
-CFLAGS=-c -masm=intel -m64 -mno-red-zone -ffreestanding -fno-pic -O0 -mcmodel=large 
+CC=x86_64-elf-gcc
+CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(PLATFORM)
 
 # ld
-LD=ld
-LDFLAGS=-m elf_x86_64 -T cosmos.ld -Map cosmos.map -nostdlib
+LD=x86_64-elf-ld 
+LDFLAGS=-m elf_x86_64 -T $(LINKER_SCRIPT) -Map $(MAPFILE) -nostdlib --no-relax
 
 # objcopy
-OBJCOPY=objcopy
+OBJCOPY=x86_64-elf-objcopy
 OBJCOPYFLAGS=-O binary
 
 # ar
-AR=ar
+AR=x86_64-elf-ar
 ARFLAGS=-crs
-
-# qemu
-QEMU=qemu-system-i386

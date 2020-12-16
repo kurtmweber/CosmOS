@@ -19,8 +19,6 @@
 #include <video/video.h>
 #include <video/vga/vga.h>
 
-#define P(row, col)	((row << 5) + col)
-
 void CosmOS(){	
 	video_init();
 	video_select_driver(VIDEO_DRIVER_VGA);
@@ -41,7 +39,6 @@ void CosmOS(){
 	pic_init();
 	
 	rtc_init();
-	
 	keyboard_init();
 	
 	pci_init();

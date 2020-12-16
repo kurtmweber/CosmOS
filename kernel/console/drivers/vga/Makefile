@@ -14,13 +14,6 @@ vga_console.o: vga_console.c
 vga_console_write.o: vga_console_write.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
-clean: vga-a-clean vga_console-o-clean vga_console_write-o-clean
-
-vga_console-o-clean:
-	$(RM) vga_console.o
-	
-vga_console_write-o-clean:
-	$(RM) vga_console_write.o
-	
-vga-a-clean:
-	$(RM) vga.a
+clean:
+	$(RM) *.o
+	$(RM) *.a
