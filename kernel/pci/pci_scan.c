@@ -52,7 +52,7 @@ void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
 	}
 	
 	pci_devices[num_pci_devices - 1] = fill_pci_device(bus, device, function);
-	kprintf("PCI device found at %#hX:%#hX:%#hX, class %#hX.%#hX, IRQ %hu\n", pci_devices[num_pci_devices - 1].bus, pci_devices[num_pci_devices - 1].device, pci_devices[num_pci_devices - 1].function, pci_devices[num_pci_devices - 1].pci_class, pci_devices[num_pci_devices - 1].pci_subclass, pci_devices[num_pci_devices - 1].irq);
+//	kprintf("PCI device found at %#hX:%#hX:%#hX, class %#hX.%#hX, IRQ %hu\n", pci_devices[num_pci_devices - 1].bus, pci_devices[num_pci_devices - 1].device, pci_devices[num_pci_devices - 1].function, pci_devices[num_pci_devices - 1].pci_class, pci_devices[num_pci_devices - 1].pci_subclass, pci_devices[num_pci_devices - 1].irq);
 	
 	if ((pci_header_read_type(bus, device, function) & 0x80) == 0x80){
 		for (i = 1; i < 8; i++){
