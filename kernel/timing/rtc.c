@@ -13,6 +13,7 @@
 #include <console/console.h>
 #include <timing/timing.h>
 #include <interrupts/interrupt_router.h>
+#include <device/device.h>
 
 #define RTC_IRQ_NUMBER 8
 #define RTC_FREQ 1024
@@ -27,14 +28,26 @@ void rtc_handle_irq(){
 	return;
 }
 
-void rtc_init(){
-	kprintf("Initializing RTC...\n");
+/*
+* perform device instance specific init here
+*/
+void deviceInitRTC(){
+    kprintf("Init RTC\n");
 	rtc_freq = RTC_FREQ;
 	sleep_countdown = 0;
 	
 	asm_cli();
 	rtc_write_register(RTC_REGISTER_STATUS_B, 0x40);	// bit 6 turns on interrupt
 	registerInterruptHandler(RTC_IRQ_NUMBER, &rtc_handle_irq);
+}
+
+void rtc_register_devices(){
+	/*
+	* register device
+	*/
+	struct device* deviceinstance = newDevice();
+	deviceinstance->init =  &deviceInitRTC;
+	registerDevice(deviceinstance);
 }
 
 uint8_t rtc_read_register(uint8_t reg){

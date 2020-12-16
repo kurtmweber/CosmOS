@@ -60,26 +60,25 @@ void CosmOS(){
 
 	kprintf("Initializing Device Registry...\n");
 	device_registry_init();
-	kprintf("There are %llX devices\n", deviceCount());
 
 	kprintf("Initializing RS232...\n");
-	serial_init();
-	kprintf("There are %llX devices\n", deviceCount());
+	serial_register_devices();
 
-	rtc_init();
-	keyboard_init();
+	rtc_register_devices();
+	keyboard_register_devices();
 	
 	pci_init();
 
-	usb_init();
-	network_init();
-	bridge_init();
+	usb_register_devices();
+	network_register_devices();
+	bridge_register_devices();
 	ata_init();
 	
 	/*
 	* init all devices
 	*/
 	initDevices();
+	kprintf("There are %llX devices\n", deviceCount());
 
 	asm_sti();
 

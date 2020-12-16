@@ -33,7 +33,7 @@ typedef struct key_action_t{
 #ifndef _KEYBOARD_C
 extern uint8_t keyboard_buffer_start, keyboard_buffer_end;
 
-void keyboard_init();
+void keyboard_register_devices();
 void keyboard_irq_read();
 #else
 #include "abstract_keyboard.h"

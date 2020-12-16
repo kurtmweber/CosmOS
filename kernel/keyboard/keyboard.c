@@ -15,6 +15,7 @@
 #include <console/console.h>
 #include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
+#include <device/device.h>
 
 #define KB_IRQ_NUMBER 1
 
@@ -154,12 +155,25 @@ void keyboard_remove_command_queue(){
 void keyboard_send_command_queue(){
 }
 
-void keyboard_init(){
-	console_write("Initializing keyboard...\n");
+/*
+* perform device instance specific init here
+*/
+void deviceInitKeyboard(){
+    kprintf("Init Keyboard\n");
 	registerInterruptHandler(KB_IRQ_NUMBER, &keyboard_irq_read);
+}
+
+
+void keyboard_register_devices(){
 	keyboard_buffer_start = 0;
 	keyboard_buffer_end = 0;
-	return;
+
+	/*
+	* register device
+	*/
+	struct device* deviceinstance = newDevice();
+	deviceinstance->init =  &deviceInitKeyboard;
+	registerDevice(deviceinstance);
 }
 
 #endif

@@ -50,12 +50,15 @@ void init_port(uint16_t portAddress) {
    asm_out_b(portAddress + 4, 0x0B);    // IRQs enabled, RTS/DSR set
 }
 
+/*
+* perform device instance specific init here
+*/
 void deviceInitCOM1(){
     kprintf("Init COM1\n");
     init_port(COM1_ADDRESS);
 }
 
-void serial_init() {
+void serial_register_devices() {
     struct device* com1deviceinstance = newDevice();
     com1deviceinstance->init =  &deviceInitCOM1;
     registerDevice(com1deviceinstance);

@@ -42,7 +42,7 @@ typedef enum rtc_registers{
 extern uint16_t rtc_freq;
 
 void rtc_handle_irq();
-void rtc_init();
+void rtc_register_devices();
 rtc_time_t rtc_time();
 #else
 uint16_t rtc_freq;

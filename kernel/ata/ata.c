@@ -13,6 +13,7 @@
 #include <console/console.h>
 #include <mm/mm.h>
 #include <pci/pci.h>
+#include <device/device.h>
 
 void ata_detect_addresses(uint16_t num_ide){
 	uint16_t i;
@@ -72,6 +73,10 @@ void ata_init(){
 	return;
 }
 
+void deviceInitATA(){
+    kprintf("Init ATA\n");
+}
+
 uint16_t ata_scan_ide_controllers(){
 	uint16_t i = 0, num_ide = 0;
 	bool ide_found = false;
@@ -90,6 +95,13 @@ uint16_t ata_scan_ide_controllers(){
 			}
 			
 			ide_controllers[num_ide - 1].pci = &pci_devices[i];
+
+			/*
+			* register device
+			*/
+			struct device* deviceinstance = newDevice();
+			deviceinstance->init =  &deviceInitATA;
+			registerDevice(deviceinstance);
 		}
 	}
 	

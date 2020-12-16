@@ -12,7 +12,11 @@
 #include <console/console.h>
 #include <pci/pci.h>
 
-void bridge_init() {
+void deviceInitBridge(){
+    kprintf("Init Bridge\n");
+}
+
+void bridge_register_devices() {
     uint16_t i = 0;
     for (i = 0; i < num_pci_devices; i++){
         if (pci_devices[i].pci_class == PCI_CLASS_BRIDGE)  {
@@ -28,6 +32,13 @@ void bridge_init() {
     		    kprintf("Other Bridge found at PCI address %#hX:%#hX:%#hX\n", pci_devices[i].bus, pci_devices[i].device, pci_devices[i].function);
 			    kprintf("\tVendor %#X, Device %#X\n", pci_devices[i].vendor_id, pci_devices[i].device_id);
             }
+
+            /*
+            * register device
+            */
+            struct device* deviceinstance = newDevice();
+            deviceinstance->init =  &deviceInitBridge;
+            registerDevice(deviceinstance);
         }
     }
 }

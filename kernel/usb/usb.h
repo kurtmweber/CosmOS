@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void usb_init();
+void usb_register_devices();
 
 #endif
