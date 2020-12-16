@@ -12,18 +12,15 @@
 #include <asm/asm.h>
 #include <console/drivers/drivers.h>
 #include <keyboard/keyboard.h>
+#include <console/console.h>
+#include <interrupts/interrupts.h>
+#include <interrupts/interrupt_router.h>
+
+#define KB_IRQ_NUMBER 1
 
 #define P(row, col)	((row << 5) + col)
 
 void keyboard_add_command_queue(uint8_t command){
-}
-
-void keyboard_init(){
-	console_write("Initializing keyboard...\n");
-	keyboard_buffer_start = 0;
-	keyboard_buffer_end = 0;
-	
-	return;
 }
 
 void keyboard_irq_read(){
@@ -155,6 +152,14 @@ void keyboard_remove_command_queue(){
 }
 
 void keyboard_send_command_queue(){
+}
+
+void keyboard_init(){
+	console_write("Initializing keyboard...\n");
+	registerInterruptHandler(KB_IRQ_NUMBER, &keyboard_irq_read);
+	keyboard_buffer_start = 0;
+	keyboard_buffer_end = 0;
+	return;
 }
 
 #endif

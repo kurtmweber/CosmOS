@@ -11,6 +11,7 @@
 #include <asm/asm.h>
 #include <ata/ata.h>
 #include <interrupts/interrupts.h>
+#include <interrupts/interrupt_router.h>
 #include <keyboard/keyboard.h>
 #include <mm/mm.h>
 #include <pci/pci.h>
@@ -37,7 +38,10 @@ void CosmOS(){
 	
 	kprintf("Initializing PIC...\n");
 	pic_init();
-	
+
+	kprintf("Initializing Interrupt Routing...\n");
+	interrupt_router_init();
+
 	rtc_init();
 	keyboard_init();
 	

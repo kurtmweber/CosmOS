@@ -12,6 +12,10 @@
 #include <asm/asm.h>
 #include <console/console.h>
 #include <timing/timing.h>
+#include <interrupts/interrupt_router.h>
+
+#define RTC_IRQ_NUMBER 8
+#define RTC_FREQ 1024
 
 void rtc_handle_irq(){
 #ifdef RTC_SLEEP
@@ -25,14 +29,12 @@ void rtc_handle_irq(){
 
 void rtc_init(){
 	kprintf("Initializing RTC...\n");
-	rtc_freq = 1024;
-	
+	rtc_freq = RTC_FREQ;
 	sleep_countdown = 0;
 	
 	asm_cli();
 	rtc_write_register(RTC_REGISTER_STATUS_B, 0x40);	// bit 6 turns on interrupt
-	
-	return;
+	registerInterruptHandler(RTC_IRQ_NUMBER, &rtc_handle_irq);
 }
 
 uint8_t rtc_read_register(uint8_t reg){
