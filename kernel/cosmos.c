@@ -47,8 +47,14 @@ void CosmOS(){
 	kprintf("Initializing Interrupt Routing...\n");
 	interrupt_router_init();
 
+	kprintf("Initializing Device Registry...\n");
+	device_registry_init();
+	kprintf("There are %llX devices\n", deviceCount());
+
+	kprintf("Initializing RS232...\n");
 	serial_init();
 	serial_write("Hello Serial 1\n");	
+	kprintf("There are %llX devices\n", deviceCount());
 
 	rtc_init();
 	keyboard_init();
