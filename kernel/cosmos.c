@@ -41,10 +41,13 @@ void CosmOS(){
 	*/
 	console_select_driver(CONSOLE_DRIVER_SERIAL);
 	
+	/*
+	* Hello!
+	*/
 	kprintf("Loading CosmOS 0.1\n");
 	
 	kprintf("Initializing IDT...\n");
-	initIDT();
+	idt_init();
 	
 	kprintf("Initializing MMU...\n");
 	mmu_init();

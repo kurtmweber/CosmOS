@@ -77,7 +77,7 @@ typedef enum intVectors{
 	} intVectors;
 	
 #ifndef _IDT_C
-void initIDT();
+void idt_init();
 #else
 idtEntry idt[256];
 

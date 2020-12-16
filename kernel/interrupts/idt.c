@@ -12,7 +12,7 @@
 #include <asm/asm.h>
 #include <interrupts/interrupts.h>
 
-void initIDT(){
+void idt_init(){
 	idtr idtr;
 	addISR(isrDE, DE);
 	
