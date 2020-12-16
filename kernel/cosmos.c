@@ -43,8 +43,8 @@ void CosmOS(){
 	kprintf("Initializing Interrupt Routing...\n");
 	interrupt_router_init();
 
-	kprintf("Initializing Serial...\n");
 	serial_init();
+	serial_write("Hello Serial 1\n");	
 
 	rtc_init();
 	keyboard_init();

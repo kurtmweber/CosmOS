@@ -33,4 +33,4 @@ QEMUARGS= -accel tcg,thread=single       \
   -smp 1                                 \
   -usb                                   \
   -vga std					                     \
-  -monitor stdio
+  -serial stdio
