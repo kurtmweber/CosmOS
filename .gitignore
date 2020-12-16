@@ -7,6 +7,7 @@
 *.obj
 *.elf
 *.bin
+*.img
 kernel/cosmos
 
 # Linker output
@@ -56,3 +57,4 @@ dkms.conf
 # Temp files
 *.un*
 *.~
+
