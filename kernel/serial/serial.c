@@ -31,7 +31,9 @@ struct rs232_16550 {
 } rs232_16550_t;
 
 int is_transmit_empty() {
-    return asm_in_b(COM1_ADDRESS + 5) & 0x20;
+    struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
+    uint8_t data = asm_in_b((uint16_t)&(com1->linestatus));
+    return data & 0x20;
 }
 
 void serial_write_char(const uint8_t c){
