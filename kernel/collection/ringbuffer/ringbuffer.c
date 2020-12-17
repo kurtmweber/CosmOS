@@ -29,7 +29,7 @@ void ringbufferDelete(struct ringbuffer* rb) {
     }
 }
 
-void ringbufferAdd(struct ringbuffer* rb, uint8_t value) {
+void ringbufferAdd(struct ringbuffer* rb, uint64_t value) {
     if (0!=rb){
         if (0==rb->arr){
             panic("why is the underlying array null?!");
@@ -45,18 +45,31 @@ void ringbufferAdd(struct ringbuffer* rb, uint8_t value) {
     }   
 }
 
-uint8_t ringbufferRemove(struct ringbuffer* rb) {
+uint64_t ringbufferRemove(struct ringbuffer* rb) {
     if (0!=rb){
         if (0==rb->arr){
             panic("why is the underlying array null?!");
         }
-        uint8_t ret = arrayGet(rb->arr, rb->tail);      
-        rb->tail=rb->tail+1;
-        // wrap
-        if (rb->tail == arraySize(rb->arr)){
-            rb->tail=0;
+        if (rb->head > rb->tail) {
+            uint64_t ret = (uint64_t) arrayGet(rb->arr, rb->tail);      
+            rb->tail=rb->tail+1;
+            // wrap
+            if (rb->tail == arraySize(rb->arr)){
+                rb->tail=0;
+            }
+        } else {
+            panic("ringbuffer underflow");
         }
     } else {
         panic("null ringbuffer\n");
     }   
 }
+
+uint16_t ringbufferAvailable(struct ringbuffer* rb) {
+     if (0!=rb){
+        return (rb->head - rb->tail);
+    } else {
+        panic("null ringbuffer\n");
+    }     
+}
+
