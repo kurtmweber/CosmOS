@@ -44,6 +44,7 @@ void bridge_register_devices() {
             */
             struct device* deviceinstance = newDevice();
             deviceinstance->init =  &deviceInitBridge;
+            deviceinstance->deviceData = &(pci_devices[i]);
             registerDevice(deviceinstance);
         }
     }

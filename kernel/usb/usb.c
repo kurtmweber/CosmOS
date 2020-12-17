@@ -34,6 +34,7 @@ void usb_register_devices() {
             */
             struct device* deviceinstance = newDevice();
             deviceinstance->init =  &deviceInitUSB;
+            deviceinstance->deviceData = &(pci_devices[i]);
             registerDevice(deviceinstance);
         }
     }

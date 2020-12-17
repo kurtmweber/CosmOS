@@ -34,6 +34,7 @@ void display_register_devices() {
             */
             struct device* deviceinstance = newDevice();
             deviceinstance->init =  &deviceInitDisplay;
+            deviceinstance->deviceData = &(pci_devices[i]);
             registerDevice(deviceinstance);
         }
     }

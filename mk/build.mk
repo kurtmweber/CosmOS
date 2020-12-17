@@ -35,5 +35,8 @@ QEMUARGS= -accel tcg,thread=single       \
   -drive format=raw,file=hda.img         \
   -smp 1                                 \
   -usb                                   \
+  -net nic,model=ne2k_pci                \
   -vga std					                     \
   -serial stdio
+
+  #-net nic,model=rtl8139                 \

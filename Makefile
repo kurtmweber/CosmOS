@@ -5,7 +5,6 @@ BOOTIMAGE=hda.img
 all: bootimage
 
 bootimage: subsystems
-	$(RM) $(BOOTIMAGE)
 	$(DD) if=/dev/zero of=$(BOOTIMAGE) bs=32768 count=129024
 	$(DD) if=boot/boot.bin of=$(BOOTIMAGE) conv=notrunc bs=512 count=1
 	$(DD) if=boot/boot2.bin of=$(BOOTIMAGE) conv=notrunc bs=512 count=2 seek=1

@@ -5,13 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _NETWORK_H
-#define _NETWORK_H
+#ifndef _RTL8139_H
+#define _RTL8139_H
 
-#include <network/ne2000/ne2000.h>
-#include <network/rtl8139/rtl8139.h>
+#include <types.h>
 
-void network_register_devices();
+void rtl8139_register_devices();
 
 #endif
-
