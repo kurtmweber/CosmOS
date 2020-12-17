@@ -28,7 +28,7 @@ struct rs232_16550 {
     uint8_t linestatus;
     uint8_t modemstatus;
     uint8_t scratch;    
-} rs232_16550_t;
+} __attribute__((packed)) rs232_16550_t;
 
 int is_transmit_empty() {
     struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
