@@ -44,7 +44,11 @@ uint16_t deviceCount() {
 }
 
 struct device* getDevice(uint16_t idx){
-    return arrayGet(devices, idx);
+    if ((idx>0) && (idx<device_index)) {
+        return arrayGet(devices, idx);
+    } else {
+        panic("invalid device index passed to getDevice\n");
+    }
 }
 
 void initDevices(){
