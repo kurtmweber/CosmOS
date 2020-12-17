@@ -14,6 +14,9 @@
 /**
  * a simple fixed-size array with some accessors and very basic protections
  */
+/**
+ * array is zero-indexed
+ */
 typedef struct array {
 	void** data;
     uint16_t size;

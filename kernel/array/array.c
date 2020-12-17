@@ -8,6 +8,7 @@
 #include <array/array.h>
 
 #include <mm/mm.h>
+#include <panic/panic.h>
 
 struct array* arrayNew(uint16_t size) {
     struct array*  ret = (struct array*) kmalloc(sizeof(array_t));
@@ -25,29 +26,39 @@ void arrayDelete(struct array* arr){
             kfree(arr->data);
         }
         kfree(arr);
+    } else {
+        panic("null array");
     }
 }
 
 uint16_t arraySize(struct array* arr){
-      if (0!=arr){
-          return arr->size;
-      } 
-      return 0;
+    if (0!=arr){
+        return arr->size;
+    } else {
+        panic("null array");
+    }   
 }
 
 void  arraySet(struct array* arr, uint16_t position, void* value){
      if (0!=arr){
          if ((position>=0) &&(position< arr->size) ){
              arr->data[position]=value;
-         }
-     }
+         } else {
+            panic("invalid array index");
+        }
+     } else {
+        panic("null array");
+    }  
 }
 
 void* arrayGet(struct array* arr,  uint16_t position){
     if (0!=arr){
         if ((position>=0) &&(position< arr->size) ){
             return arr->data[position];
-        }
-    }
-    return 0;
+        } else {
+            panic("invalid array index");
+        }  
+    } else {
+        panic("null array");
+    }  
 }
