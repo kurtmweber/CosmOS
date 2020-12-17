@@ -54,5 +54,7 @@ void pci_scan_bus(uint8_t bus);
 bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function);
 #endif
 
+// search for a PCI device.  
+pci_device_t* pci_search(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id);
 
 #endif
