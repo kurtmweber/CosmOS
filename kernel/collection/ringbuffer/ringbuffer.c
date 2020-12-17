@@ -33,11 +33,15 @@ void ringbufferAdd(struct ringbuffer* rb, uint64_t value) {
         if (0==rb->arr){
             panic("why is the underlying array null?!");
         }
-        arraySet(rb->arr, rb->head, (void*) value);
-        rb->head=rb->head+1;
-        // wrap
-        if (rb->head == arraySize(rb->arr)){
-            rb->head=0;
+        if (rb->head > rb->tail) {
+            arraySet(rb->arr, rb->head, (void*) value);
+            rb->head=rb->head+1;
+            // wrap
+            if (rb->head == arraySize(rb->arr)){
+                rb->head=0;
+            }
+        }  else {
+            panic("ringbuffer overflow");
         }
     } else {
         panic("null ringbuffer\n");
