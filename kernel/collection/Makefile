@@ -5,10 +5,13 @@ ARFLAGS=-crs
 
 all: collection.a
 
-collection.a: array.o
+collection.a: array.o list.o
 	$(AR) $(ARFLAGS) $@ $^
 	
 array.o: array/array.c
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
+
+list.o: list/list.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
 clean:
