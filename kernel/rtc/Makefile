@@ -3,12 +3,12 @@ include ../../mk/build.mk
 EXTRA_CFLAGS= -I.. -DRTC_SLEEP
 ARFLAGS=-crs
 
-all: timing.a
+all: rtc.a
 
-timing.a: sleep.o
+rtc.a: rtc.o
 	$(AR) $(ARFLAGS) $@ $^
 	
-sleep.o: sleep.c
+rtc.o: rtc.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 	
 clean:

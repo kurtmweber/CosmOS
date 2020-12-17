@@ -1,12 +1,12 @@
-/*****************************************************************
- * This file is part of CosmOS                                   *
- * Copyright (C) 2019-2020 Kurt M. Weber                         *
- * Released under the stated terms in the file LICENSE           *
- * See the file "LICENSE" in the source distribution for details *
- *****************************************************************/
+//*****************************************************************
+// This file is part of CosmOS                                    *
+// Copyright (C) 2020 Tom Everett                                 *
+// Released under the stated terms in the file LICENSE            *
+// See the file "LICENSE" in the source distribution for details  *
+// ****************************************************************
 
-#ifndef _TIMING_H
-#define _TIMING_H
+#ifndef _RTC_H
+#define _RTC_H
 
 #include <types.h>
 
@@ -24,8 +24,6 @@ typedef struct rtc_time_t{
 	uint8_t century;
 } rtc_time_t;
 
-
-
 extern uint16_t rtc_freq;
 
 void rtc_handle_irq();
@@ -36,3 +34,4 @@ uint8_t rtc_read_register(uint8_t reg);
 void rtc_write_register(uint8_t reg, uint8_t val);
 
 #endif
+

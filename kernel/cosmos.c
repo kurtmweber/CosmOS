@@ -16,7 +16,7 @@
 #include <mm/mm.h>
 #include <pci/pci.h>
 #include <string/string.h>
-#include <timing/timing.h>
+#include <rtc/rtc.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
 #include <serial/serial.h>

@@ -8,7 +8,7 @@
 #include <types.h>
 #include <asm/asm.h>
 #include <console/console.h>
-#include <timing/timing.h>
+#include <rtc/rtc.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/devicemgr.h>
 #include <timing/sleep.h>
