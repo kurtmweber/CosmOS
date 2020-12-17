@@ -10,10 +10,11 @@
 #include <panic/panic.h>
 
 #define EXPAND_SIZE 64
+#define START_SIZE 16
 
-struct list* listNew(uint16_t size) {
+struct list* listNew() {
     struct list* ret = (struct list*) kmalloc(sizeof(list_t));
-    ret->arr = arrayNew(size);
+    ret->arr = arrayNew(START_SIZE);
     ret->count=0;
 }
 

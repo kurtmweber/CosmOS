@@ -12,12 +12,10 @@
 #include <string/string.h>
 #include <panic/panic.h>
 
-#define MAX_DEVICES 64
-
 struct list* devices;
 
 void device_registry_init() {
-    devices = listNew(MAX_DEVICES);    
+    devices = listNew();    
 }
 
 void registerDevice(struct device* dev) {

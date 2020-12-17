@@ -15,7 +15,7 @@ typedef struct list {
     uint16_t count;
 } list_t;
 
-struct list* listNew(uint16_t size);
+struct list* listNew();
 void listDelete(struct list* lst);
 /*
 * number items in the list
