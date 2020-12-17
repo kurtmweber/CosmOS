@@ -4,7 +4,6 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-
 #include <network/network.h>
 
 void network_register_devices() {

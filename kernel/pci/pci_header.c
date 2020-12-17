@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _PCI_HEADER_C
-#define _PCI_HEADER_C
-
 #include <types.h>
 #include <asm/asm.h>
 #include <pci/pci.h>
@@ -113,5 +110,3 @@ void pci_header_set_irq(uint8_t bus, uint8_t device, uint8_t function, uint8_t i
 	
 	return;
 }
-
-#endif

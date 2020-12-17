@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _PCI_SCAN_C
-#define _PCI_SCAN_C
-
 #include <types.h>
 #include <asm/asm.h>
 #include <console/console.h>
@@ -121,4 +118,3 @@ void pci_scan_bus(uint8_t bus){
 	return;
 }
 
-#endif

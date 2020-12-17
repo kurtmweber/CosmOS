@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _PCI_ADDRESS_C
-#define _PCI_ADDRESS_C
-
 #include <types.h>
 
 uint32_t pci_config_address_build(uint8_t bus, uint8_t device, uint8_t function, uint8_t offset, uint8_t enabled){
@@ -21,5 +18,3 @@ uint32_t pci_config_address_build(uint8_t bus, uint8_t device, uint8_t function,
 	
 	return r;
 }
-
-#endif

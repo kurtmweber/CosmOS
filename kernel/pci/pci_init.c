@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _PCI_INIT_C
-#define _PCI_INIT_C
-
 #include <types.h>
 #include <console/console.h>
 #include <mm/mm.h>
@@ -26,5 +23,3 @@ void pci_init(){
 	
 	return;
 }
-
-#endif
