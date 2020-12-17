@@ -48,16 +48,18 @@ struct device* getDevice(uint16_t idx){
     }
 }
 
+void deviceInitIterator(void* value) {
+    struct device* dev = (struct device*) value;
+    if (0!=dev) {
+        dev->init(dev);
+    } else {
+        panic("um. why is there a null device?");
+    }
+}
+
 void initDevices(){
     kprintf("Initializing Devices\n");
-    for (uint16_t i=0; i<listCount(devices);i++){
-        struct device* dev = (struct device*) listGet(devices, i);
-        if (0!=dev){
-            dev->init(dev);
-        } else {
-            panic("um. why is there a null device?");
-        }
-    }
+    listIterate(devices, &deviceInitIterator);
 }
 
 struct device* newDevice() {
