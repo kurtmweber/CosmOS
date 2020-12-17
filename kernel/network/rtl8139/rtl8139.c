@@ -32,6 +32,7 @@ void RTL8139SearchCB(struct pci_device* dev){
     struct device* deviceinstance = newDevice();
     deviceinstance->init =  &RTL8139Init;
     deviceinstance->deviceData = dev;
+    deviceinstance->devicetype = ETHERNET;
     deviceSetDescription(deviceinstance, "RTL8139");
     registerDevice(deviceinstance);
 }

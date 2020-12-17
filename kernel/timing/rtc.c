@@ -65,6 +65,7 @@ void rtc_register_devices(){
 	*/
 	struct device* deviceinstance = newDevice();
 	deviceSetDescription(deviceinstance, "RTC");
+	deviceinstance->devicetype = RTC;
 	deviceinstance->init =  &deviceInitRTC;
 	registerDevice(deviceinstance);
 }

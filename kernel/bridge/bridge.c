@@ -27,6 +27,7 @@ void BridgeSearchCB(struct pci_device* dev){
     struct device* deviceinstance = newDevice();
     deviceinstance->init =  &deviceInitBridge;
     deviceinstance->deviceData = dev;
+    deviceinstance->devicetype = BRIDGE;
     deviceSetDescription(deviceinstance, "Bridge");
     registerDevice(deviceinstance);
 }

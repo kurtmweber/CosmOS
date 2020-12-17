@@ -27,6 +27,7 @@ void DisplaySearchCB(struct pci_device* dev){
     struct device* deviceinstance = newDevice();
     deviceinstance->init =  &deviceInitDisplay;
     deviceinstance->deviceData = dev;
+    deviceinstance->devicetype = VGA;
     deviceSetDescription(deviceinstance, "VGA Display");
     registerDevice(deviceinstance);
 }

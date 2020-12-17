@@ -187,6 +187,7 @@ void keyboard_register_devices(){
 	*/
 	struct device* deviceinstance = newDevice();
 	deviceinstance->init =  &deviceInitKeyboard;
+	deviceinstance->devicetype = KEYBOARD;
 	deviceSetDescription(deviceinstance, "Keyboard");
 	registerDevice(deviceinstance);
 }

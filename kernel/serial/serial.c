@@ -102,9 +102,10 @@ void serial_register_devices() {
     struct comport* cp = kmalloc(sizeof(struct comport));
     cp->irq=SERIAL_IRQ2;
     cp->address=COM1_ADDRESS;
-    struct device* comdeviceinstance = newDevice();
-    comdeviceinstance->init =  &deviceInitCOM1;
-    comdeviceinstance->deviceData = cp;
-    deviceSetDescription(comdeviceinstance, "RS232");
-    registerDevice(comdeviceinstance);
+    struct device* deviceinstance = newDevice();
+    deviceinstance->init =  &deviceInitCOM1;
+    deviceinstance->deviceData = cp;
+    deviceinstance->devicetype = SERIAL;
+    deviceSetDescription(deviceinstance, "RS232");
+    registerDevice(deviceinstance);
 }

@@ -27,6 +27,7 @@ void USBSearchCB(struct pci_device* dev){
     struct device* deviceinstance = newDevice();
     deviceinstance->init =  &deviceInitUSB;
     deviceinstance->deviceData = dev;
+    deviceinstance->devicetype = USB;
     deviceSetDescription(deviceinstance, "USB");
     registerDevice(deviceinstance);
 }
