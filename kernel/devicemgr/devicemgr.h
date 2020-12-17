@@ -14,8 +14,20 @@ struct device;
 
 typedef void (*deviceInit)(struct device* dev);
 
+enum deviceType{
+	SERIAL	=		0x00,
+	VGA = 			0x01,
+	RTC=			0x03,
+	KEYBOARD=		0x04,
+	ETHERNET=		0x05,
+	BRIDGE=			0x06,
+	USB=			0x07,
+	ATA=			0x08
+};
+
 typedef struct device {
 	int8_t* name;
+	enum deviceType devicetype;
 	deviceInit init;
 	int8_t* description;
 	void* deviceData;
@@ -41,5 +53,8 @@ void initDevices();
 
 // set description
 void deviceSetDescription(struct device* dev, int8_t* description);
+
+typedef void (*deviceSearchCallback)(struct device* dev);
+void search_device(enum deviceType devicetype, deviceSearchCallback cb);
 
 #endif

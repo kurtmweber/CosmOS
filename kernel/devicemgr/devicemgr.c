@@ -61,3 +61,8 @@ void deviceSetDescription(struct device* dev, int8_t* description) {
         strcpy(dev->description, description);
     }
 }
+
+void search_device(enum deviceType devicetype, deviceSearchCallback cb) {
+
+}
+

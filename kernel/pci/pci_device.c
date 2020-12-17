@@ -12,7 +12,7 @@
 struct pci_device *pci_devices;
 uint16_t num_pci_devices;
 
-void pci_search_device(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id, deviceSearchCallback cb){
+void pci_search_device(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id, pcideviceSearchCallback cb){
     uint16_t i = 0;
     for (i = 0; i < num_pci_devices; i++){
         if ((pci_devices[i].pci_class == pci_class) && (pci_devices[i].pci_subclass == pci_subclass)) {
@@ -23,7 +23,7 @@ void pci_search_device(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t
     }
 }
 
-void pci_search_devicetype(pci_class_codes pci_class, uint8_t pci_subclass, deviceSearchCallback cb){
+void pci_search_devicetype(pci_class_codes pci_class, uint8_t pci_subclass, pcideviceSearchCallback cb){
     uint16_t i = 0;
     for (i = 0; i < num_pci_devices; i++){
         if ((pci_devices[i].pci_class == pci_class) && (pci_devices[i].pci_subclass == pci_subclass)) {
