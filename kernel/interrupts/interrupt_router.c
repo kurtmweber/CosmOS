@@ -5,9 +5,6 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _INTERRUPT_ROUTER_C
-#define _INTERRUPT_ROUTER_C
-
 #include <interrupts/interrupt_router.h>
 
 #define NUMBER_INTERRUPTS 16
@@ -42,4 +39,3 @@ void routeInterrupt(int interruptNumber, stackFrame *frame){
     }
 }
 
-#endif

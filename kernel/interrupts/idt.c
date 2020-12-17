@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _IDT_C
-#define _IDT_C
-
 #include <types.h>
 #include <asm/asm.h>
 #include <interrupts/interrupts.h>
@@ -55,5 +52,3 @@ void addISR(void *func, intVectors vector){
 	idt[vector].offsetDwordHigh = (uint32_t)(((uint64_t)func >> 32) & 0xFFFFFFFF);
 	idt[vector].reserved = 0;
 }
-
-#endif

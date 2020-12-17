@@ -8,8 +8,6 @@
 #ifndef _PANIC_H
 #define _PANIC_H
 
-#ifndef _PANIC_C
 void panic(const char *s);
-#endif
 
 #endif

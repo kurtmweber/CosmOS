@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _IRQ_C
-#define _IRQ_C
-
 #include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
 
@@ -90,5 +87,3 @@ __attribute__ ((interrupt)) void irq15(stackFrame *frame){
 	routeInterrupt(15, frame);
 	pic_send_eoi(15);
 }
-
-#endif

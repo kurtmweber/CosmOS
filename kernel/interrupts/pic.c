@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _PIC_C
-#define _PIC_C
-
 #include <asm/asm.h>
 #include <interrupts/interrupts.h>
 
@@ -39,5 +36,3 @@ void pic_send_eoi(uint8_t irq){
 		asm_out_b(PIC_SECONDARY_COMMAND, PIC_EOI);
 	}
 }
-
-#endif
