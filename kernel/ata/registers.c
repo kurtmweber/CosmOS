@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _ATA_REGISTERS_C
-#define _ATA_REGISTERS_C
-
 #include <types.h>
 #include <asm/asm.h>
 #include <ata/ata.h>
@@ -103,7 +100,6 @@ uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_regis
 			panic("Invalid or unsupported ATA register selected!");
 			break;
 	}
-	
 	return out_offset + out_port_base;
 }
 
@@ -123,8 +119,5 @@ uint16_t ata_register_read_word(uint8_t controller, uint8_t channel, ata_registe
 void ata_register_write(uint8_t controller, uint8_t channel, ata_registers reg, uint8_t value){
 	//kprintf("Preparing to write value %#X to port %#X\n", value, out_port_base + out_offset);	
 	asm_out_b(ata_register_port_number(controller, channel, reg), value);
-	
 	return;
 }
-
-#endif

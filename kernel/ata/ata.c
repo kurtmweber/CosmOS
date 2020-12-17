@@ -5,15 +5,14 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _ATA_C
-#define _ATA_C
-
 #include <types.h>
 #include <ata/ata.h>
 #include <console/console.h>
 #include <mm/mm.h>
 #include <pci/pci.h>
 #include <device/device.h>
+
+ide_controller_t *ide_controllers;
 
 void ata_detect_addresses(uint16_t num_ide){
 	uint16_t i;
@@ -118,5 +117,3 @@ void ata_setup_irq(uint16_t num_ide){
 		pci_header_set_irq(ide_controllers[i].pci->bus, ide_controllers[i].pci->device, ide_controllers[i].pci->function, IDE_SERIAL_IRQ);
 	}
 }
-
-#endif

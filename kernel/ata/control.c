@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _ATA_CONTROL_C
-#define _ATA_CONTROL_C
-
 #include <types.h>
 #include <ata/ata.h>
 #include <console/console.h>
@@ -61,5 +58,3 @@ bool ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector d
 	
 	return true;
 }
-
-#endif

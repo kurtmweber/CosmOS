@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _ATA_DETECT_C
-#define _ATA_DETECT_C
-
 #include <types.h>
 #include <ata/ata.h>
 #include <console/console.h>
@@ -157,5 +154,3 @@ uint32_t ata_detect_sector_size(char *identify_buf){
 	
 	return ata_detect_extract_dword(identify_buf, ATA_IDENTIFY_OFFSET_SECTOR_SIZE);
 }
-
-#endif

@@ -106,27 +106,17 @@ typedef struct ide_controller_t{
 	ide_channel_t channels[2];
 } ide_controller_t;
 
-#ifndef _ATA_C
 extern ide_controller_t *ide_controllers;
-
 void ata_init();
-#else
-ide_controller_t *ide_controllers;
-
 void ata_detect_addresses(uint16_t num_ide);
 uint16_t ata_scan_ide_controllers();
 void ata_setup_irq(uint16_t num_ide);
-#endif
 
-#ifndef _ATA_CONTROL_C
 bool ata_channel_ready(uint8_t controller, uint8_t channel);
 void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled);
 bool ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector device);
-#endif
 
-#ifndef _ATA_DETECT_C
 void ata_detect_devices(uint8_t controller);
-#else
 #define CUR_ATA ide_controllers[controller].channels[i].devices[j]
 
 void ata_detect_atapi(uint8_t controller, uint8_t channel);
@@ -136,15 +126,10 @@ char *ata_detect_extract_string(char *identify_buf, uint8_t len, ata_identify_of
 uint16_t ata_detect_extract_word(char *identify_buf, ata_identify_offsets offset);
 char *ata_detect_read_identify(uint8_t controller, uint8_t channel);
 uint32_t ata_detect_sector_size(char *identify_buf);
-#endif
-
-#ifndef _ATA_REGISTERS_C
 uint8_t ata_register_read(uint8_t controller, uint8_t channel, ata_registers reg);
-uint16_t ata_register_read_dword(uint8_t controller, uint8_t channel, ata_registers reg);
+uint32_t ata_register_read_dword(uint8_t controller, uint8_t channel, ata_registers reg);
 uint16_t ata_register_read_word(uint8_t controller, uint8_t channel, ata_registers reg);
 void ata_register_write(uint8_t controller, uint8_t channel, ata_registers reg, uint8_t value);
-#else
 uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_registers reg);
-#endif
 
 #endif
