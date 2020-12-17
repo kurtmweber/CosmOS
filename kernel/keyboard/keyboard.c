@@ -19,8 +19,6 @@
 
 #define KB_IRQ_NUMBER 1
 
-#define P(row, col)	((row << 5) + col)
-
 void keyboard_add_command_queue(uint8_t command){
 }
 
@@ -162,7 +160,6 @@ void deviceInitKeyboard(struct device* dev){
     kprintf("Init Keyboard\n");
 	registerInterruptHandler(KB_IRQ_NUMBER, &keyboard_irq_read);
 }
-
 
 /**
 * find all keyboard devices and register them
