@@ -26,12 +26,12 @@ void stringDelete(struct kernelstring* str) {
     }
 }
 
-//uint16_t stringLength(struct kernelstring* str) {
-//    if (0!=str){
- //       return str->length;
- //   } else {
- //       panic("null kernelstring\n");
- //   }
-//}
+uint16_t stringLength(struct kernelstring* str) {
+    if (0!=str){
+        return str->length;
+    } else {
+        panic("null kernelstring\n");
+    }
+}
 
 

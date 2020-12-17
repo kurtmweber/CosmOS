@@ -20,5 +20,5 @@ typedef struct kernelstring {
 
 struct kernelstring* stringNew();
 void stringDelete(struct kernelstring* str);
-//uint16_t stringLength(struct kernelstring* str)
+uint16_t stringLength(struct kernelstring* str);
 #endif
