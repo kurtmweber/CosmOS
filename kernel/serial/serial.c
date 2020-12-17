@@ -11,17 +11,17 @@
 #include <device/device.h>
 #include <console/console.h>
 
-#define COM1_ADDRESS 0x3F8
-#define COM2_ADDRESS 0x2F8
-#define COM3_ADDRESS 0x3E8
-#define COM4_ADDRESS 0x2E8
+#define COM1_ADDRESS (uint16_t) 0x3F8
+#define COM2_ADDRESS (uint16_t) 0x2F8
+#define COM3_ADDRESS (uint16_t) 0x3E8
+#define COM4_ADDRESS (uint16_t) 0x2E8
 
-#define SERIAL_IRQ1 3
-#define SERIAL_IRQ2 4
+#define SERIAL_IRQ1 (uint8_t) 0x3
+#define SERIAL_IRQ2 (uint8_t) 0x4
 
 struct comport {
     uint8_t irq;
-    uint8_t address;
+    uint16_t address;
 } __attribute__((packed));
 
 struct rs232_16550 {
