@@ -37,7 +37,7 @@ struct rs232_16550 {
 
 int is_transmit_empty() {
     struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
-    uint8_t data = asm_in_b((uint16_t)&(com1->linestatus));
+    uint8_t data = asm_in_b((uint64_t)&(com1->linestatus));
     return data & 0x20;
 }
 
@@ -45,12 +45,12 @@ void serial_write_char(const uint8_t c){
     struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
 
     while (is_transmit_empty() == 0);
-    asm_out_b((uint16_t) &(com1->data),c);
+    asm_out_b((uint64_t) &(com1->data),c);
 }
 
 void serial_irq_handler(stackFrame *frame){
     struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
-    uint8_t data = asm_in_b((uint16_t)&(com1->data));
+    uint8_t data = asm_in_b((uint64_t)&(com1->data));
 
     // echo the data
     serial_write_char(data);
@@ -64,24 +64,24 @@ void serial_write(const uint8_t* c){
 }
 
 // https://wiki.osdev.org/Serial_Ports
-void init_port(uint16_t portAddress) {
+void init_port(uint64_t portAddress) {
 
     struct rs232_16550* com1 = (struct rs232_16550*) portAddress;
 
     // enable interrupt on received data
-    asm_out_b((uint16_t)&(com1->interrupt),0x01);
+    asm_out_b((uint64_t)&(com1->interrupt),0x01);
 
     // set 38400 baud
-    asm_out_b((uint16_t)&(com1->linecontrol),0x80);
-    asm_out_b((uint16_t)&(com1->data),0x03);
-    asm_out_b((uint16_t)&(com1->interrupt),0x00);
-    asm_out_b((uint16_t)&(com1->linecontrol),0x03);
+    asm_out_b((uint64_t)&(com1->linecontrol),0x80);
+    asm_out_b((uint64_t)&(com1->data),0x03);
+    asm_out_b((uint64_t)&(com1->interrupt),0x00);
+    asm_out_b((uint64_t)&(com1->linecontrol),0x03);
 
     // FIFO on
-    asm_out_b((uint16_t)&(com1->fifocontrol),0xC7);
+    asm_out_b((uint64_t)&(com1->fifocontrol),0xC7);
 
     // IRQ on, RTD/DSR set
-    asm_out_b((uint16_t)&(com1->modemcontrol),0x0B);
+    asm_out_b((uint64_t)&(com1->modemcontrol),0x0B);
 }
 
 /*
