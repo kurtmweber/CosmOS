@@ -17,6 +17,10 @@ typedef void (*interruptHandler)();
 void interrupt_router_init();
 void registerInterruptHandler(int interruptNumber, interruptHandler func);
 interruptHandler getInterruptHandler(int interruptNumber);
+
+/*
+* called by ISR in irq.c
+*/
 void routeInterrupt(int interruptNumber, stackFrame *frame);
 
 #endif
