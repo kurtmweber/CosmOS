@@ -42,3 +42,11 @@ char *strtrim(const char *s){
 	tgt[j + 1] = '\0';
 	return tgt;
 }
+
+char * strcpy(char *dest, const char *src) {
+	uint32_t i;
+	for (i = 0; src[i] != '\0'; i++)
+		dest[i] = src[i];
+	return dest;
+}
+

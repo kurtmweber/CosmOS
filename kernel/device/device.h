@@ -15,6 +15,7 @@ struct device;
 typedef void (*deviceInit)(struct device* dev);
 
 typedef struct device {
+	int8_t* name;
 	deviceInit init;
 	int8_t* description;
 	void* deviceData;
@@ -39,6 +40,6 @@ struct device* getDevice(uint16_t idx);
 void initDevices();
 
 // set description
-//void deviceSetDescription(struct device* dev, int8_t* description);
+void deviceSetDescription(struct device* dev, int8_t* description);
 
 #endif

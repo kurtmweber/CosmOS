@@ -47,10 +47,10 @@ struct device* newDevice() {
     ret->description=0;
     ret->init=0;
     ret->deviceData=0;
+    ret->name=0;
     return ret;
 }
 
-/*
 void deviceSetDescription(struct device* dev, int8_t* description) {
     if ((0!=description) && (0!=dev)){
         uint32_t size = strlen(description);
@@ -61,6 +61,3 @@ void deviceSetDescription(struct device* dev, int8_t* description) {
         strcpy(description, dev->description);
     }
 }
-*/
-
-
