@@ -99,13 +99,46 @@ void deviceInitCOM1(struct device* dev){
 */
 void serial_register_devices() {
     // COM1
-    struct comport* cp = kmalloc(sizeof(struct comport));
-    cp->irq=SERIAL_IRQ2;
-    cp->address=COM1_ADDRESS;
-    struct device* deviceinstance = newDevice();
-    deviceinstance->init =  &deviceInitCOM1;
-    deviceinstance->deviceData = cp;
-    deviceinstance->devicetype = SERIAL;
-    deviceSetDescription(deviceinstance, "RS232");
-    registerDevice(deviceinstance);
+    struct comport* cp1 = kmalloc(sizeof(struct comport));
+    cp1->irq=SERIAL_IRQ2;
+    cp1->address=COM1_ADDRESS;
+    struct device* deviceinstance1 = newDevice();
+    deviceinstance1->init =  &deviceInitCOM1;
+    deviceinstance1->deviceData = cp1;
+    deviceinstance1->devicetype = SERIAL;
+    deviceSetDescription(deviceinstance1, "RS232");
+    registerDevice(deviceinstance1);
+
+    // COM2
+    struct comport* cp2 = kmalloc(sizeof(struct comport));
+    cp2->irq=SERIAL_IRQ1;
+    cp2->address=COM2_ADDRESS;
+    struct device* deviceinstance2 = newDevice();
+    deviceinstance2->init =  &deviceInitCOM1;
+    deviceinstance2->deviceData = cp2;
+    deviceinstance2->devicetype = SERIAL;
+    deviceSetDescription(deviceinstance2, "RS232");
+    registerDevice(deviceinstance2);
+
+    // COM3
+    struct comport* cp3 = kmalloc(sizeof(struct comport));
+    cp3->irq=SERIAL_IRQ2;
+    cp3->address=COM3_ADDRESS;
+    struct device* deviceinstance3 = newDevice();
+    deviceinstance3->init =  &deviceInitCOM1;
+    deviceinstance3->deviceData = cp3;
+    deviceinstance3->devicetype = SERIAL;
+    deviceSetDescription(deviceinstance3, "RS232");
+    registerDevice(deviceinstance3);
+
+    // COM4
+    struct comport* cp4 = kmalloc(sizeof(struct comport));
+    cp4->irq=SERIAL_IRQ1;
+    cp4->address=COM4_ADDRESS;
+    struct device* deviceinstance4 = newDevice();
+    deviceinstance4->init =  &deviceInitCOM1;
+    deviceinstance4->deviceData = cp4;
+    deviceinstance4->devicetype = SERIAL;
+    deviceSetDescription(deviceinstance4, "RS232");
+    registerDevice(deviceinstance4);
 }
