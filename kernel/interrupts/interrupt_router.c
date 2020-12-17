@@ -54,7 +54,7 @@ void routeInterrupt(int interruptNumber, stackFrame *frame){
         for (uint16_t i=0; i<listCount(lst);i++){
             interruptHandler handler = (interruptHandler) listGet(lst,i);
             if (0!=handler){
-                (*handler)();
+                (*handler)(frame);
             } else {
                 panic("Interrupt handler should not be null");
             }

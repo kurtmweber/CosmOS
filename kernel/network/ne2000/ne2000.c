@@ -12,7 +12,7 @@
 #include <console/console.h>
 #include <pci/pci.h>
 
-void ne2000_irq_handler(){
+void ne2000_irq_handler(stackFrame *frame){
 }
 /*
 * perform device instance specific init here

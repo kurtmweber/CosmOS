@@ -61,7 +61,7 @@ uint8_t rtc_read_register(uint8_t reg){
 	return b;
 }
 
-void rtc_handle_irq(){
+void rtc_handle_irq(stackFrame *frame){
 #ifdef RTC_SLEEP
 	sleep_update();
 #endif

@@ -12,7 +12,7 @@
 #include <console/console.h>
 #include <pci/pci.h>
 
-void rtl8139_irq_handler(){
+void rtl8139_irq_handler(stackFrame *frame){
 
 }
 

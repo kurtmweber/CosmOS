@@ -13,7 +13,7 @@
 /**
  * interrupt routing to be used by device drivers
  */
-typedef void (*interruptHandler)();
+typedef void (*interruptHandler)(stackFrame *frame);
 void interrupt_router_init();
 void registerInterruptHandler(int interruptNumber, interruptHandler func);
 

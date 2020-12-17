@@ -48,7 +48,7 @@ void serial_write_char(const uint8_t c){
     asm_out_b((uint16_t) &(com1->data),c);
 }
 
-void serial_irq_handler(){
+void serial_irq_handler(stackFrame *frame){
     struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
     uint8_t data = asm_in_b((uint16_t)&(com1->data));
 

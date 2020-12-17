@@ -35,7 +35,7 @@ uint8_t keyboard_buffer_start, keyboard_buffer_end;
 void keyboard_add_command_queue(uint8_t command){
 }
 
-void keyboard_irq_read(){
+void keyboard_irq_read(stackFrame *frame){
 	kprintf(".");
 	uint8_t read_byte;
 	static bool long_scan_code = false, longer_scan_code = false;
