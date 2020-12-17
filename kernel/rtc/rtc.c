@@ -16,6 +16,9 @@
 #define RTC_IRQ_NUMBER 8
 #define RTC_FREQ 1024
 
+#define CMOS_REGISTER_SELECT_PORT	0x70
+#define CMOS_REGISTER_DATA_PORT		0x71
+
 uint16_t rtc_freq;
 
 typedef enum rtc_registers{
@@ -31,6 +34,32 @@ typedef enum rtc_registers{
 	RTC_REGISTER_STATUS_C = 0x0C,
 	RTC_REGISTER_CENTURY = 0x32
 } rtc_registers;
+
+void rtc_write_register(uint8_t reg, uint8_t val){
+	uint8_t pv;
+	
+	asm_cli();
+	asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x80 | reg);	// disable NMI so we don't screw up the CMOS RTC irreparably
+	pv = asm_in_b(CMOS_REGISTER_DATA_PORT);
+	asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x80 | reg);
+	asm_out_b(CMOS_REGISTER_DATA_PORT, pv | val);
+	
+	asm_out_b(CMOS_REGISTER_SELECT_PORT, asm_in_b(CMOS_REGISTER_SELECT_PORT) & 0x7F);	// re-enable nmi
+	asm_sti();
+	
+	return;
+}
+
+uint8_t rtc_read_register(uint8_t reg){
+	uint8_t b;
+	
+	asm_cli();
+	asm_out_b(CMOS_REGISTER_SELECT_PORT, reg);
+	b = asm_in_b(CMOS_REGISTER_DATA_PORT);
+	asm_sti();
+	
+	return b;
+}
 
 void rtc_handle_irq(){
 #ifdef RTC_SLEEP
@@ -70,16 +99,6 @@ void rtc_register_devices(){
 	registerDevice(deviceinstance);
 }
 
-uint8_t rtc_read_register(uint8_t reg){
-	uint8_t b;
-	
-	asm_cli();
-	asm_out_b(CMOS_REGISTER_SELECT_PORT, reg);
-	b = asm_in_b(CMOS_REGISTER_DATA_PORT);
-	asm_sti();
-	
-	return b;
-}
 
 rtc_time_t rtc_time(){
 	rtc_time_t a, b;
@@ -128,17 +147,4 @@ rtc_time_t rtc_time(){
 	return b;	
 }
 
-void rtc_write_register(uint8_t reg, uint8_t val){
-	uint8_t pv;
-	
-	asm_cli();
-	asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x80 | reg);	// disable NMI so we don't screw up the CMOS RTC irreparably
-	pv = asm_in_b(CMOS_REGISTER_DATA_PORT);
-	asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x80 | reg);
-	asm_out_b(CMOS_REGISTER_DATA_PORT, pv | val);
-	
-	asm_out_b(CMOS_REGISTER_SELECT_PORT, asm_in_b(CMOS_REGISTER_SELECT_PORT) & 0x7F);	// re-enable nmi
-	asm_sti();
-	
-	return;
-}
+

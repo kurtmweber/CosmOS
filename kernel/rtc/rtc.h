@@ -10,9 +10,6 @@
 
 #include <types.h>
 
-#define CMOS_REGISTER_SELECT_PORT	0x70
-#define CMOS_REGISTER_DATA_PORT		0x71
-
 typedef struct rtc_time_t{
 	uint8_t second;
 	uint8_t minute;
@@ -29,9 +26,6 @@ extern uint16_t rtc_freq;
 void rtc_handle_irq();
 void rtc_register_devices();
 rtc_time_t rtc_time();
-
-uint8_t rtc_read_register(uint8_t reg);
-void rtc_write_register(uint8_t reg, uint8_t val);
 
 #endif
 
