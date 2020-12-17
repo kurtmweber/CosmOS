@@ -36,6 +36,7 @@ void keyboard_add_command_queue(uint8_t command){
 }
 
 void keyboard_irq_read(){
+	kprintf(".");
 	uint8_t read_byte;
 	static bool long_scan_code = false, longer_scan_code = false;
 	static bool prnt_scrn_scan_code = false;

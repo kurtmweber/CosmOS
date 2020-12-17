@@ -27,6 +27,9 @@ void interrupt_router_init() {
     }    
 }
 
+/**
+* register an interrupt handler callback
+*/
 void registerInterruptHandler(int interruptNumber, interruptHandler func){
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
         struct list* lst = arrayGet(interruptHandlers,interruptNumber);
@@ -39,6 +42,9 @@ void registerInterruptHandler(int interruptNumber, interruptHandler func){
     }
 }
 
+/**
+* route an interrupt
+*/
 void routeInterrupt(int interruptNumber, stackFrame *frame){
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
         struct list* lst = arrayGet(interruptHandlers,interruptNumber);
