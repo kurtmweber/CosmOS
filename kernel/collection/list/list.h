@@ -10,10 +10,24 @@
 
 #include <collection/array/array.h>
 
+/**
+ *  a simple list based on an array.  The array is automatically expanded as required to contain all the list items
+ */
+/**
+ * an interator function is provded since for loops are notoriously the cause of bugs
+ */
+/**
+ * indices are zero-based
+ */
 typedef struct list {
 	struct array* arr;
     uint16_t count;
 } list_t;
+
+/*
+* list iterator
+*/
+typedef void (*listIterator)(void* value);
 
 struct list* listNew();
 void listDelete(struct list* lst);
@@ -28,5 +42,6 @@ uint16_t listSize(struct list* lst);
 uint16_t listAdd(struct list* lst, void* value);
 void  listSet(struct list* lst, uint16_t position, void* value);
 void* listGet(struct list* lst, uint16_t position);
+void listIterate(struct list* lst, listIterator iter);
 
 #endif

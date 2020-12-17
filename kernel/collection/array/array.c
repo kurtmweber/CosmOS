@@ -84,4 +84,18 @@ void arrayIncrementallyResize(struct array* arr, uint16_t increment) {
     }   
 }
 
+void arrayIterate(struct array* arr, arrayIterator iter) {
+    if (0!=iter){
+        if (0!=arr){
+            for (uint16_t i=0; i<arr->size;i++) {
+                (*iter)(arr->data[i]);
+            }
+        } else {
+            panic("null array\n");
+        } 
+    } else {
+        panic("null iterator passed\n");
+    }  
+}
+
 

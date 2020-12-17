@@ -100,4 +100,17 @@ void* listGet(struct list* lst, uint16_t position) {
     }  
 }
 
+void listIterate(struct list* lst, listIterator iter) {
+    if (0!=iter){
+        if (0!=lst){
+            for (uint16_t i=0; i<lst->count;i++) {
+                (*iter)(lst->arr->data[i]);
+            }
+        } else {
+            panic("null list\n");
+        }
+    } else {
+        panic("null iterator passed\n");
+    }
+}
 

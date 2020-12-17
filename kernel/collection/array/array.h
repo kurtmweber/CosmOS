@@ -15,12 +15,20 @@
  * a simple fixed-size array with some accessors and very basic protections
  */
 /**
+ * an interator function is provded since for loops are notoriously the cause of bugs
+ */
+/**
  * array is zero-indexed
  */
 typedef struct array {
 	void** data;
     uint16_t size;
 } array_t;
+
+/*
+* array iterator
+*/
+typedef void (*arrayIterator)(void* value);
 
 struct array* arrayNew(uint16_t size);
 void arrayDelete(struct array* arr);
@@ -29,5 +37,6 @@ void* arrayGet(struct array* arr, uint16_t position);
 uint16_t arraySize(struct array* arr);
 void arrayResize(struct array* arr, uint16_t size);
 void arrayIncrementallyResize(struct array* arr, uint16_t increment);
+void arrayIterate(struct array* arr, arrayIterator iter);
 
 #endif
