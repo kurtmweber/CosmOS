@@ -76,16 +76,12 @@ typedef enum intVectors{
 	IRQ15
 	} intVectors;
 	
-#ifndef _IDT_C
-void idt_init();
-#else
-idtEntry idt[256];
 
+void idt_init();
 void addISR(void *func, intVectors vector);
 void isrDE(stackFrame *frame);
-#endif
 
-#ifndef _IRQ_C
+
 void irq0(stackFrame *frame);
 void irq1(stackFrame *frame);
 void irq2(stackFrame *frame);
@@ -102,11 +98,9 @@ void irq12(stackFrame *frame);
 void irq13(stackFrame *frame);
 void irq14(stackFrame *frame);
 void irq15(stackFrame *frame);
-#endif
 
-#ifndef _PIC_C
 void pic_init();
 void pic_send_eoi(uint8_t irq);
-#endif
+
 
 #endif

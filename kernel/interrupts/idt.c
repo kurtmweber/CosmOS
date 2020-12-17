@@ -12,6 +12,8 @@
 #include <asm/asm.h>
 #include <interrupts/interrupts.h>
 
+idtEntry idt[256];
+
 void idt_init(){
 	idtr idtr;
 	addISR(isrDE, DE);
