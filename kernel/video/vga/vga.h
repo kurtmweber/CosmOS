@@ -47,35 +47,15 @@ typedef struct vga_mode_params_t{
 	uint16_t y_height;
 } vga_mode_params_t;
 
-
-#ifndef _CURSOR_C
 extern uint16_t cursor_position;
-
 void cursor_set_position(uint16_t loc);
-#else
-uint16_t cursor_position;
-#endif
-
-#ifndef _MODE_C
 uint8_t vga_set_mode(video_mode mode);
-#endif
 
-#ifndef _VGA_TEXT_C
 void vga_scroll_text(void);
 uint8_t vga_write_text(const char *txt, uint8_t start_row, uint8_t start_col, uint8_t attrib, video_text_color fg_color, video_text_color bg_color);
-#else
-
-#endif
-
-#ifndef _VGA_C
 extern vga_mode_params_t vga_mode_params[VIDEO_MODE_MAX];
-
 void vga_driver_register();
-#else
-vga_mode_params_t vga_mode_params[VIDEO_MODE_MAX];
-
 void vga_init();
 uint8_t vga_query_resolution(uint16_t *x, uint16_t *y);
-#endif
 
 #endif

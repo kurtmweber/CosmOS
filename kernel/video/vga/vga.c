@@ -12,6 +12,8 @@
 #include <video/video.h>
 #include <video/vga/vga.h>
 
+vga_mode_params_t vga_mode_params[VIDEO_MODE_MAX];
+
 void vga_driver_register(){
 	video_interfaces[VIDEO_DRIVER_VGA].init = &vga_init;
 	video_interfaces[VIDEO_DRIVER_VGA].query_resolution = &vga_query_resolution;
