@@ -170,7 +170,8 @@ void keyboard_send_command_queue(){
 * perform device instance specific init here
 */
 void deviceInitKeyboard(struct device* dev){
-    kprintf("Init Keyboard\n");
+	struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
+    kprintf("Init %s at IRQ %llu\n",dev->description, KB_IRQ_NUMBER);
 	registerInterruptHandler(KB_IRQ_NUMBER, &keyboard_irq_read);
 }
 
@@ -186,6 +187,7 @@ void keyboard_register_devices(){
 	*/
 	struct device* deviceinstance = newDevice();
 	deviceinstance->init =  &deviceInitKeyboard;
+	deviceSetDescription(deviceinstance, "Keyboard");
 	registerDevice(deviceinstance);
 }
 

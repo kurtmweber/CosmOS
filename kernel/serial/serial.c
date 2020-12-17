@@ -83,7 +83,8 @@ void init_port(uint16_t portAddress) {
 * perform device instance specific init here
 */
 void deviceInitCOM1(struct device* dev){
-    kprintf("Init COM1\n");
+    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
+    kprintf("Init %s\n",dev->description);
     init_port(COM1_ADDRESS);
 }
 
@@ -93,6 +94,7 @@ void deviceInitCOM1(struct device* dev){
 void serial_register_devices() {
     struct device* com1deviceinstance = newDevice();
     com1deviceinstance->init =  &deviceInitCOM1;
+    deviceSetDescription(com1deviceinstance, "RS232");
     registerDevice(com1deviceinstance);
 
 	registerInterruptHandler(SERIAL_IRQ1, &serial_irq_handler);

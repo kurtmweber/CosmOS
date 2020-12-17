@@ -22,7 +22,7 @@ void rtl8139_irq_handler(){
 void RTL8139Init(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     registerInterruptHandler(pci_dev->irq, &rtl8139_irq_handler);
-    kprintf("Init RTL8139 at IRQ %llu\n", pci_dev->irq);
+    kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
 }
 
 void RTL8139SearchCB(struct pci_device* dev){
@@ -32,6 +32,7 @@ void RTL8139SearchCB(struct pci_device* dev){
     struct device* deviceinstance = newDevice();
     deviceinstance->init =  &RTL8139Init;
     deviceinstance->deviceData = dev;
+    deviceSetDescription(deviceinstance, "RTL8139");
     registerDevice(deviceinstance);
 }
 

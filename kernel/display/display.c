@@ -17,10 +17,7 @@
 */
 void deviceInitDisplay(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    if (0!=dev->description){
-        kprintf(dev->description);
-    }
-    kprintf("Init Display at IRQ %llu\n", pci_dev->irq);
+    kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
 }
 
 

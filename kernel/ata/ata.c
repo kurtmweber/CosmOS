@@ -72,8 +72,9 @@ void ata_init(){
 	return;
 }
 
-void deviceInitATA(){
-    kprintf("Init ATA\n");
+void deviceInitATA(struct device* dev){
+	struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
+	kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
 }
 
 void ATASearchCB(struct pci_device* dev){
@@ -94,6 +95,7 @@ void ATASearchCB(struct pci_device* dev){
     struct device* deviceinstance = newDevice();
     deviceinstance->init =  &deviceInitATA;
     deviceinstance->deviceData = dev;
+	deviceSetDescription(deviceinstance, "ATA");
     registerDevice(deviceinstance);
 }
 

@@ -17,7 +17,7 @@
 */
 void deviceInitUSB(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init USB at IRQ %llu\n", pci_dev->irq);
+    kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
 }
 
 void USBSearchCB(struct pci_device* dev){
@@ -27,6 +27,7 @@ void USBSearchCB(struct pci_device* dev){
     struct device* deviceinstance = newDevice();
     deviceinstance->init =  &deviceInitUSB;
     deviceinstance->deviceData = dev;
+    deviceSetDescription(deviceinstance, "USB");
     registerDevice(deviceinstance);
 }
 

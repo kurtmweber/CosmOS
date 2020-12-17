@@ -46,7 +46,8 @@ void rtc_handle_irq(){
 * perform device instance specific init here
 */
 void deviceInitRTC(struct device* dev){
-    kprintf("Init RTC\n");
+    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
+    kprintf("Init %s at IRQ %llu\n",dev->description, RTC_IRQ_NUMBER);
 	rtc_freq = RTC_FREQ;
 	sleep_countdown = 0;
 	
@@ -63,6 +64,7 @@ void rtc_register_devices(){
 	* register device
 	*/
 	struct device* deviceinstance = newDevice();
+	deviceSetDescription(deviceinstance, "RTC");
 	deviceinstance->init =  &deviceInitRTC;
 	registerDevice(deviceinstance);
 }
