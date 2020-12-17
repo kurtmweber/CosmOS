@@ -58,6 +58,6 @@ void deviceSetDescription(struct device* dev, int8_t* description) {
             kfree(dev->description);
         }
         dev->description = kmalloc(size+1);
-        strcpy(description, dev->description);
+        strcpy(dev->description, description);
     }
 }
