@@ -20,23 +20,19 @@ void deviceInitUSB(struct device* dev){
     kprintf("Init USB at IRQ %llu\n", pci_dev->irq);
 }
 
+void USBSearchCB(struct pci_device* dev){
+    /*
+    * register device
+    */
+    struct device* deviceinstance = newDevice();
+    deviceinstance->init =  &deviceInitUSB;
+    deviceinstance->deviceData = dev;
+    registerDevice(deviceinstance);
+}
+
 /**
 * find all USB devices and register them
 */
 void usb_register_devices() {
-    uint16_t i = 0;
-    for (i = 0; i < num_pci_devices; i++){
-        if ((pci_devices[i].pci_class == PCI_CLASS_SERIAL) && ((pci_serial_subclass_codes)pci_devices[i].pci_subclass == PCI_SERIAL_SUBCLASS_USB)) {
-			kprintf("USB Controller found at PCI address %#hX:%#hX:%#hX\n", pci_devices[i].bus, pci_devices[i].device, pci_devices[i].function);
-			kprintf("\tVendor %#X, Device %#X\n", pci_devices[i].vendor_id, pci_devices[i].device_id);
-       
-            /*
-            * register device
-            */
-            struct device* deviceinstance = newDevice();
-            deviceinstance->init =  &deviceInitUSB;
-            deviceinstance->deviceData = &(pci_devices[i]);
-            registerDevice(deviceinstance);
-        }
-    }
+    pci_search_devicetype(PCI_CLASS_SERIAL,PCI_SERIAL_SUBCLASS_USB, &USBSearchCB);
 }
