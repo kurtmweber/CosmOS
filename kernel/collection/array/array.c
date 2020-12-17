@@ -76,3 +76,12 @@ void arrayResize(struct array* arr, uint16_t size) {
     }    
 }
 
+void arrayIncrementallyResize(struct array* arr, uint16_t increment) {
+    if (0!=arr){
+        arrayResize(arr, increment+arr->size);
+    } else {
+        panic("null array\n");
+    }   
+}
+
+

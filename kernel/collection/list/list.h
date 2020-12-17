@@ -12,7 +12,14 @@
 
 typedef struct list {
 	struct array* arr;
-    uint16_t index;
+    uint16_t count;
 } list_t;
+
+struct list* listNew(uint16_t size);
+void listDelete(struct list* lst);
+uint16_t listCount(struct list* lst);
+uint16_t listAdd(struct list* lst, void* value);
+void  listSet(struct list* lst, uint16_t position, void* value);
+void* listGet(struct list* lst, uint16_t position);
 
 #endif

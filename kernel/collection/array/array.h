@@ -28,5 +28,6 @@ void  arraySet(struct array* arr, uint16_t position, void* value);
 void* arrayGet(struct array* arr, uint16_t position);
 uint16_t arraySize(struct array* arr);
 void arrayResize(struct array* arr, uint16_t size);
+void arrayIncrementallyResize(struct array* arr, uint16_t increment);
 
 #endif
