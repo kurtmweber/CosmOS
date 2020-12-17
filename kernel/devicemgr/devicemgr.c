@@ -7,18 +7,17 @@
 
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
-#include <collection/array/array.h>
+#include <collection/list/list.h>
 #include <mm/mm.h>
 #include <string/string.h>
 #include <panic/panic.h>
 
 #define MAX_DEVICES 64
 
-struct array* devices;
-uint16_t device_index = 0;
+struct list* devices;
 
 void device_registry_init() {
-    devices = arrayNew(MAX_DEVICES);    
+    devices = listNew(MAX_DEVICES);    
 }
 
 void registerDevice(struct device* dev) {
@@ -36,16 +35,16 @@ void registerDevice(struct device* dev) {
         kprintf(dev->description);
         panic("Attempt to register device without init function\n");
     }
-    arraySet(devices,device_index++, dev );
+    listAdd(devices, dev);
 }
 
 uint16_t deviceCount() {
-    return device_index;
+    return listCount(devices);
 }
 
 struct device* getDevice(uint16_t idx){
-    if ((idx>0) && (idx<device_index)) {
-        return arrayGet(devices, idx);
+    if ((idx>0) && (idx<listCount(devices))) {
+        return listGet(devices, idx);
     } else {
         panic("invalid device index passed to getDevice\n");
     }
@@ -53,8 +52,8 @@ struct device* getDevice(uint16_t idx){
 
 void initDevices(){
     kprintf("Initializing Devices\n");
-    for (uint16_t i=0; i<device_index;i++){
-        struct device* dev = (struct device*) arrayGet(devices, i);
+    for (uint16_t i=0; i<listCount(devices);i++){
+        struct device* dev = (struct device*) listGet(devices, i);
         if (0!=dev){
             dev->init(dev);
         } else {
@@ -90,8 +89,8 @@ void deviceSetDescription(struct device* dev, int8_t* description) {
 */
 void search_device(enum deviceType devicetype, deviceSearchCallback cb) {
     if (0!=cb){
-        for (uint16_t i=0; i<device_index;i++){
-            struct device* dev = (struct device*) arrayGet(devices, i);
+        for (uint16_t i=0; i<listCount(devices);i++){
+            struct device* dev = (struct device*) listGet(devices, i);
             if (0!=dev){
                 if (dev->devicetype == devicetype){
                     (*cb)(dev);
