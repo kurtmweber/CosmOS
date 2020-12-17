@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _RTC_C
-#define _RTC_C
-
 #include <types.h>
 #include <asm/asm.h>
 #include <console/console.h>
@@ -142,5 +139,3 @@ void rtc_write_register(uint8_t reg, uint8_t val){
 	
 	return;
 }
-
-#endif

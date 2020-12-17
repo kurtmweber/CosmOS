@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _SLEEP_C
-#define _SLEEP_C
-
 #include <asm/asm.h>
 #include <console/console.h>
 #include <timing/timing.h>
@@ -42,5 +39,3 @@ void sleep_wait(uint64_t milliseconds){
 	
 	return;
 }
-
-#endif

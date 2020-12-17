@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _IO_C
-#define _IO_C
-
 #include <types.h>
 
 uint8_t asm_in_b(uint16_t port){
@@ -76,5 +73,3 @@ void asm_out_w(uint16_t port, uint16_t data){
 	
 	return;
 }
-
-#endif
