@@ -19,6 +19,11 @@
 #define SERIAL_IRQ1 3
 #define SERIAL_IRQ2 4
 
+struct comport {
+    uint8_t irq;
+    uint8_t address;
+} __attribute__((packed));
+
 struct rs232_16550 {
     uint8_t data;
     uint8_t interrupt;
@@ -83,20 +88,22 @@ void init_port(uint16_t portAddress) {
 * perform device instance specific init here
 */
 void deviceInitCOM1(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s\n",dev->description);
-    init_port(COM1_ADDRESS);
+    struct comport* cp = (struct comport*) dev->deviceData;
+    kprintf("Init %s at IRQ %llu\n",dev->description, cp->irq);
+    registerInterruptHandler(cp->irq, &serial_irq_handler);
+    init_port(cp->address);
 }
 
 /**
 * find all RS232 devices and register them
 */
 void serial_register_devices() {
-    struct device* com1deviceinstance = newDevice();
-    com1deviceinstance->init =  &deviceInitCOM1;
-    deviceSetDescription(com1deviceinstance, "RS232");
-    registerDevice(com1deviceinstance);
-
-	registerInterruptHandler(SERIAL_IRQ1, &serial_irq_handler);
-	registerInterruptHandler(SERIAL_IRQ2, &serial_irq_handler);
+    struct comport* cp = kmalloc(sizeof(struct comport));
+    cp->irq=SERIAL_IRQ2;
+    cp->address=COM1_ADDRESS;
+    struct device* comdeviceinstance = newDevice();
+    comdeviceinstance->init =  &deviceInitCOM1;
+    comdeviceinstance->deviceData = cp;
+    deviceSetDescription(comdeviceinstance, "RS232");
+    registerDevice(comdeviceinstance);
 }
