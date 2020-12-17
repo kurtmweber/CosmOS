@@ -23,7 +23,7 @@ void NE200Init(struct device* dev){
     kprintf("Init NE2000 at IRQ %llu\n", pci_dev->irq);
 }
 
-void NE2000DeviceCB(struct device* dev){
+void NE2000DeviceCB(struct pci_device* dev){
     /*
     * register device
     */
@@ -36,5 +36,5 @@ void NE2000DeviceCB(struct device* dev){
 * find all NE2000 devices and register them
 */
 void ne2000_register_devices() {
- //   pci_search(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000DeviceCB);
+    pci_search(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000DeviceCB);
 }

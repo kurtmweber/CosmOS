@@ -11,7 +11,6 @@
 #include <panic/panic.h>
 #include <string/string.h>
 
-
 #ifdef COMPILE_PLATFORM_LINUX 
 pttentry *extract_cr3_base_address(pttentry cr3) __attribute__((alias("extract_pttentry_base_address")));
 #else

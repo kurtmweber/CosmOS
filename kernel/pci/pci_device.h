@@ -23,6 +23,9 @@ struct pci_device {
 	uint16_t device_id;
 };
 
+// search for PCI devices
+typedef void (*deviceSearchCallback)(struct pci_device* dev);
+void pci_search(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id, deviceSearchCallback cb);
 
 extern struct pci_device *pci_devices;
 extern uint16_t num_pci_devices;
