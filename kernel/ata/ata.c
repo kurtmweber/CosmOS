@@ -95,6 +95,7 @@ void ATASearchCB(struct pci_device* dev){
     struct device* deviceinstance = newDevice();
     deviceinstance->init =  &deviceInitATA;
     deviceinstance->deviceData = dev;
+	deviceinstance->devicetype=ATA;
 	deviceSetDescription(deviceinstance, "ATA");
     registerDevice(deviceinstance);
 }

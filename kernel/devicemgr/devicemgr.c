@@ -10,6 +10,7 @@
 #include <array/array.h>
 #include <mm/mm.h>
 #include <string/string.h>
+#include <panic/panic.h>
 
 #define MAX_DEVICES 64
 
@@ -21,6 +22,20 @@ void device_registry_init() {
 }
 
 void registerDevice(struct device* dev) {
+    if (0==dev){
+        panic("Attempt to register null device\n");
+    }
+    if (0==dev->description){
+        panic("Attempt to register device without description\n");
+    }
+    if (0==dev->devicetype){
+        kprintf(dev->description);
+        panic("Attempt to register device without deviceType\n");
+    }
+    if (0==dev->init){
+        kprintf(dev->description);
+        panic("Attempt to register device without init function\n");
+    }
     arraySet(devices,device_index++, dev );
 }
 
@@ -62,7 +77,17 @@ void deviceSetDescription(struct device* dev, int8_t* description) {
     }
 }
 
+/*
+* search for devices by type
+*/
 void search_device(enum deviceType devicetype, deviceSearchCallback cb) {
-
+    for (uint16_t i=0; i<=device_index;i++){
+        struct device* dev = (struct device*) arrayGet(devices, i);
+        if (0!=dev){
+            if (dev->devicetype == devicetype){
+                (*cb)(dev);
+            }
+        }
+    }
 }
 

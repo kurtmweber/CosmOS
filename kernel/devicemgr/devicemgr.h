@@ -15,8 +15,9 @@ struct device;
 typedef void (*deviceInit)(struct device* dev);
 
 typedef enum deviceType {
-	SERIAL	=		0x00,
-	VGA = 			0x01,
+	NONE	=		0x00,
+	SERIAL	=		0x01,
+	VGA = 			0x02,
 	RTC=			0x03,
 	KEYBOARD=		0x04,
 	ETHERNET=		0x05,
