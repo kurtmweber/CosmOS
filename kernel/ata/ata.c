@@ -14,6 +14,8 @@
 
 ide_controller_t *ide_controllers;
 
+uint16_t num_ide=0;
+
 void ata_detect_addresses(uint16_t num_ide){
 	uint16_t i;
 	uint32_t bar_result;
@@ -36,8 +38,6 @@ void ata_detect_addresses(uint16_t num_ide){
 void ata_init(){
 	uint16_t i = 0;
 	uint16_t num_ide;
-	
-	kprintf("Initializing ATA devices...\n");
 	
 	ide_controllers = (ide_controller_t *)0;
 	
@@ -76,34 +76,29 @@ void deviceInitATA(){
     kprintf("Init ATA\n");
 }
 
-uint16_t ata_scan_ide_controllers(){
-	uint16_t i = 0, num_ide = 0;
-	bool ide_found = false;
-	
-	for (i = 0; i < num_pci_devices; i++){
-		if ((pci_devices[i].pci_class == PCI_CLASS_MASS_STORAGE) && ((pci_mass_storage_subclass_codes)pci_devices[i].pci_subclass == PCI_MASS_STORAGE_SUBCLASS_IDE)){
-			kprintf("IDE Controller found at PCI address %#hX:%#hX:%#hX\n", pci_devices[i].bus, pci_devices[i].device, pci_devices[i].function);
-			kprintf("\tVendor %#X, Device %#X\n", pci_devices[i].vendor_id, pci_devices[i].device_id);
-			
-			num_ide++;
-			
-			if (!ide_controllers){
-				ide_controllers = kmalloc(sizeof(ide_controller_t));
-			} else {
-				ide_controllers = krealloc(ide_controllers, num_ide * sizeof(ide_controller_t));
-			}
-			
-			ide_controllers[num_ide - 1].pci = &pci_devices[i];
-
-			/*
-			* register device
-			*/
-			struct device* deviceinstance = newDevice();
-			deviceinstance->init =  &deviceInitATA;
-			registerDevice(deviceinstance);
-		}
+void ATASearchCB(struct pci_device* dev){
+	/*
+	* save in IDE list
+	*/
+	num_ide++;
+	if (!ide_controllers){
+		ide_controllers = kmalloc(sizeof(ide_controller_t));
+	} else {
+		ide_controllers = krealloc(ide_controllers, num_ide * sizeof(ide_controller_t));
 	}
-	
+	ide_controllers[num_ide - 1].pci = dev;
+
+    /*
+    * register device
+    */
+    struct device* deviceinstance = newDevice();
+    deviceinstance->init =  &deviceInitATA;
+    deviceinstance->deviceData = dev;
+    registerDevice(deviceinstance);
+}
+
+uint16_t ata_scan_ide_controllers(){
+	pci_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ATASearchCB);	
 	return num_ide;
 }
 
