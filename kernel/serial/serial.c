@@ -98,6 +98,7 @@ void deviceInitCOM1(struct device* dev){
 * find all RS232 devices and register them
 */
 void serial_register_devices() {
+    // COM1
     struct comport* cp = kmalloc(sizeof(struct comport));
     cp->irq=SERIAL_IRQ2;
     cp->address=COM1_ADDRESS;
