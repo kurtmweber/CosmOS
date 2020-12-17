@@ -15,11 +15,12 @@
  */
 typedef struct kernelstring {
 	uint8_t* str;
-    uint16_t length;
+    uint32_t length;
 } kernelstring_t;
 
 struct kernelstring* stringNew();
 void stringDelete(struct kernelstring* str);
-uint16_t stringLength(struct kernelstring* str);
-
+uint32_t stringLength(struct kernelstring* str);
+struct kernelstring* stringFromCStr(const int8_t* str);
+const int8_t* stringGetCStr(struct kernelstring* str);
 #endif

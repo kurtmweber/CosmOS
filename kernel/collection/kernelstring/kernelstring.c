@@ -26,12 +26,44 @@ void stringDelete(struct kernelstring* str) {
     }
 }
 
-uint16_t stringLength(struct kernelstring* str) {
+uint32_t stringLength(struct kernelstring* str) {
     if (0!=str){
         return str->length;
     } else {
         panic("null kernelstring\n");
     }
 }
+
+struct kernelstring* stringFromCStr(const int8_t* str) {
+    struct kernelstring* ret = stringNew();
+    /*
+    * get length
+    */
+	for (ret->length = 0; str[ret->length] != '\0'; ret->length++);
+    /*
+    * allocate
+    */
+    ret->str = (uint8_t*) kmalloc(ret->length+1);
+    /*
+    * copy
+    */
+    for (ret->length = 0; str[ret->length] != '\0'; ret->length++) {
+        ret->str[ret->length]=str[ret->length];
+    }
+    /*
+    * null
+    */
+    ret->str[ret->length]=0;
+}
+
+const int8_t* stringGetCStr(struct kernelstring* str) {
+    if (0!=str){
+        return str->str;
+    } else {
+        panic("null kernelstring\n");
+    }
+}
+
+
 
 
