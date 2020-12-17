@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _STRING_C
-#define _STRING_C
-
 #include <types.h>
 #include <mm/mm.h>
 #include <string/string.h>
@@ -45,5 +42,3 @@ char *strtrim(const char *s){
 	tgt[j + 1] = '\0';
 	return tgt;
 }
-
-#endif

@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _ITOA_C
-#define _ITOA_C
-
 #include <types.h>
 
 void uitoa3(uint64_t n, char *s, uint8_t len, uint8_t base){
@@ -40,5 +37,3 @@ void uitoa3(uint64_t n, char *s, uint8_t len, uint8_t base){
 	
 	return;
 }
-
-#endif
