@@ -28,3 +28,35 @@ void ringbufferDelete(struct ringbuffer* rb) {
         panic("null ringbuffer\n");
     }
 }
+
+void ringbufferAdd(struct ringbuffer* rb, uint8_t value) {
+    if (0!=rb){
+        if (0==rb->arr){
+            panic("why is the underlying array null?!");
+        }
+        arraySet(rb->arr, rb->head, (void*) value);
+        rb->head=rb->head+1;
+        // wrap
+        if (rb->head == arraySize(rb->arr)){
+            rb->head=0;
+        }
+    } else {
+        panic("null ringbuffer\n");
+    }   
+}
+
+uint8_t ringbufferRemove(struct ringbuffer* rb) {
+    if (0!=rb){
+        if (0==rb->arr){
+            panic("why is the underlying array null?!");
+        }
+        uint8_t ret = arrayGet(rb->arr, rb->tail);      
+        rb->tail=rb->tail+1;
+        // wrap
+        if (rb->tail == arraySize(rb->arr)){
+            rb->tail=0;
+        }
+    } else {
+        panic("null ringbuffer\n");
+    }   
+}

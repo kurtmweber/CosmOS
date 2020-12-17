@@ -21,5 +21,7 @@ typedef struct ringbuffer {
 
 struct ringbuffer* ringbufferNew(uint16_t size);
 void ringbufferDelete(struct ringbuffer* rb);
+void ringbufferAdd(struct ringbuffer* rb, uint8_t value);
+uint8_t ringbufferRemove(struct ringbuffer* rb);
 
 #endif
