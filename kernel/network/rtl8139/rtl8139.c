@@ -39,5 +39,5 @@ void RTL8139SearchCB(struct pci_device* dev){
 * find all RTL8139 devices and register them
 */
 void rtl8139_register_devices() {
-    pci_search(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8139, &RTL8139SearchCB);
+    pci_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8139, &RTL8139SearchCB);
 }

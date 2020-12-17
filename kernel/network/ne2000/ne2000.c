@@ -36,5 +36,5 @@ void NE2000SearchCB(struct pci_device* dev){
 * find all NE2000 devices and register them
 */
 void ne2000_register_devices() {
-    pci_search(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000SearchCB);
+    pci_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000SearchCB);
 }
