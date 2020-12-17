@@ -64,7 +64,7 @@ uint8_t vga_set_mode(video_mode mode);
 void vga_scroll_text(void);
 uint8_t vga_write_text(const char *txt, uint8_t start_row, uint8_t start_col, uint8_t attrib, video_text_color fg_color, video_text_color bg_color);
 #else
-char *vga_text_mem_base = (char *)0xB8000;
+
 #endif
 
 #ifndef _VGA_C
