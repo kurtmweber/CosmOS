@@ -20,7 +20,6 @@ void deviceInitDisplay(struct device* dev){
     kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
 }
 
-
 void DisplaySearchCB(struct pci_device* dev){
     /*
     * register device
