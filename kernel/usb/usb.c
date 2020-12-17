@@ -16,7 +16,8 @@
 * perform device instance specific init here
 */
 void deviceInitUSB(struct device* dev){
-    kprintf("Init USB\n");
+    struct pci_device_t* pci_dev = (struct pci_device_t*) dev->deviceData;
+    kprintf("Init USB at IRQ %llu\n", pci_dev->irq);
 }
 
 /**

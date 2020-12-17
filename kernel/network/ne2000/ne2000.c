@@ -12,11 +12,15 @@
 #include <console/console.h>
 #include <pci/pci.h>
 
+void ne2000_irq_handler(){
+}
 /*
 * perform device instance specific init here
 */
 void deviceInitNE200(struct device* dev){
-    kprintf("Init Ethernet\n");
+    struct pci_device_t* pci_dev = (struct pci_device_t*) dev->deviceData;
+    registerInterruptHandler(pci_dev->irq, &ne2000_irq_handler);
+    kprintf("Init NE2000 at IRQ %llu\n", pci_dev->irq);
 }
 
 /**

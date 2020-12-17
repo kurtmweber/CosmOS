@@ -16,7 +16,8 @@
 * perform device instance specific init here
 */
 void deviceInitBridge(struct device* dev){
-    kprintf("Init Bridge\n");
+    struct pci_device_t* pci_dev = (struct pci_device_t*) dev->deviceData;
+    kprintf("Init Bridge at IRQ %llu\n", pci_dev->irq);
 }
 
 /**
