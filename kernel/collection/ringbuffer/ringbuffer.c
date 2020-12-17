@@ -9,7 +9,6 @@
 #include <mm/mm.h>
 #include <panic/panic.h>
 
-
 struct ringbuffer* ringbufferNew(uint16_t size) {
     struct ringbuffer* ret = (struct ringbuffer*) kmalloc(sizeof(ringbuffer_t));
     ret->arr = arrayNew(size);
