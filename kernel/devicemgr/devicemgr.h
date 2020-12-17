@@ -55,6 +55,7 @@ void initDevices();
 // set description
 void deviceSetDescription(struct device* dev, int8_t* description);
 
+// search for device by device type
 typedef void (*deviceSearchCallback)(struct device* dev);
 void search_device(enum deviceType devicetype, deviceSearchCallback cb);
 
