@@ -5,7 +5,7 @@ ARFLAGS=-crs
 
 all: collection.a
 
-collection.a: array.o list.o ringbuffer.o string.o
+collection.a: array.o list.o ringbuffer.o kernelstring.o
 	$(AR) $(ARFLAGS) $@ $^
 	
 array.o: array/array.c
@@ -17,7 +17,7 @@ list.o: list/list.c
 ringbuffer.o: ringbuffer/ringbuffer.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
-string.o: string/string.c
+kernelstring.o: kernelstring/kernelstring.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
 clean:

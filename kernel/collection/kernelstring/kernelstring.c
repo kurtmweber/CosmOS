@@ -5,28 +5,33 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <collection/string/string.h>
+#include <collection/kernelstring/kernelstring.h>
 #include <mm/mm.h>
 #include <panic/panic.h>
 
-#define DEFAULT_STRING_SIZE 32
-
-struct string* stringNew() {
-    struct string* ret = (struct string*) kmalloc(sizeof(string_t));
-    ret->arr = arrayNew(DEFAULT_STRING_SIZE);
+struct kernelstring* stringNew() {
+    struct kernelstring* ret = (struct kernelstring*) kmalloc(sizeof(kernelstring_t));
+    ret->str = 0;
     ret->length=0;
 }
 
-void stringDelete(struct string* str) {
+void stringDelete(struct kernelstring* str) {
     if (0!=str){
-        if (0==str->arr){
-            panic("why is the underlying array null?!");
+        if (0!=str->str) {
+            kfree(str->str);
         }
-        arrayDelete(str->arr);
         kfree(str);
     } else {
-        panic("null string\n");
+        panic("null kernelstring\n");
     }
 }
+
+//uint16_t stringLength(struct kernelstring* str) {
+//    if (0!=str){
+ //       return str->length;
+ //   } else {
+ //       panic("null kernelstring\n");
+ //   }
+//}
 
 

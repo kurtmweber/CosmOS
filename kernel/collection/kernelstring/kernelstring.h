@@ -5,20 +5,20 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _STRING_H
-#define _STRING_H
+#ifndef _KERNELSTRING_H
+#define _KERNELSTRING_H
 
-#include <collection/array/array.h>
+#include <types.h>
 
 /**
  *  a simple string based on an array. The string is null terminated, but stores a length 
  */
-typedef struct string {
-	struct array* arr;
+typedef struct kernelstring {
+	uint8_t* str;
     uint16_t length;
-} string_t;
+} kernelstring_t;
 
-struct string* stringNew();
-void stringDelete(struct string* str);
-
+struct kernelstring* stringNew();
+void stringDelete(struct kernelstring* str);
+//uint16_t stringLength(struct kernelstring* str)
 #endif
