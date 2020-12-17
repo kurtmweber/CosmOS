@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _KEYBOARDBUFFER_H
-#define _KEYBOARDBUFFER_H
-
 #include <types.h>
 #include <keyboard/keyboard.h>
 
@@ -56,5 +53,3 @@ key_action_t keyboard_buffer_consume(void){
 	
 	return keyboard_buffer[i];
 }
-
-#endif

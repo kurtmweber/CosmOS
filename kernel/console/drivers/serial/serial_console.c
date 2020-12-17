@@ -4,10 +4,6 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-
-#ifndef _SERIAL_CONSOLE_C
-#define _SERIAL_CONSOLE_C
-
 #include <console/drivers/drivers.h>
 #include <console/drivers/serial/serial_console.h>
 #include <serial/serial.h>
@@ -27,5 +23,3 @@ void serial_console_register(){
 	
 	return;
 }
-
-#endif

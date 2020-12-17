@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _CONSOLE_DRIVERS_C
-#define _CONSOLE_DRIVERS_C
-
 #include <types.h>
 #include <console/console.h>
 #include <console/drivers/drivers.h>
@@ -43,5 +40,3 @@ uint8_t console_setpos(uint8_t x, uint8_t y){
 uint8_t console_write(const char *c){
 	return console_interfaces[console_active_driver].write(c);
 }
-
-#endif

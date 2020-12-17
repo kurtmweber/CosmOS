@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _KPRINTF_C
-#define _KPRINTF_C
-
 #include <types.h>
 #include <console/console.h>
 #include <console/drivers/drivers.h>
@@ -150,5 +147,3 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
 		}
 	}
 }
-
-#endif

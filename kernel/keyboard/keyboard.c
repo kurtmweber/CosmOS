@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _KEYBOARD_C
-#define _KEYBOARD_C
-
 #include <types.h>
 #include <asm/asm.h>
 #include <console/drivers/drivers.h>
@@ -192,5 +189,4 @@ void keyboard_register_devices(){
 	registerDevice(deviceinstance);
 }
 
-#endif
 
