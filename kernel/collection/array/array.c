@@ -62,3 +62,17 @@ void* arrayGet(struct array* arr,  uint16_t position){
         panic("null array\n");
     }  
 }
+
+void arrayResize(struct array* arr, uint16_t size) {
+    if (0!=arr){
+        if (size >= arr->size){
+            arr = krealloc(arr, size);
+            arr->size = size;
+        } else {
+            ("arrays cannot be shrunk\n");
+        }
+    } else {
+        panic("null array\n");
+    }    
+}
+
