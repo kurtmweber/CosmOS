@@ -29,13 +29,13 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: make
-      run: sudo apt install make
+      run: sudo brew install make
 
     - name: gcc
-      run: sudo apt install gcc-10
+      run: sudo brew install gcc-10
 
     - name: nasm
-      run: sudo apt install nasm
+      run: sudo brew install nasm
     
     - name: build
       run: make
