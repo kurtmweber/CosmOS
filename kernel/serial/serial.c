@@ -8,7 +8,7 @@
 #include <serial/serial.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
-#include <device/device.h>
+#include <devicemgr/devicemgr.h>
 #include <console/console.h>
 
 #define COM1_ADDRESS (uint16_t) 0x3F8

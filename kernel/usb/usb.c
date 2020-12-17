@@ -10,7 +10,7 @@
 #include <asm/asm.h>
 #include <pci/pci.h>
 #include <console/console.h>
-#include <device/device.h>
+#include <devicemgr/devicemgr.h>
 
 /*
 * perform device instance specific init here

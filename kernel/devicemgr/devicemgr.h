@@ -5,8 +5,8 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _DEVICE_H
-#define _DEVICE_H
+#ifndef _DEVICEMGR_H
+#define _DEVICEMGR_H
 
 #include <types.h>
 

@@ -21,7 +21,7 @@
 #include <video/vga/vga.h>
 #include <serial/serial.h>
 #include <usb/usb.h>
-#include <device/device.h>
+#include <devicemgr/devicemgr.h>
 #include <network/network.h>
 #include <bridge/bridge.h>
 #include <display/display.h>

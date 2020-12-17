@@ -10,7 +10,7 @@
 #include <console/console.h>
 #include <timing/timing.h>
 #include <interrupts/interrupt_router.h>
-#include <device/device.h>
+#include <devicemgr/devicemgr.h>
 #include <timing/sleep.h>
 
 #define RTC_IRQ_NUMBER 8

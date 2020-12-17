@@ -3,12 +3,12 @@ include ../../mk/build.mk
 EXTRA_CFLAGS= -I..
 ARFLAGS=-crs
 
-all: device.a
+all: devicemgr.a
 
-device.a: device.o 
+devicemgr.a: devicemgr.o 
 	$(AR) $(ARFLAGS) $@ $^
 	
-device.o: device.c
+devicemgr.o: devicemgr.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
 clean:

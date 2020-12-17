@@ -12,7 +12,7 @@
 #include <console/console.h>
 #include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
-#include <device/device.h>
+#include <devicemgr/devicemgr.h>
 #include <keyboard/abstract_keyboard.h>
 
 #define KB_IRQ_NUMBER 1

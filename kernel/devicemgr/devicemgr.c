@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <device/device.h>
+#include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <array/array.h>
 #include <mm/mm.h>

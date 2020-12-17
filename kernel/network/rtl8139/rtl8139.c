@@ -8,7 +8,7 @@
 #include <network/rtl8139/rtl8139.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
-#include <device/device.h>
+#include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <pci/pci.h>
 

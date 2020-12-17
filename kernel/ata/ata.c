@@ -10,7 +10,7 @@
 #include <console/console.h>
 #include <mm/mm.h>
 #include <pci/pci.h>
-#include <device/device.h>
+#include <devicemgr/devicemgr.h>
 
 ide_controller_t *ide_controllers;
 
