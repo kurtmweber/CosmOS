@@ -5,12 +5,15 @@ ARFLAGS=-crsT
 
 all: vga-dir serial-dir drivers.a
 
-drivers.a: driverinterface.o vga/vga.a serial/serial_console.a
+drivers.a: driverinterface.o vga/vga.a serial/serial_console.a drivers.o
 	$(AR) $(ARFLAGS) $@ $^
 
 driverinterface.o: driverinterface.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-	
+
+drivers.o: drivers.c
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
+
 vga-dir:
 	cd vga && $(MAKE)
 
