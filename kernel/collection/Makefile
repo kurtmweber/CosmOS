@@ -5,10 +5,13 @@ ARFLAGS=-crs
 
 all: collection.a
 
-collection.a: array.o 
+collection.a: array.o dynarray.o
 	$(AR) $(ARFLAGS) $@ $^
 	
 array.o: array/array.c
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
+
+dynarray.o: dynarray/dynarray.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
 clean:
