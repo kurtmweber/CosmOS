@@ -7,7 +7,7 @@
 
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
-#include <array/array.h>
+#include <collection/array/array.h>
 #include <mm/mm.h>
 #include <string/string.h>
 #include <panic/panic.h>

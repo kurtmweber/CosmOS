@@ -3,14 +3,14 @@ include ../../mk/build.mk
 EXTRA_CFLAGS= -I..
 ARFLAGS=-crs
 
-all: array.a
+all: collection.a
 
-array.a: array.o 
+collection.a: array.o 
 	$(AR) $(ARFLAGS) $@ $^
 	
-array.o: array.c
+array.o: array/array.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
 clean:
-	$(RM) *.o
+	$(RM) -r *.o
 	$(RM) *.a

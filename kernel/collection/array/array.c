@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <array/array.h>
+#include <collection/array/array.h>
 
 #include <mm/mm.h>
 #include <panic/panic.h>
