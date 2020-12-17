@@ -6,6 +6,7 @@
 // ****************************************************************
 
 #include <interrupts/interrupt_router.h>
+#include <panic/panic.h>
 
 #define NUMBER_INTERRUPTS 16
 
@@ -20,14 +21,17 @@ void interrupt_router_init() {
 void registerInterruptHandler(int interruptNumber, interruptHandler func){
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
         interruptHandlers[interruptNumber]=func;
+    } else {
+        panic("Invalid interrupt number");
     }
 }
 
 interruptHandler getInterruptHandler(int interruptNumber){
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
         return interruptHandlers[interruptNumber];
+    } else {
+        panic("Invalid interrupt number");
     }
-    return 0;
 }
 
 void routeInterrupt(int interruptNumber, stackFrame *frame){
@@ -36,6 +40,8 @@ void routeInterrupt(int interruptNumber, stackFrame *frame){
         if (handler!=0){
             (*handler)();
         }
+    } else {
+        panic("Invalid interrupt number");
     }
 }
 
