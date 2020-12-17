@@ -11,7 +11,7 @@ CosmOS is distributed under the licensing terms [here](https://github.com/tevere
 
 CosmOS requires:
 
-* [Clang](https://clang.llvm.org/) or [GCC](https://gcc.gnu.org/)
+* [GCC](https://gcc.gnu.org/)
 * [NASM](http://nasm.us/)
 * [binutils](https://www.gnu.org/software/binutils/)
 * [QEMU](https://www.qemu.org/) 
