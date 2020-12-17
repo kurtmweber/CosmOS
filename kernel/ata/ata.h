@@ -8,7 +8,7 @@
 #ifndef _ATA_H
 #define _ATA_H
 
-#include <pci/devicetree.h>
+#include <pci/pci_device.h>
 
 #define IDE_CHANNEL_PRIMARY	0
 #define IDE_CHANNEL_SECONDARY	1
@@ -102,7 +102,7 @@ typedef struct ide_channel_t{
 } ide_channel_t;
 
 typedef struct ide_controller_t{
-	pci_device_t *pci;
+	struct pci_device *pci;
 	ide_channel_t channels[2];
 } ide_controller_t;
 

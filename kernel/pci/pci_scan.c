@@ -14,10 +14,10 @@
 #include <pci/pci.h>
 #include <pci/devicetree.h>
 
-pci_device_t fill_pci_device(uint8_t bus, uint8_t device, uint8_t function){
+struct pci_device fill_pci_device(uint8_t bus, uint8_t device, uint8_t function){
 	// ensure the given device actually exists BEFORE sending it to this function
 	
-	pci_device_t tmp;
+	struct pci_device tmp;
 	
 	tmp.bus = bus;
 	tmp.device = device;
@@ -46,9 +46,9 @@ void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
 	num_pci_devices++;
 	
 	if (!pci_devices){
-		pci_devices = kmalloc(sizeof(pci_device_t) * num_pci_devices);
+		pci_devices = kmalloc(sizeof(struct pci_device) * num_pci_devices);
 	} else {
-		pci_devices = krealloc(pci_devices, sizeof(pci_device_t) * num_pci_devices);
+		pci_devices = krealloc(pci_devices, sizeof(struct pci_device) * num_pci_devices);
 	}
 	
 	pci_devices[num_pci_devices - 1] = fill_pci_device(bus, device, function);

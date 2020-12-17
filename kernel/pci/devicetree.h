@@ -95,26 +95,5 @@ typedef enum pci_serial_subclass_codes{
 	PCI_SERIAL_SUBCLASS_OTHER	=	0x80
 } pci_serial_subclass_codes;
 
-typedef struct pci_device_t pci_device_t;
-
-typedef struct pci_device_t{
-	pci_class_codes pci_class;
-	uint8_t pci_subclass;
-	uint8_t bus;
-	uint8_t device;
-	uint8_t function;
-	uint8_t header_type;
-	uint8_t irq;
-	uint16_t vendor_id;
-	uint16_t device_id;
-} pci_device_t;
-
-#ifndef _PCI_INIT_C
-extern pci_device_t *pci_devices;
-extern uint16_t num_pci_devices;
-#else
-pci_device_t *pci_devices;
-uint16_t num_pci_devices;
-#endif
 
 #endif

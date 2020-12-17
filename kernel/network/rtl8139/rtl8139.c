@@ -20,7 +20,7 @@ void rtl8139_irq_handler(){
 * perform device instance specific init here
 */
 void deviceInitRTL8139(struct device* dev){
-    struct pci_device_t* pci_dev = (struct pci_device_t*) dev->deviceData;
+    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     registerInterruptHandler(pci_dev->irq, &rtl8139_irq_handler);
     kprintf("Init RTL8139 at IRQ %llu\n", pci_dev->irq);
 }

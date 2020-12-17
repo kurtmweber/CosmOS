@@ -16,8 +16,24 @@
 #include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
 #include <device/device.h>
+#include <keyboard/abstract_keyboard.h>
 
 #define KB_IRQ_NUMBER 1
+
+#define KBD_PORT		0x60
+#define KBD_CTRL_PORT		0x64
+
+#define KBD_ACK			0xFA
+#define KBD_ECHO_RESPONSE	0xEE
+#define KBD_ERROR_1		0x00
+#define KBD_ERROR_2		0xFF
+#define KBD_RESEND		0xFE
+#define KBD_TEST_FAILED_1	0xFC
+#define KBD_TEST_FAILED_2	0xFD
+#define KBD_TEST_PASSED		0xAA
+
+key_action_t keyboard_buffer[256];
+uint8_t keyboard_buffer_start, keyboard_buffer_end;
 
 void keyboard_add_command_queue(uint8_t command){
 }

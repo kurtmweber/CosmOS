@@ -14,9 +14,26 @@
 #include <timing/timing.h>
 #include <interrupts/interrupt_router.h>
 #include <device/device.h>
+#include <timing/sleep.h>
 
 #define RTC_IRQ_NUMBER 8
 #define RTC_FREQ 1024
+
+uint16_t rtc_freq;
+
+typedef enum rtc_registers{
+	RTC_REGISTER_SECOND = 0x00,
+	RTC_REGISTER_MINUTE = 0x02,
+	RTC_REGISTER_HOUR = 0x04,
+	RTC_REGISTER_WEEKDAY = 0x06,
+	RTC_REGISTER_MONTHDAY = 0x07,
+	RTC_REGISTER_MONTH = 0x08,
+	RTC_REGISTER_YEAR = 0x09,
+	RTC_REGISTER_STATUS_A = 0x0A,
+	RTC_REGISTER_STATUS_B = 0x0B,
+	RTC_REGISTER_STATUS_C = 0x0C,
+	RTC_REGISTER_CENTURY = 0x32
+} rtc_registers;
 
 void rtc_handle_irq(){
 #ifdef RTC_SLEEP

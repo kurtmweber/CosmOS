@@ -12,6 +12,8 @@
 #include <console/console.h>
 #include <timing/timing.h>
 
+volatile uint64_t sleep_countdown;
+
 void sleep_update(){
 	if (sleep_countdown){
 		sleep_countdown--;

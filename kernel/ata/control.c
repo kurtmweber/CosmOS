@@ -11,7 +11,7 @@
 #include <types.h>
 #include <ata/ata.h>
 #include <console/console.h>
-#include <timing/timing.h>
+#include <timing/sleep.h>
 
 bool ata_channel_ready(uint8_t controller, uint8_t channel){
 	BYTE status;

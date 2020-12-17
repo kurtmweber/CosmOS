@@ -9,6 +9,7 @@
 #define _PCI_H
 
 #include <pci/devicetree.h>
+#include <pci/pci_device.h>
 
 #define PCI_CONFIG_ADDRESS_PORT	0xCF8
 #define PCI_CONFIG_DATA_PORT	0xCFC
@@ -20,11 +21,8 @@
 #define PCI_BAR4_OFFSET		0x20
 #define PCI_BAR5_OFFSET		0x24
 
-#ifndef _PCI_ADDRESS_C
 uint32_t pci_config_address_build(uint8_t bus, uint8_t device, uint8_t function, uint8_t offset, uint8_t enabled);
-#endif
 
-#ifndef _PCI_HEADER_C
 uint32_t pci_header_read_bar0(uint8_t bus, uint8_t device, uint8_t function);
 uint32_t pci_header_read_bar1(uint8_t bus, uint8_t device, uint8_t function);
 uint32_t pci_header_read_bar2(uint8_t bus, uint8_t device, uint8_t function);
@@ -39,22 +37,17 @@ uint8_t pci_header_read_type(uint8_t bus, uint8_t device, uint8_t function);
 uint16_t pci_header_read_vendor(uint8_t bus, uint8_t device, uint8_t function);
 
 void pci_header_set_irq(uint8_t bus, uint8_t device, uint8_t function, uint8_t irq);
-#endif
 
-#ifndef _PCI_INIT_C
 void pci_init();
-#endif
 
-#ifndef _PCI_SCAN_C
 void pci_scan();
-#else
-pci_device_t fill_pci_device(uint8_t bus, uint8_t device, uint8_t function);
+struct pci_device fill_pci_device(uint8_t bus, uint8_t device, uint8_t function);
 void pci_found_device(uint8_t bus, uint8_t device, uint8_t function);
 void pci_scan_bus(uint8_t bus);
 bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function);
-#endif
 
-// search for a PCI device.  
-pci_device_t* pci_search(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id);
+// search for PCI devices
+typedef void (*deviceSearchCallback)(struct pci_device* dev);
+void pci_search(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id, deviceSearchCallback cb);
 
 #endif

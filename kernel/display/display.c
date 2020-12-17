@@ -16,7 +16,7 @@
 * perform device instance specific init here
 */
 void deviceInitDisplay(struct device* dev){
-    struct pci_device_t* pci_dev = (struct pci_device_t*) dev->deviceData;
+    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init Display at IRQ %llu\n", pci_dev->irq);
 }
 
