@@ -49,10 +49,12 @@ struct device* getDevice(uint16_t idx){
 
 void initDevices(){
     kprintf("Initializing Devices\n");
-    for (uint16_t i=0; i<=device_index;i++){
+    for (uint16_t i=0; i<device_index;i++){
         struct device* dev = (struct device*) arrayGet(devices, i);
         if (0!=dev){
             dev->init(dev);
+        } else {
+            panic("um. why is there a null device?");
         }
     }
 }
@@ -74,6 +76,8 @@ void deviceSetDescription(struct device* dev, int8_t* description) {
         }
         dev->description = kmalloc(size+1);
         strcpy(dev->description, description);
+    } else {
+        panic("Invalid device or description passed to deviceSetDescription\n");
     }
 }
 
@@ -81,13 +85,19 @@ void deviceSetDescription(struct device* dev, int8_t* description) {
 * search for devices by type
 */
 void search_device(enum deviceType devicetype, deviceSearchCallback cb) {
-    for (uint16_t i=0; i<=device_index;i++){
-        struct device* dev = (struct device*) arrayGet(devices, i);
-        if (0!=dev){
-            if (dev->devicetype == devicetype){
-                (*cb)(dev);
+    if (0!=cb){
+        for (uint16_t i=0; i<device_index;i++){
+            struct device* dev = (struct device*) arrayGet(devices, i);
+            if (0!=dev){
+                if (dev->devicetype == devicetype){
+                    (*cb)(dev);
+                }
+            } else {
+                panic("um. why is there a null device?\n");
             }
         }
+    } else {
+        panic("Invalid function pointer passed to deviceSetDescription\n");
     }
 }
 

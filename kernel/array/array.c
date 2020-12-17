@@ -27,7 +27,7 @@ void arrayDelete(struct array* arr){
         }
         kfree(arr);
     } else {
-        panic("null array");
+        panic("null array\n");
     }
 }
 
@@ -35,7 +35,7 @@ uint16_t arraySize(struct array* arr){
     if (0!=arr){
         return arr->size;
     } else {
-        panic("null array");
+        panic("null array\n");
     }   
 }
 
@@ -44,10 +44,10 @@ void  arraySet(struct array* arr, uint16_t position, void* value){
          if ((position>=0) &&(position< arr->size) ){
              arr->data[position]=value;
          } else {
-            panic("invalid array index");
+            panic("invalid array index\n");
         }
      } else {
-        panic("null array");
+        panic("null array\n");
     }  
 }
 
@@ -56,9 +56,9 @@ void* arrayGet(struct array* arr,  uint16_t position){
         if ((position>=0) &&(position< arr->size) ){
             return arr->data[position];
         } else {
-            panic("invalid array index");
+            panic("invalid array index\n");
         }  
     } else {
-        panic("null array");
+        panic("null array\n");
     }  
 }
