@@ -23,9 +23,7 @@ void listDelete(struct list* lst) {
         if (0==lst->arr){
             panic("why is the underlying array null?!");
         }
-        if (0!=lst->arr){
-            arrayDelete(lst->arr);
-        }
+        arrayDelete(lst->arr);
         kfree(lst);
     } else {
         panic("null list\n");
