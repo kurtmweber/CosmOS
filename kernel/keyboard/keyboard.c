@@ -48,7 +48,7 @@ void keyboard_irq_read(){
 			prnt_scrn_scan_code = false;	// done processing scan codes for print screen
 		}
 		
-		if ((read_byte = 0xAA)){
+		if ((read_byte == 0xAA)){
 			keypress.key = P(0,13);
 			keypress.state = KEYPRESS_BREAK;
 			keyboard_buffer_add(keypress);
