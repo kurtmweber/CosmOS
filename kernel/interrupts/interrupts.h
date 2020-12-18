@@ -9,6 +9,7 @@
 #define _INTERRUPTS_H
 
 #include <types.h>
+#include <pic/pic.h>
 
 // PIC-related constants:
 
@@ -81,7 +82,6 @@ void idt_init();
 void addISR(void *func, intVectors vector);
 void isrDE(stackFrame *frame);
 
-
 void irq0(stackFrame *frame);
 void irq1(stackFrame *frame);
 void irq2(stackFrame *frame);
@@ -98,9 +98,5 @@ void irq12(stackFrame *frame);
 void irq13(stackFrame *frame);
 void irq14(stackFrame *frame);
 void irq15(stackFrame *frame);
-
-void pic_init();
-void pic_send_eoi(uint8_t irq);
-
 
 #endif
