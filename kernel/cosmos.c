@@ -39,7 +39,7 @@ void CosmOS(){
 	* Put a hello message on the video, just so we know it's ok....
 	*/
 	console_select_driver(CONSOLE_DRIVER_VGA);
-	kprintf("Welcome CosmOS 0.1\n");
+	kprintf("Welcome to CosmOS 0.1\n");
 	/*
 	* ok, output to the serial console now
 	*/
@@ -63,6 +63,7 @@ void CosmOS(){
 	* get the PCI bus info
 	*/
 	pci_init();
+
 	/*
 	* register all devices.  this just makes a list of device instances
 	*/
@@ -70,7 +71,7 @@ void CosmOS(){
 	device_registry_init();
 
 	/*
-	* devices
+	* devices. Note that devices are initialized in the order they are registered.  So PIC first....
 	*/
 	pic_register_devices();
 	serial_register_devices();
@@ -80,12 +81,12 @@ void CosmOS(){
 	usb_register_devices();
 	network_register_devices();
 	bridge_register_devices();
-	ata_init();
 	
 	/*
 	* init all devices
 	*/
 	initDevices();
+	ata_init(); // the init here is a little different and hasn't been ported to the same init mechanism as the other devices
 	kprintf("There are %llu devices\n", deviceCount());
 
 	asm_sti();

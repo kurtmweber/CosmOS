@@ -5,15 +5,15 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#include <pic/pic.h>
 #include <asm/asm.h>
-#include <interrupts/interrupts.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 
 // I/O ports
 #define PIC_PRIMARY_COMMAND		0x20
 #define PIC_PRIMARY_DATA		0x21
-#define PIC_SECONDARY_COMMAND		0xA0
+#define PIC_SECONDARY_COMMAND	0xA0
 #define PIC_SECONDARY_DATA		0xA1
 
 // PIC Mode
@@ -53,7 +53,7 @@ void pic_register_devices(){
 	* register device
 	*/
 	struct device* deviceinstance = newDevice();
-	deviceSetDescription(deviceinstance, "PIC");
+	deviceSetDescription(deviceinstance, "8259 PIC");
 	deviceinstance->devicetype = PIC;
 	deviceinstance->init =  &deviceInitPIC;
 	registerDevice(deviceinstance);
