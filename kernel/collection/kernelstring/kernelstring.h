@@ -11,7 +11,7 @@
 #include <types.h>
 
 /**
- *  a simple string based on an array. The string is null terminated, but stores a length 
+ *  a simple string. The string is null terminated, but stores a length 
  */
 typedef struct kernelstring {
 	uint8_t* str;
