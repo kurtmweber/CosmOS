@@ -69,7 +69,7 @@ void arrayResize(struct array* arr, uint16_t size) {
             arr = krealloc(arr, size);
             arr->size = size;
         } else {
-            ("arrays cannot be shrunk\n");
+            panic ("arrays cannot be shrunk\n");
         }
     } else {
         panic("null array\n");

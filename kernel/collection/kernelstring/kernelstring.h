@@ -14,7 +14,7 @@
  *  a simple string. The string is null terminated, but stores a length 
  */
 typedef struct kernelstring {
-	uint8_t* str;
+	int8_t* str;
     // does not include terminating null
     uint32_t length;
 } kernelstring_t;

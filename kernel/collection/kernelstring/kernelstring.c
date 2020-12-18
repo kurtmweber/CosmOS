@@ -106,8 +106,8 @@ struct kernelstring*  stringItoa3(uint64_t n, uint8_t base) {
         const uint32_t len = n*5;
         struct kernelstring* ret = stringNewSized(len);
         uint8_t i = 0;
-        uint8_t *s = ret->str;
-        uint8_t *rev = s;
+        int8_t *s = ret->str;
+        int8_t *rev = s;
         char tmp;
         char c_array[] = "0123456789ABCDEF";
         
