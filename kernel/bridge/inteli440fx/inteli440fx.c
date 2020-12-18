@@ -5,36 +5,36 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <usb/usb.h>
+#include <bridge/inteli440fx/inteli440fx.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
-#include <pci/pci.h>
-#include <console/console.h>
 #include <devicemgr/devicemgr.h>
+#include <console/console.h>
+#include <pci/pci.h>
 
 /*
 * perform device instance specific init here
 */
-void deviceInitUSB(struct device* dev){
+void deviceInitI440fx(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
 }
 
-void USBSearchCB(struct pci_device* dev){
+void I440fxSearchCB(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = newDevice();
-    deviceinstance->init =  &deviceInitUSB;
+    deviceinstance->init =  &deviceInitI440fx;
     deviceinstance->deviceData = dev;
-    deviceinstance->devicetype = USB;
-    deviceSetDescription(deviceinstance, "USB");
+    deviceinstance->devicetype = BRIDGE;
+    deviceSetDescription(deviceinstance, "Intel i440FX Chipset");
     registerDevice(deviceinstance);
 }
 
 /**
-* find all USB devices and register them
+* find all bridge devices and register them
 */
-void usb_register_devices() {
-    pci_search_devicetype(PCI_CLASS_SERIAL,PCI_SERIAL_SUBCLASS_USB, &USBSearchCB);
+void bridge_register_i440fx() {
+    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_HOST, &I440fxSearchCB);
 }

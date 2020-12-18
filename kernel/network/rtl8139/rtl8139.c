@@ -22,7 +22,7 @@ void rtl8139_irq_handler(stackFrame *frame){
 void RTL8139Init(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     registerInterruptHandler(pci_dev->irq, &rtl8139_irq_handler);
-    kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
 }
 
 void RTL8139SearchCB(struct pci_device* dev){
@@ -33,7 +33,7 @@ void RTL8139SearchCB(struct pci_device* dev){
     deviceinstance->init =  &RTL8139Init;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = ETHERNET;
-    deviceSetDescription(deviceinstance, "RTL8139");
+    deviceSetDescription(deviceinstance, "Realtek RTL8139 10/100 NIC");
     registerDevice(deviceinstance);
 }
 

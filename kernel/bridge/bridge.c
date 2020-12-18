@@ -11,32 +11,15 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <pci/pci.h>
-
-/*
-* perform device instance specific init here
-*/
-void deviceInitBridge(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
-}
-
-void BridgeSearchCB(struct pci_device* dev){
-    /*
-    * register device
-    */
-    struct device* deviceinstance = newDevice();
-    deviceinstance->init =  &deviceInitBridge;
-    deviceinstance->deviceData = dev;
-    deviceinstance->devicetype = BRIDGE;
-    deviceSetDescription(deviceinstance, "Bridge");
-    registerDevice(deviceinstance);
-}
+#include <bridge/inteli440fx/inteli440fx.h>
+#include <bridge/intel82371ab/intel82371ab.h>
+#include <bridge/intelpciisa/intelpciisa.h>
 
 /**
 * find all bridge devices and register them
 */
 void bridge_register_devices() {
-    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_HOST, &BridgeSearchCB);
-    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_ISA, &BridgeSearchCB);
-    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_OTHER, &BridgeSearchCB);
+    bridge_register_i440fx();
+    bridge_register_82371();
+    bridge_register_pciisa();
 }

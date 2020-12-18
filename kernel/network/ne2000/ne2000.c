@@ -20,7 +20,7 @@ void ne2000_irq_handler(stackFrame *frame){
 void NE200Init(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     registerInterruptHandler(pci_dev->irq, &ne2000_irq_handler);
-    kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
 }
 
 void NE2000SearchCB(struct pci_device* dev){
