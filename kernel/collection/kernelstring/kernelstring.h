@@ -22,12 +22,13 @@ typedef struct kernelstring {
 struct kernelstring* stringNew();
 struct kernelstring* stringNewSized(uint32_t size);
 void stringDelete(struct kernelstring* str);
-uint32_t stringLength(struct kernelstring* str);
+uint32_t stringLength(const struct kernelstring* str);
 struct kernelstring* stringFromCStr(const int8_t* str);
-const int8_t* stringGetCStr(struct kernelstring* str);
+const int8_t* stringGetCStr(const struct kernelstring* str);
 
-struct kernelstring*  stringItoa3(uint64_t n, uint8_t base);
-struct kernelstring*  stringConcat(struct kernelstring* str1, struct kernelstring* str2);
-struct kernelstring*  stringCopy(struct kernelstring* str);
+struct kernelstring* stringItoa3(uint64_t n, uint8_t base);
+struct kernelstring* stringConcat(const struct kernelstring* str1, const struct kernelstring* str2);
+struct kernelstring* stringCopy(const struct kernelstring* str);
+struct kernelstring* stringTrim(const struct kernelstring* str);
 
 #endif

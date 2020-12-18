@@ -20,7 +20,7 @@ struct kernelstring* stringNew() {
 struct kernelstring* stringNewSized(uint32_t size) {
     if (size>0) {
         struct kernelstring* ret = (struct kernelstring*) kmalloc(sizeof(struct kernelstring));
-        ret->str = kmalloc(size+1);
+        ret->str = kmalloc((size+1)*(sizeof(uint8_t)));
         ret->length = 0;
         for (uint32_t i=0; i<size;i++){
             ret->str[i]=0;
@@ -42,7 +42,7 @@ void stringDelete(struct kernelstring* str) {
     }
 }
 
-uint32_t stringLength(struct kernelstring* str) {
+uint32_t stringLength(const struct kernelstring* str) {
     if (0!=str){
         return str->length;
     } else {
@@ -80,7 +80,7 @@ struct kernelstring* stringFromCStr(const int8_t* str) {
    return ret;
 }
 
-const int8_t* stringGetCStr(struct kernelstring* str) {
+const int8_t* stringGetCStr(const struct kernelstring* str) {
     if (0!=str){
         return str->str;
     } else {
@@ -137,7 +137,7 @@ struct kernelstring*  stringItoa3(uint64_t n, uint8_t base) {
     }
 }
 
-struct kernelstring*  stringConcat(struct kernelstring* str1, struct kernelstring* str2) {
+struct kernelstring*  stringConcat(const struct kernelstring* str1, const struct kernelstring* str2) {
     if ((0!=str1) && (0!=str2)){
         uint32_t len = str1->length + str2->length;
         struct kernelstring* ret = stringNewSized(len);
@@ -154,7 +154,7 @@ struct kernelstring*  stringConcat(struct kernelstring* str1, struct kernelstrin
     }
 }
 
-struct kernelstring*  stringCopy(struct kernelstring* str) {
+struct kernelstring*  stringCopy(const struct kernelstring* str) {
     if (0!=str){
         struct kernelstring* ret =  stringNewSized(str->length);
         uint32_t i=0;
@@ -168,6 +168,40 @@ struct kernelstring*  stringCopy(struct kernelstring* str) {
     }
 }
 
+/*****************************************************************
+ * This file is part of CosmOS                                   *
+ * Copyright (C) 2019-2020 Kurt M. Weber                         *
+ * Released under the stated terms in the file LICENSE           *
+ * See the file "LICENSE" in the source distribution for details *
+ *****************************************************************/
+
+struct kernelstring* stringTrim(const struct kernelstring* str) {
+    if (0!=str){
+
+        uint32_t i = str->length;
+        uint32_t j = i-1;
+        
+        uint8_t *tgt;
+        
+        // walk backwards....
+        while ((str->str[j] == ' ') || (str->str[j] == '\t')){
+            j--;
+        }
+        
+        // +1 for the fact that it's a zero-based index, +1 for the terminator
+        struct kernelstring* ret = stringNewSized(j+2);
+        
+        for (i = 0; i <= j; i++){
+            ret->str[i] = str->str[i];
+        }
+        
+        ret->str[j + 1] = 0;
+        ret->length = j+1;
+        return ret;
+    } else {
+        panic("null kernelstring\n");
+    }
+}
 
 
 

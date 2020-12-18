@@ -106,7 +106,7 @@ void CosmOS(){
 //		kprintf("Base: %llX, Length: %llX\n", (uint64_t)tmp->base, tmp->len);
 	} while((tmp = tmp->next));
 	
-	stringtest();
+//	stringtest();
 
 	while (1){
 		asm_hlt();
@@ -134,6 +134,21 @@ void stringtest() {
 	struct kernelstring* string5 = stringCopy(string3);
 	kprintf("%llu\n",string3->length);
 	kprintf(stringGetCStr(string3));
+	kprintf("\n");
 
+	struct kernelstring* string6 = stringCopy(string3);
+	kprintf("%llu\n",string3->length);
+	kprintf(stringGetCStr(string3));
+	kprintf("\n");
+
+	struct kernelstring* string7 = stringFromCStr("beer           ");
+	kprintf("%llu\n",string7->length);
+	kprintf(stringGetCStr(string7));
+	kprintf("\n");
+
+	struct kernelstring* string8 = stringTrim(string7);
+	kprintf("%llu\n",string8->length);
+	kprintf(stringGetCStr(string8));
+	kprintf("\n");
 }
 #undef P
