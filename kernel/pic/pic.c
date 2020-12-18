@@ -8,6 +8,7 @@
 #include <asm/asm.h>
 #include <interrupts/interrupts.h>
 #include <devicemgr/devicemgr.h>
+#include <console/console.h>
 
 // I/O ports
 #define PIC_PRIMARY_COMMAND		0x20
