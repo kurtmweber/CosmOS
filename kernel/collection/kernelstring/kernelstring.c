@@ -202,6 +202,3 @@ struct kernelstring* stringTrim(const struct kernelstring* str) {
         panic("null kernelstring\n");
     }
 }
-
-
-
