@@ -11,25 +11,6 @@
 #include <types.h>
 #include <pic/pic.h>
 
-// PIC-related constants:
-
-// I/O ports
-#define PIC_PRIMARY_COMMAND		0x20
-#define PIC_PRIMARY_DATA		0x21
-#define PIC_SECONDARY_COMMAND		0xA0
-#define PIC_SECONDARY_DATA		0xA1
-
-// IRQ vector offsets for remapping
-#define PIC_PRIMARY_VECTOR_OFFSET	0x20
-#define PIC_SECONDARY_VECTOR_OFFSET	PIC_PRIMARY_VECTOR_OFFSET + 8
-
-// PIC Mode
-#define PIC_MODE_8086			0x01
-
-// Commands
-#define PIC_INIT		0x11
-#define PIC_EOI			0x20
-
 typedef struct idtEntry{
 	uint16_t offsetWordLow;		// offset bits 0-15
 	uint16_t selector;		// per bootloader, should be 0x08

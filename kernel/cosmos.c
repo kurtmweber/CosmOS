@@ -55,9 +55,6 @@ void CosmOS(){
 	
 	kprintf("Initializing MMU...\n");
 	mmu_init();
-	
-	kprintf("Initializing PIC...\n");
-	pic_init();
 
 	kprintf("Initializing Interrupt Routing...\n");
 	interrupt_router_init();
@@ -71,9 +68,11 @@ void CosmOS(){
 	*/
 	kprintf("Initializing Device Registry...\n");
 	device_registry_init();
+
 	/*
 	* devices
 	*/
+	pic_register_devices();
 	serial_register_devices();
 	rtc_register_devices();
 	keyboard_register_devices();

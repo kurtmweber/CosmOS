@@ -7,8 +7,27 @@
 
 #include <asm/asm.h>
 #include <interrupts/interrupts.h>
+#include <devicemgr/devicemgr.h>
 
-void pic_init(){
+// I/O ports
+#define PIC_PRIMARY_COMMAND		0x20
+#define PIC_PRIMARY_DATA		0x21
+#define PIC_SECONDARY_COMMAND		0xA0
+#define PIC_SECONDARY_DATA		0xA1
+
+// PIC Mode
+#define PIC_MODE_8086			0x01
+
+// Commands
+#define PIC_INIT		0x11
+#define PIC_EOI			0x20
+
+/*
+* perform device instance specific init here
+*/
+void deviceInitPIC(struct device* dev){
+    kprintf("Init %s\n" ,dev->description);
+
 	// send init command to prim/sec PICs
 	asm_out_b(PIC_PRIMARY_COMMAND, PIC_INIT);
 	asm_out_b(PIC_SECONDARY_COMMAND, PIC_INIT);
@@ -25,7 +44,19 @@ void pic_init(){
 	// and then set the PICs to 8086 mode
 	asm_out_b(PIC_PRIMARY_DATA, PIC_MODE_8086);
 	asm_out_b(PIC_SECONDARY_DATA, PIC_MODE_8086);
-	
+}
+
+void pic_register_devices(){
+
+    /*
+	* register device
+	*/
+	struct device* deviceinstance = newDevice();
+	deviceSetDescription(deviceinstance, "PIC");
+	deviceinstance->devicetype = PIC;
+	deviceinstance->init =  &deviceInitPIC;
+	registerDevice(deviceinstance);
+
 	return;
 }
 
