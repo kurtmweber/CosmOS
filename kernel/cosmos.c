@@ -25,6 +25,9 @@
 #include <network/network.h>
 #include <bridge/bridge.h>
 #include <display/display.h>
+#include <collection/kernelstring/kernelstring.h>
+
+void stringtest();
 
 void CosmOS(){
 	video_init();
@@ -103,9 +106,34 @@ void CosmOS(){
 //		kprintf("Base: %llX, Length: %llX\n", (uint64_t)tmp->base, tmp->len);
 	} while((tmp = tmp->next));
 	
+	stringtest();
+
 	while (1){
 		asm_hlt();
 	}
 }
 
+void stringtest() {
+	// concat
+	struct kernelstring* string1 = stringFromCStr("hello");
+	struct kernelstring* string2 = stringFromCStr(" world\n");
+
+	kprintf("%llu\n",string1->length);
+	kprintf(stringGetCStr(string1));
+	kprintf("%llu\n",string2->length);
+	kprintf(stringGetCStr(string2));
+
+	struct kernelstring* string3 = stringConcat(string1, string2);
+	kprintf("%llu\n",string3->length);
+	kprintf(stringGetCStr(string3));
+
+	struct kernelstring* string4 = stringItoa3(1000, 16);
+	kprintf("%llu\n",string4->length);
+	kprintf(stringGetCStr(string4));
+
+	struct kernelstring* string5 = stringCopy(string3);
+	kprintf("%llu\n",string3->length);
+	kprintf(stringGetCStr(string3));
+
+}
 #undef P
