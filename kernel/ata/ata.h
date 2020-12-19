@@ -107,10 +107,8 @@ typedef struct ide_controller_t{
 } ide_controller_t;
 
 extern ide_controller_t *ide_controllers;
-void ata_init();
-void ata_detect_addresses(uint16_t num_ide);
+void ata_register_devices();
 uint16_t ata_scan_ide_controllers();
-void ata_setup_irq(uint16_t num_ide);
 
 bool ata_channel_ready(uint8_t controller, uint8_t channel);
 void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled);

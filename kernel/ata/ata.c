@@ -15,8 +15,11 @@
 ide_controller_t *ide_controllers;
 
 uint16_t num_ide=0;
+void ata_setup_irq();
 
-void ata_detect_addresses(uint16_t num_ide){
+void ata_detect_addresses(){
+	kprintf("num_ide: %llu\n",num_ide);
+
 	uint16_t i;
 	uint32_t bar_result;
 	
@@ -35,30 +38,28 @@ void ata_detect_addresses(uint16_t num_ide){
 	}
 }
 
-void ata_init(){
-	uint16_t i = 0;
-	uint16_t num_ide;
-	
-	ide_controllers = (ide_controller_t *)0;
-	
-	num_ide = ata_scan_ide_controllers();
+void deviceInitATA(struct device* dev){
+	struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
+
 	if (!num_ide){
 		kprintf("No IDE controllers detected\n");
 		return;
 	}
-	
+	uint16_t i;
 	for (i = 0; i < num_ide; i++){
 		ide_controllers[i].channels[IDE_CHANNEL_PRIMARY].selected_device = ATA_DRIVE_SELECT_NONE;
 		ide_controllers[i].channels[IDE_CHANNEL_SECONDARY].selected_device = ATA_DRIVE_SELECT_NONE;
 	}
-	
-	ata_detect_addresses(num_ide);
+
+	ata_detect_addresses();
+
 	for (i = 0; i < num_ide; i++){
 		kprintf("Primary IDE I/O at %#X, control at %#X\n", ide_controllers[i].channels[IDE_CHANNEL_PRIMARY].base_io, ide_controllers[i].channels[IDE_CHANNEL_PRIMARY].base_io_ctrl);
 		kprintf("Secondary IDE I/O at %#X, control at %#X\n", ide_controllers[i].channels[IDE_CHANNEL_SECONDARY].base_io, ide_controllers[i].channels[IDE_CHANNEL_SECONDARY].base_io_ctrl);
 	}
 	
-	ata_setup_irq(num_ide);
+	ata_setup_irq();
 	
 	for (i = 0; i < num_ide; i++){
 		ata_interrupt_enable(i, IDE_CHANNEL_PRIMARY, false);
@@ -70,11 +71,6 @@ void ata_init(){
 	}
 	
 	return;
-}
-
-void deviceInitATA(struct device* dev){
-	struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
 }
 
 void ATASearchCB(struct pci_device* dev){
@@ -100,12 +96,11 @@ void ATASearchCB(struct pci_device* dev){
     registerDevice(deviceinstance);
 }
 
-uint16_t ata_scan_ide_controllers(){
+void ata_register_devices() {
 	pci_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ATASearchCB);	
-	return num_ide;
 }
 
-void ata_setup_irq(uint16_t num_ide){
+void ata_setup_irq(){
 	uint8_t in;
 	uint16_t i;
 	

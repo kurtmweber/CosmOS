@@ -81,12 +81,11 @@ void CosmOS(){
 	usb_register_devices();
 	network_register_devices();
 	bridge_register_devices();
-	
+	ata_register_devices();
 	/*
 	* init all devices
 	*/
 	initDevices();
-	ata_init(); // the init here is a little different and hasn't been ported to the same init mechanism as the other devices
 	kprintf("There are %llu devices\n", deviceCount());
 
 	asm_sti();
