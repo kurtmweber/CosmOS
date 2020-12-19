@@ -9,10 +9,10 @@ all: kernel
 
 kernel: cosmos
 
-cosmos: cosmos.elf
+cosmos: $(KERNEL_ELF)
 	$(OBJCOPY) $(OBJCOPYFLAGS) $(KERNEL_ELF) $(KERNEL_BIN)
 
-cosmos.elf: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir serial-dir devicemgr-dir usb-dir network-dir bridge-dir collection-dir display-dir rtc-dir pic-dir ethernet-dir
+$(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir serial-dir devicemgr-dir usb-dir network-dir bridge-dir collection-dir display-dir rtc-dir pic-dir ethernet-dir
 	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) \
 	cosmos.o \
 	ata/ata.a \

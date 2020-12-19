@@ -28,15 +28,14 @@ endif
 # qemu
 # qemu
 QEMU=qemu-system-x86_64
-QEMUARGS= -accel tcg,thread=single       \
-  -cpu core2duo                          \
-  -m 1024                                \
-  -no-reboot                             \
-  -drive format=raw,file=hda.img         \
-  -smp 1                                 \
-  -usb                                   \
-  -net nic,model=ne2k_pci                \
-  -vga std					                     \
-  -serial stdio
+QEMUARGS=                                                 \
+  -accel tcg,thread=single                                \
+  -cpu core2duo                                           \
+  -m 1024                                                 \
+  -no-reboot                                              \
+  -drive format=raw,file=hda.img                          \
+  -smp 1                                                  \
+  -usb                                                    \
+  -nic user,ipv6=off,model=ne2k_pci,mac=52:54:98:76:54:32 \
+  -serial stdio                                           \
 
-  #-net nic,model=rtl8139                 \
