@@ -32,4 +32,5 @@ void dev_register_devices(){
 	bridge_register_devices();
 	ata_register_devices(); 
     mouse_register_devices();
+    floppy_register_devices();
 }

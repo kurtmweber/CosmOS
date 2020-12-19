@@ -3,12 +3,12 @@ include ../../../mk/build.mk
 EXTRA_CFLAGS= -I../..
 ARFLAGS=-crs
 
-all: mouse.a
+all: floppy.a
 
-mouse.a: mouse.o 
+floppy.a: floppy.o 
 	$(AR) $(ARFLAGS) $@ $^
 	
-mouse.o: mouse.c
+floppy.o: floppy.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 
 clean:

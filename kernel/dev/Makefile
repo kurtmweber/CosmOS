@@ -4,7 +4,7 @@ EXTRA_CFLAGS= -I..
 
 all: devs.a 
 
-devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir display-dir rtc-dir pic-dir mouse-dir
+devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir display-dir rtc-dir pic-dir mouse-dir floppy-dir
 	$(AR) $(ARFLAGS)T $@ \
 	ata/ata.a \
 	pci/pci.a \
@@ -17,6 +17,7 @@ devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridg
 	rtc/rtc.o \
 	pic/pic.o \
 	mouse/mouse.o \
+	floppy/floppy.a \
 	dev.o
 	
 dev.o: dev.c
@@ -55,7 +56,10 @@ pic-dir:
 mouse-dir:
 	cd mouse && $(MAKE)
 
-clean: ata-dir-clean keyboard-dir-clean pci-dir-clean serial-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean mouse-dir-clean
+floppy-dir:
+	cd floppy && $(MAKE)
+
+clean: ata-dir-clean keyboard-dir-clean pci-dir-clean serial-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean mouse-dir-clean floppy-dir-clean
 	$(RM) devs.a
 	$(RM) dev.o
 
@@ -91,3 +95,6 @@ pic-dir-clean:
  
 mouse-dir-clean:
 	cd mouse && $(MAKE) clean
+
+floppy-dir-clean:
+	cd floppy && $(MAKE) clean

@@ -20,6 +20,7 @@
 #include <dev/bridge/bridge.h>
 #include <dev/display/display.h>
 #include <dev/mouse/mouse.h>
+#include <dev/floppy/floppy.h>
 
 void dev_register_devices();
 
