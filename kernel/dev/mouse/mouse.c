@@ -11,6 +11,7 @@
 #include <dev/pci/pci.h>
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
+#include <mm/mm.h>
 
 #define MOUSE_IRQ_NUMBER 12
 
@@ -37,28 +38,31 @@
 * https://forum.osdev.org/viewtopic.php?t=10247
 */
 
-uint8_t mouse_cycle=0;
-int8_t mouse_byte[3];
-int8_t mouse_x=0;
-int8_t mouse_y=0;
+struct mouse_status {
+    uint8_t mouse_cycle;
+    int8_t mouse_byte[3];
+    int8_t mouse_x;
+    int8_t mouse_y;
+};
 
+struct mouse_status* current_mouse_status;
 
 void mouse_irq_read(stackFrame *frame) {
     kprintf("$");
-    switch(mouse_cycle) {
+    switch(current_mouse_status->mouse_cycle) {
     case 0:
-        mouse_byte[0]=asm_in_b(KB_PORT);
-        mouse_cycle++;
+        current_mouse_status->mouse_byte[0]=asm_in_b(KB_PORT);
+        current_mouse_status->mouse_cycle++;
         break;
     case 1:
-        mouse_byte[1]=asm_in_b(KB_PORT);
-        mouse_cycle++;
+        current_mouse_status->mouse_byte[1]=asm_in_b(KB_PORT);
+        current_mouse_status->mouse_cycle++;
         break;
     case 2:
-        mouse_byte[2]=asm_in_b(KB_PORT);
-        mouse_x=mouse_byte[1];
-        mouse_y=mouse_byte[2];
-        mouse_cycle=0;
+        current_mouse_status->mouse_byte[2]=asm_in_b(KB_PORT);
+        current_mouse_status->mouse_x=current_mouse_status->mouse_byte[1];
+        current_mouse_status->mouse_y=current_mouse_status->mouse_byte[2];
+        current_mouse_status->mouse_cycle=0;
         break;
     }
 }
@@ -89,7 +93,7 @@ void mouse_write(uint8_t a_write){
   asm_out_b(MOUSE_PORT, 0xD4);
   // wait for the final part
   mouse_wait(1);
-  //Finally write
+  // finally write
   asm_out_b(KB_PORT, a_write);
 }
 
@@ -105,6 +109,10 @@ uint8_t mouse_read() {
 void deviceInitMouse(struct device* dev){
     kprintf("Init %s at IRQ %llu\n",dev->description, MOUSE_IRQ_NUMBER);
     registerInterruptHandler(MOUSE_IRQ_NUMBER, &mouse_irq_read);
+
+    // alloc struct
+    current_mouse_status = kmalloc(sizeof(struct mouse_status));
+    current_mouse_status->mouse_cycle=0;
 
     // enable aux mouse
     mouse_wait(1);
