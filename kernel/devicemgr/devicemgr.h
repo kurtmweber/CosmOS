@@ -24,7 +24,8 @@ typedef enum deviceType {
 	BRIDGE=			0x06,
 	USB=			0x07,
 	ATA=			0x08,
-	PIC=			0x09
+	PIC=			0x09,
+	MOUSE=			0x0A
 } deviceType;
 
 typedef struct device {

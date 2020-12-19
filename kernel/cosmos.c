@@ -9,23 +9,14 @@
 #include <console/console.h>
 #include <console/drivers/drivers.h>
 #include <asm/asm.h>
-#include <dev/ata/ata.h>
 #include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
-#include <dev/keyboard/keyboard.h>
 #include <mm/mm.h>
-#include <dev/pci/pci.h>
 #include <string/string.h>
-#include <dev/rtc/rtc.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
-#include <dev/serial/serial.h>
-#include <dev/usb/usb.h>
-#include <devicemgr/devicemgr.h>
-#include <dev/network/network.h>
-#include <dev/bridge/bridge.h>
-#include <dev/display/display.h>
 #include <collection/kernelstring/kernelstring.h>
+#include <dev/dev.h>
 
 void stringtest();
 
