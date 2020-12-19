@@ -9,10 +9,20 @@
 #include <dev/dev.h>
 
 /*
-* Note that devices are initialized in the order they are registered.  So PIC first....
+* Note that devices are initialized in the order they are registered.
 */
 void dev_register_devices(){
+	/*
+	* scan the PCI bus first
+	*/
+	pci_init();
+	/*
+	* set up the pic next
+	*/
 	pic_register_devices();
+	/* 
+	* and then RS232
+	*/
 	serial_register_devices();
 	rtc_register_devices();
 	keyboard_register_devices();

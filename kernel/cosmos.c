@@ -51,21 +51,16 @@ void CosmOS(){
 	interrupt_router_init();
 
 	/*
-	* get the PCI bus info
-	*/
-	pci_init();
-
-	/*
-	* register all devices.  this just makes a list of device instances
+	* init the device registry
 	*/
 	kprintf("Initializing Device Registry...\n");
 	device_registry_init();
 
 	/*
-	* devices. Note that devices are initialized in the order they are registered.  So PIC first....
+	* Register devices
 	*/
 	dev_register_devices();
-	
+
 	/*
 	* init all devices
 	*/
