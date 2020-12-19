@@ -18,6 +18,7 @@
 #define MOUSE_PORT	0x64
 #define KB_PORT		0x60
 
+// https://wiki.osdev.org/PS/2_Mouse
 #define RESET                   0xFF
 #define RESEND                  0xFE
 #define SETDEFAULTS             0xF6
