@@ -12,7 +12,7 @@
 #include <ata/ata.h>
 #include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
-#include <keyboard/keyboard.h>
+#include <dev/keyboard/keyboard.h>
 #include <mm/mm.h>
 #include <pci/pci.h>
 #include <string/string.h>

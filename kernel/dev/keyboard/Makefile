@@ -1,6 +1,6 @@
-include ../../mk/build.mk
+include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I..
+EXTRA_CFLAGS= -I../..
 ISRCFLAGS=-mgeneral-regs-only
 ARFLAGS=-crs
 

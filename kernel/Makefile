@@ -23,7 +23,7 @@ $(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir 
 	mm/mm.a \
 	timing/timing.a \
 	asm/asm.a \
-	keyboard/keyboard.a \
+	dev/keyboard/keyboard.a \
 	panic/panic.a \
 	string/string.a \
 	dev/serial/serial.a \
@@ -53,7 +53,7 @@ interrupts-dir:
 	cd interrupts && $(MAKE)
 	
 keyboard-dir:
-	cd keyboard && $(MAKE)
+	cd dev/keyboard && $(MAKE)
 	
 mm-dir:
 	cd mm && $(MAKE)
@@ -124,7 +124,7 @@ interrupts-dir-clean:
 	cd interrupts && $(MAKE) clean
 	
 keyboard-dir-clean:
-	cd keyboard && $(MAKE) clean
+	cd dev/keyboard && $(MAKE) clean
 	
 mm-dir-clean:
 	cd mm && $(MAKE) clean

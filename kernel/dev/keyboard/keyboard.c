@@ -8,12 +8,12 @@
 #include <types.h>
 #include <asm/asm.h>
 #include <console/drivers/drivers.h>
-#include <keyboard/keyboard.h>
+#include <dev/keyboard/keyboard.h>
 #include <console/console.h>
 #include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/devicemgr.h>
-#include <keyboard/abstract_keyboard.h>
+#include <dev/keyboard/abstract_keyboard.h>
 
 #define KB_IRQ_NUMBER 1
 

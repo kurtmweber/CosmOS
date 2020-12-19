@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <keyboard/abstract_keyboard.h>
+#include <dev/keyboard/abstract_keyboard.h>
 #include <types.h>
 
 const uint8_t abstract_keyboard_grid[256] = {

@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
-#include <keyboard/keyboard.h>
+#include <dev/keyboard/keyboard.h>
 
 void keyboard_buffer_add(key_action_t add){
 	keyboard_buffer[keyboard_buffer_end] = add;

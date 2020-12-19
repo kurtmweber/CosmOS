@@ -8,7 +8,7 @@
 #ifndef _KEYBOARD_H
 #define _KEYBOARD_H
 
-#include <keyboard/abstract_keyboard.h>
+#include <dev/keyboard/abstract_keyboard.h>
 
 typedef enum keypress_state{
 	KEYPRESS_MAKE,		// aka press...
