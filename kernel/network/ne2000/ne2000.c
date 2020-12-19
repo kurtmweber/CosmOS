@@ -187,6 +187,8 @@ void ne2000_init() {
 	// end (abort) the DMA transfer
 	asm_out_b(CR, CR_PAGE0 | CR_START | CR_NODMA);
 
+	kprintf("MAC  %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac[0],net_mac[1],net_mac[2],net_mac[3],net_mac[4],net_mac[5]);
+
 	asm_out_b(CR, (CR_PAGE1|CR_NODMA|CR_STOP));     // switch to page 1
 	
 	// write mac

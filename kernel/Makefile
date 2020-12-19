@@ -12,7 +12,7 @@ kernel: cosmos
 cosmos: cosmos.elf
 	$(OBJCOPY) $(OBJCOPYFLAGS) $(KERNEL_ELF) $(KERNEL_BIN)
 
-cosmos.elf: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir serial-dir devicemgr-dir usb-dir network-dir bridge-dir collection-dir display-dir rtc-dir pic-dir
+cosmos.elf: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir serial-dir devicemgr-dir usb-dir network-dir bridge-dir collection-dir display-dir rtc-dir pic-dir ethernet-dir
 	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) \
 	cosmos.o \
 	ata/ata.a \
@@ -34,7 +34,8 @@ cosmos.elf: cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-
 	collection/collection.a \
 	display/display.a \
 	rtc/rtc.o \
-	pic/pic.o
+	pic/pic.o \
+	ethernet/ethernet.o
 
 cosmos.o: cosmos.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o cosmos.o cosmos.c
@@ -99,7 +100,10 @@ rtc-dir:
 pic-dir:
 	cd pic && $(MAKE)
 
-clean: kernel-clean asm-dir-clean ata-dir-clean console-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean panic-dir-clean pci-dir-clean string-dir-clean timing-dir-clean video-dir-clean serial-dir-clean devicemgr-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean collection-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean
+ethernet-dir:
+	cd ethernet && $(MAKE)
+
+clean: kernel-clean asm-dir-clean ata-dir-clean console-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean panic-dir-clean pci-dir-clean string-dir-clean timing-dir-clean video-dir-clean serial-dir-clean devicemgr-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean collection-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean ethernet-dir-clean
 
 kernel-clean: cosmos-o-clean
 	$(RM) cosmos
@@ -166,3 +170,6 @@ rtc-dir-clean:
 
 pic-dir-clean:
 	cd pic && $(MAKE) clean
+ 
+ethernet-dir-clean:
+	cd ethernet && $(MAKE) clean
