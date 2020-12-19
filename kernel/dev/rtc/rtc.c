@@ -11,7 +11,7 @@
 #include <dev/rtc/rtc.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/devicemgr.h>
-#include <timing/sleep.h>
+#include <sleep/sleep.h>
 
 #define RTC_IRQ_NUMBER 8
 #define RTC_FREQ 1024

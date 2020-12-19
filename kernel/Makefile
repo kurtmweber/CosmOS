@@ -12,7 +12,7 @@ kernel: cosmos
 cosmos: $(KERNEL_ELF)
 	$(OBJCOPY) $(OBJCOPYFLAGS) $(KERNEL_ELF) $(KERNEL_BIN)
 
-$(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir serial-dir devicemgr-dir usb-dir network-dir bridge-dir collection-dir display-dir rtc-dir pic-dir ethernet-dir
+$(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir sleep-dir video-dir serial-dir devicemgr-dir usb-dir network-dir bridge-dir collection-dir display-dir rtc-dir pic-dir ethernet-dir
 	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) \
 	cosmos.o \
 	dev/ata/ata.a \
@@ -21,7 +21,7 @@ $(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir 
 	video/video.a \
 	interrupts/interrupts.a \
 	mm/mm.a \
-	timing/timing.a \
+	sleep/sleep.a \
 	asm/asm.a \
 	dev/keyboard/keyboard.a \
 	panic/panic.a \
@@ -67,8 +67,8 @@ pci-dir:
 string-dir:
 	cd string && $(MAKE)
 	
-timing-dir:
-	cd timing && $(MAKE)
+sleep-dir:
+	cd sleep && $(MAKE)
 	
 video-dir:
 	cd video && $(MAKE)
@@ -103,7 +103,7 @@ pic-dir:
 ethernet-dir:
 	cd ethernet && $(MAKE)
 
-clean: kernel-clean asm-dir-clean ata-dir-clean console-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean panic-dir-clean pci-dir-clean string-dir-clean timing-dir-clean video-dir-clean serial-dir-clean devicemgr-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean collection-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean ethernet-dir-clean
+clean: kernel-clean asm-dir-clean ata-dir-clean console-dir-clean interrupts-dir-clean keyboard-dir-clean mm-dir-clean panic-dir-clean pci-dir-clean string-dir-clean sleep-dir-clean video-dir-clean serial-dir-clean devicemgr-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean collection-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean ethernet-dir-clean
 
 kernel-clean: cosmos-o-clean
 	$(RM) cosmos
@@ -141,8 +141,8 @@ string-dir-clean:
 serial-dir-clean:
 	cd dev/serial && $(MAKE) clean
 
-timing-dir-clean:
-	cd timing && $(MAKE) clean
+sleep-dir-clean:
+	cd sleep && $(MAKE) clean
 	
 video-dir-clean:
 	cd video && $(MAKE) clean

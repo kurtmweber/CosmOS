@@ -28,7 +28,7 @@ void I440fxSearchCB(struct pci_device* dev){
     deviceinstance->init =  &deviceInitI440fx;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = BRIDGE;
-    deviceSetDescription(deviceinstance, "Intel i440FX Chipset");
+    deviceSetDescription(deviceinstance, "Intel i440FX PCI Bridge");
     registerDevice(deviceinstance);
 }
 

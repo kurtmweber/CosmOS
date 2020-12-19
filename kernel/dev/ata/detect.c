@@ -11,7 +11,7 @@
 #include <mm/mm.h>
 #include <panic/panic.h>
 #include <string/string.h>
-#include <timing/sleep.h>
+#include <sleep/sleep.h>
 
 void ata_detect_atapi(uint8_t controller, uint8_t channel){
 	ata_register_write(controller, channel, ATA_REGISTER_COMMAND, ATA_COMMAND_IDENTIFY_PACKET);
