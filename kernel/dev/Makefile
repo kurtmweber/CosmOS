@@ -14,9 +14,9 @@ devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridg
 	network/network.a \
 	bridge/bridge.a \
 	display/display.a \
-	rtc/rtc.o \
-	pic/pic.o \
-	mouse/mouse.o \
+	rtc/rtc.a \
+	pic/pic.a \
+	mouse/mouse.a \
 	floppy/floppy.a \
 	dev.o
 	
