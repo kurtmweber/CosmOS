@@ -39,7 +39,7 @@ uint16_t listCount(struct list* lst);
 * size of the underlying array
 */
 uint16_t listSize(struct list* lst);
-uint16_t listAdd(struct list* lst, void* value);
+void listAdd(struct list* lst, void* value);
 void  listSet(struct list* lst, uint16_t position, void* value);
 void* listGet(struct list* lst, uint16_t position);
 void listIterate(struct list* lst, listIterator iter);

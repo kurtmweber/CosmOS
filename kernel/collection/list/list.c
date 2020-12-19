@@ -47,7 +47,7 @@ uint16_t listSize(struct list* lst) {
 }
 
 
-uint16_t listAdd(struct list* lst, void* value) {
+void listAdd(struct list* lst, void* value) {
      if (0!=lst){
          // sanity check
          if (0==lst->arr){
