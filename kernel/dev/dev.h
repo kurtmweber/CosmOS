@@ -11,6 +11,7 @@
 #include <dev/ata/ata.h>
 #include <dev/keyboard/keyboard.h>
 #include <dev/pci/pci.h>
+#include <dev/pic/pic.h>
 #include <dev/rtc/rtc.h>
 #include <dev/serial/serial.h>
 #include <dev/usb/usb.h>
@@ -20,6 +21,6 @@
 #include <dev/display/display.h>
 #include <dev/mouse/mouse.h>
 
-void register_devices();
+void dev_register_devices();
 
 #endif

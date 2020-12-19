@@ -1,10 +1,10 @@
 include ../../mk/build.mk
 
-EXTRA_CFLAGS=-I.
+EXTRA_CFLAGS= -I..
 
 all: devs.a 
 
-devs.a:  ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir display-dir rtc-dir pic-dir mouse-dir
+devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir display-dir rtc-dir pic-dir mouse-dir
 	$(AR) $(ARFLAGS)T $@ \
 	ata/ata.a \
 	pci/pci.a \
@@ -16,8 +16,12 @@ devs.a:  ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir 
 	display/display.a \
 	rtc/rtc.o \
 	pic/pic.o \
-	mouse/mouse.o\
+	mouse/mouse.o \
+	dev.o
 	
+dev.o: dev.c
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
+
 ata-dir:
 	cd ata && $(MAKE)
 	
@@ -53,6 +57,7 @@ mouse-dir:
 
 clean: ata-dir-clean keyboard-dir-clean pci-dir-clean serial-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean mouse-dir-clean
 	$(RM) devs.a
+	$(RM) dev.o
 
 ata-dir-clean:
 	cd ata && $(MAKE) clean

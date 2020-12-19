@@ -64,15 +64,8 @@ void CosmOS(){
 	/*
 	* devices. Note that devices are initialized in the order they are registered.  So PIC first....
 	*/
-	pic_register_devices();
-	serial_register_devices();
-	rtc_register_devices();
-	keyboard_register_devices();
-	display_register_devices();
-	usb_register_devices();
-	network_register_devices();
-	bridge_register_devices();
-	ata_register_devices();
+	dev_register_devices();
+	
 	/*
 	* init all devices
 	*/
