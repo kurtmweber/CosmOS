@@ -11,14 +11,11 @@
 #include <pci/pci.h>
 #include <pci/devicetree.h>
 
-void pci_init(){
-	uint16_t i;
-	
+void pci_init(){	
 	kprintf("Initializing PCI bus...\n");
 	
-	pci_devices = 0;
-	num_pci_devices = 0;
-	
+	pci_devices = listNew();
+
 	pci_scan();
 	
 	return;

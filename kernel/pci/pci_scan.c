@@ -11,22 +11,17 @@
 #include <pci/pci.h>
 #include <pci/devicetree.h>
 
-struct pci_device fill_pci_device(uint8_t bus, uint8_t device, uint8_t function){
-	// ensure the given device actually exists BEFORE sending it to this function
-	
-	struct pci_device tmp;
-	
-	tmp.bus = bus;
-	tmp.device = device;
-	tmp.function = function;
-	tmp.pci_class = pci_header_read_class(bus, device, function);
-	tmp.pci_subclass = pci_header_read_subclass(bus, device, function);
-	tmp.header_type = pci_header_read_type(bus, device, function);
-	tmp.irq = pci_header_read_irq(bus, device, function);
-	tmp.vendor_id = pci_header_read_vendor(bus, device, function);
-	tmp.device_id = pci_header_read_device_id(bus, device, function);
-	
-	return tmp;
+void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_t function){
+		
+	dev->bus = bus;
+	dev->device = device;
+	dev->function = function;
+	dev->pci_class = pci_header_read_class(bus, device, function);
+	dev->pci_subclass = pci_header_read_subclass(bus, device, function);
+	dev->header_type = pci_header_read_type(bus, device, function);
+	dev->irq = pci_header_read_irq(bus, device, function);
+	dev->vendor_id = pci_header_read_vendor(bus, device, function);
+	dev->device_id = pci_header_read_device_id(bus, device, function);
 }
 
 bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function){
@@ -40,16 +35,16 @@ bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function){
 void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
 	uint8_t i;
 	
-	num_pci_devices++;
+	// new device
+	struct pci_device* dev = kmalloc(sizeof(struct pci_device));
 	
-	if (!pci_devices){
-		pci_devices = kmalloc(sizeof(struct pci_device) * num_pci_devices);
-	} else {
-		pci_devices = krealloc(pci_devices, sizeof(struct pci_device) * num_pci_devices);
-	}
-	
-	pci_devices[num_pci_devices - 1] = fill_pci_device(bus, device, function);
-	kprintf("PCI device found at %#hX:%#hX:%#hX, class %#hX.%#hX, IRQ %hu\n", pci_devices[num_pci_devices - 1].bus, pci_devices[num_pci_devices - 1].device, pci_devices[num_pci_devices - 1].function, pci_devices[num_pci_devices - 1].pci_class, pci_devices[num_pci_devices - 1].pci_subclass, pci_devices[num_pci_devices - 1].irq);
+	// fill device
+	fill_pci_device(dev , bus, device, function);
+
+	// add to list
+	listAdd(pci_devices, dev);
+
+	kprintf("PCI device found at %#hX:%#hX:%#hX, class %#hX.%#hX, IRQ %hu\n", dev->bus, dev->device, dev->function, dev->pci_class, dev->pci_subclass, dev->irq);
 	
 	if ((pci_header_read_type(bus, device, function) & 0x80) == 0x80){
 		for (i = 1; i < 8; i++){

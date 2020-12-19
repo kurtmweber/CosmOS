@@ -9,15 +9,15 @@
 #include <types.h>
 #include <console/console.h>
 
-struct pci_device *pci_devices;
-uint16_t num_pci_devices;
+struct list *pci_devices;
 
 void pci_search_device(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id, pcideviceSearchCallback cb){
     uint16_t i = 0;
-    for (i = 0; i < num_pci_devices; i++){
-        if ((pci_devices[i].pci_class == pci_class) && (pci_devices[i].pci_subclass == pci_subclass)) {
-            if ((pci_devices[i].vendor_id==vendor_id) && (pci_devices[i].device_id==device_id)) {
-                (*cb)(&(pci_devices[i]));
+    for (i = 0; i < listCount(pci_devices); i++){
+        struct pci_device* dev = (struct pci_device*) listGet(pci_devices,i);
+        if ((dev->pci_class == pci_class) && (dev->pci_subclass == pci_subclass)) {
+            if ((dev->vendor_id==vendor_id) && (dev->device_id==device_id)) {
+                (*cb)(dev);
             }
         }
     }
@@ -25,9 +25,10 @@ void pci_search_device(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t
 
 void pci_search_devicetype(pci_class_codes pci_class, uint8_t pci_subclass, pcideviceSearchCallback cb){
     uint16_t i = 0;
-    for (i = 0; i < num_pci_devices; i++){
-        if ((pci_devices[i].pci_class == pci_class) && (pci_devices[i].pci_subclass == pci_subclass)) {
-            (*cb)(&(pci_devices[i]));            
+    for (i = 0; i < listCount(pci_devices); i++){
+        struct pci_device* dev = (struct pci_device*) listGet(pci_devices,i);
+        if ((dev->pci_class == pci_class) && (dev->pci_subclass == pci_subclass)) {
+            (*cb)(dev);            
         }
     }
 }

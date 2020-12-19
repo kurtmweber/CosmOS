@@ -41,7 +41,7 @@ void pci_header_set_irq(uint8_t bus, uint8_t device, uint8_t function, uint8_t i
 void pci_init();
 
 void pci_scan();
-struct pci_device fill_pci_device(uint8_t bus, uint8_t device, uint8_t function);
+void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_t function);
 void pci_found_device(uint8_t bus, uint8_t device, uint8_t function);
 void pci_scan_bus(uint8_t bus);
 bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function);

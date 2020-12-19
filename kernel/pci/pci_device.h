@@ -10,6 +10,7 @@
 
 #include <types.h>
 #include <pci/devicetree.h>
+#include <collection/list/list.h>
 
 struct pci_device {
 	pci_class_codes pci_class;
@@ -28,8 +29,7 @@ typedef void (*pcideviceSearchCallback)(struct pci_device* dev);
 void pci_search_device(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id, pcideviceSearchCallback cb);
 void pci_search_devicetype(pci_class_codes pci_class, uint8_t pci_subclass, pcideviceSearchCallback cb);
 
-extern struct pci_device *pci_devices;
-extern uint16_t num_pci_devices;
+extern struct list *pci_devices;
 
 #endif
 
