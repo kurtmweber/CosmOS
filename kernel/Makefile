@@ -34,7 +34,7 @@ $(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir 
 	collection/collection.a \
 	dev/display/display.a \
 	dev/rtc/rtc.o \
-	pic/pic.o \
+	dev/pic/pic.o \
 	ethernet/ethernet.o
 
 cosmos.o: cosmos.c
@@ -98,7 +98,7 @@ rtc-dir:
 	cd dev/rtc && $(MAKE)
 
 pic-dir:
-	cd pic && $(MAKE)
+	cd dev/pic && $(MAKE)
 
 ethernet-dir:
 	cd ethernet && $(MAKE)
@@ -169,7 +169,7 @@ rtc-dir-clean:
 	cd dev/rtc && $(MAKE) clean
 
 pic-dir-clean:
-	cd pic && $(MAKE) clean
+	cd dev/pic && $(MAKE) clean
  
 ethernet-dir-clean:
 	cd ethernet && $(MAKE) clean

@@ -9,7 +9,7 @@
 #define _INTERRUPTS_H
 
 #include <types.h>
-#include <pic/pic.h>
+#include <dev/pic/pic.h>
 
 typedef struct idtEntry{
 	uint16_t offsetWordLow;		// offset bits 0-15

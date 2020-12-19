@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <pic/pic.h>
+#include <dev/pic/pic.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
