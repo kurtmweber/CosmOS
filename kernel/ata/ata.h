@@ -9,14 +9,17 @@
 #define _ATA_H
 
 #include <pci/pci_device.h>
+#include <collection/list/list.h>
 
 #define IDE_CHANNEL_PRIMARY	0
 #define IDE_CHANNEL_SECONDARY	1
 
 #define IDE_SERIAL_IRQ		14
 
-#define ATA_DEVICE(x, y, z) (ide_controllers[x].channels[y].devices[z])
-#define ATA_CHANNEL(x, y) (ide_controllers[x].channels[y])
+#define ATA_CONTROLLER(x) ((struct ide_controller_t*)listGet(ide_controllers, x))
+#define NUM_CONTROLLERS listCount(ide_controllers)
+#define ATA_DEVICE(x, y, z) (ATA_CONTROLLER(x)->channels[y].devices[z])
+#define ATA_CHANNEL(x, y) (ATA_CONTROLLER(x)->channels[y])
 #define ATA_SECTORS(x) (x / 512)
 
 typedef enum ata_commands {
@@ -106,7 +109,7 @@ typedef struct ide_controller_t{
 	ide_channel_t channels[2];
 } ide_controller_t;
 
-extern ide_controller_t *ide_controllers;
+extern struct list *ide_controllers;
 void ata_register_devices();
 uint16_t ata_scan_ide_controllers();
 
@@ -115,7 +118,7 @@ void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled);
 bool ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector device);
 
 void ata_detect_devices(uint8_t controller);
-#define CUR_ATA ide_controllers[controller].channels[i].devices[j]
+#define CUR_ATA ATA_CONTROLLER(controller)->channels[i].devices[j]
 
 void ata_detect_atapi(uint8_t controller, uint8_t channel);
 uint32_t ata_detect_extract_dword(char *identify_buf, ata_identify_offsets offset);

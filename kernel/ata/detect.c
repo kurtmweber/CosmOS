@@ -37,12 +37,12 @@ void ata_detect_devices(uint8_t controller){
 			
 			status = ata_register_read(controller, i, ATA_REGISTER_STATUS);
 			if (!status){		// no device found
-				ide_controllers[controller].channels[i].devices[j].exists = false;
+				ATA_CONTROLLER(controller)->channels[i].devices[j].exists = false;
 				continue;
 			}
 			
 			// set the exists flag to true
-			ide_controllers[controller].channels[i].devices[j].exists = true;
+			ATA_CONTROLLER(controller)->channels[i].devices[j].exists = true;
 			
 			// status isn't 0, so the device exists--so we poll until ready
 			while (1){

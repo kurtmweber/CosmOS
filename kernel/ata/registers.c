@@ -16,10 +16,10 @@ uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_regis
 	uint16_t port_base = 0, port_ctrl = 0;
 	uint16_t out_port_base = 0, out_offset = 0;
 	
-	port_prim_base = ide_controllers[controller].channels[IDE_CHANNEL_PRIMARY].base_io;
-	port_prim_ctrl = ide_controllers[controller].channels[IDE_CHANNEL_PRIMARY].base_io_ctrl;
-	port_sec_base = ide_controllers[controller].channels[IDE_CHANNEL_SECONDARY].base_io;
-	port_sec_ctrl = ide_controllers[controller].channels[IDE_CHANNEL_SECONDARY].base_io_ctrl;
+	port_prim_base = ATA_CONTROLLER(controller)->channels[IDE_CHANNEL_PRIMARY].base_io;
+	port_prim_ctrl = ATA_CONTROLLER(controller)->channels[IDE_CHANNEL_PRIMARY].base_io_ctrl;
+	port_sec_base = ATA_CONTROLLER(controller)->channels[IDE_CHANNEL_SECONDARY].base_io;
+	port_sec_ctrl = ATA_CONTROLLER(controller)->channels[IDE_CHANNEL_SECONDARY].base_io_ctrl;
 	
 	if (channel == IDE_CHANNEL_PRIMARY){
 		port_base = port_prim_base;
