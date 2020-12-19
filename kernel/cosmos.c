@@ -16,15 +16,15 @@
 #include <mm/mm.h>
 #include <pci/pci.h>
 #include <string/string.h>
-#include <rtc/rtc.h>
+#include <dev/rtc/rtc.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
-#include <serial/serial.h>
-#include <usb/usb.h>
+#include <dev/serial/serial.h>
+#include <dev/usb/usb.h>
 #include <devicemgr/devicemgr.h>
 #include <network/network.h>
 #include <bridge/bridge.h>
-#include <display/display.h>
+#include <dev/display/display.h>
 #include <collection/kernelstring/kernelstring.h>
 
 void stringtest();

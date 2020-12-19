@@ -7,7 +7,7 @@
 
 #include <asm/asm.h>
 #include <console/console.h>
-#include <rtc/rtc.h>
+#include <dev/rtc/rtc.h>
 
 volatile uint64_t sleep_countdown;
 

@@ -26,14 +26,14 @@ $(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir 
 	keyboard/keyboard.a \
 	panic/panic.a \
 	string/string.a \
-	serial/serial.a \
+	dev/serial/serial.a \
 	devicemgr/devicemgr.a \
-	usb/usb.a \
+	dev/usb/usb.a \
 	network/network.a \
 	bridge/bridge.a \
 	collection/collection.a \
-	display/display.a \
-	rtc/rtc.o \
+	dev/display/display.a \
+	dev/rtc/rtc.o \
 	pic/pic.o \
 	ethernet/ethernet.o
 
@@ -74,13 +74,13 @@ video-dir:
 	cd video && $(MAKE)
 
 serial-dir:
-	cd serial && $(MAKE)
+	cd dev/serial && $(MAKE)
 
 devicemgr-dir:
 	cd devicemgr && $(MAKE)
 
 usb-dir:
-	cd usb && $(MAKE)
+	cd dev/usb && $(MAKE)
 
 network-dir:
 	cd network && $(MAKE)
@@ -92,10 +92,10 @@ collection-dir:
 	cd collection && $(MAKE)
 
 display-dir:
-	cd display && $(MAKE)
+	cd dev/display && $(MAKE)
 
 rtc-dir:
-	cd rtc && $(MAKE)
+	cd dev/rtc && $(MAKE)
 
 pic-dir:
 	cd pic && $(MAKE)
@@ -139,7 +139,7 @@ string-dir-clean:
 	cd string && $(MAKE) clean
 
 serial-dir-clean:
-	cd serial && $(MAKE) clean
+	cd dev/serial && $(MAKE) clean
 
 timing-dir-clean:
 	cd timing && $(MAKE) clean
@@ -151,7 +151,7 @@ devicemgr-dir-clean:
 	cd devicemgr && $(MAKE) clean
 
 usb-dir-clean:
-	cd usb && $(MAKE) clean
+	cd dev/usb && $(MAKE) clean
 
 network-dir-clean:
 	cd network && $(MAKE) clean
@@ -163,10 +163,10 @@ collection-dir-clean:
 	cd collection && $(MAKE) clean
 
 display-dir-clean:
-	cd display && $(MAKE) clean
+	cd dev/display && $(MAKE) clean
 
 rtc-dir-clean:
-	cd rtc && $(MAKE) clean
+	cd dev/rtc && $(MAKE) clean
 
 pic-dir-clean:
 	cd pic && $(MAKE) clean

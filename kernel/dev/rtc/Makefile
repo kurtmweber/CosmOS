@@ -1,6 +1,6 @@
-include ../../mk/build.mk
+include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I.. -DRTC_SLEEP
+EXTRA_CFLAGS= -I../.. -DRTC_SLEEP
 ARFLAGS=-crs
 
 all: rtc.a

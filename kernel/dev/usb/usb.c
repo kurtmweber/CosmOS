@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <display/display.h>
+#include <dev/usb/usb.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <pci/pci.h>
@@ -15,26 +15,26 @@
 /*
 * perform device instance specific init here
 */
-void deviceInitDisplay(struct device* dev){
+void deviceInitUSB(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
 }
 
-void DisplaySearchCB(struct pci_device* dev){
+void USBSearchCB(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = newDevice();
-    deviceinstance->init =  &deviceInitDisplay;
+    deviceinstance->init =  &deviceInitUSB;
     deviceinstance->deviceData = dev;
-    deviceinstance->devicetype = VGA;
-    deviceSetDescription(deviceinstance, "QEMU/Bochs VBE Framebuffer");
+    deviceinstance->devicetype = USB;
+    deviceSetDescription(deviceinstance, "USB");
     registerDevice(deviceinstance);
 }
 
 /**
-* find all Display devices and register them
+* find all USB devices and register them
 */
-void display_register_devices() {
-    pci_search_devicetype(PCI_CLASS_DISPLAY,PCI_DISPLAY_SUBCLASS_VGA, &DisplaySearchCB);
+void usb_register_devices() {
+    pci_search_devicetype(PCI_CLASS_SERIAL,PCI_SERIAL_SUBCLASS_USB, &USBSearchCB);
 }
