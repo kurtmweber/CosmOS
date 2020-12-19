@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
-#include <ata/ata.h>
+#include <dev/ata/ata.h>
 
 BYTE *ata_read(uint64_t start, uint64_t end, uint8_t controller, uint8_t channel, uint8_t device){
 	ata_select_device(controller, channel, device);

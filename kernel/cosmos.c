@@ -9,7 +9,7 @@
 #include <console/console.h>
 #include <console/drivers/drivers.h>
 #include <asm/asm.h>
-#include <ata/ata.h>
+#include <dev/ata/ata.h>
 #include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
 #include <dev/keyboard/keyboard.h>

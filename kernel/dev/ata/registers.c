@@ -7,7 +7,7 @@
 
 #include <types.h>
 #include <asm/asm.h>
-#include <ata/ata.h>
+#include <dev/ata/ata.h>
 #include <console/console.h>
 #include <panic/panic.h>
 

@@ -15,7 +15,7 @@ cosmos: $(KERNEL_ELF)
 $(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir mm-dir panic-dir pci-dir string-dir timing-dir video-dir serial-dir devicemgr-dir usb-dir network-dir bridge-dir collection-dir display-dir rtc-dir pic-dir ethernet-dir
 	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) \
 	cosmos.o \
-	ata/ata.a \
+	dev/ata/ata.a \
 	pci/pci.a \
 	console/console.a \
 	video/video.a \
@@ -44,7 +44,7 @@ asm-dir:
 	cd asm && $(MAKE)
 	
 ata-dir:
-	cd ata && $(MAKE)
+	cd dev/ata && $(MAKE)
 	
 console-dir:
 	cd console && $(MAKE)
@@ -115,7 +115,7 @@ asm-dir-clean:
 	cd asm && $(MAKE) clean
 	
 ata-dir-clean:
-	cd ata && $(MAKE) clean
+	cd dev/ata && $(MAKE) clean
 	
 console-dir-clean:
 	cd console && $(MAKE) clean

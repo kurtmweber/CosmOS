@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
-#include <ata/ata.h>
+#include <dev/ata/ata.h>
 #include <console/console.h>
 #include <timing/sleep.h>
 
