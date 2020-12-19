@@ -27,7 +27,7 @@ void arrayDelete(struct array* arr){
         }
         kfree(arr);
     } else {
-        panic("null array\n");
+        panic("null array passed to arrayDelete\n");
     }
 }
 
@@ -35,7 +35,7 @@ uint16_t arraySize(struct array* arr){
     if (0!=arr){
         return arr->size;
     } else {
-        panic("null array\n");
+        panic("null array passed to arraySize\n");
     }   
 }
 
@@ -44,10 +44,10 @@ void  arraySet(struct array* arr, uint16_t position, void* value){
          if ((position>=0) &&(position< arr->size) ){
              arr->data[position]=value;
          } else {
-            panic("invalid array index\n");
+            panic("invalid array index passed to arraySet\n");
         }
      } else {
-        panic("null array\n");
+        panic("null array passed to arraySet\n");
     }  
 }
 
@@ -56,10 +56,10 @@ void* arrayGet(struct array* arr,  uint16_t position){
         if ((position>=0) &&(position< arr->size) ){
             return arr->data[position];
         } else {
-            panic("invalid array index\n");
+            panic("invalid array index passed to arrayGet\n");
         }  
     } else {
-        panic("null array\n");
+        panic("null array passed to arrayGet\n");
     }  
 }
 
@@ -72,7 +72,7 @@ void arrayResize(struct array* arr, uint16_t size) {
             panic ("arrays cannot be shrunk\n");
         }
     } else {
-        panic("null array\n");
+        panic("null array passed to arrayResize\n");
     }    
 }
 
@@ -80,7 +80,7 @@ void arrayIncrementallyResize(struct array* arr, uint16_t increment) {
     if (0!=arr){
         arrayResize(arr, increment+arr->size);
     } else {
-        panic("null array\n");
+        panic("null array passed to arrayIncrementallyResize\n");
     }   
 }
 
@@ -91,10 +91,10 @@ void arrayIterate(struct array* arr, arrayIterator iter) {
                 (*iter)(arr->data[i]);
             }
         } else {
-            panic("null array\n");
+            panic("null array passed to arrayIterate\n ");
         } 
     } else {
-        panic("null iterator passed\n");
+        panic("null iterator passed to arrayIterate\n");
     }  
 }
 
