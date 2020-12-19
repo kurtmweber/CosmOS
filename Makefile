@@ -16,7 +16,7 @@ subsystems: boot-subsystem kernel-subsystem
 boot-subsystem:
 	cd boot && $(MAKE)
 	
-kernel-subsystem: kernel/cosmos.bin
+kernel-subsystem:
 	cd kernel && $(MAKE)
 	
 clean: boot-clean kernel-clean
