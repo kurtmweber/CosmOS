@@ -98,7 +98,6 @@ void ata_register_devices() {
 }
 
 void ata_setup_irq(){
-	uint8_t in;
 	uint16_t i;
 	
 	// if this doesn't set the IRQ then this is a parallel IDE, but we don't need to know that
