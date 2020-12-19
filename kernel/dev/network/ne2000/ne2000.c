@@ -13,7 +13,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
-#include <pci/pci.h>
+#include <dev/pci/pci.h>
 #include <types.h>
 #include <asm/io.h>
 

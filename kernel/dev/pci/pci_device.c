@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <pci/pci_device.h>
+#include <dev/pci/pci_device.h>
 #include <types.h>
 #include <console/console.h>
 

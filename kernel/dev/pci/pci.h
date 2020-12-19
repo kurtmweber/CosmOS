@@ -8,8 +8,8 @@
 #ifndef _PCI_H
 #define _PCI_H
 
-#include <pci/devicetree.h>
-#include <pci/pci_device.h>
+#include <dev/pci/devicetree.h>
+#include <dev/pci/pci_device.h>
 
 #define PCI_CONFIG_ADDRESS_PORT	0xCF8
 #define PCI_CONFIG_DATA_PORT	0xCFC

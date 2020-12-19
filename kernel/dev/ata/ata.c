@@ -9,7 +9,7 @@
 #include <dev/ata/ata.h>
 #include <console/console.h>
 #include <mm/mm.h>
-#include <pci/pci.h>
+#include <dev/pci/pci.h>
 #include <devicemgr/devicemgr.h>
 
 struct list *ide_controllers;

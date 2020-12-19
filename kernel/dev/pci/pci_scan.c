@@ -8,8 +8,8 @@
 #include <types.h>
 #include <asm/asm.h>
 #include <console/console.h>
-#include <pci/pci.h>
-#include <pci/devicetree.h>
+#include <dev/pci/pci.h>
+#include <dev/pci/devicetree.h>
 
 void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_t function){
 		

@@ -10,7 +10,6 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
-#include <pci/pci.h>
 #include <dev/bridge/inteli440fx/inteli440fx.h>
 #include <dev/bridge/intel82371ab/intel82371ab.h>
 #include <dev/bridge/intelpciisa/intelpciisa.h>

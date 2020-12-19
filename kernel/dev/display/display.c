@@ -8,7 +8,7 @@
 #include <dev/display/display.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
-#include <pci/pci.h>
+#include <dev/pci/pci.h>
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
 

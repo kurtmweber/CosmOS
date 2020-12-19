@@ -14,7 +14,7 @@
 #include <interrupts/interrupt_router.h>
 #include <dev/keyboard/keyboard.h>
 #include <mm/mm.h>
-#include <pci/pci.h>
+#include <dev/pci/pci.h>
 #include <string/string.h>
 #include <dev/rtc/rtc.h>
 #include <video/video.h>

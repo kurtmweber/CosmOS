@@ -8,8 +8,8 @@
 #include <types.h>
 #include <console/console.h>
 #include <mm/mm.h>
-#include <pci/pci.h>
-#include <pci/devicetree.h>
+#include <dev/pci/pci.h>
+#include <dev/pci/devicetree.h>
 
 void pci_init(){	
 	kprintf("Initializing PCI bus...\n");

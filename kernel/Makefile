@@ -16,7 +16,7 @@ $(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir 
 	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) \
 	cosmos.o \
 	dev/ata/ata.a \
-	pci/pci.a \
+	dev/pci/pci.a \
 	console/console.a \
 	video/video.a \
 	interrupts/interrupts.a \
@@ -62,7 +62,7 @@ panic-dir:
 	cd panic && $(MAKE)
 	
 pci-dir:
-	cd pci && $(MAKE)
+	cd dev/pci && $(MAKE)
 
 string-dir:
 	cd string && $(MAKE)
@@ -133,7 +133,7 @@ panic-dir-clean:
 	cd panic && $(MAKE) clean
 
 pci-dir-clean:
-	cd pci && $(MAKE) clean
+	cd dev/pci && $(MAKE) clean
 
 string-dir-clean:
 	cd string && $(MAKE) clean

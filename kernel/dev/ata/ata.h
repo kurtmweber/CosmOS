@@ -8,7 +8,7 @@
 #ifndef _ATA_H
 #define _ATA_H
 
-#include <pci/pci_device.h>
+#include <dev/pci/pci_device.h>
 #include <collection/list/list.h>
 
 #define IDE_CHANNEL_PRIMARY	0
