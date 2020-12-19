@@ -8,7 +8,7 @@
 * NE2000 support based on code from here https://github.com/matijaspanic/NE2000/blob/master/NE2000.c
 */
 
-#include <network/ne2000/ne2000.h>
+#include <dev/network/ne2000/ne2000.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>

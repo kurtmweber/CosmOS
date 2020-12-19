@@ -22,7 +22,7 @@
 #include <dev/serial/serial.h>
 #include <dev/usb/usb.h>
 #include <devicemgr/devicemgr.h>
-#include <network/network.h>
+#include <dev/network/network.h>
 #include <dev/bridge/bridge.h>
 #include <dev/display/display.h>
 #include <collection/kernelstring/kernelstring.h>

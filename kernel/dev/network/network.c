@@ -4,7 +4,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <network/network.h>
+#include <dev/network/network.h>
 
 void network_register_devices() {
     rtl8139_register_devices();
