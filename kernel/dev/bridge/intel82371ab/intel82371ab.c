@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <bridge/inteli440fx/inteli440fx.h>
+#include <dev/bridge/intel82371ab/intel82371ab.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
@@ -15,26 +15,26 @@
 /*
 * perform device instance specific init here
 */
-void deviceInitI440fx(struct device* dev){
+void deviceInit82371Bridge(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
 }
 
-void I440fxSearchCB(struct pci_device* dev){
+void Bridge82371SearchCB(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = newDevice();
-    deviceinstance->init =  &deviceInitI440fx;
+    deviceinstance->init =  &deviceInit82371Bridge;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = BRIDGE;
-    deviceSetDescription(deviceinstance, "Intel i440FX Chipset");
+    deviceSetDescription(deviceinstance, "Intel PIIX4/4E/4M Power Management Controller");
     registerDevice(deviceinstance);
 }
 
 /**
 * find all bridge devices and register them
 */
-void bridge_register_i440fx() {
-    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_HOST, &I440fxSearchCB);
+void bridge_register_82371() {
+    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_OTHER, &Bridge82371SearchCB);
 }

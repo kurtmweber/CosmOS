@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <bridge/intel82371ab/intel82371ab.h>
+#include <dev/bridge/intelpciisa/intelpciisa.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
@@ -15,26 +15,26 @@
 /*
 * perform device instance specific init here
 */
-void deviceInit82371Bridge(struct device* dev){
+void deviceInitpciisa(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
 }
 
-void Bridge82371SearchCB(struct pci_device* dev){
+void pciisaSearchCB(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = newDevice();
-    deviceinstance->init =  &deviceInit82371Bridge;
+    deviceinstance->init =  &deviceInitpciisa;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = BRIDGE;
-    deviceSetDescription(deviceinstance, "Intel PIIX4/4E/4M Power Management Controller");
+    deviceSetDescription(deviceinstance, "Intel PIIX3 PCI-to-ISA Bridge (Triton II)");
     registerDevice(deviceinstance);
 }
 
 /**
 * find all bridge devices and register them
 */
-void bridge_register_82371() {
-    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_OTHER, &Bridge82371SearchCB);
+void bridge_register_pciisa() {
+    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_ISA, &pciisaSearchCB);
 }

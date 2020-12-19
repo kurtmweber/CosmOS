@@ -5,15 +5,15 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <bridge/bridge.h>
+#include <dev/bridge/bridge.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <pci/pci.h>
-#include <bridge/inteli440fx/inteli440fx.h>
-#include <bridge/intel82371ab/intel82371ab.h>
-#include <bridge/intelpciisa/intelpciisa.h>
+#include <dev/bridge/inteli440fx/inteli440fx.h>
+#include <dev/bridge/intel82371ab/intel82371ab.h>
+#include <dev/bridge/intelpciisa/intelpciisa.h>
 
 /**
 * find all bridge devices and register them

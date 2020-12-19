@@ -1,6 +1,6 @@
-include ../../mk/build.mk
+include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I..
+EXTRA_CFLAGS= -I../..
 ARFLAGS=-crs
 
 all: bridge.a

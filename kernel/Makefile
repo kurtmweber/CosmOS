@@ -30,7 +30,7 @@ $(KERNEL_ELF): cosmos.o asm-dir ata-dir console-dir interrupts-dir keyboard-dir 
 	devicemgr/devicemgr.a \
 	dev/usb/usb.a \
 	network/network.a \
-	bridge/bridge.a \
+	dev/bridge/bridge.a \
 	collection/collection.a \
 	dev/display/display.a \
 	dev/rtc/rtc.o \
@@ -86,7 +86,7 @@ network-dir:
 	cd network && $(MAKE)
 
 bridge-dir:
-	cd bridge && $(MAKE)
+	cd dev/bridge && $(MAKE)
 
 collection-dir:
 	cd collection && $(MAKE)
@@ -157,7 +157,7 @@ network-dir-clean:
 	cd network && $(MAKE) clean
 
 bridge-dir-clean:
-	cd bridge && $(MAKE) clean
+	cd dev/bridge && $(MAKE) clean
 
 collection-dir-clean:
 	cd collection && $(MAKE) clean

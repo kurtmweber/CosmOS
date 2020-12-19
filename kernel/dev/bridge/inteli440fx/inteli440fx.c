@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <bridge/intelpciisa/intelpciisa.h>
+#include <dev/bridge/inteli440fx/inteli440fx.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
@@ -15,26 +15,26 @@
 /*
 * perform device instance specific init here
 */
-void deviceInitpciisa(struct device* dev){
+void deviceInitI440fx(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
 }
 
-void pciisaSearchCB(struct pci_device* dev){
+void I440fxSearchCB(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = newDevice();
-    deviceinstance->init =  &deviceInitpciisa;
+    deviceinstance->init =  &deviceInitI440fx;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = BRIDGE;
-    deviceSetDescription(deviceinstance, "Intel PIIX3 PCI-to-ISA Bridge (Triton II)");
+    deviceSetDescription(deviceinstance, "Intel i440FX Chipset");
     registerDevice(deviceinstance);
 }
 
 /**
 * find all bridge devices and register them
 */
-void bridge_register_pciisa() {
-    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_ISA, &pciisaSearchCB);
+void bridge_register_i440fx() {
+    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_HOST, &I440fxSearchCB);
 }
