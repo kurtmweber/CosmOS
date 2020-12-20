@@ -10,7 +10,6 @@
 
 #include <types.h>
 
-void sleep_update();
 void sleep_wait(uint64_t milliseconds);
 
 #endif

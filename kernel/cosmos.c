@@ -69,6 +69,8 @@ void CosmOS(){
 
 	asm_sti();
 
+	speaker_beep(2000,200);
+
 	mem_block *tmp;
 	tmp = usable_phys_blocks;
 
