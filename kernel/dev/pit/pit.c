@@ -9,6 +9,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
+#include <collection/list/list.h>
 
 #define PIT_IRQ           0x00
 
@@ -16,6 +17,8 @@
 #define PIT_PORT_1        0x41
 #define PIT_PORT_2        0x42
 #define PIT_PORT_COMMAND  0x43
+
+struct list* pitEvents;
 
 /*
 * perform device instance specific init here
@@ -25,6 +28,8 @@ void deviceInitPIT(struct device* dev){
 }
 
 void pit_register_devices(){
+    pitEvents = listNew();
+
     /*
 	* register device
 	*/
@@ -33,4 +38,8 @@ void pit_register_devices(){
 	deviceinstance->devicetype = PIT;
 	deviceinstance->init =  &deviceInitPIT;
 	registerDevice(deviceinstance);
+}
+
+void pit_subscribe(PITEvent pitEvent) {
+	listAdd(pitEvents, pitEvent);
 }
