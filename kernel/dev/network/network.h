@@ -10,6 +10,7 @@
 
 #include <dev/network/ne2000/ne2000.h>
 #include <dev/network/rtl8139/rtl8139.h>
+#include <dev/network/e1000/e1000.h>
 
 void network_register_devices();
 
