@@ -72,7 +72,7 @@ void CosmOS(){
 	asm_sti();
 
 	
-	speaker_beep(4000,100);
+//	speaker_beep(4000,100);
 
 	// show the tick count, since we can
 	kprintf("Ticks: %llu\n", pit_tickcount());

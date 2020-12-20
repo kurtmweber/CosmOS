@@ -5,13 +5,13 @@ ARFLAGS=-crs
 
 all: network.a
 
-network.a: ne2000.o rtl8139.o network.o e1000.o
+network.a: ne2000pci.o rtl8139.o network.o e1000.o
 	$(AR) $(ARFLAGS) $@ $^
 
 network.o: network.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
-ne2000.o: ne2000/ne2000.c
+ne2000pci.o: ne2000pci/ne2000pci.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
 rtl8139.o: rtl8139/rtl8139.c

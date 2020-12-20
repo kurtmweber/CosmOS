@@ -5,14 +5,14 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _NE2000_H
-#define _NE2000_H
+#ifndef _NE2000PCI_H
+#define _NE2000PCI_H
 
 #include <types.h>
 
-void ne2000_register_devices();
+void ne2000pci_register_devices();
 
-void ne2000_send(uint8_t *packet, uint16_t length);
-uint16_t ne2000_recieve(uint8_t *packet, uint16_t max_size);
+void ne2000pci_send(uint8_t *packet, uint16_t length);
+uint16_t ne2000pci_recieve(uint8_t *packet, uint16_t max_size);
 
 #endif

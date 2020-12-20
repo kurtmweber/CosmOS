@@ -8,7 +8,7 @@
 * NE2000 support based on code from here https://github.com/matijaspanic/NE2000/blob/master/NE2000.c
 */
 
-#include <dev/network/ne2000/ne2000.h>
+#include <dev/network/ne2000pci/ne2000pci.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
@@ -123,28 +123,28 @@
 */
 uint8_t net_mac[6];
 
-void ne2000_init(void);
+void ne2000pci_init(void);
 
-void ne2000_irq_handler(stackFrame *frame){
+void ne2000pci_irq_handler(stackFrame *frame){
 	kprintf("%");
 }
 /*
 * perform device instance specific init here
 */
-void NE200Init(struct device* dev){
+void NE200PCIInit(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    registerInterruptHandler(pci_dev->irq, &ne2000_irq_handler);
+    registerInterruptHandler(pci_dev->irq, &ne2000pci_irq_handler);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
     // do the init
-    ne2000_init();
+    ne2000pci_init();
 }
 
-void NE2000SearchCB(struct pci_device* dev){
+void NE2000PCISearchCB(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = newDevice();
-    deviceinstance->init =  &NE200Init;
+    deviceinstance->init =  &NE200PCIInit;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = ETHERNET;
     deviceSetDescription(deviceinstance, "NE2000");
@@ -154,11 +154,11 @@ void NE2000SearchCB(struct pci_device* dev){
 /**
 * find all NE2000 devices and register them
 */
-void ne2000_register_devices() {
-    pci_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000SearchCB);
+void ne2000pci_register_devices() {
+    pci_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000PCISearchCB);
 }
 
-void ne2000_init() {	
+void ne2000pci_init() {	
 	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));     // set page 0, turn off DMA, tell the NIC to stop
 	sleep_wait(10);					                // wait for traffic to complete
 	asm_out_b(DCR, DCR_BYTEDMA|DCR_NOLPBK|DCR_ARM); // we want byte-wide DMA, automatic DMA transfers, 
