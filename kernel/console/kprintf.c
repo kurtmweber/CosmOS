@@ -5,18 +5,19 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#ifndef _KPRINTF_C
+#define _KPRINTF_C
+
 #include <types.h>
 #include <console/console.h>
 #include <console/drivers/drivers.h>
 #include <string/string.h>
 
-#define KPRINTF_LEN 1024
-
 uint64_t kprintf(const char *s, ...){
 	__builtin_va_list ap;
 	uint64_t idx_in = 0, idx_out = 0;
 	uint64_t chars_written = 0;
-	char out_str[KPRINTF_LEN] = { '\0' };
+	char out_str[64] = { '\0' };
 	
 	__builtin_va_start(ap, s);
 	
@@ -44,11 +45,11 @@ uint64_t kprintf(const char *s, ...){
 		
 		idx_in++;
 		
-		if (idx_out == KPRINTF_LEN){
-			out_str[KPRINTF_LEN] = '\0';
+		if (idx_out == 63){
+			out_str[63] = '\0';
 			console_write(out_str);
 			idx_out = 0;
-			chars_written += KPRINTF_LEN;
+			chars_written += 63;
 		}
 	}
 	
@@ -72,11 +73,11 @@ uint64_t kprintf_do_uint(uint8_t width, char *output, uint8_t base, __builtin_va
 		case 16:
 		case 32:
 			conv_uint = __builtin_va_arg(ap, unsigned int);
-			uitoa3(conv_uint, output, KPRINTF_LEN, base);
+			uitoa3(conv_uint, output, 66, base);
 			break;
 		case 64:
 			conv_ulong = __builtin_va_arg(ap, unsigned long);
-			uitoa3(conv_ulong, output, KPRINTF_LEN, base);
+			uitoa3(conv_ulong, output, 66, base);
 			break;
 	}
 	console_write(output);
@@ -88,7 +89,7 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
 	// 64 binary digits (for an unsigned 64-bit type) or 63 and a +/- sign (if signed)
 	// possible "b" sigil at end
 	// NULL terminator
-	char output[KPRINTF_LEN];
+	char output[66];
 	uint64_t i = 0;
 	uint64_t consumed = 0;
 	uint8_t width = 0;
@@ -149,3 +150,5 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
 		}
 	}
 }
+
+#endif

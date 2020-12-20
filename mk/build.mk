@@ -27,7 +27,6 @@ include $(SELF_DIR)/gcc-linux.mk
 endif
 
 # qemu
-# qemu
 QEMU=qemu-system-x86_64
 QEMUARGS=                                                 \
   -accel tcg,thread=single                                \
@@ -42,3 +41,6 @@ QEMUARGS=                                                 \
   -machine pcspk-audiodev=audio0                          \
   -audiodev coreaudio,id=audio0                           \
   -monitor telnet::45454,server,nowait                    \
+
+# to list devices:
+# qemu-system-x86_64 -device ?
