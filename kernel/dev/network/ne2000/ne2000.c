@@ -126,6 +126,7 @@ uint8_t net_mac[6];
 void ne2000_init(void);
 
 void ne2000_irq_handler(stackFrame *frame){
+	kprintf("%");
 }
 /*
 * perform device instance specific init here
@@ -193,7 +194,7 @@ void ne2000_init() {
 	asm_out_b(DCR, DCR_FIFO8|DCR_NOLPBK|DCR_ARM);
 	asm_out_b(CR, (CR_NODMA|CR_START));
 	asm_out_b(ISR,0xFF); 			                // clear all interrupts
-	asm_out_b(IMR, 0x00);			                // no interupts
+	asm_out_b(IMR, 0xFF);			                // all interupts
 	asm_out_b(TCR, 0x00);			                // normal operation
 
 	asm_out_b(CURR, RXSTART);                       // init curr pointer
@@ -223,7 +224,7 @@ void ne2000_send(uint8_t *packet, uint16_t length) {
 	for (i = 0; i < length; i++) {
 		asm_out_b(RDMA, packet[i]);
 	}
-	
+
 	// Wait for something here?
 	asm_out_b(CR, CR_PAGE0 | CR_START | CR_NODMA);
 	asm_out_b(TBCR0, length & 0xff);
