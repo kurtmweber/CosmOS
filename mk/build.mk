@@ -5,7 +5,8 @@
 # See the file "LICENSE" in the source distribution for details  *
 # ****************************************************************
 
-NASM=nasm -O0 -f bin
+NASM=nasm
+NASMARGS=-O0
 RM=rm -f
 MAKE=make
 DD=dd
