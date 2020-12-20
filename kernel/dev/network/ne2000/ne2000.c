@@ -171,22 +171,30 @@ void ne2000_init() {
 	asm_out_b(BNRY, RXSTART);			            // set Boundary Register	
 	asm_out_b(PSTOP, RXSTOP);			            // set the stop page address of the receive buffer ring 
 		
+	// set mac
+	net_mac[0]=52;
+	net_mac[1]=54;
+	net_mac[2]=98;
+	net_mac[3]=76;
+	net_mac[4]=54;
+	net_mac[5]=32;
+		
+	kprintf("MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac[0],net_mac[1],net_mac[2],net_mac[3],net_mac[4],net_mac[5]);
+
+	asm_out_b(CR, (CR_PAGE1|CR_NODMA|CR_STOP));
+	asm_out_b(PAR0,net_mac[0]);
+	asm_out_b(PAR1,net_mac[1]);
+	asm_out_b(PAR2,net_mac[2]);
+	asm_out_b(PAR3,net_mac[3]);
+	asm_out_b(PAR4,net_mac[4]);
+	asm_out_b(PAR5,net_mac[5]);
+	
 	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));
 	asm_out_b(DCR, DCR_FIFO8|DCR_NOLPBK|DCR_ARM);
 	asm_out_b(CR, (CR_NODMA|CR_START));
 	asm_out_b(ISR,0xFF); 			                // clear all interrupts
 	asm_out_b(IMR, 0x00);			                // no interupts
 	asm_out_b(TCR, 0x00);			                // normal operation
-
-	// read mac
-	net_mac[0]=asm_in_b(PAR0);
-	net_mac[1]=asm_in_b(PAR1);
-	net_mac[2]=asm_in_b(PAR2);
-	net_mac[3]=asm_in_b(PAR3);
-	net_mac[4]=asm_in_b(PAR4);
-	net_mac[5]=asm_in_b(PAR5);
-
-	kprintf("MAC  %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac[0],net_mac[1],net_mac[2],net_mac[3],net_mac[4],net_mac[5]);
 
 	asm_out_b(CURR, RXSTART);                       // init curr pointer
 	asm_out_b(CR, (CR_NODMA|CR_START));	            // start the NIC
@@ -195,13 +203,17 @@ void ne2000_init() {
 void ne2000_send(uint8_t *packet, uint16_t length) {
 	uint16_t i;
 	
-	if (length < 0x40) { length = 0x40; }
+	if (length < 0x40) { 
+		length = 0x40; 
+	}
+
 	i = 0;
 	// If there is still a packet in transmission, wait until it's done!
 	while ((i < 50000) && (asm_in_b(CR) & CR_TRANSMIT)) {
 		i++;
 	}
-	/* Abort any currently running "DMA" operations */
+
+	// Abort any currently running "DMA" operations
 	asm_out_b(CR, CR_PAGE0 | CR_START | CR_NODMA);
 	asm_out_b(RBCR0, length & 0xff);
 	asm_out_b(RBCR1, length >> 8);
@@ -211,6 +223,7 @@ void ne2000_send(uint8_t *packet, uint16_t length) {
 	for (i = 0; i < length; i++) {
 		asm_out_b(RDMA, packet[i]);
 	}
+	
 	// Wait for something here?
 	asm_out_b(CR, CR_PAGE0 | CR_START | CR_NODMA);
 	asm_out_b(TBCR0, length & 0xff);
