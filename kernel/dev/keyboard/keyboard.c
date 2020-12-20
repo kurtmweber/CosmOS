@@ -14,6 +14,7 @@
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/devicemgr.h>
 #include <dev/keyboard/abstract_keyboard.h>
+#include <dev/keyboard/keyboardbuffer.h>
 
 #define KB_IRQ_NUMBER 1
 
@@ -29,8 +30,6 @@
 #define KBD_TEST_FAILED_2	0xFD
 #define KBD_TEST_PASSED		0xAA
 
-key_action_t keyboard_buffer[256];
-uint8_t keyboard_buffer_start, keyboard_buffer_end;
 
 void keyboard_add_command_queue(uint8_t command){
 }
