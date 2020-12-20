@@ -44,7 +44,7 @@ void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
 	// add to list
 	listAdd(pci_devices, dev);
 
-	kprintf("PCI device found at %#hX:%#hX:%#hX, class %#hX.%#hX, IRQ %hu\n", dev->bus, dev->device, dev->function, dev->pci_class, dev->pci_subclass, dev->irq);
+	kprintf("PCI device found at %#hX:%#hX:%#hX, class %#hX.%#hX, vendor %#hX, device %#hX, IRQ %hu\n", dev->bus, dev->device, dev->function, dev->pci_class, dev->pci_subclass, dev->vendor_id, dev->device_id, dev->irq);
 	
 	if ((pci_header_read_type(bus, device, function) & 0x80) == 0x80){
 		for (i = 1; i < 8; i++){
