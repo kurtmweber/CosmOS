@@ -23,6 +23,7 @@
 #include <dev/floppy/floppy.h>
 #include <dev/speaker/speaker.h>
 #include <dev/pit/pit.h>
+#include <dev/sb16/sb16.h>
 
 void dev_devicemgr_register_devices();
 

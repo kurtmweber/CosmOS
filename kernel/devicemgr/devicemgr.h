@@ -28,7 +28,8 @@ typedef enum deviceType {
 	MOUSE=			0x0A,
 	FLOPPY=			0x0B,
 	SPEAKER=		0x0C,
-	PIT=			0x0D
+	PIT=			0x0D,
+	DSP=			0x0C
 } deviceType;
 
 typedef struct device {

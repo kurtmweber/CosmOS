@@ -4,7 +4,7 @@ EXTRA_CFLAGS= -I..
 
 all: devs.a 
 
-devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir display-dir rtc-dir pic-dir mouse-dir floppy-dir speaker-dir pit-dir
+devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir display-dir rtc-dir pic-dir mouse-dir floppy-dir speaker-dir pit-dir sb16-dir
 	$(AR) $(ARFLAGS)T $@ \
 	ata/ata.a \
 	pci/pci.a \
@@ -20,6 +20,7 @@ devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridg
 	floppy/floppy.a \
 	speaker/speaker.o \
 	pit/pit.o \
+	sb16/sb16.o \
 	dev.o
 	
 dev.o: dev.c
@@ -67,7 +68,10 @@ speaker-dir:
 pit-dir:
 	cd pit && $(MAKE)
 
-clean: ata-dir-clean keyboard-dir-clean pci-dir-clean serial-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean mouse-dir-clean floppy-dir-clean speaker-dir-clean pit-dir-clean
+sb16-dir:
+	cd sb16 && $(MAKE)
+
+clean: ata-dir-clean keyboard-dir-clean pci-dir-clean serial-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean mouse-dir-clean floppy-dir-clean speaker-dir-clean pit-dir-clean sb16-dir-clean
 	$(RM) devs.a
 	$(RM) dev.o
 
@@ -112,3 +116,7 @@ speaker-dir-clean:
 
 pit-dir-clean:
 	cd pit && $(MAKE) clean
+
+sb16-dir-clean:
+	cd sb16 && $(MAKE) clean
+
