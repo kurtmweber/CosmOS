@@ -10,7 +10,7 @@
 
 #include <types.h>
 
-void pit_register_devices();
+void pit_devicemgr_register_devices();
 
 typedef void (*PITEvent)();
 

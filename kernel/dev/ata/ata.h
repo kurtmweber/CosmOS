@@ -65,7 +65,7 @@ typedef enum ata_registers {
 	ATA_REGISTER_LBA_0,
 	ATA_REGISTER_LBA_1,
 	ATA_REGISTER_LBA_2,
-	ATA_REGISTER_DEVICE_SELECT,
+	ATA_devicemgr_register_device_SELECT,
 	ATA_REGISTER_COMMAND,	// write-only
 	ATA_REGISTER_STATUS,	// read-only
 	ATA_REGISTER_SECTOR_COUNT_1,
@@ -74,7 +74,7 @@ typedef enum ata_registers {
 	ATA_REGISTER_LBA_5,
 	ATA_REGISTER_CONTROL,
 	ATA_REGISTER_ALT_STATUS,
-	ATA_REGISTER_DEVICE_ADDRESS
+	ATA_devicemgr_register_device_ADDRESS
 } ata_registers;
 
 typedef enum ata_status {
@@ -110,7 +110,7 @@ typedef struct ide_controller_t{
 } ide_controller_t;
 
 extern struct list *ide_controllers;
-void ata_register_devices();
+void ata_devicemgr_register_devices();
 uint16_t ata_scan_ide_controllers();
 
 bool ata_channel_ready(uint8_t controller, uint8_t channel);

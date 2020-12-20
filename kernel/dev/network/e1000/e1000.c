@@ -29,16 +29,16 @@ void E1000SearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = new_device();
+    struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &E1000Init;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = ETHERNET;
-    device_set_description(deviceinstance, "E1000 NIC");
-    register_device(deviceinstance);
+    devicemgr_set_device_description(deviceinstance, "E1000 NIC");
+    devicemgr_register_device(deviceinstance);
 }
 
 /**
 */
-void e1000_register_devices() {
-    pci_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x8086,0x100E, &E1000SearchCB);
+void e1000_devicemgr_register_devices() {
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x8086,0x100E, &E1000SearchCB);
 }

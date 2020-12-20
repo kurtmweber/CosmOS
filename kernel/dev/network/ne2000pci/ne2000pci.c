@@ -143,19 +143,19 @@ void NE2000PCISearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = new_device();
+    struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &NE200PCIInit;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = ETHERNET;
-    device_set_description(deviceinstance, "NE2000 PCI");
-    register_device(deviceinstance);
+    devicemgr_set_device_description(deviceinstance, "NE2000 PCI");
+    devicemgr_register_device(deviceinstance);
 }
 
 /**
 * find all NE2000 devices and register them
 */
-void ne2000pci_register_devices() {
-    pci_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000PCISearchCB);
+void ne2000pci_devicemgr_register_devices() {
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000PCISearchCB);
 }
 
 void ne2000pci_init() {	

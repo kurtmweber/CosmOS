@@ -10,7 +10,7 @@
 
 #include <types.h>
 
-void ne2000isa_register_devices();
+void ne2000isa_devicemgr_register_devices();
 
 void ne2000isa_send(uint8_t *packet, uint16_t length);
 uint16_t ne2000isa_recieve(uint8_t *packet, uint16_t max_size);

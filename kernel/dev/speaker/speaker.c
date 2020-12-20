@@ -22,15 +22,15 @@ void deviceInitSpeaker(struct device* dev){
     kprintf("Init %s\n" ,dev->description);
 }
 
-void speaker_register_devices(){
+void speaker_devicemgr_register_devices(){
     /*
 	* register device
 	*/
-	struct device* deviceinstance = new_device();
-	device_set_description(deviceinstance, "Speaker");
+	struct device* deviceinstance = devicemgr_new_device();
+	devicemgr_set_device_description(deviceinstance, "Speaker");
 	deviceinstance->devicetype = SPEAKER;
 	deviceinstance->init =  &deviceInitSpeaker;
-	register_device(deviceinstance);
+	devicemgr_register_device(deviceinstance);
 }
 
 void play_sound(uint32_t frequency) {

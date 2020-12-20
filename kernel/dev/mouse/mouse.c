@@ -141,13 +141,13 @@ void deviceInitMouse(struct device* dev){
 /**
 * find all PS/2 mouse devices and register them
 */
-void mouse_register_devices() {
+void mouse_devicemgr_register_devices() {
     /*
 	* register device
 	*/
-	struct device* deviceinstance = new_device();
+	struct device* deviceinstance = devicemgr_new_device();
 	deviceinstance->init =  &deviceInitMouse;
 	deviceinstance->devicetype = MOUSE;
-	device_set_description(deviceinstance, "PS2 Mouse");
-	register_device(deviceinstance);
+	devicemgr_set_device_description(deviceinstance, "PS2 Mouse");
+	devicemgr_register_device(deviceinstance);
 }

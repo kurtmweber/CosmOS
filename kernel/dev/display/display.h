@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void display_register_devices();
+void display_devicemgr_register_devices();
 
 #endif

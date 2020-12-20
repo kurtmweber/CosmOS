@@ -143,15 +143,15 @@ void NE200ISAInit(struct device* dev){
 /**
 * find all NE2000 devices and register them
 */
-void ne2000isa_register_devices() {
+void ne2000isa_devicemgr_register_devices() {
     /*
     * register device
     */
-    struct device* deviceinstance = new_device();
+    struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &NE200ISAInit;
     deviceinstance->devicetype = ETHERNET;
-    device_set_description(deviceinstance, "NE2000 ISA");
-    register_device(deviceinstance);}
+    devicemgr_set_device_description(deviceinstance, "NE2000 ISA");
+    devicemgr_register_device(deviceinstance);}
 
 void ne2000isa_init() {	
 	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));     // set page 0, turn off DMA, tell the NIC to stop

@@ -47,16 +47,16 @@ void deviceInitPIC(struct device* dev){
 	asm_out_b(PIC_SECONDARY_DATA, PIC_MODE_8086);
 }
 
-void pic_register_devices(){
+void pic_devicemgr_register_devices(){
 
     /*
 	* register device
 	*/
-	struct device* deviceinstance = new_device();
-	device_set_description(deviceinstance, "8259 PIC");
+	struct device* deviceinstance = devicemgr_new_device();
+	devicemgr_set_device_description(deviceinstance, "8259 PIC");
 	deviceinstance->devicetype = PIC;
 	deviceinstance->init =  &deviceInitPIC;
-	register_device(deviceinstance);
+	devicemgr_register_device(deviceinstance);
 
 	return;
 }

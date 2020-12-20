@@ -56,18 +56,18 @@ void CosmOS(){
 	* init the device registry
 	*/
 	kprintf("Initializing Device Registry...\n");
-	device_registry_init();
+	devicemgr_init();
 
 	/*
 	* Register devices
 	*/
-	dev_register_devices();
+	dev_devicemgr_register_devices();
 
 	/*
 	* init all devices
 	*/
-	init_devices();
-	kprintf("There are %llu devices\n", device_count());
+	devicemgr_init_devices();
+	kprintf("There are %llu devices\n", devicemgr_device_count());
 
 	asm_sti();
 

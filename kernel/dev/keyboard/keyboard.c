@@ -179,18 +179,18 @@ void deviceInitKeyboard(struct device* dev){
 /**
 * find all keyboard devices and register them
 */
-void keyboard_register_devices(){
+void keyboard_devicemgr_register_devices(){
 	keyboard_buffer_start = 0;
 	keyboard_buffer_end = 0;
 
 	/*
 	* register device
 	*/
-	struct device* deviceinstance = new_device();
+	struct device* deviceinstance = devicemgr_new_device();
 	deviceinstance->init =  &deviceInitKeyboard;
 	deviceinstance->devicetype = KEYBOARD;
-	device_set_description(deviceinstance, "Keyboard");
-	register_device(deviceinstance);
+	devicemgr_set_device_description(deviceinstance, "Keyboard");
+	devicemgr_register_device(deviceinstance);
 }
 
 

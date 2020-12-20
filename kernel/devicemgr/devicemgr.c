@@ -14,11 +14,11 @@
 
 struct list* devices;
 
-void device_registry_init() {
+void devicemgr_init() {
     devices = list_new();    
 }
 
-void register_device(struct device* dev) {
+void devicemgr_register_device(struct device* dev) {
     if (0==dev){
         panic("Attempt to register null device\n");
     }
@@ -36,11 +36,11 @@ void register_device(struct device* dev) {
     list_add(devices, dev);
 }
 
-uint16_t device_count() {
+uint16_t devicemgr_device_count() {
     return list_count(devices);
 }
 
-struct device* get_device(uint16_t idx){
+struct device* devicemgr_get_device(uint16_t idx){
     if ((idx>0) && (idx<list_count(devices))) {
         return list_get(devices, idx);
     } else {
@@ -57,12 +57,12 @@ void deviceInitIterator(void* value) {
     }
 }
 
-void init_devices(){
+void devicemgr_init_devices(){
     kprintf("Initializing Devices\n");
     list_iterate(devices, &deviceInitIterator);
 }
 
-struct device* new_device() {
+struct device* devicemgr_new_device() {
     struct device* ret= (struct device*) kmalloc(sizeof(struct device));
     ret->description=0;
     ret->init=0;
@@ -71,7 +71,7 @@ struct device* new_device() {
     return ret;
 }
 
-void device_set_description(struct device* dev, int8_t* description) {
+void devicemgr_set_device_description(struct device* dev, int8_t* description) {
     if ((0!=description) && (0!=dev)){
         uint32_t size = strlen(description);
         if (0!=dev->description){
@@ -80,14 +80,14 @@ void device_set_description(struct device* dev, int8_t* description) {
         dev->description = kmalloc(size+1);
         strcpy(dev->description, description);
     } else {
-        panic("Invalid device or description passed to device_set_description\n");
+        panic("Invalid device or description passed to devicemgr_set_device_description\n");
     }
 }
 
 /*
 * search for devices by type
 */
-void search_device(enum deviceType devicetype, deviceSearchCallback cb) {
+void devicemgr_search_device(enum deviceType devicetype, deviceSearchCallback cb) {
     if (0!=cb){
         for (uint16_t i=0; i<list_count(devices);i++){
             struct device* dev = (struct device*) list_get(devices, i);
@@ -100,7 +100,7 @@ void search_device(enum deviceType devicetype, deviceSearchCallback cb) {
             }
         }
     } else {
-        panic("Invalid function pointer passed to device_set_description\n");
+        panic("Invalid function pointer passed to devicemgr_set_device_description\n");
     }
 }
 

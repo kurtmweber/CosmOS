@@ -7,24 +7,24 @@ the CosmOS device manager at `/devicemgr/devicemgr.h` contains a database of phs
 
 # Registration
 
-* Call the "register" function for each device type. For example `network_register_devices()` registers the network devices.
+* Call the "register" function for each device type. For example `network_devicemgr_register_devices()` registers the network devices.
 
 * The device type register function for the type calls register functions for each driver. For example
 
 ```
-void network_register_devices() {
-    rtl8139_register_devices();
-    ne2000_register_devices();
+void network_devicemgr_register_devices() {
+    rtl8139_devicemgr_register_devices();
+    ne2000_devicemgr_register_devices();
 }
 ```
 
-Each device driver's register function finds all instance of the specific device type, and calls `void register_device(struct device* dev);` to register each instance.
+Each device driver's register function finds all instance of the specific device type, and calls `void devicemgr_register_device(struct device* dev);` to register each instance.
 
 Device's are on the PCI bus can use the PCI search functions to find device instances
 
 ```
-void pci_search_device(pci_class,pci_subclass, vendor_id, device_id, pcideviceSearchCallback cb);
-void pci_search_devicetype(pci_class,pci_subclass, pcideviceSearchCallback cb);
+void pci_devicemgr_search_device(pci_class,pci_subclass, vendor_id, device_id, pcideviceSearchCallback cb);
+void pci_devicemgr_search_devicetype(pci_class,pci_subclass, pcideviceSearchCallback cb);
 ```
 
 The callback function `typedef void (*deviceSearchCallback)(struct pci_device* dev);` is called once for each device instance found in the PCI database.

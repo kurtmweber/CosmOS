@@ -6,9 +6,9 @@
 
 #include <dev/network/network.h>
 
-void network_register_devices() {
-    rtl8139_register_devices();
-    ne2000pci_register_devices();
-    ne2000isa_register_devices();
-    e1000_register_devices();
+void network_devicemgr_register_devices() {
+    rtl8139_devicemgr_register_devices();
+    ne2000pci_devicemgr_register_devices();
+    ne2000isa_devicemgr_register_devices();
+    e1000_devicemgr_register_devices();
 }

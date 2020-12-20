@@ -24,17 +24,17 @@ void USBSearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = new_device();
+    struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInitUSB;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = USB;
-    device_set_description(deviceinstance, "USB");
-    register_device(deviceinstance);
+    devicemgr_set_device_description(deviceinstance, "USB");
+    devicemgr_register_device(deviceinstance);
 }
 
 /**
 * find all USB devices and register them
 */
-void usb_register_devices() {
-    pci_search_devicetype(PCI_CLASS_SERIAL,PCI_SERIAL_SUBCLASS_USB, &USBSearchCB);
+void usb_devicemgr_register_devices() {
+    pci_devicemgr_search_devicetype(PCI_CLASS_SERIAL,PCI_SERIAL_SUBCLASS_USB, &USBSearchCB);
 }

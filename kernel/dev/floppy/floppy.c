@@ -67,13 +67,13 @@ void deviceInitFloppy(struct device* dev){
 /**
 * find all floppy devices and register them
 */
-void floppy_register_devices() {
+void floppy_devicemgr_register_devices() {
     /*
 	* register device
 	*/
-	struct device* deviceinstance = new_device();
+	struct device* deviceinstance = devicemgr_new_device();
 	deviceinstance->init =  &deviceInitFloppy;
 	deviceinstance->devicetype = FLOPPY;
-	device_set_description(deviceinstance, "Floppy");
-	register_device(deviceinstance);
+	devicemgr_set_device_description(deviceinstance, "Floppy");
+	devicemgr_register_device(deviceinstance);
 }

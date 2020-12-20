@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void rtl8139_register_devices();
+void rtl8139_devicemgr_register_devices();
 
 #endif

@@ -53,7 +53,7 @@ bool ata_select_device(uint8_t controller, uint8_t channel, ata_drive_selector d
 	
 	ATA_CHANNEL(controller, channel).selected_device = device;
 	
-	ata_register_write(controller, channel, ATA_REGISTER_DEVICE_SELECT, 0xA0 | (device << 4));
+	ata_register_write(controller, channel, ATA_devicemgr_register_device_SELECT, 0xA0 | (device << 4));
 	sleep_wait(1);
 	
 	return true;

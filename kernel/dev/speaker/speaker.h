@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void speaker_register_devices();
+void speaker_devicemgr_register_devices();
 void speaker_beep(uint32_t frequency, uint32_t milliseconds);
 #endif

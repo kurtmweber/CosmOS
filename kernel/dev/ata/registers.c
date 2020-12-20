@@ -38,7 +38,7 @@ uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_regis
 		case ATA_REGISTER_LBA_0:
 		case ATA_REGISTER_LBA_1:
 		case ATA_REGISTER_LBA_2:
-		case ATA_REGISTER_DEVICE_SELECT:
+		case ATA_devicemgr_register_device_SELECT:
 		case ATA_REGISTER_COMMAND:
 		case ATA_REGISTER_STATUS:
 		case ATA_REGISTER_SECTOR_COUNT_1:
@@ -49,7 +49,7 @@ uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_regis
 			break;
 		case ATA_REGISTER_CONTROL:
 		case ATA_REGISTER_ALT_STATUS:
-		case ATA_REGISTER_DEVICE_ADDRESS:
+		case ATA_devicemgr_register_device_ADDRESS:
 			out_port_base = port_ctrl;
 			break;
 		default:
@@ -82,7 +82,7 @@ uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_regis
 		case ATA_REGISTER_LBA_5:
 			out_offset = 5;
 			break;
-		case ATA_REGISTER_DEVICE_SELECT:
+		case ATA_devicemgr_register_device_SELECT:
 			out_offset = 6;
 			break;
 		case ATA_REGISTER_COMMAND:
@@ -93,7 +93,7 @@ uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_regis
 		case ATA_REGISTER_ALT_STATUS:
 			out_offset = 0;
 			break;
-		case ATA_REGISTER_DEVICE_ADDRESS:
+		case ATA_devicemgr_register_device_ADDRESS:
 			out_offset = 1;
 			break;
 		default:

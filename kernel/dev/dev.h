@@ -24,6 +24,6 @@
 #include <dev/speaker/speaker.h>
 #include <dev/pit/pit.h>
 
-void dev_register_devices();
+void dev_devicemgr_register_devices();
 
 #endif

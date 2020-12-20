@@ -97,48 +97,48 @@ void deviceInitCOM1(struct device* dev){
 /**
 * find all RS232 devices and register them
 */
-void serial_register_devices() {
+void serial_devicemgr_register_devices() {
     // COM1
     struct comport* cp1 = kmalloc(sizeof(struct comport));
     cp1->irq=SERIAL_IRQ2;
     cp1->address=COM1_ADDRESS;
-    struct device* deviceinstance1 = new_device();
+    struct device* deviceinstance1 = devicemgr_new_device();
     deviceinstance1->init =  &deviceInitCOM1;
     deviceinstance1->deviceData = cp1;
     deviceinstance1->devicetype = SERIAL;
-    device_set_description(deviceinstance1, "RS232");
-    register_device(deviceinstance1);
+    devicemgr_set_device_description(deviceinstance1, "RS232");
+    devicemgr_register_device(deviceinstance1);
 
     // COM2
     struct comport* cp2 = kmalloc(sizeof(struct comport));
     cp2->irq=SERIAL_IRQ1;
     cp2->address=COM2_ADDRESS;
-    struct device* deviceinstance2 = new_device();
+    struct device* deviceinstance2 = devicemgr_new_device();
     deviceinstance2->init =  &deviceInitCOM1;
     deviceinstance2->deviceData = cp2;
     deviceinstance2->devicetype = SERIAL;
-    device_set_description(deviceinstance2, "RS232");
-    register_device(deviceinstance2);
+    devicemgr_set_device_description(deviceinstance2, "RS232");
+    devicemgr_register_device(deviceinstance2);
 
     // COM3
     struct comport* cp3 = kmalloc(sizeof(struct comport));
     cp3->irq=SERIAL_IRQ2;
     cp3->address=COM3_ADDRESS;
-    struct device* deviceinstance3 = new_device();
+    struct device* deviceinstance3 = devicemgr_new_device();
     deviceinstance3->init =  &deviceInitCOM1;
     deviceinstance3->deviceData = cp3;
     deviceinstance3->devicetype = SERIAL;
-    device_set_description(deviceinstance3, "RS232");
-    register_device(deviceinstance3);
+    devicemgr_set_device_description(deviceinstance3, "RS232");
+    devicemgr_register_device(deviceinstance3);
 
     // COM4
     struct comport* cp4 = kmalloc(sizeof(struct comport));
     cp4->irq=SERIAL_IRQ1;
     cp4->address=COM4_ADDRESS;
-    struct device* deviceinstance4 = new_device();
+    struct device* deviceinstance4 = devicemgr_new_device();
     deviceinstance4->init =  &deviceInitCOM1;
     deviceinstance4->deviceData = cp4;
     deviceinstance4->devicetype = SERIAL;
-    device_set_description(deviceinstance4, "RS232");
-    register_device(deviceinstance4);
+    devicemgr_set_device_description(deviceinstance4, "RS232");
+    devicemgr_register_device(deviceinstance4);
 }

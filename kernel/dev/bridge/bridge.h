@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void bridge_register_devices();
+void bridge_devicemgr_register_devices();
 
 #endif

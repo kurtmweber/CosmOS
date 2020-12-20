@@ -24,17 +24,17 @@ void pciisaSearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = new_device();
+    struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInitpciisa;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = BRIDGE;
-    device_set_description(deviceinstance, "Intel PIIX3 PCI-to-ISA Bridge (Triton II)");
-    register_device(deviceinstance);
+    devicemgr_set_device_description(deviceinstance, "Intel PIIX3 PCI-to-ISA Bridge (Triton II)");
+    devicemgr_register_device(deviceinstance);
 }
 
 /**
 * find all bridge devices and register them
 */
 void bridge_register_pciisa() {
-    pci_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_ISA, &pciisaSearchCB);
+    pci_devicemgr_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_ISA, &pciisaSearchCB);
 }

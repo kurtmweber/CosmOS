@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void e1000_register_devices();
+void e1000_devicemgr_register_devices();
 
 #endif

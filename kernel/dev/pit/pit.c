@@ -49,17 +49,17 @@ void deviceInitPIT(struct device* dev){
     register_interrupt_handler(PIT_IRQ, &pit_handle_irq);
 }
 
-void pit_register_devices(){
+void pit_devicemgr_register_devices(){
     pitEvents = list_new();
 
     /*
 	* register device
 	*/
-	struct device* deviceinstance = new_device();
-	device_set_description(deviceinstance, "8253/8254 PIT");
+	struct device* deviceinstance = devicemgr_new_device();
+	devicemgr_set_device_description(deviceinstance, "8253/8254 PIT");
 	deviceinstance->devicetype = PIT;
 	deviceinstance->init =  &deviceInitPIT;
-	register_device(deviceinstance);
+	devicemgr_register_device(deviceinstance);
 }
 
 void pit_subscribe(PITEvent pitEvent) {

@@ -10,7 +10,7 @@
 
 #include <types.h>
 
-void mouse_register_devices();
+void mouse_devicemgr_register_devices();
 
 extern struct mouse_status* current_mouse_status;
 

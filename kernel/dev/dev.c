@@ -11,7 +11,7 @@
 /*
 * Note that devices are initialized in the order they are registered.
 */
-void dev_register_devices(){
+void dev_devicemgr_register_devices(){
 	/*
 	* scan the PCI bus first
 	*/
@@ -19,20 +19,20 @@ void dev_register_devices(){
 	/*
 	* set up the pic next
 	*/
-	pic_register_devices();
+	pic_devicemgr_register_devices();
 	/* 
 	* and then RS232
 	*/
-	serial_register_devices();
-	rtc_register_devices();
-	keyboard_register_devices();
-	display_register_devices();
-	usb_register_devices();
-	network_register_devices();
-	bridge_register_devices();
-	ata_register_devices(); 
-    mouse_register_devices();
-    floppy_register_devices();
-    speaker_register_devices();
-    pit_register_devices();
+	serial_devicemgr_register_devices();
+	rtc_devicemgr_register_devices();
+	keyboard_devicemgr_register_devices();
+	display_devicemgr_register_devices();
+	usb_devicemgr_register_devices();
+	network_devicemgr_register_devices();
+	bridge_devicemgr_register_devices();
+	ata_devicemgr_register_devices(); 
+    mouse_devicemgr_register_devices();
+    floppy_devicemgr_register_devices();
+    speaker_devicemgr_register_devices();
+    pit_devicemgr_register_devices();
 }
