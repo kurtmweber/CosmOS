@@ -21,7 +21,7 @@
  */
 typedef struct list {
 	struct array* arr;
-    uint16_t count;
+    uint32_t count;
 } list_t;
 
 /*
