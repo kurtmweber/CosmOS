@@ -48,7 +48,7 @@ uint64_t kprintf(const char *s, ...){
 			out_str[KPRINTF_LEN] = '\0';
 			console_write(out_str);
 			idx_out = 0;
-			chars_written += 63;
+			chars_written += KPRINTF_LEN;
 		}
 	}
 	
@@ -72,11 +72,11 @@ uint64_t kprintf_do_uint(uint8_t width, char *output, uint8_t base, __builtin_va
 		case 16:
 		case 32:
 			conv_uint = __builtin_va_arg(ap, unsigned int);
-			uitoa3(conv_uint, output, 66, base);
+			uitoa3(conv_uint, output, KPRINTF_LEN, base);
 			break;
 		case 64:
 			conv_ulong = __builtin_va_arg(ap, unsigned long);
-			uitoa3(conv_ulong, output, 66, base);
+			uitoa3(conv_ulong, output, KPRINTF_LEN, base);
 			break;
 	}
 	console_write(output);
@@ -88,7 +88,7 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
 	// 64 binary digits (for an unsigned 64-bit type) or 63 and a +/- sign (if signed)
 	// possible "b" sigil at end
 	// NULL terminator
-	char output[66];
+	char output[KPRINTF_LEN];
 	uint64_t i = 0;
 	uint64_t consumed = 0;
 	uint8_t width = 0;
