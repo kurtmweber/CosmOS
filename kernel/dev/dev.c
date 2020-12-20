@@ -24,6 +24,13 @@ void dev_devicemgr_register_devices(){
 	* and then RS232
 	*/
 	serial_devicemgr_register_devices();
+	/*
+	* and the then the PIT
+	*/
+	pit_devicemgr_register_devices();
+	/*
+	* rest of this stuff can really happen in any order
+	*/
 	rtc_devicemgr_register_devices();
 	keyboard_devicemgr_register_devices();
 	display_devicemgr_register_devices();
@@ -34,5 +41,4 @@ void dev_devicemgr_register_devices(){
     mouse_devicemgr_register_devices();
     floppy_devicemgr_register_devices();
     speaker_devicemgr_register_devices();
-    pit_devicemgr_register_devices();
 }

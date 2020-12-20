@@ -134,7 +134,7 @@ void ne2000isa_irq_handler(stackFrame *frame){
 * perform device instance specific init here
 */
 void NE200ISAInit(struct device* dev){
-    register_interrupt_handler(NE2000ISA_IRQ, &ne2000isa_irq_handler);
+    interrupt_router_register_interrupt_handler(NE2000ISA_IRQ, &ne2000isa_irq_handler);
     kprintf("Init %s at IRQ %llu\n",dev->description, NE2000ISA_IRQ);
     // do the init
     ne2000isa_init();

@@ -30,7 +30,7 @@ void interrupt_router_init() {
 /**
 * register an interrupt handler callback
 */
-void register_interrupt_handler(int interruptNumber, interruptHandler func){
+void interrupt_router_register_interrupt_handler(int interruptNumber, interruptHandler func){
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
         struct list* lst = array_get(interruptHandlers,interruptNumber);
         if (0==lst){
@@ -45,7 +45,7 @@ void register_interrupt_handler(int interruptNumber, interruptHandler func){
 /**
 * route an interrupt
 */
-void route_interrupt(int interruptNumber, stackFrame *frame){
+void interrupt_router_route_interrupt(int interruptNumber, stackFrame *frame){
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
         struct list* lst = array_get(interruptHandlers,interruptNumber);
         if (0==lst){

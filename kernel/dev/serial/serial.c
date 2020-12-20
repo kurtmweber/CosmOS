@@ -90,7 +90,7 @@ void init_port(uint64_t portAddress) {
 void deviceInitCOM1(struct device* dev){
     struct comport* cp = (struct comport*) dev->deviceData;
     kprintf("Init %s at IRQ %llu\n",dev->description, cp->irq);
-    register_interrupt_handler(cp->irq, &serial_irq_handler);
+    interrupt_router_register_interrupt_handler(cp->irq, &serial_irq_handler);
     init_port(cp->address);
 }
 
