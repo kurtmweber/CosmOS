@@ -26,11 +26,11 @@ void speaker_register_devices(){
     /*
 	* register device
 	*/
-	struct device* deviceinstance = newDevice();
-	deviceSetDescription(deviceinstance, "Speaker");
+	struct device* deviceinstance = new_device();
+	device_set_description(deviceinstance, "Speaker");
 	deviceinstance->devicetype = SPEAKER;
 	deviceinstance->init =  &deviceInitSpeaker;
-	registerDevice(deviceinstance);
+	register_device(deviceinstance);
 }
 
 void play_sound(uint32_t frequency) {

@@ -11,7 +11,7 @@
 
 struct ringbuffer* ringbufferNew(uint16_t size) {
     struct ringbuffer* ret = (struct ringbuffer*) kmalloc(sizeof(ringbuffer_t));
-    ret->arr = arrayNew(size);
+    ret->arr = array_new(size);
     ret->head=0;
     ret->tail=0;
 }
@@ -21,7 +21,7 @@ void ringbufferDelete(struct ringbuffer* rb) {
         if (0==rb->arr){
             panic("why is the underlying array null?!");
         }
-        arrayDelete(rb->arr);
+        array_delete(rb->arr);
         kfree(rb);
     } else {
         panic("null ringbuffer\n");
@@ -34,10 +34,10 @@ void ringbufferAdd(struct ringbuffer* rb, uint64_t value) {
             panic("why is the underlying array null?!");
         }
         if (rb->head > rb->tail) {
-            arraySet(rb->arr, rb->head, (void*) value);
+            array_set(rb->arr, rb->head, (void*) value);
             rb->head=rb->head+1;
             // wrap
-            if (rb->head == arraySize(rb->arr)){
+            if (rb->head == array_size(rb->arr)){
                 rb->head=0;
             }
         }  else {
@@ -54,10 +54,10 @@ uint64_t ringbufferRemove(struct ringbuffer* rb) {
             panic("why is the underlying array null?!");
         }
         if (rb->head > rb->tail) {
-            uint64_t ret = (uint64_t) arrayGet(rb->arr, rb->tail);      
+            uint64_t ret = (uint64_t) array_get(rb->arr, rb->tail);      
             rb->tail=rb->tail+1;
             // wrap
-            if (rb->tail == arraySize(rb->arr)){
+            if (rb->tail == array_size(rb->arr)){
                 rb->tail=0;
             }
         } else {

@@ -29,12 +29,12 @@ void E1000SearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = newDevice();
+    struct device* deviceinstance = new_device();
     deviceinstance->init =  &E1000Init;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = ETHERNET;
-    deviceSetDescription(deviceinstance, "E1000 NIC");
-    registerDevice(deviceinstance);
+    device_set_description(deviceinstance, "E1000 NIC");
+    register_device(deviceinstance);
 }
 
 /**

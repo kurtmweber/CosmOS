@@ -42,7 +42,7 @@ void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
 	fill_pci_device(dev , bus, device, function);
 
 	// add to list
-	listAdd(pci_devices, dev);
+	list_add(pci_devices, dev);
 
 	kprintf("PCI device found at %#hX:%#hX:%#hX, class %#hX.%#hX, vendor %#hX, device %#hX, IRQ %hu\n", dev->bus, dev->device, dev->function, dev->pci_class, dev->pci_subclass, dev->vendor_id, dev->device_id, dev->irq);
 	

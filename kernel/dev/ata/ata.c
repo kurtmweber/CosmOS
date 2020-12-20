@@ -79,21 +79,21 @@ void ATASearchCB(struct pci_device* dev){
 	*/
 	struct ide_controller_t* ide_controller = kmalloc(sizeof(struct ide_controller_t));
 	ide_controller->pci = dev;
-	listAdd(ide_controllers, ide_controller);
+	list_add(ide_controllers, ide_controller);
 
     /*
     * register device
     */
-    struct device* deviceinstance = newDevice();
+    struct device* deviceinstance = new_device();
     deviceinstance->init =  &deviceInitATA;
     deviceinstance->deviceData = dev;
 	deviceinstance->devicetype=ATA;
-	deviceSetDescription(deviceinstance, "ATA");
-    registerDevice(deviceinstance);
+	device_set_description(deviceinstance, "ATA");
+    register_device(deviceinstance);
 }
 
 void ata_register_devices() {
-	ide_controllers = listNew();
+	ide_controllers = list_new();
 	pci_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ATASearchCB);	
 }
 

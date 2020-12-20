@@ -147,11 +147,11 @@ void ne2000isa_register_devices() {
     /*
     * register device
     */
-    struct device* deviceinstance = newDevice();
+    struct device* deviceinstance = new_device();
     deviceinstance->init =  &NE200ISAInit;
     deviceinstance->devicetype = ETHERNET;
-    deviceSetDescription(deviceinstance, "NE2000 ISA");
-    registerDevice(deviceinstance);}
+    device_set_description(deviceinstance, "NE2000 ISA");
+    register_device(deviceinstance);}
 
 void ne2000isa_init() {	
 	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));     // set page 0, turn off DMA, tell the NIC to stop

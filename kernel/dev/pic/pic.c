@@ -52,11 +52,11 @@ void pic_register_devices(){
     /*
 	* register device
 	*/
-	struct device* deviceinstance = newDevice();
-	deviceSetDescription(deviceinstance, "8259 PIC");
+	struct device* deviceinstance = new_device();
+	device_set_description(deviceinstance, "8259 PIC");
 	deviceinstance->devicetype = PIC;
 	deviceinstance->init =  &deviceInitPIC;
-	registerDevice(deviceinstance);
+	register_device(deviceinstance);
 
 	return;
 }

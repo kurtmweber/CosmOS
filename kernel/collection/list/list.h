@@ -29,23 +29,23 @@ typedef struct list {
 */
 typedef void (*listIterator)(void* value);
 
-struct list* listNew();
-void listDelete(struct list* lst);
+struct list* list_new();
+void list_delete(struct list* lst);
 /*
 * number items in the list
 */
-uint32_t listCount(struct list* lst);
+uint32_t list_count(struct list* lst);
 /*
 * size of the underlying array
 */
-uint32_t listSize(struct list* lst);
+uint32_t list_size(struct list* lst);
 
 /*
 * returns zero-based index of added item
 */
-uint32_t listAdd(struct list* lst, void* value);
-void  listSet(struct list* lst, uint32_t position, void* value);
-void* listGet(struct list* lst, uint32_t position);
-void listIterate(struct list* lst, listIterator iter);
+uint32_t list_add(struct list* lst, void* value);
+void  list_set(struct list* lst, uint32_t position, void* value);
+void* list_get(struct list* lst, uint32_t position);
+void list_iterate(struct list* lst, listIterator iter);
 
 #endif

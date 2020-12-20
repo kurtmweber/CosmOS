@@ -16,8 +16,8 @@
 
 #define IDE_SERIAL_IRQ		14
 
-#define ATA_CONTROLLER(x) ((struct ide_controller_t*)listGet(ide_controllers, x))
-#define NUM_CONTROLLERS listCount(ide_controllers)
+#define ATA_CONTROLLER(x) ((struct ide_controller_t*)list_get(ide_controllers, x))
+#define NUM_CONTROLLERS list_count(ide_controllers)
 #define ATA_DEVICE(x, y, z) (ATA_CONTROLLER(x)->channels[y].devices[z])
 #define ATA_CHANNEL(x, y) (ATA_CONTROLLER(x)->channels[y])
 #define ATA_SECTORS(x) (x / 512)

@@ -29,12 +29,12 @@ void RTL8139SearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = newDevice();
+    struct device* deviceinstance = new_device();
     deviceinstance->init =  &RTL8139Init;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = ETHERNET;
-    deviceSetDescription(deviceinstance, "Realtek RTL8139 10/100 NIC");
-    registerDevice(deviceinstance);
+    device_set_description(deviceinstance, "Realtek RTL8139 10/100 NIC");
+    register_device(deviceinstance);
 }
 
 /**

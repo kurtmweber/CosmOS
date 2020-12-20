@@ -24,12 +24,12 @@ void DisplaySearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = newDevice();
+    struct device* deviceinstance = new_device();
     deviceinstance->init =  &deviceInitDisplay;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = VGA;
-    deviceSetDescription(deviceinstance, "QEMU/Bochs VBE Framebuffer");
-    registerDevice(deviceinstance);
+    device_set_description(deviceinstance, "QEMU/Bochs VBE Framebuffer");
+    register_device(deviceinstance);
 }
 
 /**

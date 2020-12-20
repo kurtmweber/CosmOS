@@ -24,12 +24,12 @@ void I440fxSearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = newDevice();
+    struct device* deviceinstance = new_device();
     deviceinstance->init =  &deviceInitI440fx;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = BRIDGE;
-    deviceSetDescription(deviceinstance, "Intel i440FX PCI Bridge");
-    registerDevice(deviceinstance);
+    device_set_description(deviceinstance, "Intel i440FX PCI Bridge");
+    register_device(deviceinstance);
 }
 
 /**

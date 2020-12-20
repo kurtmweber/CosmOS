@@ -143,12 +143,12 @@ void NE2000PCISearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = newDevice();
+    struct device* deviceinstance = new_device();
     deviceinstance->init =  &NE200PCIInit;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = ETHERNET;
-    deviceSetDescription(deviceinstance, "NE2000 PCI");
-    registerDevice(deviceinstance);
+    device_set_description(deviceinstance, "NE2000 PCI");
+    register_device(deviceinstance);
 }
 
 /**

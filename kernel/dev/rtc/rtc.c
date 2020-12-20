@@ -36,8 +36,8 @@ typedef enum rtc_registers{
 } rtc_registers;
 
 void rtc_handle_irq(stackFrame *frame) {	
-	for (uint32_t i=0; i< listCount(rtcEvents);i++){
-		RTCEvent rtcEvent = (RTCEvent) listGet(rtcEvents,i);
+	for (uint32_t i=0; i< list_count(rtcEvents);i++){
+		RTCEvent rtcEvent = (RTCEvent) list_get(rtcEvents,i);
 		(*rtcEvent)();
 	}
 
@@ -56,7 +56,7 @@ void deviceInitRTC(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu\n",dev->description, RTC_IRQ_NUMBER);
 	
-	rtcEvents = listNew();
+	rtcEvents = list_new();
 	asm_cli();
 
 	asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x8B);		 // select register B, and disable NMI
@@ -76,11 +76,11 @@ void rtc_register_devices(){
 	/*
 	* register device
 	*/
-	struct device* deviceinstance = newDevice();
-	deviceSetDescription(deviceinstance, "RTC");
+	struct device* deviceinstance = new_device();
+	device_set_description(deviceinstance, "RTC");
 	deviceinstance->devicetype = RTC;
 	deviceinstance->init =  &deviceInitRTC;
-	registerDevice(deviceinstance);
+	register_device(deviceinstance);
 }
 
 
@@ -132,7 +132,7 @@ rtc_time_t rtc_time(){
 }
 
 void rtc_subscribe(RTCEvent rtcEvent) {
-	listAdd(rtcEvents, rtcEvent);
+	list_add(rtcEvents, rtcEvent);
 }
 
 

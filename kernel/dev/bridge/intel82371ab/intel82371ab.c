@@ -24,12 +24,12 @@ void Bridge82371SearchCB(struct pci_device* dev){
     /*
     * register device
     */
-    struct device* deviceinstance = newDevice();
+    struct device* deviceinstance = new_device();
     deviceinstance->init =  &deviceInit82371Bridge;
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = BRIDGE;
-    deviceSetDescription(deviceinstance, "Intel PIIX4/4E/4M Power Management Controller");
-    registerDevice(deviceinstance);
+    device_set_description(deviceinstance, "Intel PIIX4/4E/4M Power Management Controller");
+    register_device(deviceinstance);
 }
 
 /**

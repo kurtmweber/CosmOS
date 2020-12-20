@@ -18,7 +18,7 @@ void network_register_devices() {
 }
 ```
 
-Each device driver's register function finds all instance of the specific device type, and calls `void registerDevice(struct device* dev);` to register each instance.
+Each device driver's register function finds all instance of the specific device type, and calls `void register_device(struct device* dev);` to register each instance.
 
 Device's are on the PCI bus can use the PCI search functions to find device instances
 

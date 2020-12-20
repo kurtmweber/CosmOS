@@ -40,25 +40,25 @@ typedef struct device {
 } device_t;
 
 // new device, allocated on the kernel heap
-struct device* newDevice();
+struct device* new_device();
 
 // register a device
-void registerDevice(struct device* dev); 
+void register_device(struct device* dev); 
 
 // init the device registry
 void device_registry_init();
 
 // count of device instances
-uint16_t deviceCount();
+uint16_t device_count();
 
 // get a device instance
-struct device* getDevice(uint16_t idx);
+struct device* get_device(uint16_t idx);
 
 // init all devices
-void initDevices();
+void init_devices();
 
 // set description
-void deviceSetDescription(struct device* dev, int8_t* description);
+void device_set_description(struct device* dev, int8_t* description);
 
 // search for device by device type
 typedef void (*deviceSearchCallback)(struct device* dev);

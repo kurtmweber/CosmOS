@@ -50,20 +50,20 @@ void deviceInitPIT(struct device* dev){
 }
 
 void pit_register_devices(){
-    pitEvents = listNew();
+    pitEvents = list_new();
 
     /*
 	* register device
 	*/
-	struct device* deviceinstance = newDevice();
-	deviceSetDescription(deviceinstance, "8253/8254 PIT");
+	struct device* deviceinstance = new_device();
+	device_set_description(deviceinstance, "8253/8254 PIT");
 	deviceinstance->devicetype = PIT;
 	deviceinstance->init =  &deviceInitPIT;
-	registerDevice(deviceinstance);
+	register_device(deviceinstance);
 }
 
 void pit_subscribe(PITEvent pitEvent) {
-	listAdd(pitEvents, pitEvent);
+	list_add(pitEvents, pitEvent);
 }
 
 uint64_t pit_tickcount() {

@@ -71,9 +71,9 @@ void floppy_register_devices() {
     /*
 	* register device
 	*/
-	struct device* deviceinstance = newDevice();
+	struct device* deviceinstance = new_device();
 	deviceinstance->init =  &deviceInitFloppy;
 	deviceinstance->devicetype = FLOPPY;
-	deviceSetDescription(deviceinstance, "Floppy");
-	registerDevice(deviceinstance);
+	device_set_description(deviceinstance, "Floppy");
+	register_device(deviceinstance);
 }

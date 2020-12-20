@@ -12,64 +12,64 @@
 #define EXPAND_SIZE 64
 #define START_SIZE 16
 
-struct list* listNew() {
+struct list* list_new() {
     struct list* ret = (struct list*) kmalloc(sizeof(list_t));
-    ret->arr = arrayNew(START_SIZE);
+    ret->arr = array_new(START_SIZE);
     ret->count=0;
 }
 
-void listDelete(struct list* lst) {
+void list_delete(struct list* lst) {
     if (0!=lst){
         if (0==lst->arr){
             panic("why is the underlying array null?!");
         }
-        arrayDelete(lst->arr);
+        array_delete(lst->arr);
         kfree(lst);
     } else {
-        panic("null list passed to listDelete\n");
+        panic("null list passed to list_delete\n");
     }
 }
 
-uint32_t listCount(struct list* lst) {
+uint32_t list_count(struct list* lst) {
      if (0!=lst){
         return lst->count;
     } else {
-        panic("null list passed to listCount\n");
+        panic("null list passed to list_count\n");
     }
 }
 
-uint32_t listSize(struct list* lst) {
+uint32_t list_size(struct list* lst) {
       if (0!=lst){
         return lst->arr->size;
     } else {
-        panic("null list passed to listSize\n");
+        panic("null list passed to list_size\n");
     }   
 }
 
-uint32_t listAdd(struct list* lst, void* value) {
+uint32_t list_add(struct list* lst, void* value) {
      if (0!=lst){
          // sanity check
          if (0==lst->arr){
             panic("why is the underlying array null?!");
          }
-         if (lst->count > arraySize(lst->arr)){
+         if (lst->count > array_size(lst->arr)){
              panic("oh no! what happened?!");
          }
 
          // expand the underlying array?
-         if (lst->count+1 == arraySize(lst->arr)){
-             arrayIncrementallyResize(lst->arr, EXPAND_SIZE);
+         if (lst->count+1 == array_size(lst->arr)){
+             array_incrementallyResize(lst->arr, EXPAND_SIZE);
          }
         // save the data
-        arraySet(lst->arr, lst->count, value);
+        array_set(lst->arr, lst->count, value);
         lst->count = lst->count+1;
         return lst->count-1;
     } else {
-        panic("null list passed to listAdd\n");
+        panic("null list passed to list_add\n");
     }
 }
 
-void  listSet(struct list* lst, uint32_t position, void* value) {
+void  list_set(struct list* lst, uint32_t position, void* value) {
      if (0!=lst){
          if (0==lst->arr){
             panic("why is the underlying array null?!");
@@ -77,14 +77,14 @@ void  listSet(struct list* lst, uint32_t position, void* value) {
          if ((position>=0) &&(position< lst->count) ){
              lst->arr->data[position]=value;
          } else {
-            panic("invalid list index passed to listSet\n");
+            panic("invalid list index passed to list_set\n");
         }
      } else {
-        panic("null list passed to listSet\n");
+        panic("null list passed to list_set\n");
     }  
 }
 
-void* listGet(struct list* lst, uint32_t position) {
+void* list_get(struct list* lst, uint32_t position) {
     if (0!=lst){
          if (0==lst->arr){
             panic("why is the underlying array null?!");
@@ -92,24 +92,24 @@ void* listGet(struct list* lst, uint32_t position) {
         if ((position>=0) &&(position< lst->count) ){
             return lst->arr->data[position];
         } else {
-            panic("invalid list index passed to listGet\n");
+            panic("invalid list index passed to list_get\n");
         }  
     } else {
-        panic("null list passed to listGet\n");
+        panic("null list passed to list_get\n");
     }  
 }
 
-void listIterate(struct list* lst, listIterator iter) {
+void list_iterate(struct list* lst, listIterator iter) {
     if (0!=iter){
         if (0!=lst){
             for (uint16_t i=0; i<lst->count;i++) {
                 (*iter)(lst->arr->data[i]);
             }
         } else {
-            panic("null list passed to listIterate\n");
+            panic("null list passed to list_iterate\n");
         }
     } else {
-        panic("null iterator passed to listIterate\n");
+        panic("null iterator passed to list_iterate\n");
     }
 }
 

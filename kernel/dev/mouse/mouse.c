@@ -145,9 +145,9 @@ void mouse_register_devices() {
     /*
 	* register device
 	*/
-	struct device* deviceinstance = newDevice();
+	struct device* deviceinstance = new_device();
 	deviceinstance->init =  &deviceInitMouse;
 	deviceinstance->devicetype = MOUSE;
-	deviceSetDescription(deviceinstance, "PS2 Mouse");
-	registerDevice(deviceinstance);
+	device_set_description(deviceinstance, "PS2 Mouse");
+	register_device(deviceinstance);
 }

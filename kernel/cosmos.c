@@ -66,8 +66,8 @@ void CosmOS(){
 	/*
 	* init all devices
 	*/
-	initDevices();
-	kprintf("There are %llu devices\n", deviceCount());
+	init_devices();
+	kprintf("There are %llu devices\n", device_count());
 
 	asm_sti();
 

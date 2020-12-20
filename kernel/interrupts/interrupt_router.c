@@ -21,9 +21,9 @@ struct array* interruptHandlers;
 * create the array of interrupts and then add a list for each entry
 */
 void interrupt_router_init() {
-    interruptHandlers = arrayNew(NUMBER_INTERRUPTS);
+    interruptHandlers = array_new(NUMBER_INTERRUPTS);
     for (int i=0; i<NUMBER_INTERRUPTS;i++){
-        arraySet(interruptHandlers,i, listNew());
+        array_set(interruptHandlers,i, list_new());
     }    
 }
 
@@ -32,11 +32,11 @@ void interrupt_router_init() {
 */
 void registerInterruptHandler(int interruptNumber, interruptHandler func){
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
-        struct list* lst = arrayGet(interruptHandlers,interruptNumber);
+        struct list* lst = array_get(interruptHandlers,interruptNumber);
         if (0==lst){
             panic("List should not be null");
         }
-        listAdd(lst, func);
+        list_add(lst, func);
     } else {
         panic("Invalid interrupt number");
     }
@@ -47,12 +47,12 @@ void registerInterruptHandler(int interruptNumber, interruptHandler func){
 */
 void routeInterrupt(int interruptNumber, stackFrame *frame){
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
-        struct list* lst = arrayGet(interruptHandlers,interruptNumber);
+        struct list* lst = array_get(interruptHandlers,interruptNumber);
         if (0==lst){
             panic("List should not be null");
         }
-        for (uint16_t i=0; i<listCount(lst);i++){
-            interruptHandler handler = (interruptHandler) listGet(lst,i);
+        for (uint16_t i=0; i<list_count(lst);i++){
+            interruptHandler handler = (interruptHandler) list_get(lst,i);
             if (0!=handler){
                 (*handler)(frame);
             } else {
