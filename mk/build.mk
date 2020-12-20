@@ -36,7 +36,7 @@ QEMUARGS=                                                 \
   -drive format=raw,file=hda.img                          \
   -smp 1                                                  \
   -usb                                                    \
-  -nic user,ipv6=off,model=ne2k_pci                       \
+  -nic user,ipv6=off,model=ne2k_isa,mac=52:54:98:76:54:32 \
   -serial stdio                                           \
   -machine pcspk-audiodev=audio0                          \
   -audiodev coreaudio,id=audio0                           \
