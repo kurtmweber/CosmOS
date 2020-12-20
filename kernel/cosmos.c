@@ -17,6 +17,7 @@
 #include <video/vga/vga.h>
 #include <collection/kernelstring/kernelstring.h>
 #include <dev/dev.h>
+#include <sleep/sleep.h>
 
 void stringtest();
 
@@ -69,7 +70,12 @@ void CosmOS(){
 
 	asm_sti();
 
-	speaker_beep(2000,200);
+	speaker_beep(2000,100);
+
+	// show the tick count, since we can
+	kprintf("Ticks: %llu\n", pit_tickcount());
+	sleep_wait(1000);
+	kprintf("Ticks: %llu\n", pit_tickcount());
 
 	mem_block *tmp;
 	tmp = usable_phys_blocks;
