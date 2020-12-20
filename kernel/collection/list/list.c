@@ -26,7 +26,7 @@ void listDelete(struct list* lst) {
         arrayDelete(lst->arr);
         kfree(lst);
     } else {
-        panic("null list\n");
+        panic("null list passed to listDelete\n");
     }
 }
 
@@ -34,7 +34,7 @@ uint16_t listCount(struct list* lst) {
      if (0!=lst){
         return lst->count;
     } else {
-        panic("null list\n");
+        panic("null list passed to listCount\n");
     }
 }
 
@@ -42,10 +42,9 @@ uint16_t listSize(struct list* lst) {
       if (0!=lst){
         return lst->arr->size;
     } else {
-        panic("null list\n");
+        panic("null list passed to listSize\n");
     }   
 }
-
 
 void listAdd(struct list* lst, void* value) {
      if (0!=lst){
@@ -64,7 +63,7 @@ void listAdd(struct list* lst, void* value) {
         arraySet(lst->arr, lst->count, value);
         lst->count = lst->count+1;
     } else {
-        panic("null list\n");
+        panic("null list passed to listAdd\n");
     }
 }
 
@@ -76,10 +75,10 @@ void  listSet(struct list* lst, uint16_t position, void* value) {
          if ((position>=0) &&(position< lst->count) ){
              lst->arr->data[position]=value;
          } else {
-            panic("invalid list index\n");
+            panic("invalid list index passed to listSet\n");
         }
      } else {
-        panic("null list\n");
+        panic("null list passed to listSet\n");
     }  
 }
 
@@ -91,10 +90,10 @@ void* listGet(struct list* lst, uint16_t position) {
         if ((position>=0) &&(position< lst->count) ){
             return lst->arr->data[position];
         } else {
-            panic("invalid list index\n");
+            panic("invalid list index passed to listGet\n");
         }  
     } else {
-        panic("null list\n");
+        panic("null list passed to listGet\n");
     }  
 }
 
@@ -105,10 +104,10 @@ void listIterate(struct list* lst, listIterator iter) {
                 (*iter)(lst->arr->data[i]);
             }
         } else {
-            panic("null list\n");
+            panic("null list passed to listIterate\n");
         }
     } else {
-        panic("null iterator passed\n");
+        panic("null iterator passed to listIterate\n");
     }
 }
 
