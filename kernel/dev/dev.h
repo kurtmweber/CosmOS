@@ -21,6 +21,7 @@
 #include <dev/display/display.h>
 #include <dev/mouse/mouse.h>
 #include <dev/floppy/floppy.h>
+#include <dev/speaker/speaker.h>
 
 void dev_register_devices();
 
