@@ -16,7 +16,8 @@
 #include <sleep/sleep.h>
 
 #define RTC_IRQ_NUMBER 		8
-#define RTC_PORT		 	0x40
+
+// https://wiki.osdev.org/RTC
 
 struct list* rtcEvents;
 
@@ -34,7 +35,7 @@ typedef enum rtc_registers{
 	RTC_REGISTER_CENTURY = 	0x32
 } rtc_registers;
 
-void rtc_handle_irq(stackFrame *frame) {
+void rtc_handle_irq(stackFrame *frame) {	
 	for (uint32_t i=0; i< listCount(rtcEvents);i++){
 		RTCEvent rtcEvent = (RTCEvent) listGet(rtcEvents,i);
 		(*rtcEvent)();
@@ -43,7 +44,6 @@ void rtc_handle_irq(stackFrame *frame) {
 #ifdef RTC_SLEEP
 	sleep_update();
 #endif
-	
 	// have to read status register C in order for irq to fire again
 	cmos_read_register(RTC_REGISTER_STATUS_C);
 	return;
@@ -58,7 +58,14 @@ void deviceInitRTC(struct device* dev){
 	
 	rtcEvents = listNew();
 	asm_cli();
-	cmos_write_register(RTC_REGISTER_STATUS_B, RTC_PORT);	// bit 6 turns on interrupt
+
+	asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x8B);		 // select register B, and disable NMI
+	int8_t prev=asm_in_b(CMOS_REGISTER_DATA_PORT);	 // read the current value of register B
+	asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x8B);		 // set the index again (a read will reset the index to register D)
+	asm_out_b(CMOS_REGISTER_DATA_PORT, prev | 0x40); // write the previous value ORed with 0x40. This turns on bit 6 of register B
+	
+	asm_sti();
+
 	registerInterruptHandler(RTC_IRQ_NUMBER, &rtc_handle_irq);
 }
 
