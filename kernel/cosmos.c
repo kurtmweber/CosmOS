@@ -18,6 +18,7 @@
 #include <collection/kernelstring/kernelstring.h>
 #include <dev/dev.h>
 #include <sleep/sleep.h>
+#include <notes.h>
 
 void stringtest();
 
@@ -70,7 +71,8 @@ void CosmOS(){
 
 	asm_sti();
 
-	speaker_beep(2000,100);
+	
+	speaker_beep(4000,100);
 
 	// show the tick count, since we can
 	kprintf("Ticks: %llu\n", pit_tickcount());
@@ -137,4 +139,24 @@ void stringtest() {
 	kprintf(stringGetCStr(string8));
 	kprintf("\n");
 }
-#undef P
+
+void BeethovensFifth() {
+	speaker_beep(NOTE_G5, 200);
+	sleep_wait(100);
+	speaker_beep(NOTE_G5, 200);
+	sleep_wait(100);
+	speaker_beep(NOTE_G5, 200);
+	sleep_wait(100);
+	speaker_beep(NOTE_DS5, 400);
+	sleep_wait(400);
+
+	speaker_beep(NOTE_F5, 200);
+	sleep_wait(100);
+	speaker_beep(NOTE_F5, 200);
+	sleep_wait(100);
+	speaker_beep(NOTE_F5, 200);
+	sleep_wait(100);
+	speaker_beep(NOTE_D5, 400);
+	sleep_wait(100);
+}
+
