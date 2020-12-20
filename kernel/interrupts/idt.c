@@ -35,7 +35,7 @@ void idt_init(){
 	idt_add_ISR(irq14, IRQ14);
 	idt_add_ISR(irq15, IRQ15);
 	
-	idtr.limit = (256 * sizeof(idtEntry)) - 1;
+	idtr.limit = (IDT_SIZE * sizeof(idtEntry)) - 1;
 	idtr.base = (uint64_t)&idt;
 	
 	asm volatile(
