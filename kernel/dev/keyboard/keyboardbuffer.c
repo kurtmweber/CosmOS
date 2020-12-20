@@ -11,6 +11,12 @@
 key_action_t keyboard_buffer[256];
 uint8_t keyboard_buffer_start, keyboard_buffer_end;
 
+void keyboard_buffer_init() {
+	keyboard_buffer_start = 0;
+	keyboard_buffer_end = 0;
+}
+
+
 void keyboard_buffer_add(key_action_t add){
 	keyboard_buffer[keyboard_buffer_end] = add;
 	

@@ -18,18 +18,17 @@
 
 #define KB_IRQ_NUMBER 1
 
-#define KBD_PORT		0x60
+#define KBD_PORT			0x60
 #define KBD_CTRL_PORT		0x64
 
-#define KBD_ACK			0xFA
+#define KBD_ACK				0xFA
 #define KBD_ECHO_RESPONSE	0xEE
-#define KBD_ERROR_1		0x00
-#define KBD_ERROR_2		0xFF
-#define KBD_RESEND		0xFE
+#define KBD_ERROR_1			0x00
+#define KBD_ERROR_2			0xFF
+#define KBD_RESEND			0xFE
 #define KBD_TEST_FAILED_1	0xFC
 #define KBD_TEST_FAILED_2	0xFD
 #define KBD_TEST_PASSED		0xAA
-
 
 void keyboard_add_command_queue(uint8_t command){
 }
@@ -179,8 +178,7 @@ void deviceInitKeyboard(struct device* dev){
 * find all keyboard devices and register them
 */
 void keyboard_devicemgr_register_devices(){
-	keyboard_buffer_start = 0;
-	keyboard_buffer_end = 0;
+	keyboard_buffer_init();
 
 	/*
 	* register device

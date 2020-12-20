@@ -25,5 +25,6 @@ extern uint8_t keyboard_buffer_start, keyboard_buffer_end;
 
 void keyboard_buffer_add(key_action_t add);
 key_action_t keyboard_buffer_consume(void);
+void keyboard_buffer_init();
 
 #endif
