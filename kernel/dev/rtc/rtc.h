@@ -25,5 +25,9 @@ void rtc_handle_irq();
 void rtc_register_devices();
 rtc_time_t rtc_time();
 
+typedef void (*RTCEvent)();
+
+void rtc_subscribe(RTCEvent rtcEvent);
+
 #endif
 

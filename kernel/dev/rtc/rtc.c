@@ -12,10 +12,13 @@
 #include <dev/rtc/cmos.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/devicemgr.h>
+#include <collection/list/list.h>
 #include <sleep/sleep.h>
 
 #define RTC_IRQ_NUMBER 8
 #define RTC_PORT 0x40
+
+struct list* rtcEvents;
 
 typedef enum rtc_registers{
 	RTC_REGISTER_SECOND = 	0x00,
@@ -32,6 +35,12 @@ typedef enum rtc_registers{
 } rtc_registers;
 
 void rtc_handle_irq(stackFrame *frame){
+
+	for (uint32_t i=0; i< listCount(rtcEvents);i++){
+		RTCEvent rtcEvent = (RTCEvent) listGet(rtcEvents,i);
+		(*rtcEvent)();
+	}
+
 #ifdef RTC_SLEEP
 	sleep_update();
 #endif
@@ -48,6 +57,7 @@ void deviceInitRTC(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu\n",dev->description, RTC_IRQ_NUMBER);
 	
+	rtcEvents = listNew();
 	asm_cli();
 	cmos_write_register(RTC_REGISTER_STATUS_B, RTC_PORT);	// bit 6 turns on interrupt
 	registerInterruptHandler(RTC_IRQ_NUMBER, &rtc_handle_irq);
@@ -114,5 +124,10 @@ rtc_time_t rtc_time(){
 	
 	return b;	
 }
+
+void rtc_subscribe(RTCEvent rtcEvent) {
+	listAdd(rtcEvents, rtcEvent);
+}
+
 
 
