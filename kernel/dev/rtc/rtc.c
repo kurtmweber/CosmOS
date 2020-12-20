@@ -15,8 +15,8 @@
 #include <collection/list/list.h>
 #include <sleep/sleep.h>
 
-#define RTC_IRQ_NUMBER 8
-#define RTC_PORT 0x40
+#define RTC_IRQ_NUMBER 		8
+#define RTC_PORT		 	0x40
 
 struct list* rtcEvents;
 
@@ -34,8 +34,7 @@ typedef enum rtc_registers{
 	RTC_REGISTER_CENTURY = 	0x32
 } rtc_registers;
 
-void rtc_handle_irq(stackFrame *frame){
-
+void rtc_handle_irq(stackFrame *frame) {
 	for (uint32_t i=0; i< listCount(rtcEvents);i++){
 		RTCEvent rtcEvent = (RTCEvent) listGet(rtcEvents,i);
 		(*rtcEvent)();
