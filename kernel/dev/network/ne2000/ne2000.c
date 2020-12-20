@@ -16,6 +16,7 @@
 #include <dev/pci/pci.h>
 #include <types.h>
 #include <asm/io.h>
+#include <sleep/sleep.h>
 
 // REGISTERS
 #define CR				0x00 // Command Register
@@ -55,7 +56,14 @@
 #define PAR5			0x06
 #define CURR			0x07 // Current Page Register (R/W)
 							 // This register points to the page address of the first receive buffer page to be used for a packet reception.
-
+#define MAR0			0x08 // Multicast Register 0
+#define MAR1			0x09 // Multicast Register 1
+#define MAR2			0x0A // Multicast Register 2
+#define MAR3			0x0B // Multicast Register 3
+#define MAR4			0x0C // Multicast Register 4
+#define MAR5			0x0D // Multicast Register 5
+#define MAR6			0x0E // Multicast Register 6
+#define MAR7			0x0F // Multicast Register 7
 
 // COMMAND REGISTER BITS
 #define CR_STOP 		0x01	// Stop (Reset) NIC
@@ -150,12 +158,12 @@ void ne2000_register_devices() {
 }
 
 void ne2000_init() {	
-	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));     // set page 0
-//	_delay_ms(2);					                // wait for traffic to complete
-	asm_out_b(DCR, DCR_BYTEDMA|DCR_NOLPBK|DCR_ARM);
-	asm_out_b(RBCR0,0x00);
-	asm_out_b(RBCR1,0x00);
-	asm_out_b(RCR, RCR_AB);
+	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));     // set page 0, turn off DMA, tell the NIC to stop
+	sleep_wait(10);					                // wait for traffic to complete
+	asm_out_b(DCR, DCR_BYTEDMA|DCR_NOLPBK|DCR_ARM); // we want byte-wide DMA, automatic DMA transfers, 
+	asm_out_b(RBCR0,0x00);							// byte count zero
+	asm_out_b(RBCR1,0x00);							// byte count zero
+	asm_out_b(RCR, RCR_AB);							// receive configuration of (Accept Broadcast)
 	asm_out_b(TCR, TCR_INTLPBK); 	                // set internal lookback
 
 	asm_out_b(TPSR, TXSTART);			            // set the start page address of the packet to the transmitted.
@@ -169,38 +177,18 @@ void ne2000_init() {
 	asm_out_b(ISR,0xFF); 			                // clear all interrupts
 	asm_out_b(IMR, 0x00);			                // no interupts
 	asm_out_b(TCR, 0x00);			                // normal operation
-	
-    // read mac from eeprom
-	asm_out_b(RBCR0, 32); // Intend to read 32 Bytes
-	asm_out_b(RBCR1, 0);
-	asm_out_b(RSAR0, 0); // low byte of start address (0x0000)
-	asm_out_b(RSAR1, 0); // high byte of start address
-	asm_out_b(CR, CR_PAGE0 | CR_START | CR_DMAREAD);
-	// for some reason, 2 reads are required, otherwise you get duplicate
-	// values. the comments in the linux driver talk about values being
-	// "doubled up", but i don't know why. whatever - it works this way
-	// and i don't have time to investigate :)
-	for (uint8_t i = 0; i < 6; i++) {
-		asm_in_b(RDMA);
-		net_mac[i] = asm_in_b(RDMA);
-	}
-	// end (abort) the DMA transfer
-	asm_out_b(CR, CR_PAGE0 | CR_START | CR_NODMA);
+
+	// read mac
+	net_mac[0]=asm_in_b(PAR0);
+	net_mac[1]=asm_in_b(PAR1);
+	net_mac[2]=asm_in_b(PAR2);
+	net_mac[3]=asm_in_b(PAR3);
+	net_mac[4]=asm_in_b(PAR4);
+	net_mac[5]=asm_in_b(PAR5);
 
 	kprintf("MAC  %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac[0],net_mac[1],net_mac[2],net_mac[3],net_mac[4],net_mac[5]);
 
-	asm_out_b(CR, (CR_PAGE1|CR_NODMA|CR_STOP));     // switch to page 1
-	
-	// write mac
-	asm_out_b(PAR0, net_mac[0]);
-	asm_out_b(PAR1, net_mac[1]);
-	asm_out_b(PAR2, net_mac[2]);
-	asm_out_b(PAR3, net_mac[3]);
-	asm_out_b(PAR4, net_mac[4]);
-	asm_out_b(PAR5, net_mac[5]);
-		
 	asm_out_b(CURR, RXSTART);                       // init curr pointer
-
 	asm_out_b(CR, (CR_NODMA|CR_START));	            // start the NIC
 }
 
