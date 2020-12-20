@@ -52,6 +52,12 @@ From the root directory:
 
 `make clean;make`
 
+# Running
+
+The command `make qemu` will start QEMU and boot the image.  The QEMU monitor is exposed on port 45454 and can be connected to with `telnet localhost:45454`
+
+
+
 
 
 

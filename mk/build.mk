@@ -41,3 +41,4 @@ QEMUARGS=                                                 \
   -serial stdio                                           \
   -machine pcspk-audiodev=audio0                          \
   -audiodev coreaudio,id=audio0                           \
+  -monitor telnet::45454,server,nowait                    \
