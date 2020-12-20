@@ -9,29 +9,31 @@
 #include <asm/asm.h>
 #include <interrupts/interrupts.h>
 
-idtEntry idt[256];
+#define IDT_SIZE 256
+
+idtEntry idt[IDT_SIZE];
 
 void idt_init(){
 	idtr idtr;
-	addISR(isrDE, DE);
+	idt_add_ISR(isrDE, DE);
 	
 	// IRQs
-	addISR(irq0, IRQ0);
-	addISR(irq1, IRQ1);
-	addISR(irq2, IRQ2);
-	addISR(irq3, IRQ3);
-	addISR(irq4, IRQ4);
-	addISR(irq5, IRQ5);
-	addISR(irq6, IRQ6);
-	addISR(irq7, IRQ7);
-	addISR(irq8, IRQ8);
-	addISR(irq9, IRQ9);
-	addISR(irq10, IRQ10);
-	addISR(irq11, IRQ11);
-	addISR(irq12, IRQ12);
-	addISR(irq13, IRQ13);
-	addISR(irq14, IRQ14);
-	addISR(irq15, IRQ15);
+	idt_add_ISR(irq0, IRQ0);
+	idt_add_ISR(irq1, IRQ1);
+	idt_add_ISR(irq2, IRQ2);
+	idt_add_ISR(irq3, IRQ3);
+	idt_add_ISR(irq4, IRQ4);
+	idt_add_ISR(irq5, IRQ5);
+	idt_add_ISR(irq6, IRQ6);
+	idt_add_ISR(irq7, IRQ7);
+	idt_add_ISR(irq8, IRQ8);
+	idt_add_ISR(irq9, IRQ9);
+	idt_add_ISR(irq10, IRQ10);
+	idt_add_ISR(irq11, IRQ11);
+	idt_add_ISR(irq12, IRQ12);
+	idt_add_ISR(irq13, IRQ13);
+	idt_add_ISR(irq14, IRQ14);
+	idt_add_ISR(irq15, IRQ15);
 	
 	idtr.limit = (256 * sizeof(idtEntry)) - 1;
 	idtr.base = (uint64_t)&idt;
@@ -43,7 +45,7 @@ void idt_init(){
 	//asm_sti()
 }
 
-void addISR(void *func, intVectors vector){
+void idt_add_ISR(void *func, intVectors vector){
 	idt[vector].offsetWordLow = (uint16_t)((uint64_t)func & 0xFFFF);
 	idt[vector].selector = 8;
 	idt[vector].ist = 0;

@@ -10,6 +10,8 @@
 
 #include <types.h>
 #include <dev/pic/pic.h>
+#include <interrupts/idt.h>
+
 
 typedef struct idtEntry{
 	uint16_t offsetWordLow;		// offset bits 0-15
@@ -38,29 +40,6 @@ typedef struct stackFrame{
 	uint64_t ss;
 	}__attribute__((packed)) stackFrame;
 	
-typedef enum intVectors{
-	DE = 0,
-	IRQ0 = PIC_PRIMARY_VECTOR_OFFSET,
-	IRQ1,
-	IRQ2,
-	IRQ3,
-	IRQ4,
-	IRQ5,
-	IRQ6,
-	IRQ7,
-	IRQ8 = PIC_SECONDARY_VECTOR_OFFSET,
-	IRQ9,
-	IRQ10,
-	IRQ11,
-	IRQ12,
-	IRQ13,
-	IRQ14,
-	IRQ15
-	} intVectors;
-	
-
-void idt_init();
-void addISR(void *func, intVectors vector);
 void isrDE(stackFrame *frame);
 
 void irq0(stackFrame *frame);
