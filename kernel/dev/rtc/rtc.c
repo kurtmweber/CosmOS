@@ -66,7 +66,7 @@ void deviceInitRTC(struct device* dev){
 	
 	asm_sti();
 
-	registerInterruptHandler(RTC_IRQ_NUMBER, &rtc_handle_irq);
+	register_interrupt_handler(RTC_IRQ_NUMBER, &rtc_handle_irq);
 }
 
 /*

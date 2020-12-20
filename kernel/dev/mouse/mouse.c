@@ -109,7 +109,7 @@ uint8_t mouse_read() {
 */
 void deviceInitMouse(struct device* dev){
     kprintf("Init %s at IRQ %llu\n",dev->description, MOUSE_IRQ_NUMBER);
-    registerInterruptHandler(MOUSE_IRQ_NUMBER, &mouse_irq_read);
+    register_interrupt_handler(MOUSE_IRQ_NUMBER, &mouse_irq_read);
 
     // alloc struct
     current_mouse_status = kmalloc(sizeof(struct mouse_status));

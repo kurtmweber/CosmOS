@@ -15,11 +15,11 @@
  */
 typedef void (*interruptHandler)(stackFrame *frame);
 void interrupt_router_init();
-void registerInterruptHandler(int interruptNumber, interruptHandler func);
+void register_interrupt_handler(int interruptNumber, interruptHandler func);
 
 /*
 * called by ISR in irq.c
 */
-void routeInterrupt(int interruptNumber, stackFrame *frame);
+void route_interrupt(int interruptNumber, stackFrame *frame);
 
 #endif

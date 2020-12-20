@@ -46,7 +46,7 @@ void pit_handle_irq(stackFrame *frame) {
 */
 void deviceInitPIT(struct device* dev){
     kprintf("Init %s at IRQ %llu\n",dev->description, PIT_IRQ);
-    registerInterruptHandler(PIT_IRQ, &pit_handle_irq);
+    register_interrupt_handler(PIT_IRQ, &pit_handle_irq);
 }
 
 void pit_register_devices(){
