@@ -9,6 +9,8 @@
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
+#include <devicemgr/devicetype_serial.h>
+
 #include <console/console.h>
 
 #define COM1_ADDRESS (uint16_t) 0x3F8
@@ -94,22 +96,34 @@ void deviceInitCOM1(struct device* dev){
     init_port(cp->address);
 }
 
+void deviceTypeSerial_write(struct device* dev, const uint8_t* c) {
+
+}
+
+
 /**
 * find all RS232 devices and register them
 */
 void serial_devicemgr_register_devices() {
-    // COM1
+    /* COM1 */
+    // ISA serial port specific data
     struct comport* cp1 = kmalloc(sizeof(struct comport));
     cp1->irq=SERIAL_IRQ2;
     cp1->address=COM1_ADDRESS;
+    // the device instance
     struct device* deviceinstance1 = devicemgr_new_device();
     deviceinstance1->init =  &deviceInitCOM1;
     deviceinstance1->deviceData = cp1;
     deviceinstance1->devicetype = SERIAL;
     devicemgr_set_device_description(deviceinstance1, "RS232");
+    // the device api
+    struct DeviceType_serial* deviceType_serial = (struct DeviceType_serial*) kmalloc(sizeof(struct DeviceType_serial));
+    deviceType_serial->deviceTypeSerial_write = &deviceTypeSerial_write;
+    deviceinstance1->api = deviceType_serial;
+
     devicemgr_register_device(deviceinstance1);
 
-    // COM2
+    /* COM2 */
     struct comport* cp2 = kmalloc(sizeof(struct comport));
     cp2->irq=SERIAL_IRQ1;
     cp2->address=COM2_ADDRESS;
@@ -120,7 +134,7 @@ void serial_devicemgr_register_devices() {
     devicemgr_set_device_description(deviceinstance2, "RS232");
     devicemgr_register_device(deviceinstance2);
 
-    // COM3
+    /* COM3 */
     struct comport* cp3 = kmalloc(sizeof(struct comport));
     cp3->irq=SERIAL_IRQ2;
     cp3->address=COM3_ADDRESS;
@@ -131,7 +145,7 @@ void serial_devicemgr_register_devices() {
     devicemgr_set_device_description(deviceinstance3, "RS232");
     devicemgr_register_device(deviceinstance3);
 
-    // COM4
+    /* COM4 */
     struct comport* cp4 = kmalloc(sizeof(struct comport));
     cp4->irq=SERIAL_IRQ1;
     cp4->address=COM4_ADDRESS;

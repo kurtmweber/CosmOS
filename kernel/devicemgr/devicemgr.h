@@ -37,6 +37,7 @@ typedef struct device {
 	deviceInit init;
 	int8_t* description;
 	void* deviceData;
+	void* api;
 } device_t;
 
 // new device, allocated on the kernel heap
@@ -51,8 +52,6 @@ void devicemgr_init();
 // count of device instances
 uint16_t devicemgr_device_count();
 
-// get a device instance
-struct device* devicemgr_get_device(uint16_t idx);
 
 // init all devices
 void devicemgr_init_devices();

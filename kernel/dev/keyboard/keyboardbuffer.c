@@ -16,7 +16,6 @@ void keyboard_buffer_init() {
 	keyboard_buffer_end = 0;
 }
 
-
 void keyboard_buffer_add(key_action_t add){
 	keyboard_buffer[keyboard_buffer_end] = add;
 	

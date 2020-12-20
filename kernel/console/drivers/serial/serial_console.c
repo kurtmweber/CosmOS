@@ -12,7 +12,7 @@ void serial_console_init(){
 	return;
 }
 
-uint8_t serial_console_write(const char *c){
+uint8_t serial_console_write(const char *c) {
     serial_write(c);
 }
 
