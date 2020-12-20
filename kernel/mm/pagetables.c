@@ -11,6 +11,7 @@
 #include <types.h>
 #include <asm/asm.h>
 #include <mm/mm.h>
+#include <mm/pagetables.h>
 #include <panic/panic.h>
 #include <string/string.h>
 

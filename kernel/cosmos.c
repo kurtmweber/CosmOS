@@ -53,7 +53,7 @@ void CosmOS(){
 	mem_block *tmp;
 	tmp = usable_phys_blocks;
 
-	do {
+	/*do {
 		kprintf("Base: %llX, Length: %llX\n", (uint64_t)tmp->base, tmp->len);
 	} while((tmp = tmp->next));
 
@@ -63,7 +63,7 @@ void CosmOS(){
 
 	do {
 		kprintf("Base: %llX, Length: %llX\n", (uint64_t)tmp->base, tmp->len);
-	} while((tmp = tmp->next));
+	} while((tmp = tmp->next)); */
 	
 	while (1){
 		asm_hlt();

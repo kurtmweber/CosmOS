@@ -30,12 +30,14 @@ void mmu_init(){
 	
 	sort_usable_phys_blocks();
 
+	reset_brk_after_malloc();
+
 	// split off the first three blocks of physical memory we've allocated:
 	// 0x0000000000000000 - 0x00000000000FFFFF: ID-mapped first megabyte
 	// 0x0000000000100000 - 0x00000000008FFFFF: Kernel stack
 	// 0x0000000000900000 - 0x0000000001FFFFFF: Kernel + kernel heap
-	b = find_containing_block(0x0000000000000000, usable_phys_blocks);
-	kprintf("Base: %llX\tLength: %llX\n", b->base, b->len);
+	/*b = find_containing_block(0x0000000000000000, usable_phys_blocks);
+	kprintf("Base: %llX\tLength: %llX\n", b->base, b->len);*/
 
 	
 	
