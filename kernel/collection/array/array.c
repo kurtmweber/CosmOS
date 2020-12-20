@@ -11,11 +11,11 @@
 #include <panic/panic.h>
 #include <console/console.h>
 
-struct array* arrayNew(uint16_t size) {
+struct array* arrayNew(uint32_t size) {
     struct array*  ret = (struct array*) kmalloc(sizeof(array_t));
     ret->data = (void**) kmalloc(sizeof(void*)*size); 
     ret->size = size;
-    for (uint16_t i=0; i<size;i++){
+    for (uint32_t i=0; i<size;i++){
         ret->data[i]=0;
     }
     return ret;
@@ -32,7 +32,7 @@ void arrayDelete(struct array* arr){
     }
 }
 
-uint16_t arraySize(struct array* arr){
+uint32_t arraySize(struct array* arr){
     if (0!=arr){
         return arr->size;
     } else {
@@ -40,7 +40,7 @@ uint16_t arraySize(struct array* arr){
     }   
 }
 
-void  arraySet(struct array* arr, uint16_t position, void* value){
+void  arraySet(struct array* arr, uint32_t position, void* value){
      if (0!=arr){
          if ((position>=0) &&(position< arr->size) ){
              arr->data[position]=value;
@@ -53,7 +53,7 @@ void  arraySet(struct array* arr, uint16_t position, void* value){
     }  
 }
 
-void* arrayGet(struct array* arr,  uint16_t position){
+void* arrayGet(struct array* arr,  uint32_t position){
     if (0!=arr){
         if ((position>=0) &&(position< arr->size) ){
             return arr->data[position];
@@ -66,7 +66,7 @@ void* arrayGet(struct array* arr,  uint16_t position){
     }  
 }
 
-void arrayResize(struct array* arr, uint16_t size) {
+void arrayResize(struct array* arr, uint32_t size) {
     if (0!=arr){
         if (size >= arr->size){
             arr->data = krealloc(arr->data, size);
@@ -79,7 +79,7 @@ void arrayResize(struct array* arr, uint16_t size) {
     }    
 }
 
-void arrayIncrementallyResize(struct array* arr, uint16_t increment) {
+void arrayIncrementallyResize(struct array* arr, uint32_t increment) {
     if (0!=arr){
         arrayResize(arr, increment+(arr->size));
     } else {
@@ -90,7 +90,7 @@ void arrayIncrementallyResize(struct array* arr, uint16_t increment) {
 void arrayIterate(struct array* arr, arrayIterator iter) {
     if (0!=iter){
         if (0!=arr){
-            for (uint16_t i=0; i<arr->size;i++) {
+            for (uint32_t i=0; i<arr->size;i++) {
                 (*iter)(arr->data[i]);
             }
         } else {

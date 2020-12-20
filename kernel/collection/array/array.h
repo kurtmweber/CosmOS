@@ -22,7 +22,7 @@
  */
 typedef struct array {
 	void** data;
-    uint16_t size;
+    uint32_t size;
 } array_t;
 
 /*
@@ -30,13 +30,13 @@ typedef struct array {
 */
 typedef void (*arrayIterator)(void* value);
 
-struct array* arrayNew(uint16_t size);
+struct array* arrayNew(uint32_t size);
 void arrayDelete(struct array* arr);
-void  arraySet(struct array* arr, uint16_t position, void* value);
-void* arrayGet(struct array* arr, uint16_t position);
-uint16_t arraySize(struct array* arr);
-void arrayResize(struct array* arr, uint16_t size);
-void arrayIncrementallyResize(struct array* arr, uint16_t increment);
+void  arraySet(struct array* arr, uint32_t position, void* value);
+void* arrayGet(struct array* arr, uint32_t position);
+uint32_t arraySize(struct array* arr);
+void arrayResize(struct array* arr, uint32_t size);
+void arrayIncrementallyResize(struct array* arr, uint32_t increment);
 void arrayIterate(struct array* arr, arrayIterator iter);
 
 #endif

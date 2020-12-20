@@ -30,7 +30,7 @@ void listDelete(struct list* lst) {
     }
 }
 
-uint16_t listCount(struct list* lst) {
+uint32_t listCount(struct list* lst) {
      if (0!=lst){
         return lst->count;
     } else {
@@ -38,7 +38,7 @@ uint16_t listCount(struct list* lst) {
     }
 }
 
-uint16_t listSize(struct list* lst) {
+uint32_t listSize(struct list* lst) {
       if (0!=lst){
         return lst->arr->size;
     } else {
@@ -46,7 +46,7 @@ uint16_t listSize(struct list* lst) {
     }   
 }
 
-void listAdd(struct list* lst, void* value) {
+uint32_t listAdd(struct list* lst, void* value) {
      if (0!=lst){
          // sanity check
          if (0==lst->arr){
@@ -63,12 +63,13 @@ void listAdd(struct list* lst, void* value) {
         // save the data
         arraySet(lst->arr, lst->count, value);
         lst->count = lst->count+1;
+        return lst->count-1;
     } else {
         panic("null list passed to listAdd\n");
     }
 }
 
-void  listSet(struct list* lst, uint16_t position, void* value) {
+void  listSet(struct list* lst, uint32_t position, void* value) {
      if (0!=lst){
          if (0==lst->arr){
             panic("why is the underlying array null?!");
@@ -83,7 +84,7 @@ void  listSet(struct list* lst, uint16_t position, void* value) {
     }  
 }
 
-void* listGet(struct list* lst, uint16_t position) {
+void* listGet(struct list* lst, uint32_t position) {
     if (0!=lst){
          if (0==lst->arr){
             panic("why is the underlying array null?!");
