@@ -12,6 +12,8 @@
 
 // https://wiki.osdev.org/PC_Speaker
 
+#define SPEAKER_PORT    0x61
+
 /*
 * perform device instance specific init here
 */

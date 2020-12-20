@@ -10,18 +10,18 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 
+#define PIT_IRQ           0x00
+
 #define PIT_PORT_0        0x40
 #define PIT_PORT_1        0x41
 #define PIT_PORT_2        0x42
 #define PIT_PORT_COMMAND  0x43
 
-
 /*
 * perform device instance specific init here
 */
 void deviceInitPIT(struct device* dev){
-    kprintf("Init %s\n" ,dev->description);
-
+    kprintf("Init %s at IRQ %llu\n",dev->description, PIT_IRQ);
 }
 
 void pit_register_devices(){
@@ -29,7 +29,7 @@ void pit_register_devices(){
 	* register device
 	*/
 	struct device* deviceinstance = newDevice();
-	deviceSetDescription(deviceinstance, " 8253/8254 PIT");
+	deviceSetDescription(deviceinstance, "8253/8254 PIT");
 	deviceinstance->devicetype = PIT;
 	deviceinstance->init =  &deviceInitPIT;
 	registerDevice(deviceinstance);
