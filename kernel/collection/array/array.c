@@ -9,6 +9,7 @@
 
 #include <mm/mm.h>
 #include <panic/panic.h>
+#include <console/console.h>
 
 struct array* arrayNew(uint16_t size) {
     struct array*  ret = (struct array*) kmalloc(sizeof(array_t));
@@ -44,6 +45,7 @@ void  arraySet(struct array* arr, uint16_t position, void* value){
          if ((position>=0) &&(position< arr->size) ){
              arr->data[position]=value;
          } else {
+            kprintf("Index %llu",position);
             panic("invalid array index passed to arraySet\n");
         }
      } else {
@@ -56,6 +58,7 @@ void* arrayGet(struct array* arr,  uint16_t position){
         if ((position>=0) &&(position< arr->size) ){
             return arr->data[position];
         } else {
+            kprintf("Index %llu",position);
             panic("invalid array index passed to arrayGet\n");
         }  
     } else {
@@ -66,8 +69,8 @@ void* arrayGet(struct array* arr,  uint16_t position){
 void arrayResize(struct array* arr, uint16_t size) {
     if (0!=arr){
         if (size >= arr->size){
-            arr = krealloc(arr, size);
-            arr->size = size;
+            arr->data = krealloc(arr->data, size);
+            arr->size = size;         
         } else {
             panic ("arrays cannot be shrunk\n");
         }
@@ -78,7 +81,7 @@ void arrayResize(struct array* arr, uint16_t size) {
 
 void arrayIncrementallyResize(struct array* arr, uint16_t increment) {
     if (0!=arr){
-        arrayResize(arr, increment+arr->size);
+        arrayResize(arr, increment+(arr->size));
     } else {
         panic("null array passed to arrayIncrementallyResize\n");
     }   

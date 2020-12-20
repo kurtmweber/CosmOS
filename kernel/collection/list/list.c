@@ -55,8 +55,9 @@ void listAdd(struct list* lst, void* value) {
          if (lst->count > arraySize(lst->arr)){
              panic("oh no! what happened?!");
          }
+
          // expand the underlying array?
-         if (lst->count == arraySize(lst->arr)){
+         if (lst->count+1 == arraySize(lst->arr)){
              arrayIncrementallyResize(lst->arr, EXPAND_SIZE);
          }
         // save the data
