@@ -5,16 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _PIC_H
-#define _PIC_H
+#ifndef _PIT_H
+#define _PIT_H
 
 #include <types.h>
 
-// IRQ vector offsets for remapping
-#define PIC_PRIMARY_VECTOR_OFFSET	0x20
-#define PIC_SECONDARY_VECTOR_OFFSET	PIC_PRIMARY_VECTOR_OFFSET + 8
-
-void pic_register_devices();
-void pic_send_eoi(uint8_t irq);
+void pit_register_devices();
 
 #endif

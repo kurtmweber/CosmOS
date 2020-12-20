@@ -22,6 +22,7 @@
 #include <dev/mouse/mouse.h>
 #include <dev/floppy/floppy.h>
 #include <dev/speaker/speaker.h>
+#include <dev/pit/pit.h>
 
 void dev_register_devices();
 
