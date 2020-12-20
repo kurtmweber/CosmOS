@@ -10,14 +10,14 @@
 #include <panic/panic.h>
 #include <console/console.h>
 
-struct kernelstring* stringNew() {
+struct kernelstring* string_new() {
     struct kernelstring* ret = (struct kernelstring*) kmalloc(sizeof(struct kernelstring));
     ret->str = 0;
     ret->length=0;
     return ret;
 }
 
-struct kernelstring* stringNewSized(uint32_t size) {
+struct kernelstring* string_new_sized(uint32_t size) {
     if (size>0) {
         struct kernelstring* ret = (struct kernelstring*) kmalloc(sizeof(struct kernelstring));
         ret->str = kmalloc((size+1)*(sizeof(uint8_t)));
@@ -31,7 +31,7 @@ struct kernelstring* stringNewSized(uint32_t size) {
     }
 }
 
-void stringDelete(struct kernelstring* str) {
+void string_delete(struct kernelstring* str) {
     if (0!=str){
         if (0!=str->str) {
             kfree(str->str);
@@ -42,7 +42,7 @@ void stringDelete(struct kernelstring* str) {
     }
 }
 
-uint32_t stringLength(const struct kernelstring* str) {
+uint32_t string_length(const struct kernelstring* str) {
     if (0!=str){
         return str->length;
     } else {
@@ -50,7 +50,7 @@ uint32_t stringLength(const struct kernelstring* str) {
     }
 }
 
-struct kernelstring* stringFromCStr(const int8_t* str) {   
+struct kernelstring* string_from_cstr(const int8_t* str) {   
     /*
     * get length
     */
@@ -60,7 +60,7 @@ struct kernelstring* stringFromCStr(const int8_t* str) {
     /*
     * allocate
     */
-    struct kernelstring* ret = stringNewSized(len);
+    struct kernelstring* ret = string_new_sized(len);
 
     /*
     * copy
@@ -80,7 +80,7 @@ struct kernelstring* stringFromCStr(const int8_t* str) {
    return ret;
 }
 
-const int8_t* stringGetCStr(const struct kernelstring* str) {
+const int8_t* string_get_cstr(const struct kernelstring* str) {
     if (0!=str){
         return str->str;
     } else {
@@ -95,7 +95,7 @@ const int8_t* stringGetCStr(const struct kernelstring* str) {
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-struct kernelstring*  stringItoa3(uint64_t n, uint8_t base) {
+struct kernelstring* string_itoa3(uint64_t n, uint8_t base) {
     /*
     * valid bases
     */
@@ -104,7 +104,7 @@ struct kernelstring*  stringItoa3(uint64_t n, uint8_t base) {
         * max four binary digits per decimal digits, so just use 5
         */
         const uint32_t len = n*5;
-        struct kernelstring* ret = stringNewSized(len);
+        struct kernelstring* ret = string_new_sized(len);
         uint8_t i = 0;
         int8_t *s = ret->str;
         int8_t *rev = s;
@@ -137,10 +137,10 @@ struct kernelstring*  stringItoa3(uint64_t n, uint8_t base) {
     }
 }
 
-struct kernelstring*  stringConcat(const struct kernelstring* str1, const struct kernelstring* str2) {
+struct kernelstring* string_concat(const struct kernelstring* str1, const struct kernelstring* str2) {
     if ((0!=str1) && (0!=str2)){
         uint32_t len = str1->length + str2->length;
-        struct kernelstring* ret = stringNewSized(len);
+        struct kernelstring* ret = string_new_sized(len);
         for (uint32_t i=0; i<str1->length;i++){
             ret->str[i]=str1->str[i];
         }
@@ -154,9 +154,9 @@ struct kernelstring*  stringConcat(const struct kernelstring* str1, const struct
     }
 }
 
-struct kernelstring*  stringCopy(const struct kernelstring* str) {
+struct kernelstring* string_copy(const struct kernelstring* str) {
     if (0!=str){
-        struct kernelstring* ret =  stringNewSized(str->length);
+        struct kernelstring* ret =  string_new_sized(str->length);
         uint32_t i=0;
         for (i=0; i<str->length;i++){
         }
@@ -175,7 +175,7 @@ struct kernelstring*  stringCopy(const struct kernelstring* str) {
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-struct kernelstring* stringTrim(const struct kernelstring* str) {
+struct kernelstring* string_trim(const struct kernelstring* str) {
     if (0!=str){
 
         uint32_t i = str->length;
@@ -189,7 +189,7 @@ struct kernelstring* stringTrim(const struct kernelstring* str) {
         }
         
         // +1 for the fact that it's a zero-based index, +1 for the terminator
-        struct kernelstring* ret = stringNewSized(j+2);
+        struct kernelstring* ret = string_new_sized(j+2);
         
         for (i = 0; i <= j; i++){
             ret->str[i] = str->str[i];

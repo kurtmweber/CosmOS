@@ -19,10 +19,10 @@ typedef struct ringbuffer {
     uint16_t tail;
 } ringbuffer_t;
 
-struct ringbuffer* ringbufferNew(uint16_t size);
-void ringbufferDelete(struct ringbuffer* rb);
-void ringbufferAdd(struct ringbuffer* rb, uint64_t value);
-uint64_t ringbufferRemove(struct ringbuffer* rb);
-uint16_t ringbufferAvailable(struct ringbuffer* rb);
+struct ringbuffer* ringbuffer_new(uint16_t size);
+void ringbuffer_delete(struct ringbuffer* rb);
+void ringbuffer_add(struct ringbuffer* rb, uint64_t value);
+uint64_t ringbuffer_remove(struct ringbuffer* rb);
+uint16_t ringbuffer_available(struct ringbuffer* rb);
 
 #endif

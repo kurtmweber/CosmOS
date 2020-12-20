@@ -9,14 +9,14 @@
 #include <mm/mm.h>
 #include <panic/panic.h>
 
-struct ringbuffer* ringbufferNew(uint16_t size) {
+struct ringbuffer* ringbuffer_new(uint16_t size) {
     struct ringbuffer* ret = (struct ringbuffer*) kmalloc(sizeof(ringbuffer_t));
     ret->arr = array_new(size);
     ret->head=0;
     ret->tail=0;
 }
 
-void ringbufferDelete(struct ringbuffer* rb) {
+void ringbuffer_delete(struct ringbuffer* rb) {
     if (0!=rb){
         if (0==rb->arr){
             panic("why is the underlying array null?!");
@@ -28,7 +28,7 @@ void ringbufferDelete(struct ringbuffer* rb) {
     }
 }
 
-void ringbufferAdd(struct ringbuffer* rb, uint64_t value) {
+void ringbuffer_add(struct ringbuffer* rb, uint64_t value) {
     if (0!=rb){
         if (0==rb->arr){
             panic("why is the underlying array null?!");
@@ -48,7 +48,7 @@ void ringbufferAdd(struct ringbuffer* rb, uint64_t value) {
     }   
 }
 
-uint64_t ringbufferRemove(struct ringbuffer* rb) {
+uint64_t ringbuffer_remove(struct ringbuffer* rb) {
     if (0!=rb){
         if (0==rb->arr){
             panic("why is the underlying array null?!");
@@ -68,7 +68,7 @@ uint64_t ringbufferRemove(struct ringbuffer* rb) {
     }   
 }
 
-uint16_t ringbufferAvailable(struct ringbuffer* rb) {
+uint16_t ringbuffer_available(struct ringbuffer* rb) {
      if (0!=rb){
         return (rb->head - rb->tail);
     } else {

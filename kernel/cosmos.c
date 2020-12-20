@@ -103,40 +103,40 @@ void CosmOS(){
 
 void stringtest() {
 	// concat
-	struct kernelstring* string1 = stringFromCStr("hello");
-	struct kernelstring* string2 = stringFromCStr(" world\n");
+	struct kernelstring* string1 = string_from_cstr("hello");
+	struct kernelstring* string2 = string_from_cstr(" world\n");
 
 	kprintf("%llu\n",string1->length);
-	kprintf(stringGetCStr(string1));
+	kprintf(string_get_cstr(string1));
 	kprintf("%llu\n",string2->length);
-	kprintf(stringGetCStr(string2));
+	kprintf(string_get_cstr(string2));
 
-	struct kernelstring* string3 = stringConcat(string1, string2);
+	struct kernelstring* string3 = string_concat(string1, string2);
 	kprintf("%llu\n",string3->length);
-	kprintf(stringGetCStr(string3));
+	kprintf(string_get_cstr(string3));
 
-	struct kernelstring* string4 = stringItoa3(1000, 16);
+	struct kernelstring* string4 = string_itoa3(1000, 16);
 	kprintf("%llu\n",string4->length);
-	kprintf(stringGetCStr(string4));
+	kprintf(string_get_cstr(string4));
 
-	struct kernelstring* string5 = stringCopy(string3);
+	struct kernelstring* string5 = string_copy(string3);
 	kprintf("%llu\n",string3->length);
-	kprintf(stringGetCStr(string3));
+	kprintf(string_get_cstr(string3));
 	kprintf("\n");
 
-	struct kernelstring* string6 = stringCopy(string3);
+	struct kernelstring* string6 = string_copy(string3);
 	kprintf("%llu\n",string3->length);
-	kprintf(stringGetCStr(string3));
+	kprintf(string_get_cstr(string3));
 	kprintf("\n");
 
-	struct kernelstring* string7 = stringFromCStr("beer           ");
+	struct kernelstring* string7 = string_from_cstr("beer           ");
 	kprintf("%llu\n",string7->length);
-	kprintf(stringGetCStr(string7));
+	kprintf(string_get_cstr(string7));
 	kprintf("\n");
 
-	struct kernelstring* string8 = stringTrim(string7);
+	struct kernelstring* string8 = string_trim(string7);
 	kprintf("%llu\n",string8->length);
-	kprintf(stringGetCStr(string8));
+	kprintf(string_get_cstr(string8));
 	kprintf("\n");
 }
 

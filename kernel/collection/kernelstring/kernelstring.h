@@ -19,16 +19,16 @@ typedef struct kernelstring {
     uint32_t length;
 } kernelstring_t;
 
-struct kernelstring* stringNew();
-struct kernelstring* stringNewSized(uint32_t size);
-void stringDelete(struct kernelstring* str);
-uint32_t stringLength(const struct kernelstring* str);
-struct kernelstring* stringFromCStr(const int8_t* str);
-const int8_t* stringGetCStr(const struct kernelstring* str);
+struct kernelstring* string_new();
+struct kernelstring* string_new_sized(uint32_t size);
+void string_delete(struct kernelstring* str);
+uint32_t string_length(const struct kernelstring* str);
+struct kernelstring* string_from_cstr(const int8_t* str);
+const int8_t* string_get_cstr(const struct kernelstring* str);
 
-struct kernelstring* stringItoa3(uint64_t n, uint8_t base);
-struct kernelstring* stringConcat(const struct kernelstring* str1, const struct kernelstring* str2);
-struct kernelstring* stringCopy(const struct kernelstring* str);
-struct kernelstring* stringTrim(const struct kernelstring* str);
+struct kernelstring* string_itoa3(uint64_t n, uint8_t base);
+struct kernelstring* string_concat(const struct kernelstring* str1, const struct kernelstring* str2);
+struct kernelstring* string_copy(const struct kernelstring* str);
+struct kernelstring* string_trim(const struct kernelstring* str);
 
 #endif
