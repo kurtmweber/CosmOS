@@ -2,7 +2,7 @@ include mk/build.mk
 
 BOOTIMAGE=hda.img
 
-all: bootimage
+all: subsystems
 
 bootimage: subsystems
 	$(DD) if=/dev/zero of=$(BOOTIMAGE) bs=32768 count=129024

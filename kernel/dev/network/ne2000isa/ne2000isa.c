@@ -18,7 +18,7 @@
 #include <sleep/sleep.h>
 
 #define NE2000ISA_BASE_ADDRESS 0x300
-#define NE2000ISA_IRQ 11
+#define NE2000ISA_IRQ 9
 
 // REGISTERS
 #define CR				NE2000ISA_BASE_ADDRESS+0x00 // Command Register
