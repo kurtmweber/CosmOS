@@ -15,9 +15,7 @@
 #include <sleep/sleep.h>
 
 #define RTC_IRQ_NUMBER 8
-#define RTC_FREQ 1024
-
-uint16_t rtc_freq;
+#define RTC_PORT 0x40
 
 typedef enum rtc_registers{
 	RTC_REGISTER_SECOND = 	0x00,
@@ -32,8 +30,6 @@ typedef enum rtc_registers{
 	RTC_REGISTER_STATUS_C = 0x0C,
 	RTC_REGISTER_CENTURY = 	0x32
 } rtc_registers;
-
-
 
 void rtc_handle_irq(stackFrame *frame){
 #ifdef RTC_SLEEP
@@ -51,11 +47,9 @@ void rtc_handle_irq(stackFrame *frame){
 void deviceInitRTC(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu\n",dev->description, RTC_IRQ_NUMBER);
-	rtc_freq = RTC_FREQ;
-	sleep_countdown = 0;
 	
 	asm_cli();
-	cmos_write_register(RTC_REGISTER_STATUS_B, 0x40);	// bit 6 turns on interrupt
+	cmos_write_register(RTC_REGISTER_STATUS_B, RTC_PORT);	// bit 6 turns on interrupt
 	registerInterruptHandler(RTC_IRQ_NUMBER, &rtc_handle_irq);
 }
 

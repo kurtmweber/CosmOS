@@ -11,6 +11,9 @@
 
 volatile uint64_t sleep_countdown;
 
+#define RTC_FREQ 1024
+uint16_t rtc_freq = RTC_FREQ;
+
 void sleep_update(){
 	if (sleep_countdown){
 		sleep_countdown--;

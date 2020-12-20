@@ -10,7 +10,6 @@
 
 #include <types.h>
 
-extern volatile uint64_t sleep_countdown;
 void sleep_update();
 void sleep_wait(uint64_t milliseconds);
 

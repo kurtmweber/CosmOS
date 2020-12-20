@@ -10,6 +10,8 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 
+// https://wiki.osdev.org/PC_Speaker
+
 /*
 * perform device instance specific init here
 */
@@ -18,7 +20,6 @@ void deviceInitSpeaker(struct device* dev){
 }
 
 void speaker_register_devices(){
-
     /*
 	* register device
 	*/
@@ -27,6 +28,4 @@ void speaker_register_devices(){
 	deviceinstance->devicetype = SPEAKER;
 	deviceinstance->init =  &deviceInitSpeaker;
 	registerDevice(deviceinstance);
-
-	return;
 }

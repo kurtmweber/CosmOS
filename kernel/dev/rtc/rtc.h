@@ -21,8 +21,6 @@ typedef struct rtc_time_t{
 	uint8_t century;
 } rtc_time_t;
 
-extern uint16_t rtc_freq;
-
 void rtc_handle_irq();
 void rtc_register_devices();
 rtc_time_t rtc_time();
