@@ -10,11 +10,13 @@
 #include <console/drivers/drivers.h>
 #include <string/string.h>
 
+#define KPRINTF_LEN 1024
+
 uint64_t kprintf(const char *s, ...){
 	__builtin_va_list ap;
 	uint64_t idx_in = 0, idx_out = 0;
 	uint64_t chars_written = 0;
-	char out_str[64] = { '\0' };
+	char out_str[KPRINTF_LEN] = { '\0' };
 	
 	__builtin_va_start(ap, s);
 	
@@ -42,8 +44,8 @@ uint64_t kprintf(const char *s, ...){
 		
 		idx_in++;
 		
-		if (idx_out == 63){
-			out_str[63] = '\0';
+		if (idx_out == KPRINTF_LEN){
+			out_str[KPRINTF_LEN] = '\0';
 			console_write(out_str);
 			idx_out = 0;
 			chars_written += 63;

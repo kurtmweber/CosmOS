@@ -9,9 +9,11 @@
 #include <collection/list/list.h>
 #include <devicemgr/devicetypes.h>
 #include <panic/panic.h>
+#include <console/console.h>
 
 void deviceregistry_init() {
-    void devicetypes_init();
+    kprintf("Init Device Registry\n");
+    devicetypes_init();
 }
 
 void deviceregistry_registerdevice(struct device* dev) {
@@ -73,8 +75,8 @@ void deviceregistry_iterate(DeviceIterator deviceIterator) {
         for (uint16_t i=0; i<MAX_DEVICE_TYPES;i++) {
             struct list* lst = devicetypes_get_devicelist(i);
             if (0!=lst){
-                for (uint16_t j=0; i<list_count(lst);j++) {
-                    struct device* dev =  (struct device*) list_get(lst, i);
+                for (uint16_t j=0; j<list_count(lst);j++) {
+                    struct device* dev = (struct device*) list_get(lst, j);
                     if (0!=dev){
                         (*deviceIterator)(dev);
                     } else {
@@ -87,6 +89,29 @@ void deviceregistry_iterate(DeviceIterator deviceIterator) {
         panic("Invalid iterator passed to deviceregistry_iterate");    
     }
 }
+
+void deviceregistry_iterate_type(deviceType dt, DeviceIterator deviceIterator) {
+    if ((dt>=0) && (dt<MAX_DEVICE_TYPES)){
+        if (0!=deviceIterator){
+            struct list* lst = devicetypes_get_devicelist(dt);
+            if (0!=lst){
+                for (uint16_t j=0; j<list_count(lst);j++) {
+                    struct device* dev = (struct device*) list_get(lst, j);
+                    if (0!=dev){
+                        (*deviceIterator)(dev);
+                    } else {
+                        panic("null dev in deviceregistry_iterate");    
+                    }
+                }
+            }
+         } else {
+            panic("Invalid iterator passed to deviceregistry_iterate");    
+        }    
+    } else {
+        panic("Invalid iterator passed to deviceregistry_iterate");    
+    }
+}
+
 
 
 

@@ -19,5 +19,6 @@ struct device* deviceregistry_get_device(deviceType dt, uint16_t idx);
 typedef void (*DeviceIterator)(struct device* dev);
 
 void deviceregistry_iterate(DeviceIterator deviceIterator);
+void deviceregistry_iterate_type(deviceType dt, DeviceIterator deviceIterator);
 
 #endif

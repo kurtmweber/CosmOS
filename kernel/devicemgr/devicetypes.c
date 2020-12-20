@@ -7,10 +7,12 @@
 
 #include <devicemgr/devicetypes.h>
 #include <panic/panic.h>
+#include <console/console.h>
 
 struct array* types;
 
 void devicetypes_init() {
+    kprintf("Init Device Types\n");
     types = array_new(MAX_DEVICE_TYPES);
     for (uint16_t i=0; i<MAX_DEVICE_TYPES;i++) {
         array_set(types, i,0);

@@ -62,6 +62,7 @@ void CosmOS(){
 	* Register devices
 	*/
 	dev_devicemgr_register_devices();
+	kprintf("Registered %llu devices\n", devicemgr_device_count());
 
 	/*
 	* init all devices
@@ -71,7 +72,6 @@ void CosmOS(){
 
 	asm_sti();
 
-	
 //	speaker_beep(4000,100);
 
 	// show the tick count, since we can
