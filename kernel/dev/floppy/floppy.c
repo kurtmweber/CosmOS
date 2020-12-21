@@ -12,7 +12,7 @@
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
 #include <dev/cmos/cmos.h>
-
+#include <sleep/sleep.h>
 
 #define FLOPPY_IRQ_NUMBER   6
 #define FLOPPY_BASE         0x3F0
@@ -22,13 +22,13 @@
 // registers
 #define FLOPPY_STATUS_REGISTER_A                 0x3F0 // read-only
 #define FLOPPY_STATUS_REGISTER_B                 0x3F1 // read-only
-#define FLOPPY_DIGITAL_OUTPUT_REGISTER           0x3F2
-#define FLOPPY_TAPE_DRIVE_REGISTER               0x3F3
-#define FLOPPY_MAIN_STATUS_REGISTER              0x3F4 // read-only
-#define FLOPPY_DATARATE_SELECT_REGISTER          0x3F4 // write-only
-#define FLOPPY_DATA_FIFO                         0x3F5
-#define FLOPPY_DIGITAL_INPUT_REGISTER            0x3F7 // read-only
-#define FLOPPY_CONFIGURATION_CONTROL_REGISTER    0x3F7  // write-only
+#define FLOPPY_DIGITAL_OUTPUT_REGISTER           0x3F2 //			 aka (DOR)
+#define FLOPPY_TAPE_DRIVE_REGISTER               0x3F3 //			 aka (TSR)
+#define FLOPPY_MAIN_STATUS_REGISTER              0x3F4 // read-only  aka (MSR)
+#define FLOPPY_DATARATE_SELECT_REGISTER          0x3F4 // write-only aka (DSR)
+#define FLOPPY_DATA_FIFO                         0x3F5 //			 aka (FIFO)				
+#define FLOPPY_DIGITAL_INPUT_REGISTER            0x3F7 // read-only  aka (DIR)
+#define FLOPPY_CONFIGURATION_CONTROL_REGISTER    0x3F7 // write-only aka (CCR)
 
 // commands
 #define FLOPPY_READ_TRACK                  2	// generates IRQ6
@@ -54,12 +54,12 @@
 #define FLOPPY_SCAN_HIGH_OR_EQUAL          29
 
 // DOR
-#define FLOPPY_DOR_MOTD_BIT                7
-#define FLOPPY_DOR_MOTC_BIT                6
-#define FLOPPY_DOR_MOTB_BIT                5
-#define FLOPPY_DOR_MOTA_BIT                4
-#define FLOPPY_DOR_IRQ_BIT                 3
-#define FLOPPY_DOR_RESET_BIT               2
+#define FLOPPY_DOR_MOTD_BIT                7 // drive 3 motor (0x80)
+#define FLOPPY_DOR_MOTC_BIT                6 // drive 2 motor (0x40)
+#define FLOPPY_DOR_MOTB_BIT                5 // drive 1 motor (0x20)
+#define FLOPPY_DOR_MOTA_BIT                4 // drive 1 motor (0x10)
+#define FLOPPY_DOR_IRQ_BIT                 3 // enable IRQ & DMA (0x08)
+#define FLOPPY_DOR_RESET_BIT               2 // reset (0x04) Clear = enter reset mode, Set = normal operation
 #define FLOPPY_DOR_DSEL1_BIT               1
 #define FLOPPY_DOR_DSEL0_BIT               0
 
@@ -86,7 +86,13 @@
 
 #define FLOPPY_DMA_CHANNEL					2
 
+#define FLOPPY_MOTOR_DELAY_MS_35			300 // 300ms for motor to spin up
+#define FLOPPY_MOTOR_DELAY_MS_525			500 // 500ms for motor to spin up
+
+volatile uint64_t irq_count=0;
+
 void floppy_irq_read(stackFrame *frame) {
+	irq_count = irq_count+1;
     kprintf("^");
 }
 
@@ -110,6 +116,41 @@ void printDriveType(uint8_t type){
 	}
 }
 
+
+void resetFloppy() {
+	uint64_t current_irq_count = irq_count;
+	/*
+	* save DOR, write a zero to do a reset.  wait.  write back the DOR.
+	*/
+	uint8_t currentDOR = asm_in_b(FLOPPY_DIGITAL_OUTPUT_REGISTER);
+	asm_out_b(FLOPPY_DIGITAL_OUTPUT_REGISTER,0x00);
+	sleep_wait(5);
+	asm_out_b(FLOPPY_DIGITAL_OUTPUT_REGISTER,currentDOR);
+	/*
+	* wait for IRQ
+	*/
+	while (irq_count < current_irq_count+1){
+		sleep_wait(10);
+	}
+	/*
+	* 
+	*/
+	kprintf("&&");
+}
+
+
+void command(uint8_t commandByte) {
+	uint8_t msr_state = asm_in_b(FLOPPY_MAIN_STATUS_REGISTER);
+	// check that RQM=1 and DIO=0
+	if(((msr_state & 0xc0) != 0x80) ){
+		resetFloppy();
+	}
+
+	// send command to FIFO
+	asm_out_b(FLOPPY_DATA_FIFO, commandByte);
+
+
+}
 /*
 * perform device instance specific init here
 */
@@ -131,6 +172,19 @@ void deviceInitFloppy(struct device* dev){
 		printDriveType(slave_drives);
 		kprintf("\n");
 	}
+
+	// set CCR, DSR to zero
+	asm_out_b(FLOPPY_CONFIGURATION_CONTROL_REGISTER ,0x00);
+	asm_out_b(FLOPPY_DATARATE_SELECT_REGISTER ,0x00);
+
+	// turn on motor and select drive. enabled IRQS
+	asm_out_b(FLOPPY_DIGITAL_OUTPUT_REGISTER | FLOPPY_DOR_IRQ_BIT, FLOPPY_DOR_MOTA_BIT);
+
+	// sleep FLOPPY_MOTOR_DELAY_MS_35 ms to let the motor spin up
+	sleep_wait(FLOPPY_MOTOR_DELAY_MS_35);
+
+	// reset
+	resetFloppy();
 }
 
 /**
