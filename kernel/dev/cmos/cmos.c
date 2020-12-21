@@ -8,6 +8,7 @@
 #include <dev/cmos/cmos.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
+#include <console/console.h>
 
 void cmos_write_register(uint8_t reg, uint8_t val){
 	uint8_t pv;
@@ -40,8 +41,7 @@ uint8_t cmos_read_register(uint8_t reg){
 */
 
 void deviceInitCMOS(struct device* dev){
- //   kprintf("Init %s at IRQ %llu\n",dev->description, SB16_IRQ);
- //   interrupt_router_register_interrupt_handler(SB16_IRQ, &adlib_handle_irq);
+    kprintf("Init %s\n",dev->description);
 }
 
 void cmos_devicemgr_register_devices(){
