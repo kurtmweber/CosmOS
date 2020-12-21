@@ -41,7 +41,8 @@ QEMUARGS=                                                 \
   -machine pcspk-audiodev=audio0                          \
   -audiodev coreaudio,id=audio0                           \
   -monitor telnet::45454,server,nowait                    \
-  -device AC97,audiodev=audio0
 
 # to list devices:
 # qemu-system-x86_64 -device ?
+
+# -device AC97,audiodev=audio0
