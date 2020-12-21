@@ -11,6 +11,8 @@
 #include <dev/pci/pci.h>
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
+#include <dev/cmos/cmos.h>
+
 
 #define FLOPPY_IRQ_NUMBER   6
 #define FLOPPY_BASE         0x3F0
@@ -71,8 +73,37 @@
 #define FLOPPY_MSR_ACTB_BIT                1
 #define FLOPPY_MSR_ACTA_BIT                0
 
+#define CMOS_FLOPPY_DRIVES_PORT			   0x10
+
+#define FLOPPY_DRIVETYPE_NONE				0x00
+#define FLOPPY_DRIVETYPE_360_525			0x01
+#define FLOPPY_DRIVETYPE_12_525				0x02
+#define FLOPPY_DRIVETYPE_720_35				0x03
+#define FLOPPY_DRIVETYPE_144_35				0x04
+#define FLOPPY_DRIVETYPE_288_35				0x05
+
 void floppy_irq_read(stackFrame *frame) {
     kprintf("^");
+}
+
+void printDriveType(uint8_t type){
+	switch (type) {
+		case FLOPPY_DRIVETYPE_360_525:
+			kprintf("360 KB 5.25 Drive");
+			break;
+		case FLOPPY_DRIVETYPE_12_525:
+			kprintf("1.2 MB 5.25 Drive");
+			break;
+		case FLOPPY_DRIVETYPE_720_35:
+			kprintf("720 KB 3.5 Drive");
+			break;
+		case FLOPPY_DRIVETYPE_144_35:
+			kprintf("1.44 MB 3.5 Drive");
+			break;
+		case FLOPPY_DRIVETYPE_288_35:
+			kprintf("2.88 MB 3.5 drive");
+			break;
+	}
 }
 
 /*
@@ -82,8 +113,22 @@ void deviceInitFloppy(struct device* dev){
     kprintf("Init %s at IRQ %llu\n",dev->description, FLOPPY_IRQ_NUMBER);
 	interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);
 
-
+	uint8_t drives = cmos_read_register(CMOS_FLOPPY_DRIVES_PORT);
+	uint8_t master_drives = (drives & 0XF0)>> 4;
+	uint8_t slave_drives = (drives & 0X0F);
+	
+	if (0!=master_drives){
+		kprintf("Master Floppy ");
+		printDriveType(master_drives);
+		kprintf("\n");
+	}
+	if (0!=slave_drives){
+		kprintf("Slave Floppy ");
+		printDriveType(slave_drives);
+		kprintf("\n");
+	}
 }
+
 
 
 
