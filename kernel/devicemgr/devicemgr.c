@@ -47,9 +47,37 @@ void deviceInitIterator(struct device* dev) {
     }
 }
 
+/*
+* init order matters
+*/
 void devicemgr_init_devices(){
     kprintf("Initializing Devices\n");
-    deviceregistry_iterate(&deviceInitIterator);
+    /*
+    * PIC first
+    */
+    deviceregistry_iterate_type(PIC, deviceInitIterator);
+    /*
+    * Serial next
+    */
+    deviceregistry_iterate_type(SERIAL, deviceInitIterator);
+   /*
+    * the PIT
+    */
+    deviceregistry_iterate_type(PIT, deviceInitIterator);
+    /*
+    * everything else
+    */
+    deviceregistry_iterate_type(RTC, deviceInitIterator);
+    deviceregistry_iterate_type(KEYBOARD, deviceInitIterator); 
+    deviceregistry_iterate_type(VGA, deviceInitIterator);
+    deviceregistry_iterate_type(USB, deviceInitIterator);
+    deviceregistry_iterate_type(ETHERNET, deviceInitIterator);
+    deviceregistry_iterate_type(BRIDGE, deviceInitIterator);
+    deviceregistry_iterate_type(ATA, deviceInitIterator);
+    deviceregistry_iterate_type(MOUSE, deviceInitIterator);
+    deviceregistry_iterate_type(FLOPPY, deviceInitIterator);
+ //   deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
+ //   deviceregistry_iterate_type(DSP, deviceInitIterator);
 }
 
 struct device* devicemgr_new_device() {

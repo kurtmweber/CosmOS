@@ -9,7 +9,7 @@
 #include <dev/dev.h>
 
 /*
-* Note that devices are initialized in the order they are registered.
+* 
 */
 void dev_devicemgr_register_devices(){
 	/*
@@ -17,7 +17,7 @@ void dev_devicemgr_register_devices(){
 	*/
 	pci_init();
 	/*
-	* set up the pic next
+	* register up the pic next
 	*/
 	pic_devicemgr_register_devices();
 	/* 
