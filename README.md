@@ -5,7 +5,7 @@ A distributed, single-system-image operating system project
 
 # License
 
-CosmOS is distributed under the licensing terms [here](https://github.com/teverett/CosmOS/blob/clang/LICENSE)
+CosmOS is distributed under the licensing terms [here](https://github.com/kurtmweber/CosmOS/blob/master/LICENSE)
 
 # Prerequisites
 
