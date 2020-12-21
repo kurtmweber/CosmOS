@@ -15,5 +15,6 @@ uint64_t strlen(const char *s);
 char *strtrim(const char *s);
 char *strcpy(char *dest, const char *src);
 char *strcat(char *dest, const char *src);
+char strcmp(const char *str1, const char *str2);
 
 #endif

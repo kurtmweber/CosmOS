@@ -144,3 +144,12 @@ void devicemgr_set_device_description(struct device* dev, int8_t* description) {
         panic("Invalid device or description passed to devicemgr_set_device_description\n");
     }
 }
+
+struct device* devicemgr_findDevice(const int8_t* name) {
+    if (0!=name){
+        return deviceregistry_findDevice(name);
+    } else {
+        panic("Invalid device name passed to devicemgr_findDevice\n");
+    }
+}
+

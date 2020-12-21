@@ -21,4 +21,7 @@ typedef void (*DeviceIterator)(struct device* dev);
 void deviceregistry_iterate(DeviceIterator deviceIterator);
 void deviceregistry_iterate_type(deviceType dt, DeviceIterator deviceIterator);
 
+// find a device by name
+struct device* deviceregistry_findDevice(const int8_t* name);
+
 #endif

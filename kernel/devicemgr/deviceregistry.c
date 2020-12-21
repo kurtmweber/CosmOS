@@ -10,6 +10,7 @@
 #include <devicemgr/devicetypes.h>
 #include <panic/panic.h>
 #include <console/console.h>
+#include <string/string.h>
 
 void deviceregistry_init() {
     kprintf("Init Device Registry\n");
@@ -112,6 +113,30 @@ void deviceregistry_iterate_type(deviceType dt, DeviceIterator deviceIterator) {
     }
 }
 
-
+/*
+* find device by name.  return zero if there is no such device
+*/
+struct device* deviceregistry_findDevice(const int8_t* name) {
+    if (0!=name){
+        for (uint16_t i=0; i<MAX_DEVICE_TYPES;i++) {
+                struct list* lst = devicetypes_get_devicelist(i);
+                if (0!=lst){
+                    for (uint16_t j=0; j<list_count(lst);j++) {
+                        struct device* dev = (struct device*) list_get(lst, j);
+                        if (0!=dev){
+                            if (0==strcmp(name, dev->name)){
+                                return dev;
+                            }
+                        } else {
+                            panic("null dev in deviceregistry_findDevice");    
+                        }
+                    }
+            }
+        }
+    } else {
+        panic("Invalid device name passed to deviceregistry_findDevice\n");
+    }
+    return 0;
+}
 
 
