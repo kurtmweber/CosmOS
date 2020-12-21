@@ -8,7 +8,7 @@
 #include <types.h>
 
 void uitoa3(uint64_t n, char *s, uint16_t len, uint8_t base){
-	uint8_t i = 0;
+	uint16_t i = 0;
 	char *rev = s;
 	char tmp;
 	
