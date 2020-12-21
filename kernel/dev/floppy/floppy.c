@@ -12,7 +12,8 @@
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
 
-#define FLOPPY_IRQ_NUMBER 6
+#define FLOPPY_IRQ_NUMBER   6
+#define FLOPPY_BASE         0x3F0
 
 // https://wiki.osdev.org/Floppy_Disk_Controller#Registers
 
