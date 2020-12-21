@@ -19,6 +19,7 @@
 #include <dev/dev.h>
 #include <sleep/sleep.h>
 #include <notes.h>
+#include <devicemgr/deviceapi/deviceapi_rtc.h>
 
 void stringtest();
 
@@ -78,6 +79,13 @@ void CosmOS(){
 	kprintf("Ticks: %llu\n", pit_tickcount());
 	sleep_wait(1000);
 	kprintf("Ticks: %llu\n", pit_tickcount());
+
+	// get the time, b/c we can
+	struct device* rtc = devicemgr_findDevice("rtc0");
+	struct deviceapi_rtc* rtc_api = (struct deviceapi_rtc*) rtc->api;
+	rtc_time_function f = rtc_api->rtc_time;
+	rtc_time_t daTime = (*f)();
+	kprintf("Hour: %llu Minute: %llu Second: %llu\n",daTime.hour, daTime.minute, daTime.second);
 
 	mem_block *tmp;
 	tmp = usable_phys_blocks;

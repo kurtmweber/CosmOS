@@ -4,16 +4,29 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-
-#ifndef _RTC_H
-#define _RTC_H
+/*
+* this file defines the interface that all RTC devices will implement
+*/
+#ifndef _DEVICEAPI_RTC_H
+#define _DEVICEAPI_RTC_H
 
 #include <types.h>
 
-void rtc_devicemgr_register_devices();
+typedef struct rtc_time_t{
+	uint8_t second;
+	uint8_t minute;
+	uint8_t hour;
+	uint8_t weekday;
+	uint8_t monthday;
+	uint8_t month;
+	uint8_t year;
+	uint8_t century;
+} rtc_time_t;
 
-typedef void (*RTCEvent)();
-void rtc_subscribe(RTCEvent rtcEvent);
+typedef rtc_time_t (*rtc_time_function)();
+
+struct deviceapi_rtc {
+    rtc_time_function rtc_time;
+};
 
 #endif
-

@@ -14,6 +14,7 @@
 #include <devicemgr/devicemgr.h>
 #include <collection/list/list.h>
 #include <sleep/sleep.h>
+#include <devicemgr/deviceapi/deviceapi_rtc.h>
 
 #define RTC_IRQ_NUMBER 		8
 
@@ -69,21 +70,6 @@ void deviceInitRTC(struct device* dev){
 	interrupt_router_register_interrupt_handler(RTC_IRQ_NUMBER, &rtc_handle_irq);
 }
 
-/*
-* find all RTC devices and register them
-*/
-void rtc_devicemgr_register_devices(){
-	/*
-	* register device
-	*/
-	struct device* deviceinstance = devicemgr_new_device();
-	devicemgr_set_device_description(deviceinstance, "RTC");
-	deviceinstance->devicetype = RTC;
-	deviceinstance->init =  &deviceInitRTC;
-	devicemgr_register_device(deviceinstance);
-}
-
-
 rtc_time_t rtc_time(){
 	rtc_time_t a, b;
 	
@@ -135,5 +121,25 @@ void rtc_subscribe(RTCEvent rtcEvent) {
 	list_add(rtcEvents, rtcEvent);
 }
 
-
-
+/*
+* find all RTC devices and register them
+*/
+void rtc_devicemgr_register_devices(){
+	/*
+	* register device
+	*/
+	struct device* deviceinstance = devicemgr_new_device();
+	devicemgr_set_device_description(deviceinstance, "RTC");
+	deviceinstance->devicetype = RTC;
+	deviceinstance->init =  &deviceInitRTC;
+	/*
+	* device api
+	*/
+	struct deviceapi_rtc* api = (struct deviceapi_rtc*) kmalloc (sizeof(struct deviceapi_rtc));
+	api->rtc_time = &rtc_time;
+	deviceinstance->api = api;
+	/*
+	* register
+	*/
+	devicemgr_register_device(deviceinstance);
+}
