@@ -27,6 +27,7 @@
 #include <dev/ac97/ac97.h>
 #include <dev/adlib/adlib.h>
 #include <dev/cmos/cmos.h>
+#include <dev/isadma/isadma.h>
 
 void dev_devicemgr_register_devices();
 

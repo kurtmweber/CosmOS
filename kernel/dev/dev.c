@@ -33,6 +33,11 @@ void dev_devicemgr_register_devices(){
 	*/
 	cmos_devicemgr_register_devices();
 	/*
+	* ISA DMA Controller
+	*/
+	isadma_devicemgr_register_devices();
+
+	/*
 	* rest of this stuff can really happen in any order
 	*/
 	rtc_devicemgr_register_devices();
