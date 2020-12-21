@@ -5,12 +5,13 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _VIDEO_C
-#define _VIDEO_C
-
 #include <types.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
+
+video_driver_interface_t video_interfaces[VIDEO_DRIVER_LAST];
+video_driver video_active_driver;
+video_mode video_active_mode;
 
 void video_init(){
 	uint8_t i;
@@ -25,10 +26,7 @@ void video_init(){
 
 uint8_t video_query_resolution(uint16_t *x, uint16_t *y){
 	uint8_t r;
-	
 	return video_interfaces[video_active_driver].query_resolution(x, y);
-	
-	
 }
 
 uint8_t video_select_driver(video_driver driver){
@@ -52,5 +50,3 @@ uint8_t video_select_mode(video_mode mode){
 	video_active_mode = mode;
 	return 1;
 }
-
-#endif

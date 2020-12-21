@@ -6,8 +6,8 @@ ARFLAGS=-crs
 
 all: interrupts.a
 
-interrupts.a: de.o idt.o irq.o pic.o
-	$(AR) $(ARFLAGS) interrupts.a de.o idt.o irq.o pic.o
+interrupts.a: de.o idt.o irq.o interrupt_router.o
+	$(AR) $(ARFLAGS) interrupts.a de.o idt.o irq.o interrupt_router.o
 	
 de.o: de.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $<
@@ -18,22 +18,9 @@ idt.o: idt.c
 irq.o: irq.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $<
 	
-pic.o: pic.c
+interrupt_router.o: interrupt_router.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
-	
-clean: de-o-clean interrupts-a-clean idt-o-clean irq-o-clean pic-o-clean
 
-de-o-clean:
-	$(RM) de.o
-
-interrupts-a-clean:
-	$(RM) interrupts.a
-
-idt-o-clean:
-	$(RM) idt.o
-
-irq-o-clean:
-	$(RM) irq.o
-	
-pic-o-clean:
-	$(RM) pic.o
+clean:
+	$(RM) *.o
+	$(RM) *.a

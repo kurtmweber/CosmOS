@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _INIT_C
-#define _INIT_C
-
 #include <types.h>
 #include <console/console.h>
 #include <mm/mm.h>
@@ -36,10 +33,5 @@ void mmu_init(){
 	// 0x0000000000900000 - 0x0000000001FFFFFF: Kernel + kernel heap
 	b = find_containing_block(0x0000000000000000, usable_phys_blocks);
 	kprintf("Base: %llX\tLength: %llX\n", b->base, b->len);
-
-	
-	
 	return;
 }
-
-#endif

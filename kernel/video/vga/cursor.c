@@ -5,11 +5,10 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _CURSOR_C
-#define _CURSOR_C
-
 #include <asm/asm.h>
 #include <console/console.h>
+
+uint16_t cursor_position;
 
 void cursor_set_position(uint16_t loc){
 	asm_out_b(CRT_INDEX_REGISTER, CURSOR_LOCATION_HIBYTE);
@@ -18,5 +17,3 @@ void cursor_set_position(uint16_t loc){
 	asm_out_b(CRT_INDEX_REGISTER, CURSOR_LOCATION_LOBYTE);
 	asm_out_b(CRT_DATA_REGISTER, (uint8_t)(loc & 0xFF));
 }
-
-#endif
