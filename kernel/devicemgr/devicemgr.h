@@ -29,7 +29,7 @@ typedef enum deviceType {
 	FLOPPY=			0x0B,
 	SPEAKER=		0x0C,
 	PIT=			0x0D,
-	DSP=			0x0C
+	DSP=			0x0E
 } deviceType;
 
 typedef struct device {

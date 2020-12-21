@@ -76,8 +76,8 @@ void devicemgr_init_devices(){
     deviceregistry_iterate_type(ATA, deviceInitIterator);
     deviceregistry_iterate_type(MOUSE, deviceInitIterator);
     deviceregistry_iterate_type(FLOPPY, deviceInitIterator);
- //   deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
- //   deviceregistry_iterate_type(DSP, deviceInitIterator);
+    deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
+    deviceregistry_iterate_type(DSP, deviceInitIterator);
 }
 
 struct device* devicemgr_new_device() {
