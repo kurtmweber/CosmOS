@@ -68,6 +68,8 @@ struct device* devicemgr_new_device() {
     ret->init=0;
     ret->deviceData=0;
     ret->name=0;
+    ret->devicetype=0;
+    ret->api=0;
     return ret;
 }
 
