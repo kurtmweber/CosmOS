@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _MODE_C
-#define _MODE_C
-
 #include <types.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
@@ -19,5 +16,3 @@ uint8_t vga_set_mode(video_mode mode){
 		return 0;
 	}
 }
-
-#endif

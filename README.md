@@ -11,7 +11,7 @@ CosmOS is distributed under the licensing terms [here](https://github.com/kurtmw
 
 CosmOS requires:
 
-* [Clang](https://clang.llvm.org/) or [GCC](https://gcc.gnu.org/)
+* [GCC](https://gcc.gnu.org/)
 * [NASM](http://nasm.us/)
 * [binutils](https://www.gnu.org/software/binutils/)
 * [QEMU](https://www.qemu.org/) 
@@ -51,6 +51,12 @@ CosmOS builds with [GNU Make](https://www.gnu.org/software/make/)
 From the root directory:
 
 `make clean;make`
+
+# Running
+
+The command `make qemu` will start QEMU and boot the image.  The QEMU monitor is exposed on port 45454 and can be connected to with `telnet localhost:45454`
+
+
 
 
 

@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _DE_C
-#define _DE_C
-
 #include <types.h>
 #include <panic/panic.h>
 #include <interrupts/interrupts.h>
@@ -15,5 +12,3 @@
 __attribute__ ((interrupt)) void isrDE(stackFrame *frame){
 	panic("Division by zero!");
 }
-
-#endif

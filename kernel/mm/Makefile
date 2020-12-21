@@ -5,7 +5,7 @@ ARFLAGS=-crs
 
 all: mm.a
 
-mm.a: blockmgmt.o init.o kmalloc.o map.o pagetables.o phys_alloc.o
+mm.a: blockmgmt.o init.o kmalloc.o map.o pagetables.o phys_alloc.o mm.o
 	$(AR) $(ARFLAGS) $@ $?
 	
 blockmgmt.o: blockmgmt.c mm.h
@@ -24,6 +24,9 @@ pagetables.o: pagetables.c mm.h
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 
 phys_alloc.o: phys_alloc.c mm.h
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
+	
+mm.o: mm.c mm.h
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 clean:

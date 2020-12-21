@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _MAP_C
-#define _MAP_C
-
 #include <types.h>
 #include <asm/asm.h>
 #include <console/console.h>
@@ -16,6 +13,7 @@
 
 const uint16_t map_base_addr = 0x500;
 const uint8_t map_increment = 24;
+const uint16_t page_size = 4096;
 
 int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block){
 	int_15_map *map;
@@ -41,5 +39,3 @@ int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block){
 	
 	return map;
 }
-
-#endif

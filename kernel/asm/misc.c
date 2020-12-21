@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _MISC_C
-#define _MISC_C
-
 #include <types.h>
 #include <mm/mm.h>
 
@@ -45,5 +42,3 @@ void asm_sti(){
 	
 	return;
 }
-
-#endif

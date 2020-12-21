@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _VGA_CONSOLE_WRITE_C
-#define _VGA_CONSOLE_WRITE_C
-
 #include <types.h>
 #include <console/console.h>
 #include <console/drivers/vga/vga.h>
@@ -59,5 +56,3 @@ uint8_t vga_console_write(const char *c){
 	
 	return 1;
 }
-
-#endif

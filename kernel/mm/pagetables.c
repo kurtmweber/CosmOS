@@ -5,15 +5,11 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _PAGETABLES_C
-#define _PAGETABLES_C
-
 #include <types.h>
 #include <asm/asm.h>
 #include <mm/mm.h>
 #include <panic/panic.h>
 #include <string/string.h>
-
 
 #ifdef COMPILE_PLATFORM_LINUX 
 pttentry *extract_cr3_base_address(pttentry cr3) __attribute__((alias("extract_pttentry_base_address")));
@@ -103,5 +99,3 @@ uint16_t vaddr_ptt_index(void *address, ptt_levels level){
 	
 	return ((uint64_t)address & mask) >> shift;
 }
-
-#endif
