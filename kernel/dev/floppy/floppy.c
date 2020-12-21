@@ -81,7 +81,11 @@ void floppy_irq_read(stackFrame *frame) {
 void deviceInitFloppy(struct device* dev){
     kprintf("Init %s at IRQ %llu\n",dev->description, FLOPPY_IRQ_NUMBER);
 	interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);
+
+
 }
+
+
 
 /**
 * find all floppy devices and register them

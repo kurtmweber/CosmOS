@@ -26,6 +26,7 @@
 #include <dev/sb16/sb16.h>
 #include <dev/ac97/ac97.h>
 #include <dev/adlib/adlib.h>
+#include <dev/cmos/cmos.h>
 
 void dev_devicemgr_register_devices();
 

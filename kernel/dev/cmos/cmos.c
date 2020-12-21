@@ -5,8 +5,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/rtc/cmos.h>
+#include <dev/cmos/cmos.h>
 #include <asm/asm.h>
+#include <devicemgr/devicemgr.h>
 
 void cmos_write_register(uint8_t reg, uint8_t val){
 	uint8_t pv;
@@ -32,4 +33,24 @@ uint8_t cmos_read_register(uint8_t reg){
 	asm_sti();
 	
 	return b;
+}
+
+/*
+* perform device instance specific init here
+*/
+
+void deviceInitCMOS(struct device* dev){
+ //   kprintf("Init %s at IRQ %llu\n",dev->description, SB16_IRQ);
+ //   interrupt_router_register_interrupt_handler(SB16_IRQ, &adlib_handle_irq);
+}
+
+void cmos_devicemgr_register_devices(){
+    /*
+	* register device
+	*/
+	struct device* deviceinstance = devicemgr_new_device();
+	devicemgr_set_device_description(deviceinstance, "i386 CMOS");
+	deviceinstance->devicetype = CMOS;
+	deviceinstance->init =  &deviceInitCMOS;
+	devicemgr_register_device(deviceinstance);
 }

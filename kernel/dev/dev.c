@@ -29,6 +29,10 @@ void dev_devicemgr_register_devices(){
 	*/
 	pit_devicemgr_register_devices();
 	/*
+	* we need the CMOS
+	*/
+	cmos_devicemgr_register_devices();
+	/*
 	* rest of this stuff can really happen in any order
 	*/
 	rtc_devicemgr_register_devices();

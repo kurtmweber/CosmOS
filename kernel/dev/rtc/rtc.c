@@ -9,7 +9,7 @@
 #include <asm/asm.h>
 #include <console/console.h>
 #include <dev/rtc/rtc.h>
-#include <dev/rtc/cmos.h>
+#include <dev/cmos/cmos.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/devicemgr.h>
 #include <collection/list/list.h>

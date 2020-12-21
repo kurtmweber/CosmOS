@@ -12,7 +12,6 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 
-
 void adlib_handle_irq(stackFrame *frame) {
 }
 
