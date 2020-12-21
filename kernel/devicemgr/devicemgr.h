@@ -53,15 +53,10 @@ void devicemgr_init();
 // count of device instances
 uint16_t devicemgr_device_count();
 
-
 // init all devices
 void devicemgr_init_devices();
 
 // set description
 void devicemgr_set_device_description(struct device* dev, int8_t* description);
-
-// search for device by device type
-typedef void (*deviceSearchCallback)(struct device* dev);
-void devicemgr_search_device(enum deviceType devicetype, deviceSearchCallback cb);
 
 #endif
