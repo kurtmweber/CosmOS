@@ -11,11 +11,39 @@
 #include <mm/mm.h>
 #include <string/string.h>
 #include <panic/panic.h>
+#include <devicemgr/deviceregistry.h>
 
-struct list* devices;
+#define MAX_DEVICE_NAME_LENGTH 64
+
+int8_t* DeviceTypeNames[] = {"None"
+	, "serial"
+	,"vga"
+	,"rtc"
+	,"keyboard"
+	,"ethernet"
+	,"bridge"
+	,"usb"
+	,"ata"
+	,"pic"
+	,"mouse"
+	,"floppy"
+	,"speaker"
+	,"pit"
+	,"dsp"
+    }; 
 
 void devicemgr_init() {
-    devices = list_new();    
+    deviceregistry_init();    
+}
+
+int8_t* createDeviceName(struct device* dev) {
+    int8_t nn[32];
+    int8_t* ret = kmalloc(MAX_DEVICE_NAME_LENGTH);
+    strcpy(ret, DeviceTypeNames[dev->devicetype]);
+    uitoa3(dev->type_index, nn, 32, 10);
+    ret = strcat(ret, nn);
+  //  kprintf(ret);
+    return ret;
 }
 
 void devicemgr_register_device(struct device* dev) {
@@ -33,23 +61,27 @@ void devicemgr_register_device(struct device* dev) {
         kprintf(dev->description);
         panic("Attempt to register device without init function\n");
     }
-    list_add(devices, dev);
+    /*
+    * set index
+    */
+   dev->type_index = deviceregistry_devicecount_type(dev->devicetype);
+    /*
+    * create name
+    */
+    dev->name = createDeviceName(dev);
+    kprintf(dev->name);
+    kprintf("\n");
+    /*
+    * register
+    */
+    deviceregistry_registerdevice(dev);
 }
 
 uint16_t devicemgr_device_count() {
-    return list_count(devices);
+    return deviceregistry_devicecount();
 }
 
-struct device* devicemgr_get_device(uint16_t idx){
-    if ((idx>0) && (idx<list_count(devices))) {
-        return list_get(devices, idx);
-    } else {
-        panic("invalid device index passed to getDevice\n");
-    }
-}
-
-void deviceInitIterator(void* value) {
-    struct device* dev = (struct device*) value;
+void deviceInitIterator(struct device* dev) {
     if (0!=dev) {
         dev->init(dev);
     } else {
@@ -57,9 +89,37 @@ void deviceInitIterator(void* value) {
     }
 }
 
+/*
+* init order matters
+*/
 void devicemgr_init_devices(){
     kprintf("Initializing Devices\n");
-    list_iterate(devices, &deviceInitIterator);
+    /*
+    * PIC first
+    */
+    deviceregistry_iterate_type(PIC, deviceInitIterator);
+    /*
+    * Serial next
+    */
+    deviceregistry_iterate_type(SERIAL, deviceInitIterator);
+   /*
+    * the PIT
+    */
+    deviceregistry_iterate_type(PIT, deviceInitIterator);
+    /*
+    * everything else
+    */
+    deviceregistry_iterate_type(RTC, deviceInitIterator);
+    deviceregistry_iterate_type(KEYBOARD, deviceInitIterator); 
+    deviceregistry_iterate_type(VGA, deviceInitIterator);
+    deviceregistry_iterate_type(USB, deviceInitIterator);
+    deviceregistry_iterate_type(ETHERNET, deviceInitIterator);
+    deviceregistry_iterate_type(BRIDGE, deviceInitIterator);
+    deviceregistry_iterate_type(ATA, deviceInitIterator);
+    deviceregistry_iterate_type(MOUSE, deviceInitIterator);
+    deviceregistry_iterate_type(FLOPPY, deviceInitIterator);
+    deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
+    deviceregistry_iterate_type(DSP, deviceInitIterator);
 }
 
 struct device* devicemgr_new_device() {
@@ -68,6 +128,7 @@ struct device* devicemgr_new_device() {
     ret->init=0;
     ret->deviceData=0;
     ret->name=0;
+    ret->type_index=0;
     ret->devicetype=0;
     ret->api=0;
     return ret;
@@ -85,24 +146,3 @@ void devicemgr_set_device_description(struct device* dev, int8_t* description) {
         panic("Invalid device or description passed to devicemgr_set_device_description\n");
     }
 }
-
-/*
-* search for devices by type
-*/
-void devicemgr_search_device(enum deviceType devicetype, deviceSearchCallback cb) {
-    if (0!=cb){
-        for (uint16_t i=0; i<list_count(devices);i++){
-            struct device* dev = (struct device*) list_get(devices, i);
-            if (0!=dev){
-                if (dev->devicetype == devicetype){
-                    (*cb)(dev);
-                }
-            } else {
-                panic("um. why is there a null device?\n");
-            }
-        }
-    } else {
-        panic("Invalid function pointer passed to devicemgr_set_device_description\n");
-    }
-}
-

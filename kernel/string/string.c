@@ -50,3 +50,19 @@ char * strcpy(char *dest, const char *src) {
 	return dest;
 }
 
+char *strcat(char *dest, const char *src) {
+	uint16_t i=0;
+	while (dest[i]!=0){
+		i++;
+	}
+	uint16_t j=0;
+	while (src[j]!=0){
+
+		dest[i+j]=src[j];
+		j++;
+	}
+	dest[i+j+1]=0;
+	return dest;
+}
+
+

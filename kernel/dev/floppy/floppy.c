@@ -155,7 +155,7 @@ void command(uint8_t commandByte) {
 * perform device instance specific init here
 */
 void deviceInitFloppy(struct device* dev){
-    kprintf("Init %s at IRQ %llu\n",dev->description, FLOPPY_IRQ_NUMBER);
+    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, FLOPPY_IRQ_NUMBER, dev->name);
 	interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);
 
 	uint8_t drives = cmos_read_register(CMOS_FLOPPY_DRIVES_PORT);

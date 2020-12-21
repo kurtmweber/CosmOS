@@ -27,7 +27,7 @@
 * perform device instance specific init here
 */
 void deviceInitPIC(struct device* dev){
-    kprintf("Init %s\n" ,dev->description);
+    kprintf("Init %s (%s)\n" ,dev->description, dev->name);
 
 	// send init command to prim/sec PICs
 	asm_out_b(PIC_PRIMARY_COMMAND, PIC_INIT);

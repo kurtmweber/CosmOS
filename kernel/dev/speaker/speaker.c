@@ -19,7 +19,7 @@
 * perform device instance specific init here
 */
 void deviceInitSpeaker(struct device* dev){
-    kprintf("Init %s\n" ,dev->description);
+    kprintf("Init %s (%s)\n" ,dev->description, dev->name);
 }
 
 void speaker_devicemgr_register_devices(){

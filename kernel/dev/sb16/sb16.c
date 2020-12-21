@@ -27,7 +27,7 @@ void sb16_handle_irq(stackFrame *frame) {
 */
 
 void deviceInitSB16(struct device* dev){
-    kprintf("Init %s at IRQ %llu\n",dev->description, SB16_IRQ);
+    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, SB16_IRQ, dev->name);
     interrupt_router_register_interrupt_handler(SB16_IRQ, &sb16_handle_irq);
 }
 

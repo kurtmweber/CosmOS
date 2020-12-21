@@ -73,23 +73,13 @@ void array_resize(struct array* arr, uint32_t size) {
             /*
             * TODO.  Should use krealloc here, but I think there is a bug in krealloc
             */
-
             uint32_t oldsize = arr->size;
             void** oldata = arr->data;
-        //    kprintf("old array data pointer: %llX\n", (uint64_t)oldata);
-
             void** newdata = (void**) kmalloc(sizeof(void*)*size);
-
-          //  kprintf("new array data pointer: %llX\n", (uint64_t)newdata);
-
             for (uint32_t i=0;i<oldsize;i++){
                 newdata[i]=oldata[i];
-            }  
-            /*
-            * ugh, why does this fail?
-            */
-            
-//            kfree(oldata);
+            }              
+            kfree(oldata);
             arr->data = newdata;
             arr->size = size;
         } else {

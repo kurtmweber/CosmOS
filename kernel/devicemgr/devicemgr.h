@@ -29,17 +29,41 @@ typedef enum deviceType {
 	FLOPPY=			0x0B,
 	SPEAKER=		0x0C,
 	PIT=			0x0D,
-	DSP=			0x0E,
-	CMOS=			0x0F,
-	DMA=			0x10
+	DSP=			0x0E
 } deviceType;
 
+/*
+* array of names, indexed by deviceType
+*/
+extern int8_t* DeviceTypeNames[];
+
 typedef struct device {
+	/*
+	* the combination of name (from DeviceTypeNames) and index
+	* create the device name.  ie "serial0".
+	*/
 	int8_t* name;
+	uint8_t type_index;
+	/*
+	* the type (SERIAL, VGA etc)
+	*/
 	enum deviceType devicetype;
+	/*
+	* init function
+	*/
 	deviceInit init;
+	/*
+	* human readable description provided by the driver
+	*/
 	int8_t* description;
+	/*
+	* For PCI devices, this is a struct pci_device*.   
+	* For non-PCI devices this is 0 or a custom struct provided by the driver
+	*/
 	void* deviceData;
+	/*
+	* pointer to the type-specific API struct
+	*/
 	void* api;
 } device_t;
 
@@ -55,15 +79,10 @@ void devicemgr_init();
 // count of device instances
 uint16_t devicemgr_device_count();
 
-
 // init all devices
 void devicemgr_init_devices();
 
 // set description
 void devicemgr_set_device_description(struct device* dev, int8_t* description);
-
-// search for device by device type
-typedef void (*deviceSearchCallback)(struct device* dev);
-void devicemgr_search_device(enum deviceType devicetype, deviceSearchCallback cb);
 
 #endif
