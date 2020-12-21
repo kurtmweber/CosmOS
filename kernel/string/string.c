@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _STRING_C
-#define _STRING_C
-
 #include <types.h>
 #include <mm/mm.h>
 #include <string/string.h>
@@ -46,4 +43,10 @@ char *strtrim(const char *s){
 	return tgt;
 }
 
-#endif
+char * strcpy(char *dest, const char *src) {
+	uint32_t i;
+	for (i = 0; src[i] != '\0'; i++)
+		dest[i] = src[i];
+	return dest;
+}
+

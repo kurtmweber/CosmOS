@@ -5,13 +5,13 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _KMALLOC_C
-#define _KMALLOC_C
-
 #include <types.h>
 #include <console/console.h>
 #include <panic/panic.h>
 #include <mm/mm.h>
+
+kmalloc_block *kmalloc_block_list;
+kmalloc_block *kmalloc_block_list_end;
 
 kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
 	kmalloc_block *cur_block;
@@ -244,4 +244,3 @@ void reset_brk_after_malloc(){
 
 	return;
 }
-#endif

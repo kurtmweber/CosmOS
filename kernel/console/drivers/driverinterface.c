@@ -5,17 +5,16 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _CONSOLE_DRIVERS_C
-#define _CONSOLE_DRIVERS_C
-
 #include <types.h>
 #include <console/console.h>
 #include <console/drivers/drivers.h>
 #include <console/drivers/vga/vga.h>
+#include <console/drivers/serial/serial_console.h>
 
 void console_driver_interface_init(){
 	uint8_t i;
-	
+
+	serial_console_register();
 #ifdef VGA_CONSOLE_ENABLED
 	vga_console_register();
 #endif
@@ -41,5 +40,3 @@ uint8_t console_setpos(uint8_t x, uint8_t y){
 uint8_t console_write(const char *c){
 	return console_interfaces[console_active_driver].write(c);
 }
-
-#endif

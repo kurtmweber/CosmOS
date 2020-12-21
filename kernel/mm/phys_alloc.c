@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _MM_PHYS_ALLOC_C
-#define _MM_PHYS_ALLOC_C
-
 #include <types.h>
 #include <mm/mm.h>
 
@@ -52,5 +49,3 @@ mem_block *phys_split_block(mem_block *src, void *base, uint64_t size){
         
     }
 }
-
-#endif

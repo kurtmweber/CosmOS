@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _PANIC_C
-#define _PANIC_C
-
 #include <asm/asm.h>
 #include <console/drivers/drivers.h>
 
@@ -18,5 +15,3 @@ void panic(const char *s){
 	asm_cli();
 	asm_hlt();
 }
-
-#endif

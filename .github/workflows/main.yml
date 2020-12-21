@@ -2,19 +2,37 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches: '*'
   pull_request:
-    branches: [ master ]
+    branches: '*'
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
+  build-ubuntu:
+    runs-on: ubuntu-20.04
     strategy:
-      matrix:
-        os: [ubuntu-latest]
       fail-fast: false
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: nasm
+      run: sudo apt install nasm
+    
+    - name: build
+      run: make
+
+  build-osx:
+    runs-on: macos-11.0
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: make
+      run: brew install make
+
+    - name: gcc
+      run: brew install x86_64-elf-gcc
 
     - name: nasm
       run: brew install nasm

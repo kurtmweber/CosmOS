@@ -11,10 +11,6 @@ panic.a: panic.o
 panic.o: panic.c panic.h
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
-clean: panic-a-clean panic-o-clean
-
-panic-a-clean:
-	$(RM) panic.a
-	
-panic-o-clean:
-	$(RM) panic.o
+clean:
+	$(RM) *.o
+	$(RM) *.a

@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _INIT_C
-#define _INIT_C
-
 #include <types.h>
 #include <console/console.h>
 #include <mm/mm.h>
@@ -43,5 +40,3 @@ void mmu_init(){
 	
 	return;
 }
-
-#endif

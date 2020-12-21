@@ -4,14 +4,13 @@
  * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
-
-#ifndef _VGA_TEXT_C
-#define _VGA_TEXT_C
-
+ 
 #include <types.h>
 #include <console/console.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
+
+char *vga_text_mem_base = (char *)0xB8000;
 
 void vga_scroll_text(void){
 	uint16_t i;
@@ -68,5 +67,3 @@ uint8_t vga_write_text(const char *txt, uint8_t start_row, uint8_t start_col, ui
 	
 	return 1;
 }
-
-#endif

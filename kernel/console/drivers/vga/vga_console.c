@@ -5,10 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _VGA_CONSOLE_C
-#define _VGA_CONSOLE_C
-
-#include <types.h>
 #include <console/drivers/drivers.h>
 #include <console/drivers/vga/vga.h>
 #include <video/video.h>
@@ -42,5 +38,3 @@ uint8_t vga_console_setpos(uint8_t x, uint8_t y){
 	
 	return 1;
 }
-
-#endif

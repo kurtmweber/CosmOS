@@ -5,12 +5,11 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _VGA_C
-#define _VGA_C
-
 #include <types.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
+
+vga_mode_params_t vga_mode_params[VIDEO_MODE_MAX];
 
 void vga_driver_register(){
 	video_interfaces[VIDEO_DRIVER_VGA].init = &vga_init;
@@ -34,5 +33,3 @@ uint8_t vga_query_resolution(uint16_t *x, uint16_t *y){
 	*y = vga_mode_params[video_active_mode].y_height;
 	return 1;
 }
-
-#endif

@@ -5,9 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _BLOCKMGMT_C
-#define _BLOCKMGMT_C
-
 #include <types.h>
 #include <mm/mm.h>
 
@@ -106,5 +103,3 @@ void sort_usable_phys_blocks(){
 	
 	return;
 }
-
-#endif
