@@ -24,6 +24,10 @@
 #include <dev/speaker/speaker.h>
 #include <dev/pit/pit.h>
 #include <dev/sb16/sb16.h>
+#include <dev/ac97/ac97.h>
+#include <dev/adlib/adlib.h>
+#include <dev/cmos/cmos.h>
+#include <dev/isadma/isadma.h>
 
 void dev_devicemgr_register_devices();
 

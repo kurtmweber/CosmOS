@@ -3,14 +3,14 @@ include ../../../mk/build.mk
 EXTRA_CFLAGS= -I../.. -DRTC_SLEEP
 ARFLAGS=-crs
 
-all: rtc.a
+all: ac97.a
 
-rtc.a: rtc.o
+ac97.a: ac97.o
 	$(AR) $(ARFLAGS) $@ $^
 	
-rtc.o: rtc.c
+ac97.o: ac97.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
+	
 clean:
 	$(RM) *.o
 	$(RM) *.a
