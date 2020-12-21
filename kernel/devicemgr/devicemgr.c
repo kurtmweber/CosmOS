@@ -75,5 +75,3 @@ void devicemgr_set_device_description(struct device* dev, int8_t* description) {
         panic("Invalid device or description passed to devicemgr_set_device_description\n");
     }
 }
-
-
