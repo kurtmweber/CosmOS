@@ -45,7 +45,7 @@ void pit_handle_irq(stackFrame *frame) {
 *  18.2065 Hz (or an IRQ every 54.9254 ms)"
 */
 void deviceInitPIT(struct device* dev){
-    kprintf("Init %s at IRQ %llu\n",dev->description, PIT_IRQ);
+    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, PIT_IRQ, dev->name);
     interrupt_router_register_interrupt_handler(PIT_IRQ, &pit_handle_irq);
 }
 

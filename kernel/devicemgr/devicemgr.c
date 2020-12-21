@@ -13,8 +13,37 @@
 #include <panic/panic.h>
 #include <devicemgr/deviceregistry.h>
 
+#define MAX_DEVICE_NAME_LENGTH 64
+
+int8_t* DeviceTypeNames[] = {"None"
+	, "serial"
+	,"vga"
+	,"rtc"
+	,"keyboard"
+	,"ethernet"
+	,"bridge"
+	,"usb"
+	,"ata"
+	,"pic"
+	,"mouse"
+	,"floppy"
+	,"speaker"
+	,"pit"
+	,"dsp"
+    }; 
+
 void devicemgr_init() {
     deviceregistry_init();    
+}
+
+int8_t* createDeviceName(struct device* dev) {
+    int8_t nn[32];
+    int8_t* ret = kmalloc(MAX_DEVICE_NAME_LENGTH);
+    strcpy(ret, DeviceTypeNames[dev->devicetype]);
+    uitoa3(dev->type_index, nn, 32, 10);
+    ret = strcat(ret, nn);
+  //  kprintf(ret);
+    return ret;
 }
 
 void devicemgr_register_device(struct device* dev) {
@@ -32,6 +61,19 @@ void devicemgr_register_device(struct device* dev) {
         kprintf(dev->description);
         panic("Attempt to register device without init function\n");
     }
+    /*
+    * set index
+    */
+   dev->type_index = deviceregistry_devicecount_type(dev->devicetype);
+    /*
+    * create name
+    */
+    dev->name = createDeviceName(dev);
+    kprintf(dev->name);
+    kprintf("\n");
+    /*
+    * register
+    */
     deviceregistry_registerdevice(dev);
 }
 
@@ -86,6 +128,7 @@ struct device* devicemgr_new_device() {
     ret->init=0;
     ret->deviceData=0;
     ret->name=0;
+    ret->type_index=0;
     ret->devicetype=0;
     ret->api=0;
     return ret;

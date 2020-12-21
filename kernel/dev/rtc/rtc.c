@@ -54,7 +54,7 @@ void rtc_handle_irq(stackFrame *frame) {
 */
 void deviceInitRTC(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu\n",dev->description, RTC_IRQ_NUMBER);
+    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, RTC_IRQ_NUMBER, dev->name);
 	
 	rtcEvents = list_new();
 	asm_cli();

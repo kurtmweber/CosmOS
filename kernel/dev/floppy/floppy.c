@@ -60,7 +60,7 @@ void floppy_irq_read(stackFrame *frame) {
 * perform device instance specific init here
 */
 void deviceInitFloppy(struct device* dev){
-    kprintf("Init %s at IRQ %llu\n",dev->description, FLOPPY_IRQ_NUMBER);
+    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, FLOPPY_IRQ_NUMBER, dev->name);
 	interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);
 }
 

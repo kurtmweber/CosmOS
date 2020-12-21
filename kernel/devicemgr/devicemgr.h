@@ -32,12 +32,38 @@ typedef enum deviceType {
 	DSP=			0x0E
 } deviceType;
 
+/*
+* array of names, indexed by deviceType
+*/
+extern int8_t* DeviceTypeNames[];
+
 typedef struct device {
+	/*
+	* the combination of name (from DeviceTypeNames) and index
+	* create the device name.  ie "serial0".
+	*/
 	int8_t* name;
+	uint8_t type_index;
+	/*
+	* the type (SERIAL, VGA etc)
+	*/
 	enum deviceType devicetype;
+	/*
+	* init function
+	*/
 	deviceInit init;
+	/*
+	* human readable description provided by the driver
+	*/
 	int8_t* description;
+	/*
+	* For PCI devices, this is a struct pci_device*.   
+	* For non-PCI devices this is 0 or a custom struct provided by the driver
+	*/
 	void* deviceData;
+	/*
+	* pointer to the type-specific API struct
+	*/
 	void* api;
 } device_t;
 
