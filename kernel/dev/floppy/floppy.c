@@ -82,6 +82,10 @@
 #define FLOPPY_DRIVETYPE_144_35				0x04
 #define FLOPPY_DRIVETYPE_288_35				0x05
 
+#define FLOPPY_144_SECTORS_PER_TRACK		18
+
+#define FLOPPY_DMA_CHANNEL					2
+
 void floppy_irq_read(stackFrame *frame) {
     kprintf("^");
 }
@@ -129,8 +133,14 @@ void deviceInitFloppy(struct device* dev){
 	}
 }
 
-
-
+/**
+ * translate LBA (Logical Block Addressing) to CHS (cylinder, head, sector)
+ */
+void lba_2_chs(uint32_t lba, uint16_t* cyl, uint16_t* head, uint16_t* sector) {
+    *cyl    = lba / (2 * FLOPPY_144_SECTORS_PER_TRACK);
+    *head   = ((lba % (2 * FLOPPY_144_SECTORS_PER_TRACK)) / FLOPPY_144_SECTORS_PER_TRACK);
+    *sector = ((lba % (2 * FLOPPY_144_SECTORS_PER_TRACK)) % FLOPPY_144_SECTORS_PER_TRACK + 1);
+}
 
 /**
 * find all floppy devices and register them
