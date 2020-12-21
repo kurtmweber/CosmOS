@@ -66,7 +66,7 @@
 * perform device instance specific init here
 */
 void deviceInitISADMA(struct device* dev){
-    kprintf("Init %s\n",dev->description);
+    kprintf("Init %s (%s)\n",dev->description, dev->name);
 }
 
 void isadma_devicemgr_register_devices(){

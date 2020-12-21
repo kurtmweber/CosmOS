@@ -30,6 +30,8 @@ int8_t* DeviceTypeNames[] = {"None"
 	,"speaker"
 	,"pit"
 	,"dsp"
+    ,"cmos"
+    ,"dma"
     }; 
 
 void devicemgr_init() {
@@ -64,13 +66,11 @@ void devicemgr_register_device(struct device* dev) {
     /*
     * set index
     */
-   dev->type_index = deviceregistry_devicecount_type(dev->devicetype);
+    dev->type_index = deviceregistry_devicecount_type(dev->devicetype);
     /*
     * create name
     */
     dev->name = createDeviceName(dev);
-    kprintf(dev->name);
-    kprintf("\n");
     /*
     * register
     */
@@ -106,6 +106,14 @@ void devicemgr_init_devices(){
     * the PIT
     */
     deviceregistry_iterate_type(PIT, deviceInitIterator);
+    /*
+    * CMOS
+    */
+    deviceregistry_iterate_type(CMOS, deviceInitIterator);
+    /*
+    * DMA
+    */
+    deviceregistry_iterate_type(DMA, deviceInitIterator);
     /*
     * everything else
     */

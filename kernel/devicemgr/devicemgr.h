@@ -29,7 +29,9 @@ typedef enum deviceType {
 	FLOPPY=			0x0B,
 	SPEAKER=		0x0C,
 	PIT=			0x0D,
-	DSP=			0x0E
+	DSP=			0x0E,
+	CMOS=			0x0F,
+	DMA=			0x10
 } deviceType;
 
 /*

@@ -41,7 +41,7 @@ uint8_t cmos_read_register(uint8_t reg){
 */
 
 void deviceInitCMOS(struct device* dev){
-    kprintf("Init %s\n",dev->description);
+    kprintf("Init %s (%s)\n",dev->description, dev->name);
 }
 
 void cmos_devicemgr_register_devices(){
