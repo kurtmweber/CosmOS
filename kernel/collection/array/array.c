@@ -12,8 +12,9 @@
 #include <console/console.h>
 
 struct array* array_new(uint32_t size) {
-    struct array*  ret = (struct array*) kmalloc(sizeof(array_t));
+    struct array*  ret = (struct array*) kmalloc(sizeof(struct array));
     ret->data = (void**) kmalloc(sizeof(void*)*size); 
+  //  kprintf("array data pointer: %llX\n", (uint64_t)ret->data);
     ret->size = size;
     for (uint32_t i=0; i<size;i++){
         ret->data[i]=0;
@@ -69,8 +70,28 @@ void* array_get(struct array* arr,  uint32_t position){
 void array_resize(struct array* arr, uint32_t size) {
     if (0!=arr){
         if (size >= arr->size){
-            arr->data = krealloc(arr->data, size);
-            arr->size = size;         
+            /*
+            * TODO.  Should use krealloc here, but I think there is a bug in krealloc
+            */
+
+            uint32_t oldsize = arr->size;
+            void** oldata = arr->data;
+        //    kprintf("old array data pointer: %llX\n", (uint64_t)oldata);
+
+            void** newdata = (void**) kmalloc(sizeof(void*)*size);
+
+          //  kprintf("new array data pointer: %llX\n", (uint64_t)newdata);
+
+            for (uint32_t i=0;i<oldsize;i++){
+                newdata[i]=oldata[i];
+            }  
+            /*
+            * ugh, why does this fail?
+            */
+            
+//            kfree(oldata);
+            arr->data = newdata;
+            arr->size = size;
         } else {
             panic ("arrays cannot be shrunk\n");
         }

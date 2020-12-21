@@ -13,7 +13,7 @@
 #define START_SIZE 16
 
 struct list* list_new() {
-    struct list* ret = (struct list*) kmalloc(sizeof(list_t));
+    struct list* ret = (struct list*) kmalloc(sizeof(struct list));
     ret->arr = array_new(START_SIZE);
     ret->count=0;
 }
