@@ -57,8 +57,8 @@
 #define FLOPPY_DOR_MOTA_BIT                4
 #define FLOPPY_DOR_IRQ_BIT                 3
 #define FLOPPY_DOR_RESET_BIT               2
-#define FLOPPY_DOR_DSEL1 _BIT              1
-#define FLOPPY_DOR_DSEL0 _BIT              0
+#define FLOPPY_DOR_DSEL1_BIT               1
+#define FLOPPY_DOR_DSEL0_BIT               0
 
 // MSR
 #define FLOPPY_MSR_RQM_BIT                 7
@@ -71,7 +71,7 @@
 #define FLOPPY_MSR_ACTA_BIT                0
 
 void floppy_irq_read(stackFrame *frame) {
-
+    kprintf("^");
 }
 
 /*
