@@ -69,8 +69,6 @@ void devicemgr_register_device(struct device* dev) {
     * create name
     */
     dev->name = createDeviceName(dev);
-    kprintf(dev->name);
-    kprintf("\n");
     /*
     * register
     */
