@@ -28,7 +28,7 @@ void stringtest();
 void BeethovensFifth();
 void chirp();
 void serialMessage(const uint8_t* message);
-
+void testFunctions();
 
 void CosmOS(){
 	video_init();
@@ -81,6 +81,17 @@ void CosmOS(){
 	asm_sti();
 
 	/*
+	* run various functions to show that things work....
+	*/
+	testFunctions();
+
+	while (1){
+		asm_hlt();
+	}
+}
+
+void testFunctions() {
+	/*
 	* exercise the uniform serial API
 	*/
 	serialMessage("This message brought to you by the uniform serial API, the letters R and S and the Digits 2, 3 and 2\n");
@@ -128,10 +139,6 @@ void CosmOS(){
 	} while((tmp = tmp->next));
 	
 //	stringtest();
-
-	while (1){
-		asm_hlt();
-	}
 }
 
 void stringtest() {
