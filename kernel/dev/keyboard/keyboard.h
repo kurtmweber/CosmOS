@@ -11,10 +11,8 @@
 #include <dev/keyboard/abstract_keyboard.h>
 
 void keyboard_devicemgr_register_devices();
-void keyboard_irq_read();
+
 void keyboard_remove_command_queue();
 void keyboard_send_command_queue();
-
-
 
 #endif
