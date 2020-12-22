@@ -16,15 +16,16 @@
 #include <video/video.h>
 #include <video/vga/vga.h>
 #include <collection/kernelstring/kernelstring.h>
-#include <dev/dev.h>
 #include <sleep/sleep.h>
 #include <notes.h>
+#include <devicemgr/devicemgr.h>
 #include <devicemgr/deviceapi/deviceapi_rtc.h>
 #include <devicemgr/deviceapi/deviceapi_speaker.h>
 #include <devicemgr/deviceapi/deviceapi_pit.h>
 
 void stringtest();
 void BeethovensFifth();
+void chirp();
 
 void CosmOS(){
 	video_init();
@@ -63,26 +64,21 @@ void CosmOS(){
 	devicemgr_init();
 
 	/*
-	* Register devices
+	* Register all devices
 	*/
-	dev_devicemgr_register_devices();
+	devicemgr_register_devices();
 	kprintf("Registered %llu devices\n", devicemgr_device_count());
 
 	/*
-	* init all devices
+	* Init all devices
 	*/
 	devicemgr_init_devices();
 	kprintf("There are %llu devices\n", devicemgr_device_count());
 
 	asm_sti();
 
-	// get the speaker
-	struct device* speaker = devicemgr_findDevice("speaker0");
-	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
-	speaker_beep_function beep_func = speaker_api->beep;
-	(*beep_func)(speaker, 4000, 50);
-
-//	BeethovensFifth();
+	chirp();
+	BeethovensFifth();
 
 	// get the PIT
 	struct device* pit = devicemgr_findDevice("pit0");
@@ -165,22 +161,37 @@ void stringtest() {
 }
 
 void BeethovensFifth() {
-//	speaker_beep(NOTE_G5, 200);
+	// get the speaker
+	struct device* speaker = devicemgr_findDevice("speaker0");
+	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
+	speaker_beep_function beep_func = speaker_api->beep;
+	(*beep_func)(speaker, 4000, 50);
+
+
+	(*beep_func)(speaker,NOTE_G5, 200);
 	sleep_wait(100);
-//	speaker_beep(NOTE_G5, 200);
+	(*beep_func)(speaker,NOTE_G5, 200);
 	sleep_wait(100);
-//	speaker_beep(NOTE_G5, 200);
+	(*beep_func)(speaker,NOTE_G5, 200);
 	sleep_wait(100);
-//	speaker_beep(NOTE_DS5, 400);
+	(*beep_func)(speaker,NOTE_DS5, 400);
 	sleep_wait(400);
 
-//	speaker_beep(NOTE_F5, 200);
+	(*beep_func)(speaker,NOTE_F5, 200);
 	sleep_wait(100);
-//	speaker_beep(NOTE_F5, 200);
+	(*beep_func)(speaker,NOTE_F5, 200);
 	sleep_wait(100);
-//	speaker_beep(NOTE_F5, 200);
+	(*beep_func)(speaker,NOTE_F5, 200);
 	sleep_wait(100);
-//	speaker_beep(NOTE_D5, 400);
+	(*beep_func)(speaker,NOTE_D5, 400);
 	sleep_wait(100);
+}
+
+void chirp() {
+	// get the speaker
+	struct device* speaker = devicemgr_findDevice("speaker0");
+	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
+	speaker_beep_function beep_func = speaker_api->beep;
+	(*beep_func)(speaker, 4000, 50);
 }
 

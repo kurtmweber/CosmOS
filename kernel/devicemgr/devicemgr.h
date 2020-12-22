@@ -78,6 +78,9 @@ void devicemgr_register_device(struct device* dev);
 // init the device registry
 void devicemgr_init();
 
+// register all the devices
+void devicemgr_register_devices();
+
 // count of device instances
 uint16_t devicemgr_device_count();
 

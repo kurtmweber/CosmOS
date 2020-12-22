@@ -29,6 +29,4 @@
 #include <dev/cmos/cmos.h>
 #include <dev/isadma/isadma.h>
 
-void dev_devicemgr_register_devices();
-
 #endif

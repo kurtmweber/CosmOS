@@ -12,6 +12,7 @@
 #include <string/string.h>
 #include <panic/panic.h>
 #include <devicemgr/deviceregistry.h>
+#include <dev/dev.h>
 
 #define MAX_DEVICE_NAME_LENGTH 64
 
@@ -162,4 +163,51 @@ struct device* devicemgr_findDevice(const int8_t* name) {
         panic("Invalid device name passed to devicemgr_findDevice\n");
     }
 }
+
+void devicemgr_register_devices() {
+	/*
+	* scan the PCI bus first
+	*/
+	pci_init();
+	/*
+	* register up the pic next
+	*/
+	pic_devicemgr_register_devices();
+	/* 
+	* and then RS232
+	*/
+	serial_devicemgr_register_devices();
+	/*
+	* and the then the PIT
+	*/
+	pit_devicemgr_register_devices();
+	/*
+	* we need the CMOS
+	*/
+	cmos_devicemgr_register_devices();
+	/*
+	* ISA DMA Controller
+	*/
+	isadma_devicemgr_register_devices();
+
+	/*
+	* rest of this stuff can really happen in any order
+	*/
+	rtc_devicemgr_register_devices();
+	keyboard_devicemgr_register_devices();
+	display_devicemgr_register_devices();
+	usb_devicemgr_register_devices();
+	network_devicemgr_register_devices();
+	bridge_devicemgr_register_devices();
+	ata_devicemgr_register_devices(); 
+    mouse_devicemgr_register_devices();
+    floppy_devicemgr_register_devices();
+    speaker_devicemgr_register_devices();
+//	sb16_devicemgr_register_devices();
+//	ac97_devicemgr_register_devices();
+//	adlib_devicemgr_register_devices();
+}
+
+
+
 
