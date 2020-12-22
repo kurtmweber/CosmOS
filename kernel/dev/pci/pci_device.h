@@ -22,6 +22,7 @@ struct pci_device {
 	uint8_t irq;
 	uint16_t vendor_id;
 	uint16_t device_id;
+	uint32_t bars[6];
 };
 
 // search for PCI devices

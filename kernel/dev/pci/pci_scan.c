@@ -22,6 +22,12 @@ void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_
 	dev->irq = pci_header_read_irq(bus, device, function);
 	dev->vendor_id = pci_header_read_vendor(bus, device, function);
 	dev->device_id = pci_header_read_device_id(bus, device, function);
+	dev->bars[0]= pci_header_read_bar0(bus, device, function);
+	dev->bars[1]= pci_header_read_bar1(bus, device, function);
+	dev->bars[2]= pci_header_read_bar2(bus, device, function);
+	dev->bars[3]= pci_header_read_bar3(bus, device, function);
+	dev->bars[4]= pci_header_read_bar4(bus, device, function);
+	dev->bars[5]= pci_header_read_bar5(bus, device, function);
 }
 
 bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function){
