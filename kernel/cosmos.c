@@ -216,7 +216,7 @@ void chirp() {
 }
 
 /*
-*
+* write a message via the uniform serial api
 */
 void serialMessage(const uint8_t* message) {
    	// get serial0
