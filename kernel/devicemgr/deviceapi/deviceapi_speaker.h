@@ -4,12 +4,19 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-
-#ifndef _SPEAKER_H
-#define _SPEAKER_H
+/*
+* this file defines the interface that all speaker devices will implement
+*/
+#ifndef _DEVICEAPI_SPEAKER_H
+#define _DEVICEAPI_SPEAKER_H
 
 #include <types.h>
+#include <devicemgr/devicemgr.h>
 
-void speaker_devicemgr_register_devices();
+typedef void (*speaker_beep_function)(struct device* dev, uint32_t frequency, uint32_t milliseconds);
+
+struct deviceapi_speaker {
+    speaker_beep_function beep;
+};
 
 #endif

@@ -11,6 +11,7 @@
 #define _DEVICEAPI_RTC_H
 
 #include <types.h>
+#include <devicemgr/devicemgr.h>
 
 typedef struct rtc_time_t{
 	uint8_t second;

@@ -20,8 +20,10 @@
 #include <sleep/sleep.h>
 #include <notes.h>
 #include <devicemgr/deviceapi/deviceapi_rtc.h>
+#include <devicemgr/deviceapi/deviceapi_speaker.h>
 
 void stringtest();
+void BeethovensFifth();
 
 void CosmOS(){
 	video_init();
@@ -73,7 +75,13 @@ void CosmOS(){
 
 	asm_sti();
 
-//	speaker_beep(4000,100);
+	// get the speaker
+	struct device* speaker = devicemgr_findDevice("speaker0");
+	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
+	speaker_beep_function beep_func = speaker_api->beep;
+	(*beep_func)(speaker, 4000, 50);
+
+//	BeethovensFifth();
 
 	// show the tick count, since we can
 	kprintf("Ticks: %llu\n", pit_tickcount());
@@ -83,8 +91,8 @@ void CosmOS(){
 	// get the time, b/c we can
 	struct device* rtc = devicemgr_findDevice("rtc0");
 	struct deviceapi_rtc* rtc_api = (struct deviceapi_rtc*) rtc->api;
-	rtc_time_function f = rtc_api->rtc_time;
-	rtc_time_t daTime = (*f)(rtc);
+	rtc_time_function time_func = rtc_api->rtc_time;
+	rtc_time_t daTime = (*time_func)(rtc);
 	kprintf("Hour: %llu Minute: %llu Second: %llu\n",daTime.hour, daTime.minute, daTime.second);
 
 	mem_block *tmp;
@@ -149,22 +157,22 @@ void stringtest() {
 }
 
 void BeethovensFifth() {
-	speaker_beep(NOTE_G5, 200);
+//	speaker_beep(NOTE_G5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_G5, 200);
+//	speaker_beep(NOTE_G5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_G5, 200);
+//	speaker_beep(NOTE_G5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_DS5, 400);
+//	speaker_beep(NOTE_DS5, 400);
 	sleep_wait(400);
 
-	speaker_beep(NOTE_F5, 200);
+//	speaker_beep(NOTE_F5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_F5, 200);
+//	speaker_beep(NOTE_F5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_F5, 200);
+//	speaker_beep(NOTE_F5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_D5, 400);
+//	speaker_beep(NOTE_D5, 400);
 	sleep_wait(100);
 }
 
