@@ -23,7 +23,7 @@ typedef struct rtc_time_t{
 	uint8_t century;
 } rtc_time_t;
 
-typedef rtc_time_t (*rtc_time_function)();
+typedef rtc_time_t (*rtc_time_function)(struct device* dev);
 
 struct deviceapi_rtc {
     rtc_time_function rtc_time;

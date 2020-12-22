@@ -70,7 +70,7 @@ void deviceInitRTC(struct device* dev){
 	interrupt_router_register_interrupt_handler(RTC_IRQ_NUMBER, &rtc_handle_irq);
 }
 
-rtc_time_t rtc_time(){
+rtc_time_t rtc_time(struct device* dev){
 	rtc_time_t a, b;
 	
 	a.second = cmos_read_register(RTC_REGISTER_SECOND);

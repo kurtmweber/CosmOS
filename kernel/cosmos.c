@@ -84,7 +84,7 @@ void CosmOS(){
 	struct device* rtc = devicemgr_findDevice("rtc0");
 	struct deviceapi_rtc* rtc_api = (struct deviceapi_rtc*) rtc->api;
 	rtc_time_function f = rtc_api->rtc_time;
-	rtc_time_t daTime = (*f)();
+	rtc_time_t daTime = (*f)(rtc);
 	kprintf("Hour: %llu Minute: %llu Second: %llu\n",daTime.hour, daTime.minute, daTime.second);
 
 	mem_block *tmp;
