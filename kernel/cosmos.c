@@ -21,6 +21,7 @@
 #include <notes.h>
 #include <devicemgr/deviceapi/deviceapi_rtc.h>
 #include <devicemgr/deviceapi/deviceapi_speaker.h>
+#include <devicemgr/deviceapi/deviceapi_pit.h>
 
 void stringtest();
 void BeethovensFifth();
@@ -83,10 +84,17 @@ void CosmOS(){
 
 //	BeethovensFifth();
 
+	// get the PIT
+	struct device* pit = devicemgr_findDevice("pit0");
+	struct deviceapi_pit* pit_api = (struct deviceapi_pit*) pit->api;
+	pit_tickcount_function tickcount_func = pit_api->tickcount;
+
 	// show the tick count, since we can
-	kprintf("Ticks: %llu\n", pit_tickcount());
+	uint64_t tc = (*tickcount_func)(pit);
+	kprintf("Ticks: %llu\n", tc);
 	sleep_wait(1000);
-	kprintf("Ticks: %llu\n", pit_tickcount());
+	tc = (*tickcount_func)(pit);
+	kprintf("Ticks: %llu\n", tc);
 
 	// get the time, b/c we can
 	struct device* rtc = devicemgr_findDevice("rtc0");

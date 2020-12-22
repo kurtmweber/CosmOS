@@ -4,15 +4,19 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-
-#ifndef _PIT_H
-#define _PIT_H
+/*
+* this file defines the interface that all PIT devices will implement
+*/
+#ifndef _DEVICEAPI_PIT_H
+#define _DEVICEAPI_PIT_H
 
 #include <types.h>
+#include <devicemgr/devicemgr.h>
 
-void pit_devicemgr_register_devices();
+typedef uint64_t (*pit_tickcount_function)(struct device* dev);
 
-typedef void (*PITEvent)();
+struct deviceapi_pit {
+    pit_tickcount_function tickcount;
+};
 
-void pit_subscribe(PITEvent pitEvent);
 #endif
