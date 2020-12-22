@@ -15,6 +15,8 @@
 #include <devicemgr/devicemgr.h>
 #include <dev/keyboard/abstract_keyboard.h>
 #include <dev/keyboard/keyboardbuffer.h>
+#include <devicemgr/deviceapi/deviceapi_keyboard.h>
+#include <panic/panic.h>
 
 #define KB_IRQ_NUMBER 1
 
@@ -174,6 +176,10 @@ void deviceInitKeyboard(struct device* dev){
 	interrupt_router_register_interrupt_handler(KB_IRQ_NUMBER, &keyboard_irq_read);
 }
 
+uint8_t keyboard_read(struct device* dev) {
+	panic("Keyboard read not implemented yet");
+}
+
 /**
 * find all keyboard devices and register them
 */
@@ -187,7 +193,16 @@ void keyboard_devicemgr_register_devices(){
 	deviceinstance->init =  &deviceInitKeyboard;
 	deviceinstance->devicetype = KEYBOARD;
 	devicemgr_set_device_description(deviceinstance, "Keyboard");
-	devicemgr_register_device(deviceinstance);
+    /*
+    * the device api
+    */
+    struct deviceapi_keyboard* api = (struct deviceapi_keyboard*) kmalloc(sizeof(struct deviceapi_keyboard));
+    api->read = &keyboard_read;
+    deviceinstance->api = api;
+    /*
+    * register
+    */
+    devicemgr_register_device(deviceinstance);
 }
 
 
