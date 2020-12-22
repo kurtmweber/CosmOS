@@ -13,6 +13,8 @@
 #include <devicemgr/devicemgr.h>
 #include <dev/cmos/cmos.h>
 #include <sleep/sleep.h>
+#include <devicemgr/deviceapi/deviceapi_floppy.h>
+#include <panic/panic.h>
 
 #define FLOPPY_IRQ_NUMBER   6
 #define FLOPPY_BASE         0x3F0
@@ -148,8 +150,6 @@ void command(uint8_t commandByte) {
 
 	// send command to FIFO
 	asm_out_b(FLOPPY_DATA_FIFO, commandByte);
-
-
 }
 /*
 * perform device instance specific init here
@@ -196,6 +196,13 @@ void lba_2_chs(uint32_t lba, uint16_t* cyl, uint16_t* head, uint16_t* sector) {
     *sector = ((lba % (2 * FLOPPY_144_SECTORS_PER_TRACK)) % FLOPPY_144_SECTORS_PER_TRACK + 1);
 }
 
+void floppy_read(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+	panic("Floppy read not implemented yet");
+}
+void floppy_write(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+	panic("Floppy write not implemented yet");
+}
+
 /**
 * find all floppy devices and register them
 */
@@ -207,5 +214,15 @@ void floppy_devicemgr_register_devices() {
 	deviceinstance->init =  &deviceInitFloppy;
 	deviceinstance->devicetype = FLOPPY;
 	devicemgr_set_device_description(deviceinstance, "Floppy");
+	/*
+    * the device api
+    */
+    struct deviceapi_floppy* api = (struct deviceapi_floppy*) kmalloc(sizeof(struct deviceapi_floppy));
+    api->write = &floppy_read;
+    api->read = &floppy_write;
+    deviceinstance->api = api;
+	/*
+	* register
+	*/
 	devicemgr_register_device(deviceinstance);
 }

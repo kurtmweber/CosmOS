@@ -11,6 +11,8 @@
 #include <mm/mm.h>
 #include <dev/pci/pci.h>
 #include <devicemgr/devicemgr.h>
+#include <devicemgr/deviceapi/deviceapi_ata.h>
+#include <panic/panic.h>
 
 struct list *ide_controllers;
 
@@ -73,6 +75,13 @@ void deviceInitATA(struct device* dev){
 	return;
 }
 
+void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+	panic("ATA read not implemented yet");
+}
+void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+	panic("ATA write not implemented yet");
+}
+
 void ATASearchCB(struct pci_device* dev){
 	/*
 	* save in IDE list
@@ -89,6 +98,16 @@ void ATASearchCB(struct pci_device* dev){
     deviceinstance->deviceData = dev;
 	deviceinstance->devicetype=ATA;
 	devicemgr_set_device_description(deviceinstance, "ATA");
+	/*
+    * the device api
+    */
+    struct deviceapi_ata* api = (struct deviceapi_ata*) kmalloc(sizeof(struct deviceapi_ata));
+    api->write = &ata_read;
+    api->read = &ata_write;
+    deviceinstance->api = api;
+	/*
+	* register
+	*/
     devicemgr_register_device(deviceinstance);
 }
 
