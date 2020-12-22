@@ -176,7 +176,7 @@ void deviceInitKeyboard(struct device* dev){
 	interrupt_router_register_interrupt_handler(KB_IRQ_NUMBER, &keyboard_irq_read);
 }
 
-uint8_t keyboard_read(struct device* dev) {
+key_action_t keyboard_read(struct device* dev) {
 	panic("Keyboard read not implemented yet");
 }
 
@@ -192,7 +192,7 @@ void keyboard_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	deviceinstance->init =  &deviceInitKeyboard;
 	deviceinstance->devicetype = KEYBOARD;
-	devicemgr_set_device_description(deviceinstance, "Keyboard");
+	devicemgr_set_device_description(deviceinstance, "PS2 Keyboard");
     /*
     * the device api
     */

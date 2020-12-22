@@ -13,7 +13,23 @@
 #include <types.h>
 #include <devicemgr/devicemgr.h>
 
-typedef uint8_t (*keyboard_read_key)(struct device* dev);
+/*
+* press and release state
+*/
+typedef enum keypress_state{
+	KEYPRESS_MAKE,
+	KEYPRESS_BREAK
+	} keypress_state;
+
+/**
+ * key action 
+ */
+typedef struct key_action_t{
+	uint8_t key;		        // encoded row-col position on abstract keyboard
+	keypress_state state;\
+	} key_action_t;
+
+typedef key_action_t (*keyboard_read_key)(struct device* dev);
 
 struct deviceapi_keyboard {
     keyboard_read_key read;

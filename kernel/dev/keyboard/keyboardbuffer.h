@@ -9,16 +9,7 @@
 #define _KEYBOARDBUFFER_H
 
 #include <types.h>
-
-typedef enum keypress_state{
-	KEYPRESS_MAKE,		// aka press...
-	KEYPRESS_BREAK		// ..and release
-	} keypress_state;
-
-typedef struct key_action_t{
-	uint8_t key;		// encoded row-col position on abstract keyboard
-	keypress_state state;	// MAKE or BREAK
-	} key_action_t;
+#include <devicemgr/deviceapi/deviceapi_keyboard.h>
 
 extern key_action_t keyboard_buffer[256];
 extern uint8_t keyboard_buffer_start, keyboard_buffer_end;
