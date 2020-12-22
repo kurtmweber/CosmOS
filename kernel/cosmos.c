@@ -91,7 +91,6 @@ void CosmOS(){
 	chirp();
 	//BeethovensFifth();
 
-
 	// get the PIT
 	struct device* pit = devicemgr_findDevice("pit0");
 	struct deviceapi_pit* pit_api = (struct deviceapi_pit*) pit->api;
