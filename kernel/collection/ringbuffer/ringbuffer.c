@@ -11,9 +11,8 @@
 
 #define RINGBUFFER_SIZE 256
 
-void ringbuffer_add(struct ringbuffer* buffer, uint64_t add) {
+void ringbuffer_add(struct ringbuffer* buffer, void* add) {
     if (0!=buffer){
- 
         buffer->data[buffer->end] = add;
 	
         if (buffer->end == RINGBUFFER_SIZE){
@@ -34,7 +33,7 @@ void ringbuffer_add(struct ringbuffer* buffer, uint64_t add) {
     }
 }
 
-uint64_t ringbuffer_consume(struct ringbuffer* buffer) {
+void* ringbuffer_consume(struct ringbuffer* buffer) {
    if (0!=buffer){
         uint16_t i;
         
@@ -64,7 +63,7 @@ struct ringbuffer* ringbuffer_new() {
     struct ringbuffer* ret = (struct ringbuffer*) kmalloc(sizeof(struct ringbuffer));
     ret->start = 0;
     ret->end=0;
-    ret->data = kmalloc(sizeof(uint64_t)*RINGBUFFER_SIZE);
+    ret->data = kmalloc(sizeof(void*)*RINGBUFFER_SIZE);
     return ret;
 }
 

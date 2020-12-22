@@ -24,9 +24,9 @@ $(KERNEL_ELF): dev-subsystem cosmos.o asm-dir console-dir interrupts-dir mm-dir 
 	panic/panic.a \
 	string/string.a \
 	devicemgr/devicemgr.a \
-	collection/collection.a \
 	ethernet/ethernet.o \
-	dev/devs.a
+	dev/devs.a \
+	collection/collection.a 
 
 dev-subsystem:
 	cd dev && $(MAKE)

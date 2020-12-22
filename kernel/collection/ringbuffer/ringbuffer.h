@@ -8,19 +8,19 @@
 #ifndef _RINGBUFFER_H
 #define _RINGBUFFER_H
 
-#include <collection/array/array.h>
+#include <types.h>
 
 /**
  *  a simple ringbuffer based on an array. 
  */
 typedef struct ringbuffer {
-	uint64_t *data;
+	void **data;
     uint16_t start;
     uint16_t end;
 } ringbuffer_t;
 
-void ringbuffer_add(struct ringbuffer* buffer, uint64_t add);
-uint64_t ringbuffer_consume(struct ringbuffer* buffer);
+void ringbuffer_add(struct ringbuffer* buffer, void* add);
+void* ringbuffer_consume(struct ringbuffer* buffer);
 struct ringbuffer * ringbuffer_new();
 
 
