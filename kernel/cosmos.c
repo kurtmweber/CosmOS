@@ -22,10 +22,13 @@
 #include <devicemgr/deviceapi/deviceapi_rtc.h>
 #include <devicemgr/deviceapi/deviceapi_speaker.h>
 #include <devicemgr/deviceapi/deviceapi_pit.h>
+#include <devicemgr/deviceapi/deviceapi_serial.h>
 
 void stringtest();
 void BeethovensFifth();
 void chirp();
+void serialMessage(const uint8_t* message);
+
 
 void CosmOS(){
 	video_init();
@@ -77,8 +80,17 @@ void CosmOS(){
 
 	asm_sti();
 
+	/*
+	* exercise the uniform serial API
+	*/
+	serialMessage("This message brought to you by the uniform serial API, the letters R and S and the Digits 2, 3 and 2\n");
+
+	/*
+	* make some noise
+	*/
 	chirp();
-	BeethovensFifth();
+	//BeethovensFifth();
+
 
 	// get the PIT
 	struct device* pit = devicemgr_findDevice("pit0");
@@ -98,6 +110,8 @@ void CosmOS(){
 	rtc_time_function time_func = rtc_api->rtc_time;
 	rtc_time_t daTime = (*time_func)(rtc);
 	kprintf("Hour: %llu Minute: %llu Second: %llu\n",daTime.hour, daTime.minute, daTime.second);
+
+
 
 	mem_block *tmp;
 	tmp = usable_phys_blocks;
@@ -193,5 +207,16 @@ void chirp() {
 	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
 	speaker_beep_function beep_func = speaker_api->beep;
 	(*beep_func)(speaker, 4000, 50);
+}
+
+/*
+*
+*/
+void serialMessage(const uint8_t* message) {
+   	// get serial0
+	struct device* serial0 = devicemgr_findDevice("serial0");
+	struct deviceapi_serial* serial_api = (struct deviceapi_serial*) serial0->api;
+	serial_write_function write_func = serial_api->write;
+	(*write_func)(serial0, message);	
 }
 
