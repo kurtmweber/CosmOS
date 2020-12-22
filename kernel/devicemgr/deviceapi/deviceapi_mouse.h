@@ -4,12 +4,26 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-
-#ifndef _MOUSE_H
-#define _MOUSE_H
+/*
+* this file defines the interface that all mouse devices will implement
+*/
+#ifndef _DEVICEAPI_MOUSE_H
+#define _DEVICEAPI_MOUSE_H
 
 #include <types.h>
+#include <devicemgr/devicemgr.h>
 
-void mouse_devicemgr_register_devices();
+struct mouse_status {
+    uint8_t mouse_cycle;
+    int8_t mouse_byte[3];
+    int8_t mouse_x;
+    int8_t mouse_y;
+};
+
+typedef struct mouse_status* (*mouse_status_function)(struct device* dev);
+
+struct deviceapi_mouse {
+    mouse_status_function status;
+};
 
 #endif
