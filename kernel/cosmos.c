@@ -99,7 +99,7 @@ void testFunctions() {
 	/*
 	* make some noise
 	*/
-	chirp();
+	//chirp();
 	//BeethovensFifth();
 
 	// get the PIT

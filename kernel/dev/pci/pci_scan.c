@@ -12,7 +12,6 @@
 #include <dev/pci/devicetree.h>
 
 void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_t function){
-		
 	dev->bus = bus;
 	dev->device = device;
 	dev->function = function;
