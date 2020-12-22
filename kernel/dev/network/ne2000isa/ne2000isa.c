@@ -16,6 +16,8 @@
 #include <types.h>
 #include <asm/io.h>
 #include <sleep/sleep.h>
+#include <devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <panic/panic.h>
 
 #define NE2000ISA_BASE_ADDRESS 0x300
 #define NE2000ISA_IRQ 9
@@ -140,6 +142,13 @@ void NE200ISAInit(struct device* dev){
     ne2000isa_init();
 }
 
+void ne2000isa_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+	panic("Ethernet read not implemented yet");
+}
+void ne2000isa_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+	panic("Ethernet write not implemented yet");
+}
+
 /**
 * find all NE2000 devices and register them
 */
@@ -151,7 +160,18 @@ void ne2000isa_devicemgr_register_devices() {
     deviceinstance->init =  &NE200ISAInit;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "NE2000 ISA");
-    devicemgr_register_device(deviceinstance);}
+    /*
+    * the device api
+    */
+    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*) kmalloc(sizeof(struct deviceapi_ethernet));
+    api->write = &ne2000isa_ethernet_read;
+    api->read = &ne2000isa_ethernet_write;
+    deviceinstance->api = api;
+    /*
+    * register
+    */
+    devicemgr_register_device(deviceinstance);
+}
 
 void ne2000isa_init() {	
 	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));     // set page 0, turn off DMA, tell the NIC to stop

@@ -17,6 +17,8 @@
 #include <types.h>
 #include <asm/io.h>
 #include <sleep/sleep.h>
+#include <devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <panic/panic.h>
 
 // REGISTERS
 #define CR				0x00 // Command Register
@@ -139,6 +141,13 @@ void NE200PCIInit(struct device* dev){
     ne2000pci_init();
 }
 
+void ne2000pci_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+	panic("Ethernet read not implemented yet");
+}
+void ne2000pci_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+	panic("Ethernet write not implemented yet");
+}
+
 void NE2000PCISearchCB(struct pci_device* dev){
     /*
     * register device
@@ -148,6 +157,16 @@ void NE2000PCISearchCB(struct pci_device* dev){
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "NE2000 PCI");
+    /*
+    * the device api
+    */
+    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*) kmalloc(sizeof(struct deviceapi_ethernet));
+    api->write = &ne2000pci_ethernet_read;
+    api->read = &ne2000pci_ethernet_write;
+    deviceinstance->api = api;
+    /*
+    * register
+    */
     devicemgr_register_device(deviceinstance);
 }
 
