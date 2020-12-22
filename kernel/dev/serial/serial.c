@@ -9,7 +9,6 @@
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
-#include <devicemgr/devicetype_serial.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
 
 #include <console/console.h>
