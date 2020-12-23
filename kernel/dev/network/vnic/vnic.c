@@ -19,16 +19,15 @@
 
 
 void vnic_irq_handler(stackFrame *frame){
-	kprintf("%");
+	kprintf("#");
 }
 /*
 * perform device instance specific init here
 */
 void VNICInit(struct device* dev){
- //   interrupt_router_register_interrupt_handler(NE2000ISA_IRQ, &vnic_irq_handler);
-   // kprintf("Init %s at IRQ %llu (%s)\n",dev->description, NE2000ISA_IRQ, dev->name);
-    // do the init
-   // ne2000isa_init();
+    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
+    interrupt_router_register_interrupt_handler(pci_dev->irq, &vnic_irq_handler);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, dev->name);
 }
 
 void VNICSearchCB(struct pci_device* dev){
@@ -47,7 +46,5 @@ void VNICSearchCB(struct pci_device* dev){
 * find all NE2000 devices and register them
 */
 void vinc_devicemgr_register_devices() {
-        pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x1AF4,0x8029, &VNICSearchCB);
+        pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x1AF4,0x1000, &VNICSearchCB);
 }
-
-
