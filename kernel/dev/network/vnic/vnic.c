@@ -17,15 +17,7 @@
 #include <sleep/sleep.h>
 #include <dev/pci/pci.h>
 
-// generic virtio flags
-#define VIRTIO_DEVICE_FEATURES      0x00
-#define VIRTIO_GUEST_FEATURES       0x04
-#define VIRTIO_QUEUE_ADDRESS        0x08
-#define VIRTIO_QUEUE_SIZE           0x0C
-#define VIRTIO_QUEUE_SELECT         0x0E
-#define VIRTIO_QUEUE_NOTIFY         0x10
-#define VIRTIO_DEVICE_STATUS        0x12
-#define VIRTIO_ISR_STATUS           0x13
+#include <dev/network/vnic/virtio.h>
 
 // virtio NIC flags
 #define VIRTIO_NIC_MAC1             0x14
