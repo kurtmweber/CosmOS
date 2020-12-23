@@ -16,10 +16,9 @@
 #include <asm/io.h>
 #include <sleep/sleep.h>
 #include <dev/pci/pci.h>
-
+#include <mm/mm.h>
 #include <dev/virtio/virtio.h>
 
-// cut and paste these later into virtio block device
 #define VIRTIO_BLOCK_TOTAL_SECTORS      0x14
 #define VIRTIO_BLOCK_MAX_SEGMENT_SIZE   0x1C
 #define VIRTIO_BLOCK_MAX_SEGMENT_COUNT  0x20
@@ -28,14 +27,23 @@
 #define VIRTIO_BLOCK_SECTOR_COUNT       0x27
 #define VIRTIO_BLOCK_LENGTH             0x28
 
-// TODO move this into virtio block device
-struct BlockRequest {
-  uint32_t Type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
-  uint32_t Reserved;
-  uint64_t Sector;
-  uint8_t Data[0];             // Data's size must be a multiple of 512
-  uint8_t Status;             // 0: OK; 1: Error; 2: Unsupported
+struct vblock_block_request {
+  uint32_t type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
+  uint32_t reserved;
+  uint64_t sector;
+  uint8_t* data;             // Data's size must be a multiple of 512
+  uint8_t  status;             // 0: OK; 1: Error; 2: Unsupported
 };
+
+struct vblock_block_request* vblock_block_request_new() {
+    struct vblock_block_request* ret = kmalloc(sizeof(struct vblock_block_request));   
+    ret->data=0;
+    ret->type=0;
+    ret->reserved=0;
+    ret->sector=0;
+    ret->status=0;
+    return ret;
+}
 
 void vblock_irq_handler(stackFrame *frame){
 	kprintf("#");
