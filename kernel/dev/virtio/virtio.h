@@ -12,6 +12,16 @@
 
 // https://wiki.osdev.org/Virtio
 
+// PCI Virtual Device IDs
+#define VIRTIO_PIC_DEVICED_NETWORK  0x1000
+#define VIRTIO_PIC_DEVICED_BLOCK    0x1001
+#define VIRTIO_PIC_DEVICED_BALLOON  0x1002
+#define VIRTIO_PIC_DEVICED_CONSOLE  0x1003
+#define VIRTIO_PIC_DEVICED_SCSCI    0x1004
+#define VIRTIO_PIC_DEVICED_ENTROPY  0x1005
+#define VIRTIO_PIC_DEVICED_9P       0x1009
+
+
 // generic virtio flags
 #define VIRTIO_DEVICE_FEATURES      0x00
 #define VIRTIO_GUEST_FEATURES       0x04

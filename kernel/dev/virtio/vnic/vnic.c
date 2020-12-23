@@ -113,5 +113,5 @@ void VNICSearchCB(struct pci_device* dev){
 * find all virtio ethernet devices and register them
 */
 void vnic_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x1AF4,0x1000, &VNICSearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x1AF4,VIRTIO_PIC_DEVICED_NETWORK, &VNICSearchCB);
 }
