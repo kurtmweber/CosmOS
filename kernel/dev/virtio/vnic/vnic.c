@@ -57,6 +57,16 @@ void VNICInit(struct device* dev){
     uint64_t base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
 
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, base, dev->name);
+
+    uint16_t virtio_mac[6];
+    virtio_mac[0] = asm_in_b(base+VIRTIO_NIC_MAC1);
+    virtio_mac[1] = asm_in_b(base+VIRTIO_NIC_MAC2);
+    virtio_mac[2] = asm_in_b(base+VIRTIO_NIC_MAC3);
+    virtio_mac[3] = asm_in_b(base+VIRTIO_NIC_MAC4);
+    virtio_mac[4] = asm_in_b(base+VIRTIO_NIC_MAC5);
+    virtio_mac[5] = asm_in_b(base+VIRTIO_NIC_MAC6);
+
+	  kprintf("MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",virtio_mac[0],virtio_mac[1],virtio_mac[2],virtio_mac[3],virtio_mac[4],virtio_mac[5]);
 }
 
 void VNICSearchCB(struct pci_device* dev){
