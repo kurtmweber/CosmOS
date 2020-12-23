@@ -19,6 +19,7 @@
 #include <mm/mm.h>
 #include <dev/virtio/virtio.h>
 #include <panic/panic.h>
+#include <dev/virtio/virtqueue.h>
 
 // registers
 #define VIRTIO_BLOCK_TOTAL_SECTORS      0x14
@@ -41,7 +42,15 @@
 #define VIRTIO_BLK_F_DISCARD        13
 #define VIRTIO_BLK_F_WRITE_ZEROES   14
 
+// request types
+#define VIRTIO_BLK_T_IN 0
+#define VIRTIO_BLK_T_OUT 1
+#define VIRTIO_BLK_T_FLUSH 4
+#define VIRTIO_BLK_T_DISCARD 11
+#define VIRTIO_BLK_T_WRITE_ZEROES 13
+
 uint64_t vblock_base=0;
+struct virtq* vblock_queue;
 
 struct vblock_block_request {
   uint32_t type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
@@ -79,6 +88,9 @@ uint64_t calcbar( struct pci_device* pci_dev){
 void VBLOCKInit(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     interrupt_router_register_interrupt_handler(pci_dev->irq, &vblock_irq_handler);
+
+    // make the queue
+    vblock_queue = virtq_new();
 
     // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
    // vblock_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
@@ -134,3 +146,8 @@ void VBLOCKSearchCB(struct pci_device* dev){
 void vblock_devicemgr_register_devices() {
     pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_BLOCK, &VBLOCKSearchCB);
 }
+
+void vblock_read(uint32_t sector, uint8_t* target, uint32_t size) {
+
+}
+

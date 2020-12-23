@@ -19,6 +19,8 @@
 #include <dev/dev.h>
 #include <sleep/sleep.h>
 #include <notes.h>
+#include <dev/virtio/vblock/vblock.h>
+
 
 void stringtest();
 
@@ -95,6 +97,11 @@ void CosmOS(){
 	} while((tmp = tmp->next));
 	
 //	stringtest();
+
+	uint32_t size=100;
+	uint8_t* blk = kmalloc(size);
+	vblock_read(0, blk, size);
+	kprintf("%llu", blk[0]);
 
 	while (1){
 		asm_hlt();

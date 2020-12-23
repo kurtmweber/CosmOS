@@ -5,7 +5,6 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-
 #include <dev/virtio/virtqueue.h>
 #include <mm/mm.h>
 #include <panic/panic.h>
