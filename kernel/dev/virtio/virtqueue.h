@@ -12,7 +12,7 @@
 
 // https://www.redhat.com/en/blog/virtqueues-and-virtio-ring-how-data-travels
 
-#define VIRTQUEUE_SIZE 256
+#define VIRTQUEUE_SIZE 16
 
 struct virtq_descriptor { 
     uint8_t* addr;
@@ -27,20 +27,31 @@ struct virtq_avail {
     uint16_t ring[VIRTQUEUE_SIZE];
 };
 
+struct virtq_used_elem {
+    uint32_t id;    // Index of start of used descriptor chain.
+    uint32_t len;   // Total length of the descriptor chain which was used (written to) 
+};
+
+struct virtq_used {
+    uint16_t flags;
+    uint16_t idx;
+    struct virtq_used_elem ring[VIRTQUEUE_SIZE];
+    uint16_t avail_event;                           // Only if VIRTIO_F_EVENT_IDX
+};
+
 struct virtq {
     struct virtq_descriptor* descriptors[VIRTQUEUE_SIZE];
     struct virtq_avail avail;
+    struct virtq_used used;
 };
 
 // virtq
 struct virtq* virtq_new();
 void virtq_delete(struct virtq* queue);
-
+void virtq_enqueue_buffer(struct virtq* queue, uint8_t* buffer, uint32_t len);
 
 // descriptors
-struct virtq_descriptor* virtq_descriptor_new();
+struct virtq_descriptor* virtq_descriptor_new(uint8_t* buffer, uint32_t len);
 void virtq_descriptor_delete(struct virtq_descriptor* descriptor);
-
-
 
 #endif
