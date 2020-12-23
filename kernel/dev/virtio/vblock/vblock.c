@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-// https://wiki.osdev.org/Virtio*/
+// https://wiki.osdev.org/Virtio
 
 #include <dev/virtio/vblock/vblock.h>
 #include <interrupts/interrupt_router.h>
@@ -26,6 +26,8 @@
 #define VIRTIO_BLOCK_HEAD_COUNT         0x26
 #define VIRTIO_BLOCK_SECTOR_COUNT       0x27
 #define VIRTIO_BLOCK_LENGTH             0x28
+
+uint64_t vblock_base=0;
 
 struct vblock_block_request {
   uint32_t type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
@@ -56,9 +58,12 @@ void VBLOCKInit(struct device* dev){
     interrupt_router_register_interrupt_handler(pci_dev->irq, &vblock_irq_handler);
 
     // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
-    uint64_t base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+    vblock_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
 
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, base, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, vblock_base, dev->name);
+
+    uint32_t totalSectors = asm_in_d(vblock_base+VIRTIO_BLOCK_TOTAL_SECTORS);
+    kprintf("Total sectors %llu\n", totalSectors);
 }
 
 void VBLOCKSearchCB(struct pci_device* dev){
