@@ -32,7 +32,7 @@ void sleep_wait(uint64_t milliseconds) {
 	if (0==rtc){
 		panic("Cant find the RTC!");
 	} else {
-		kprintf("Found rtc0 %s\n", rtc->description);
+//		kprintf("Found rtc0 %s\n", rtc->description);
 	}
 
 	uint64_t tc;	// temporary count while we're working up to full value

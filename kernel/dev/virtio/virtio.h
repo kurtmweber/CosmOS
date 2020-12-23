@@ -22,37 +22,6 @@
 #define VIRTIO_DEVICE_STATUS        0x12
 #define VIRTIO_ISR_STATUS           0x13
 
-
-
-//#define QUEUE_SIZE  1024
-
-
-//struct Available {
-//    uint16_t Flags;             // 1: Do not trigger interrupts.
-//    uint16_t Index;             // Index of the next ring index to be used.  (Last available ring buffer index+1)
-//    uint16_t Ring[QUEUE_SIZE] ;  // List of available buffer indexes from the Buffers array above.
-//    uint16_t EventIndex;        // Only used if VIRTIO_F_EVENT_IDX was negotiated
-//};
-
-//struct Ring {
-//    uint32_t Index;  // Index of the used buffer in the Buffers array above.
-//    uint32_t Length; // Total bytes written to buffer.
-//};
-
-//struct Used {
-//    uint16_t Flags;            // 1: Do not notify device when buffers are added to available ring.
-//    uint16_t Index;            // Index of the next ring index to be used.  (Last used ring buffer index+1)
-//    struct Ring ring[QUEUE_SIZE];
-//    uint16_t AvailEvent;       // Only used if VIRTIO_F_EVENT_IDX was negotiated
-//};
-
-//struct VirtualQueue {
-//    struct Buffers buffers[QUEUE_SIZE]; 
-//    struct Available available;
-
-//    uint8_t Padding[0];  // Reserved
-    // 4096 byte alignment
- //   struct Used used;
-//};
+void virtio_devicemgr_register_devices();
 
 #endif

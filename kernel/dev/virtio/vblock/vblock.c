@@ -68,6 +68,6 @@ void VBLOCKSearchCB(struct pci_device* dev){
 /**
 * find all virtio block devices and register them
 */
-void vnic_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x1AF4,0x1000, &VBLOCKSearchCB);
+void vblock_devicemgr_register_devices() {
+    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,0x1AF4,0x1001, &VBLOCKSearchCB);
 }

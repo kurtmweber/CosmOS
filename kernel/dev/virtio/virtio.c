@@ -5,11 +5,13 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _VBLOCK_H
-#define _VBLOCK_H
 
-#include <types.h>
+#include <dev/virtio/virtio.h>
+#include <dev/virtio/vblock/vblock.h>
+#include <dev/virtio/vnic/vnic.h>
 
-void vblock_devicemgr_register_devices();
+void virtio_devicemgr_register_devices() {
+    vblock_devicemgr_register_devices();
+    vnic_devicemgr_register_devices();
 
-#endif
+}
