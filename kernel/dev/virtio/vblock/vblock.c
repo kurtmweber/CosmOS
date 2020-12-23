@@ -51,6 +51,7 @@
 
 uint64_t vblock_base=0;
 struct virtq* vblock_queue;
+uint32_t sectorLength;
 
 struct vblock_block_request {
   uint32_t type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
@@ -89,9 +90,6 @@ void VBLOCKInit(struct device* dev){
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     interrupt_router_register_interrupt_handler(pci_dev->irq, &vblock_irq_handler);
 
-    // make the queue
-    vblock_queue = virtq_new();
-
     // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
    // vblock_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
     vblock_base = calcbar(pci_dev);
@@ -123,9 +121,17 @@ void VBLOCKInit(struct device* dev){
     * length*totalSectors should equal the byte size of the mounted file (currently hda.img)
     */
     uint32_t totalSectors = asm_in_d(vblock_base+VIRTIO_BLOCK_TOTAL_SECTORS);
-    uint32_t length = asm_in_d(vblock_base+VIRTIO_BLOCK_LENGTH);
-    uint64_t totalBytes = totalSectors*length;
+    sectorLength = asm_in_d(vblock_base+VIRTIO_BLOCK_LENGTH);
+    uint64_t totalBytes = totalSectors*sectorLength;
     kprintf("Total byte size of mounted media: %llu\n",totalBytes);
+
+    // make the queue
+    vblock_queue = virtq_new();
+
+    // set the queue.  The API takes a 32 bit pointer, but we have a 64 bit pointer, so ... some conversions  
+    kprintf("Queue Address: %#hX\n", (uint64_t) vblock_queue);
+    asm_out_d(VIRTIO_QUEUE_ADDRESS, (uint32_t) (uint64_t) vblock_queue);
+    asm_out_w(VIRTIO_QUEUE_SIZE, VIRTQUEUE_SIZE);
 }
 
 void VBLOCKSearchCB(struct pci_device* dev){
@@ -148,6 +154,23 @@ void vblock_devicemgr_register_devices() {
 }
 
 void vblock_read(uint32_t sector, uint8_t* target, uint32_t size) {
+    /*
+    * block request
+    */
+    struct vblock_block_request* req = vblock_block_request_new();
+    req->type = VIRTIO_BLK_T_IN;
+    req->sector = sector;
+    req->data = kmalloc(sectorLength);
+
+    /*
+    * descriptor
+    */
+    struct virtq_descriptor* desc = virtq_descriptor_new((uint8_t*)req, sizeof(struct vblock_block_request));
+    // 0 for read, 1 for write
+    desc->flags=0;
+
+    // enqueue
+    virtq_enqueue_descriptor(vblock_queue, desc);
 
 }
 

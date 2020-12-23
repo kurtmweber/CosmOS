@@ -14,6 +14,9 @@
 
 #define VIRTQUEUE_SIZE 16
 
+#define VIRTQ_DESC_F_AVAIL (1 << 7)
+#define VIRTQ_DESC_F_USED (1 << 15)
+
 struct virtq_descriptor { 
     uint8_t* addr;
     uint32_t len;
@@ -48,7 +51,7 @@ struct virtq {
 // virtq
 struct virtq* virtq_new();
 void virtq_delete(struct virtq* queue);
-void virtq_enqueue_buffer(struct virtq* queue, uint8_t* buffer, uint32_t len);
+uint32_t virtq_enqueue_descriptor(struct virtq* queue, struct virtq_descriptor* descriptor);
 
 // descriptors
 struct virtq_descriptor* virtq_descriptor_new(uint8_t* buffer, uint32_t len);

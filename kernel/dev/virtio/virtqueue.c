@@ -80,28 +80,29 @@ uint16_t find_first_empty_slot(struct virtq* queue) {
     return -1;
 }
 
-void virtq_enqueue_buffer(struct virtq* queue,uint8_t* buffer, uint32_t len) {
+uint32_t virtq_enqueue_descriptor(struct virtq* queue, struct virtq_descriptor* descriptor) {
     if (0!=queue){
-        if (0!=buffer){
+        if (0!=descriptor){
             // find a slot in the descriptor table
             uint16_t slot = find_first_empty_slot(queue);
-            // allocate descripor
-            struct virtq_descriptor* descriptor = virtq_descriptor_new(buffer, len);
             // put descriptor into  descriptor table
             queue->descriptors[slot]=descriptor;
             // point to the descriptor in the avail ring
             queue->avail.ring[queue->avail.idx]=slot;
+            // save index
+            uint32_t saved = queue->avail.idx;
             // increment the avail ring
             queue->avail.idx = queue->avail.idx+1;
             if (queue->avail.idx==VIRTQUEUE_SIZE){
                 queue->avail.idx=0;
             }
+            return saved;
         } else {
             panic("Invalid buffer passed to virtq_enqueue_buffer");
         }
     } else {
     panic("Invalid virtq passed to virtq_enqueue_buffer");
-    }
+    }    
 }
 
 /*
@@ -120,7 +121,6 @@ void virtq_descriptor_delete(struct virtq_descriptor* descriptor) {
     if (0!=descriptor){
         if (0!=descriptor->addr){
             kfree(descriptor->addr);
-
         } else {
             panic("virtq_descriptor address should not be zero");
         }
@@ -129,7 +129,3 @@ void virtq_descriptor_delete(struct virtq_descriptor* descriptor) {
         panic("Invalid virtq_descriptor passed to virtq_descriptor_delete");
     }
 }
-
-
-
-

@@ -24,8 +24,7 @@
 #define VIRTIO_PCI_DEVICED_ENTROPY  0x1005
 #define VIRTIO_PCI_DEVICED_9P       0x1009
 
-
-// generic virtio flags
+// generic virtio registers
 #define VIRTIO_DEVICE_FEATURES      0x00
 #define VIRTIO_GUEST_FEATURES       0x04
 #define VIRTIO_QUEUE_ADDRESS        0x08
