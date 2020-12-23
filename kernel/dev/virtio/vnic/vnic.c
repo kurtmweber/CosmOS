@@ -16,7 +16,7 @@
 #include <asm/io.h>
 #include <sleep/sleep.h>
 #include <dev/pci/pci.h>
-
+#include <panic/panic.h>
 #include <dev/virtio/virtio.h>
 
 // virtio NIC flags
@@ -86,6 +86,13 @@ void VNICInit(struct device* dev){
     virtio_mac[3] = asm_in_b(vnic_base+VIRTIO_NIC_MAC4);
     virtio_mac[4] = asm_in_b(vnic_base+VIRTIO_NIC_MAC5);
     virtio_mac[5] = asm_in_b(vnic_base+VIRTIO_NIC_MAC6);
+
+    /*
+    * should start with 0x52, 0x54
+    */
+    if ((virtio_mac[0] !=0x52) ||(virtio_mac[1] !=0x54)){
+      panic("Unexpected virtio MAC address");
+    }
 
 	  kprintf("MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",virtio_mac[0],virtio_mac[1],virtio_mac[2],virtio_mac[3],virtio_mac[4],virtio_mac[5]);
 }

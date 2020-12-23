@@ -18,7 +18,9 @@
 #include <dev/pci/pci.h>
 #include <mm/mm.h>
 #include <dev/virtio/virtio.h>
+#include <panic/panic.h>
 
+// registers
 #define VIRTIO_BLOCK_TOTAL_SECTORS      0x14
 #define VIRTIO_BLOCK_MAX_SEGMENT_SIZE   0x1C
 #define VIRTIO_BLOCK_MAX_SEGMENT_COUNT  0x20
@@ -26,6 +28,18 @@
 #define VIRTIO_BLOCK_HEAD_COUNT         0x26
 #define VIRTIO_BLOCK_SECTOR_COUNT       0x27
 #define VIRTIO_BLOCK_LENGTH             0x28
+
+// feature flags
+#define VIRTIO_BLK_F_SIZE_MAX       1
+#define VIRTIO_BLK_F_SEG_MAX        2
+#define VIRTIO_BLK_F_GEOMETRY       4
+#define VIRTIO_BLK_F_RO             5
+#define VIRTIO_BLK_F_BLK_SIZE       6
+#define VIRTIO_BLK_F_FLUSH          9
+#define VIRTIO_BLK_F_TOPOLOGY       10
+#define VIRTIO_BLK_F_CONFIG_WCE     11
+#define VIRTIO_BLK_F_DISCARD        13
+#define VIRTIO_BLK_F_WRITE_ZEROES   14
 
 uint64_t vblock_base=0;
 
@@ -72,26 +86,35 @@ void VBLOCKInit(struct device* dev){
 
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, vblock_base, dev->name);
 
-    uint32_t totalSectors = asm_in_d(vblock_base+VIRTIO_BLOCK_TOTAL_SECTORS);
-    kprintf("Total sectors %llu\n", totalSectors);
-
     // acknowledge device and set the driver loaded bit
     asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED);
 
     // get the feature bits
     uint32_t features = asm_in_b(vblock_base+VIRTIO_DEVICE_FEATURES);
-    kprintf("Features %llu\n", features);
+  //  kprintf("Features %llu\n", features);
 
-    // for now, we dont use any features
-  //  asm_out_b(vblock_base+VIRTIO_DEVICE_FEATURES,0x00);
+    // we kinda care about geometry
+//    asm_out_b(vblock_base+VIRTIO_DEVICE_FEATURES,0);
 
     // write features ok
-  //  asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS,VIRTIO_STATUS_FEATURES_OK);
+    asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS,VIRTIO_STATUS_FEATURES_OK);
 
-    // read fearures ok.  we good?
-  //  uint32_t status = asm_in_b(vblock_base+VIRTIO_DEVICE_STATUS);
-  //  kprintf("Features %llu\n", status);
+    // read features ok.  we good?
+    uint32_t status = asm_in_b(vblock_base+VIRTIO_DEVICE_STATUS);
+    if (VIRTIO_STATUS_FEATURES_OK!=status) {
+      panic("virtio feature negotiation failed");
+    }
 
+    // cool
+    asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DRIVER_READY);
+
+    /*
+    * length*totalSectors should equal the byte size of the mounted file (currently hda.img)
+    */
+    uint32_t totalSectors = asm_in_d(vblock_base+VIRTIO_BLOCK_TOTAL_SECTORS);
+    uint32_t length = asm_in_d(vblock_base+VIRTIO_BLOCK_LENGTH);
+    uint64_t totalBytes = totalSectors*length;
+    kprintf("Total byte size of mounted media: %llu\n",totalBytes);
 }
 
 
