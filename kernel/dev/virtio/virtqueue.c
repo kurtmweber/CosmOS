@@ -11,18 +11,17 @@
 #include <panic/panic.h>
 
 #define VIRTQUEUE_BUFFER_SIZE_BYTES 1024*2 // 2k
-#define VIRTQUEUE_SIZE 256
+
 
 struct virtq* virtq_new() {
     struct virtq* ret = kmalloc(sizeof(struct virtq));
     /*
     *  descriptor array
     */
-    ret->descriptors = kmalloc(sizeof(struct virtq_descriptor*)*VIRTQUEUE_SIZE);
     for(uint16_t i=0;i<VIRTQUEUE_SIZE;i++){
        (ret->descriptors)[i]= virtq_descriptor_new();
     }
-    return ret;
+    return ret; 
 }
 
 void virtq_delete(struct virtq* queue) {
@@ -34,7 +33,6 @@ void virtq_delete(struct virtq* queue) {
             for(uint16_t i=0;i<VIRTQUEUE_SIZE;i++){
                 kfree((queue->descriptors)[i]);
             }
-            kfree(queue->descriptors);
         } else {
             panic("descriptor array should not be null in virtq_delete");
         }
@@ -44,7 +42,9 @@ void virtq_delete(struct virtq* queue) {
     }
 }
 
-
+/*
+* descriptors
+*/
 struct virtq_descriptor* virtq_descriptor_new() {
     struct virtq_descriptor* ret = kmalloc(sizeof(struct virtq_descriptor));
     ret->addr=kmalloc(sizeof(uint8_t)*VIRTQUEUE_BUFFER_SIZE_BYTES);
@@ -67,5 +67,7 @@ void virtq_descriptor_delete(struct virtq_descriptor* descriptor) {
         panic("Invalid virtq_descriptor passed to virtq_descriptor_delete");
     }
 }
+
+
 
 
