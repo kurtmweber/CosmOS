@@ -56,6 +56,13 @@ uint8_t vnic_get_status(){
   return asm_in_b(vnic_base+VIRTIO_NIC_STATUS);
 }
 
+uint64_t vnic_calcbar( struct pci_device* pci_dev){
+   uint64_t bar0 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+   uint64_t bar1 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+
+   return  ((bar0 & 0xFFFFFFF0) + ((bar1 & 0xFFFFFFFF) << 32)) ;
+}
+
 /*
 * perform device instance specific init here
 */
@@ -64,7 +71,11 @@ void VNICInit(struct device* dev){
     interrupt_router_register_interrupt_handler(pci_dev->irq, &vnic_irq_handler);
 
     // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
-    vnic_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+
+    
+   // vnic_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+ vnic_base = vnic_calcbar(pci_dev);
+
 
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, vnic_base, dev->name);
 

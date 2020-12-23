@@ -13,5 +13,4 @@
 void virtio_devicemgr_register_devices() {
     vblock_devicemgr_register_devices();
     vnic_devicemgr_register_devices();
-
 }

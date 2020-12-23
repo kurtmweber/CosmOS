@@ -50,6 +50,15 @@ struct vblock_block_request* vblock_block_request_new() {
 void vblock_irq_handler(stackFrame *frame){
 	kprintf("#");
 }
+
+// https://wiki.osdev.org/PCI
+uint64_t calcbar( struct pci_device* pci_dev){
+   uint64_t bar0 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+   uint64_t bar1 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+
+   return  ((bar0 & 0xFFFFFFF0) + ((bar1 & 0xFFFFFFFF) << 32)) ;
+}
+
 /*
 * perform device instance specific init here
 */
@@ -58,13 +67,33 @@ void VBLOCKInit(struct device* dev){
     interrupt_router_register_interrupt_handler(pci_dev->irq, &vblock_irq_handler);
 
     // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
-    vblock_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+   // vblock_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+    vblock_base = calcbar(pci_dev);
 
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, vblock_base, dev->name);
 
     uint32_t totalSectors = asm_in_d(vblock_base+VIRTIO_BLOCK_TOTAL_SECTORS);
     kprintf("Total sectors %llu\n", totalSectors);
+
+    // acknowledge device and set the driver loaded bit
+    asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED);
+
+    // get the feature bits
+    uint32_t features = asm_in_b(vblock_base+VIRTIO_DEVICE_FEATURES);
+    kprintf("Features %llu\n", features);
+
+    // for now, we dont use any features
+  //  asm_out_b(vblock_base+VIRTIO_DEVICE_FEATURES,0x00);
+
+    // write features ok
+  //  asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS,VIRTIO_STATUS_FEATURES_OK);
+
+    // read fearures ok.  we good?
+  //  uint32_t status = asm_in_b(vblock_base+VIRTIO_DEVICE_STATUS);
+  //  kprintf("Features %llu\n", status);
+
 }
+
 
 void VBLOCKSearchCB(struct pci_device* dev){
     /*
