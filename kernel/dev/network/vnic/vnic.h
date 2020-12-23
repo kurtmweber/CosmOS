@@ -5,16 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _NETWORK_H
-#define _NETWORK_H
+#ifndef _VNIC_H
+#define _VNIC_H
 
-#include <dev/network/ne2000pci/ne2000pci.h>
-#include <dev/network/ne2000isa/ne2000isa.h>
-#include <dev/network/rtl8139/rtl8139.h>
-#include <dev/network/e1000/e1000.h>
-#include <dev/network/vnic/vnic.h>
+#include <types.h>
 
-void network_devicemgr_register_devices();
+void vinc_devicemgr_register_devices();
 
 #endif
-
