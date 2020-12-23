@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void vinc_devicemgr_register_devices();
+void vnic_devicemgr_register_devices();
 
 #endif
