@@ -91,10 +91,9 @@ void VBLOCKInit(struct device* dev){
 
     // get the feature bits
     uint32_t features = asm_in_b(vblock_base+VIRTIO_DEVICE_FEATURES);
-  //  kprintf("Features %llu\n", features);
 
-    // we kinda care about geometry
-//    asm_out_b(vblock_base+VIRTIO_DEVICE_FEATURES,0);
+    // we kinda care about geometry and block size
+    asm_out_b(vblock_base+VIRTIO_GUEST_FEATURES,VIRTIO_BLK_F_GEOMETRY|VIRTIO_BLK_F_BLK_SIZE);
 
     // write features ok
     asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS,VIRTIO_STATUS_FEATURES_OK);
@@ -116,7 +115,6 @@ void VBLOCKInit(struct device* dev){
     uint64_t totalBytes = totalSectors*length;
     kprintf("Total byte size of mounted media: %llu\n",totalBytes);
 }
-
 
 void VBLOCKSearchCB(struct pci_device* dev){
     /*
