@@ -132,5 +132,5 @@ void VBLOCKSearchCB(struct pci_device* dev){
 * find all virtio block devices and register them
 */
 void vblock_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,0x1AF4,VIRTIO_PIC_DEVICED_BLOCK, &VBLOCKSearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_BLOCK, &VBLOCKSearchCB);
 }
