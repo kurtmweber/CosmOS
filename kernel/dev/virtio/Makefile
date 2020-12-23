@@ -5,13 +5,16 @@ ARFLAGS=-crs
 
 all: virtio.a
 
-virtio.a: vnic.o vblock.o
+virtio.a: vnic.o vblock.o virtqueue.o
 	$(AR) $(ARFLAGS) $@ $^
 
 vnic.o: vnic/vnic.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
 vblock.o: vblock/vblock.c
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
+
+virtqueue.o: virtqueue.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
 clean:
