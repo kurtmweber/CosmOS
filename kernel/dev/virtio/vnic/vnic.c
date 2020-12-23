@@ -28,7 +28,6 @@
 #define VIRTIO_NIC_MAC6             0x19
 #define VIRTIO_NIC_STATUS           0x1A
 
-
 struct VirtioPacketHeader {
   uint8_t Flags;                // Bit 0: Needs checksum; Bit 1: Received packet has valid data;
                                 // Bit 2: If VIRTIO_NET_F_RSC_EXT was negotiated, the device processes
@@ -46,6 +45,17 @@ struct VirtioPacketHeader {
 void vnic_irq_handler(stackFrame *frame){
 	kprintf("#");
 }
+
+uint64_t base=0;
+
+void vinc_write_queue_notify_register(uint16_t status){
+    asm_out_w(base+VIRTIO_QUEUE_NOTIFY,status);
+}
+
+uint8_t vnic_get_status(){
+  return asm_in_b(base+VIRTIO_NIC_STATUS);
+}
+
 /*
 * perform device instance specific init here
 */
@@ -54,11 +64,11 @@ void VNICInit(struct device* dev){
     interrupt_router_register_interrupt_handler(pci_dev->irq, &vnic_irq_handler);
 
     // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
-    uint64_t base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+    base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
 
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, base, dev->name);
 
-    uint16_t virtio_mac[6];
+    uint8_t virtio_mac[6];
     virtio_mac[0] = asm_in_b(base+VIRTIO_NIC_MAC1);
     virtio_mac[1] = asm_in_b(base+VIRTIO_NIC_MAC2);
     virtio_mac[2] = asm_in_b(base+VIRTIO_NIC_MAC3);
