@@ -28,14 +28,6 @@
 #define VIRTIO_NIC_MAC6             0x19
 #define VIRTIO_NIC_STATUS           0x1A
 
-// cut and paste these later into virtio block device
-#define VIRTIO_BLOCK_TOTAL_SECTORS      0x14
-#define VIRTIO_BLOCK_MAX_SEGMENT_SIZE   0x1C
-#define VIRTIO_BLOCK_MAX_SEGMENT_COUNT  0x20
-#define VIRTIO_BLOCK_CYLINDER_COUNT     0x24
-#define VIRTIO_BLOCK_HEAD_COUNT         0x26
-#define VIRTIO_BLOCK_SECTOR_COUNT       0x27
-#define VIRTIO_BLOCK_LENGTH             0x28
 
 struct VirtioPacketHeader {
   uint8_t Flags;                // Bit 0: Needs checksum; Bit 1: Received packet has valid data;
@@ -49,15 +41,6 @@ struct VirtioPacketHeader {
   uint16_t ChecksumStart;       // The position to begin calculating the checksum.
   uint16_t ChecksumOffset;      // The position after ChecksumStart to store the checksum.
   uint16_t BufferCount;         // Used when merging buffers.
-};
-
-// TODO move this into virtio block device
-struct BlockRequest {
-  uint32_t Type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
-  uint32_t Reserved;
-  uint64_t Sector;
-  uint8_t Data[0];             // Data's size must be a multiple of 512
-  uint8_t Status;             // 0: OK; 1: Error; 2: Unsupported
 };
 
 void vnic_irq_handler(stackFrame *frame){
@@ -89,7 +72,7 @@ void VNICSearchCB(struct pci_device* dev){
 }
 
 /**
-* find all NE2000 devices and register them
+* find all virtio ethernet devices and register them
 */
 void vnic_devicemgr_register_devices() {
     pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x1AF4,0x1000, &VNICSearchCB);
