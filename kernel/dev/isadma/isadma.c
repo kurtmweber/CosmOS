@@ -11,6 +11,7 @@
 #include <console/console.h>
 
 // https://wiki.osdev.org/DMA
+// http://www.osdever.net/documents/dmaprogramming.pdf
 
 // channels 0-3 (8 bit)
 #define ISA_DMA_CHAN03_START_ADDRESS_REGISTER_0_4 			0x00

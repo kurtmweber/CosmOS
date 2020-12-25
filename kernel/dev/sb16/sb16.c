@@ -11,6 +11,7 @@
 #include <console/console.h>
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
+#include <devicemgr/deviceapi/deviceapi_dsp.h>
 
 // https://wiki.osdev.org/Sound_Blaster_16
 
@@ -25,7 +26,6 @@ void sb16_handle_irq(stackFrame *frame) {
 /*
 * perform device instance specific init here
 */
-
 void deviceInitSB16(struct device* dev){
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, SB16_IRQ, dev->name);
     interrupt_router_register_interrupt_handler(SB16_IRQ, &sb16_handle_irq);
@@ -39,6 +39,14 @@ void sb16_devicemgr_register_devices(){
 	devicemgr_set_device_description(deviceinstance, "Soundblaster 16");
 	deviceinstance->devicetype = DSP;
 	deviceinstance->init =  &deviceInitSB16;
+	/*
+	* device api
+	*/
+	struct deviceapi_dsp* api = (struct deviceapi_dsp*) kmalloc (sizeof(struct deviceapi_dsp));
+	deviceinstance->api = api;
+	/*
+	* register
+	*/
 	devicemgr_register_device(deviceinstance);
 }
 

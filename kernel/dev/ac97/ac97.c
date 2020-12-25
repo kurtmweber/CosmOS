@@ -12,6 +12,8 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 #include <dev/pci/pci.h>
+#include <devicemgr/deviceapi/deviceapi_dsp.h>
+
 
 // https://wiki.osdev.org/AC97
 
@@ -56,7 +58,15 @@ void AC97PCISearchCB(struct pci_device* dev){
     deviceinstance->deviceData = dev;
     deviceinstance->devicetype = DSP;
     devicemgr_set_device_description(deviceinstance, "Intel 82801AA AC97");
-    devicemgr_register_device(deviceinstance);
+	/*
+	* device api
+	*/
+	struct deviceapi_dsp* api = (struct deviceapi_dsp*) kmalloc (sizeof(struct deviceapi_dsp));
+	deviceinstance->api = api;
+	/*
+	* register
+	*/
+	devicemgr_register_device(deviceinstance);
 }
 
 void ac97_devicemgr_register_devices(){
