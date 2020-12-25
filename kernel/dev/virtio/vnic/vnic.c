@@ -42,20 +42,22 @@ struct VirtioPacketHeader {
   uint16_t BufferCount;         // Used when merging buffers.
 };
 
+struct vnic_devicedata {
+    uint64_t base;
+} __attribute__((packed));
+
 void vnic_irq_handler(stackFrame *frame){
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	kprintf("#");
 }
 
-uint64_t vnic_base=0;
+//void vinc_write_queue_notify_register(uint16_t status){
+//    asm_out_w(deviceData->base+VIRTIO_QUEUE_NOTIFY,status);
+//}
 
-void vinc_write_queue_notify_register(uint16_t status){
-    asm_out_w(vnic_base+VIRTIO_QUEUE_NOTIFY,status);
-}
-
-uint8_t vnic_get_status(){
-  return asm_in_b(vnic_base+VIRTIO_NIC_STATUS);
-}
+//uint8_t vnic_get_status(){
+//  return asm_in_b(deviceData->base+VIRTIO_NIC_STATUS);
+//}
 
 uint64_t vnic_calcbar( struct pci_device* pci_dev){
   ASSERT_NOT_NULL(pci_dev, "pci_dev cannot be null");
@@ -70,22 +72,20 @@ uint64_t vnic_calcbar( struct pci_device* pci_dev){
 */
 void VNICInit(struct device* dev){
 	  ASSERT_NOT_NULL(dev, "dev cannot be null");
-    interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);
+	  ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
 
-    // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
-
-    
-   // vnic_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
-    vnic_base = vnic_calcbar(dev->pci);
+    struct vnic_devicedata* deviceData = (struct vnic_devicedata*) dev->deviceData;
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);    
+    deviceData->base = vnic_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 
     uint8_t virtio_mac[6];
-    virtio_mac[0] = asm_in_b(vnic_base+VIRTIO_NIC_MAC1);
-    virtio_mac[1] = asm_in_b(vnic_base+VIRTIO_NIC_MAC2);
-    virtio_mac[2] = asm_in_b(vnic_base+VIRTIO_NIC_MAC3);
-    virtio_mac[3] = asm_in_b(vnic_base+VIRTIO_NIC_MAC4);
-    virtio_mac[4] = asm_in_b(vnic_base+VIRTIO_NIC_MAC5);
-    virtio_mac[5] = asm_in_b(vnic_base+VIRTIO_NIC_MAC6);
+    virtio_mac[0] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC1);
+    virtio_mac[1] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC2);
+    virtio_mac[2] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC3);
+    virtio_mac[3] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC4);
+    virtio_mac[4] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC5);
+    virtio_mac[5] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC6);
 
     /*
     * should start with 0x52, 0x54
@@ -107,6 +107,11 @@ void VNICSearchCB(struct pci_device* dev){
     deviceinstance->pci = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "Virtio NIC");
+  	/*
+    * device data
+    */
+    struct vnic_devicedata* deviceData = (struct vnic_devicedata*) kmalloc(sizeof(struct vnic_devicedata));
+    deviceinstance->deviceData = deviceData;
     devicemgr_register_device(deviceinstance);
 }
 

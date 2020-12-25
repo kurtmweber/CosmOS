@@ -49,9 +49,13 @@
 #define VIRTIO_BLK_T_DISCARD 11
 #define VIRTIO_BLK_T_WRITE_ZEROES 13
 
-uint64_t vblock_base=0;
 struct virtq* vblock_queue;
 uint32_t sectorLength;
+
+struct vblock_devicedata {
+    uint64_t base;
+} __attribute__((packed));
+
 
 struct vblock_block_request {
   uint32_t type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
@@ -90,40 +94,40 @@ uint64_t calcbar( struct pci_device* pci_dev){
 */
 void VBLOCKInit(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
-    interrupt_router_register_interrupt_handler(dev->pci->irq, &vblock_irq_handler);
+	ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
 
-    // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
-   // vblock_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
-    vblock_base = calcbar(dev->pci);
+    struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &vblock_irq_handler);
+    deviceData->base = calcbar(dev->pci);
 
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 
     // acknowledge device and set the driver loaded bit
-    asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED);
+    asm_out_b(deviceData->base+VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED);
 
     // get the feature bits
-    uint32_t features = asm_in_b(vblock_base+VIRTIO_DEVICE_FEATURES);
+    uint32_t features = asm_in_b(deviceData->base+VIRTIO_DEVICE_FEATURES);
 
     // we kinda care about geometry and block size
-    asm_out_b(vblock_base+VIRTIO_GUEST_FEATURES,VIRTIO_BLK_F_GEOMETRY|VIRTIO_BLK_F_BLK_SIZE);
+    asm_out_b(deviceData->base+VIRTIO_GUEST_FEATURES,VIRTIO_BLK_F_GEOMETRY|VIRTIO_BLK_F_BLK_SIZE);
 
     // write features ok
-    asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS,VIRTIO_STATUS_FEATURES_OK);
+    asm_out_b(deviceData->base+VIRTIO_DEVICE_STATUS,VIRTIO_STATUS_FEATURES_OK);
 
     // read features ok.  we good?
-    uint32_t status = asm_in_b(vblock_base+VIRTIO_DEVICE_STATUS);
+    uint32_t status = asm_in_b(deviceData->base+VIRTIO_DEVICE_STATUS);
     if (VIRTIO_STATUS_FEATURES_OK!=status) {
       panic("virtio feature negotiation failed");
     }
 
     // cool
-    asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DRIVER_READY);
+    asm_out_b(deviceData->base+VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DRIVER_READY);
 
     /*
     * length*totalSectors should equal the byte size of the mounted file (currently hda.img)
     */
-    uint32_t totalSectors = asm_in_d(vblock_base+VIRTIO_BLOCK_TOTAL_SECTORS);
-    sectorLength = asm_in_d(vblock_base+VIRTIO_BLOCK_LENGTH);
+    uint32_t totalSectors = asm_in_d(deviceData->base+VIRTIO_BLOCK_TOTAL_SECTORS);
+    sectorLength = asm_in_d(deviceData->base+VIRTIO_BLOCK_LENGTH);
     uint64_t totalBytes = totalSectors*sectorLength;
     kprintf("Total byte size of mounted media: %llu\n",totalBytes);
 
@@ -146,6 +150,11 @@ void VBLOCKSearchCB(struct pci_device* dev){
     deviceinstance->pci = dev;
     deviceinstance->devicetype = ATA;
     devicemgr_set_device_description(deviceinstance, "Virtio ATA");
+	/*
+	* device data
+	*/
+	struct vblock_devicedata* deviceData = (struct vblock_devicedata*) kmalloc(sizeof(struct vblock_devicedata));
+	deviceinstance->deviceData = deviceData;
     devicemgr_register_device(deviceinstance);
 }
 
