@@ -46,25 +46,14 @@ int8_t* createDeviceName(struct device* dev) {
     strcpy(ret, DeviceTypeNames[dev->devicetype]);
     uitoa3(dev->type_index, nn, 32, 10);
     ret = strcat(ret, nn);
-  //  kprintf(ret);
     return ret;
 }
 
 void devicemgr_register_device(struct device* dev) {
-    if (0==dev){
-        panic("Attempt to register null device\n");
-    }
-    if (0==dev->description){
-        panic("Attempt to register device without description\n");
-    }
-    if (0==dev->devicetype){
-        kprintf(dev->description);
-        panic("Attempt to register device without deviceType\n");
-    }
-    if (0==dev->init){
-        kprintf(dev->description);
-        panic("Attempt to register device without init function\n");
-    }
+    ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev->description, "description cannot be null");
+    ASSERT_NOT_NULL(dev->devicetype, "devicetype cannot be null");
+    ASSERT_NOT_NULL(dev->init, "init cannot be null");
     /*
     * set index
     */
@@ -150,24 +139,19 @@ struct device* devicemgr_new_device() {
 }
 
 void devicemgr_set_device_description(struct device* dev, int8_t* description) {
-    if ((0!=description) && (0!=dev)){
-        uint32_t size = strlen(description);
-        if (0!=dev->description){
-            kfree(dev->description);
-        }
-        dev->description = kmalloc(size+1);
-        strcpy(dev->description, description);
-    } else {
-        panic("Invalid device or description passed to devicemgr_set_device_description\n");
+    ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(description, "description cannot be null");
+    uint32_t size = strlen(description);
+    if (0!=dev->description){
+        kfree(dev->description);
     }
+    dev->description = kmalloc(size+1);
+    strcpy(dev->description, description);
 }
 
 struct device* devicemgr_findDevice(const int8_t* name) {
-    if (0!=name){
-        return deviceregistry_findDevice(name);
-    } else {
-        panic("Invalid device name passed to devicemgr_findDevice\n");
-    }
+    ASSERT_NOT_NULL(name, "name cannot be null");
+    return deviceregistry_findDevice(name);
 }
 
 void devicemgr_register_devices() {
