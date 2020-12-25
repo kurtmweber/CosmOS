@@ -13,6 +13,7 @@
 struct list *pci_devices;
 
 void pci_devicemgr_search_device(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id, pcideviceSearchCallback cb){
+    ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
     uint16_t i = 0;
     for (i = 0; i < list_count(pci_devices); i++){
         struct pci_device* dev = (struct pci_device*) list_get(pci_devices,i);
@@ -25,6 +26,7 @@ void pci_devicemgr_search_device(pci_class_codes pci_class, uint8_t pci_subclass
 }
 
 void pci_devicemgr_search_devicetype(pci_class_codes pci_class, uint8_t pci_subclass, pcideviceSearchCallback cb){
+    ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
     uint16_t i = 0;
     for (i = 0; i < list_count(pci_devices); i++){
         struct pci_device* dev = (struct pci_device*) list_get(pci_devices,i);

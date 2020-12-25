@@ -10,8 +10,11 @@
 #include <console/console.h>
 #include <dev/pci/pci.h>
 #include <dev/pci/devicetree.h>
+#include <panic/panic.h>
 
 void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_t function){
+	ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
+	ASSERT_NOT_NULL(dev, "dev must not be null");
 	dev->bus = bus;
 	dev->device = device;
 	dev->function = function;
@@ -38,6 +41,7 @@ bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function){
 }
 
 void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
+	ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
 	uint8_t i;
 	
 	// new device
@@ -63,6 +67,7 @@ void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
 }
 
 void pci_scan(){
+    ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
 	uint16_t bus = 0, device = 0, function = 0;
 	uint32_t register_dword;
 	uint16_t device_id, vendor_id;
@@ -101,8 +106,6 @@ void pci_scan(){
 	for (i = 0; i < 256; i++){
 		pci_scan_bus(i);
 	}
-	
-	return;
 }
 
 void pci_scan_bus(uint8_t bus){
@@ -114,7 +117,5 @@ void pci_scan_bus(uint8_t bus){
 		}
 		
 	}
-	
-	return;
 }
 
