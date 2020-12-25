@@ -19,8 +19,7 @@
 // https://wiki.osdev.org/Sound_Blaster_16
 
 #define SB16_IRQ        5
-#define SB16_DMA1       1
-#define SB16_DMA2       5
+#define SB16_DMA       1
 
 // ports
 #define SB16_PORT_MIXER 			0x04
@@ -45,6 +44,14 @@
 // commands (MIXER)
 #define SB16_COMMAND_MASTER_VOLUME				0x22
 #define SB16_COMMAND_IRQ 						0x80
+
+// transfer modes
+#define SB16_TRANSFER_8BIT						0xC0 // bits 7-4
+#define SB16_TRANSFER_16BIT						0xB0 // bits 7-4
+#define SB16_TRANSFER_PLAYING					0x00 // bit 3
+#define SB16_TRANSFER_RECORDING					0x04 // bit 3
+#define SB16_TRANSFER_FIFO_ON					0x01 // bit 1
+#define SB16_TRANSFER_FIFO_OFF					0x00 // bit 1
 
 /*
 * device parameters for an sb16
@@ -83,13 +90,21 @@ void sb16_speaker_on(struct device* dev) {
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SPEAKER_ON);
 }
 
+void sb16_speaker_off(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SPEAKER_OFF);
+}
+
 void sb16_init_dma(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 	// disable channel 1 (number of channel + 0x04)
 	asm_out_b(ISA_DMA_CHAN03_SINGLE_CHANNEL_MASK_REGISTER, 0x05);
+
 	// reset flip flip
 	asm_out_b(ISA_DMA_CHAN03_FLIP_FLOP_RESET_REGISTER, 0x01);
+	
 	// transfer mode
 	asm_out_b(ISA_DMA_CHAN03_MODE_REGISTER, 0x49);
 
@@ -158,10 +173,12 @@ void play(struct device* dev) {
 
 	// set time constant
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
+	
 	// 10989 Hz
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 165);
+
 	// 8 bit sound
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xC0);
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_TRANSFER_8BIT);
 
 	// mono and unsigned sound data
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00);
