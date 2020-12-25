@@ -91,6 +91,13 @@
 #define FLOPPY_MOTOR_DELAY_MS_35			300 // 300ms for motor to spin up
 #define FLOPPY_MOTOR_DELAY_MS_525			500 // 500ms for motor to spin up
 
+/*
+* device parameters for an sb16
+*/
+struct floppy_devicedata {
+    uint32_t port;
+} __attribute__((packed));
+
 volatile uint64_t irq_count=0;
 
 void floppy_irq_read(stackFrame *frame) {
@@ -155,6 +162,7 @@ void command(uint8_t commandByte) {
 * perform device instance specific init here
 */
 void deviceInitFloppy(struct device* dev){
+	struct floppy_devicedata* deviceData = (struct floppy_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, FLOPPY_IRQ_NUMBER, dev->name);
 	interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);
 
@@ -203,11 +211,8 @@ void floppy_write(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* s
 	panic("Floppy write not implemented yet");
 }
 
-/**
-* find all floppy devices and register them
-*/
-void floppy_devicemgr_register_devices() {
-    /*
+void floppy_register_floppy(uint64_t port){
+   /*
 	* register device
 	*/
 	struct device* deviceinstance = devicemgr_new_device();
@@ -222,7 +227,20 @@ void floppy_devicemgr_register_devices() {
     api->read = &floppy_write;
     deviceinstance->api = api;
 	/*
+	* device data
+	*/
+	struct floppy_devicedata* deviceData = (struct floppy_devicedata*) kmalloc(sizeof(struct floppy_devicedata));
+	deviceData->port = port;
+	deviceinstance->deviceData = deviceData;
+	/*
 	* register
 	*/
 	devicemgr_register_device(deviceinstance);
+}
+
+/**
+* find all floppy devices and register them
+*/
+void floppy_devicemgr_register_devices() {
+	floppy_register_floppy(FLOPPY_BASE);
 }
