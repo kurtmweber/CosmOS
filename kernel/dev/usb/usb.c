@@ -11,6 +11,7 @@
 #include <dev/pci/pci.h>
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
+#include <panic/panic.h>
 
 #define USB_EHCI_CAPABILITY_REGISTER        0x00
 #define USB_EHCI_HCIVERSION_REGISTER        0x02
@@ -34,10 +35,12 @@
 * perform device instance specific init here
 */
 void deviceInitUSB(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 }
 
 void USBSearchCB(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */

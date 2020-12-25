@@ -12,6 +12,7 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/deviceapi/deviceapi_pit.h>
+#include <panic/panic.h>
 
 // https://wiki.osdev.org/Programmable_Interval_Timer
 // http://www.osdever.net/bkerndev/Docs/pit.htm
@@ -46,11 +47,13 @@ void pit_handle_irq(stackFrame *frame) {
 *  18.2065 Hz (or an IRQ every 54.9254 ms)"
 */
 void deviceInitPIT(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, PIT_IRQ, dev->name);
     interrupt_router_register_interrupt_handler(PIT_IRQ, &pit_handle_irq);
 }
 
 uint64_t pit_tickcount(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     return tickcount;
 }
 

@@ -11,15 +11,18 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <dev/pci/pci.h>
+#include <panic/panic.h>
 
 /*
 * perform device instance specific init here
 */
 void deviceInitI440fx(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 }
 
 void I440fxSearchCB(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */

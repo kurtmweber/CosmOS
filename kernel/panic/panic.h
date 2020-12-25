@@ -8,6 +8,9 @@
 #ifndef _PANIC_H
 #define _PANIC_H
 
+#define ASSERT(condition, message) if (false==condition) {panic (message);}
+#define ASSERT_NOT_NULL(term, message) if (0==term) {panic (message);}
+
 void panic(const char *s);
 
 #endif

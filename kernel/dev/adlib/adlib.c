@@ -12,6 +12,7 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
+#include <panic/panic.h>
 
 void adlib_handle_irq(stackFrame *frame) {
 }
@@ -20,6 +21,7 @@ void adlib_handle_irq(stackFrame *frame) {
 * perform device instance specific init here
 */
 void deviceInitADLIB(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
  //   kprintf("Init %s at IRQ %llu\n",dev->description, SB16_IRQ);
  //   interrupt_router_register_interrupt_handler(SB16_IRQ, &adlib_handle_irq);
 }

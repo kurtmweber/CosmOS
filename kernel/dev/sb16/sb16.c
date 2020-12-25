@@ -12,6 +12,7 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
+#include <panic/panic.h>
 
 // https://wiki.osdev.org/Sound_Blaster_16
 
@@ -58,6 +59,7 @@ void sb16_handle_irq(stackFrame *frame) {
 * perform device instance specific init here
 */
 void deviceInitSB16(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu Port %#X (%s)\n",dev->description, sb16_data->irq, sb16_data->port, dev->name);
     interrupt_router_register_interrupt_handler(sb16_data->irq, &sb16_handle_irq);

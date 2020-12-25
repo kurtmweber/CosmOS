@@ -87,6 +87,7 @@
 * perform device instance specific init here
 */
 void deviceInitISADMA(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s (%s)\n",dev->description, dev->name);
 }
 

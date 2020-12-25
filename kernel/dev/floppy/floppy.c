@@ -162,6 +162,7 @@ void command(uint8_t commandByte) {
 * perform device instance specific init here
 */
 void deviceInitFloppy(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct floppy_devicedata* deviceData = (struct floppy_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, FLOPPY_IRQ_NUMBER, dev->name);
 	interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);

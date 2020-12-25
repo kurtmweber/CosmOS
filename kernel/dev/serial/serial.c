@@ -10,7 +10,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
-
+#include <panic/panic.h>
 #include <console/console.h>
 
 #define COM1_ADDRESS (uint16_t) 0x3F8
@@ -90,6 +90,7 @@ void init_port(uint64_t portAddress) {
 * perform device instance specific init here
 */
 void deviceInitSerial(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     struct comport* cp = (struct comport*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, cp->irq, dev->name);
     interrupt_router_register_interrupt_handler(cp->irq, &serial_irq_handler);
@@ -97,6 +98,7 @@ void deviceInitSerial(struct device* dev){
 }
 
 void deviceTypeSerial_write(struct device* dev, const int8_t* c) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
    serial_write(c);
 }
 

@@ -15,6 +15,7 @@
 #include <collection/list/list.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_rtc.h>
+#include <panic/panic.h>
 
 #define RTC_IRQ_NUMBER 		8
 
@@ -54,6 +55,7 @@ void rtc_handle_irq(stackFrame *frame) {
 * perform device instance specific init here
 */
 void deviceInitRTC(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, RTC_IRQ_NUMBER, dev->name);
 	

@@ -10,6 +10,7 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <devicemgr/deviceapi/deviceapi_cpu.h>
+#include <panic/panic.h>
 
 void cpu_manufacturer_id(uint8_t* cpuid);
 
@@ -17,6 +18,7 @@ void cpu_manufacturer_id(uint8_t* cpuid);
 * perform device instance specific init here
 */
 void deviceInitCPU(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s (%s)\n",dev->description, dev->name);
 }
 
@@ -33,6 +35,7 @@ void invokeCPUID(unsigned int  function, unsigned int  subfunction, unsigned int
 }
 
 void cpu_get_features(struct cpu_id* id) {    
+	ASSERT_NOT_NULL(id, "cpuid cannot be null");
     invokeCPUID(1,0, &(id->eax),&(id->ebx),&(id->ecx),&(id->edx));
 }
 
@@ -46,6 +49,7 @@ bool has_apic_function() {
 }
 
 void cpu_manufacturer_id(uint8_t* cpuid) {
+	ASSERT_NOT_NULL(cpuid, "cpuid cannot be null");
     struct cpu_id id;
     invokeCPUID(0,0, &(id.eax),&(id.ebx),&(id.ecx),&(id.edx));
 

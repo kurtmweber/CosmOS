@@ -13,7 +13,7 @@
 #include <interrupts/interrupt_router.h>
 #include <dev/pci/pci.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
-
+#include <panic/panic.h>
 
 // https://wiki.osdev.org/AC97
 
@@ -44,11 +44,13 @@ void ac97_handle_irq(stackFrame *frame) {
 * perform device instance specific init here
 */
 void deviceInitAC97(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
    	kprintf("Init %s at IRQ %llu\n",dev->description, dev->pci->irq);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &ac97_handle_irq);
 }
 
 void AC97PCISearchCB(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */

@@ -42,6 +42,7 @@ void ata_detect_addresses(){
 }
 
 void deviceInitATA(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 	if (0==NUM_CONTROLLERS){
 		kprintf("No IDE controllers detected\n");
@@ -82,6 +83,7 @@ void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size
 }
 
 void ATASearchCB(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	/*
 	* save in IDE list
 	*/

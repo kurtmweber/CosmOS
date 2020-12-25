@@ -11,6 +11,7 @@
 #include <console/console.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_speaker.h>
+#include <panic/panic.h>
 
 // https://wiki.osdev.org/PC_Speaker
 
@@ -20,6 +21,7 @@
 * perform device instance specific init here
 */
 void deviceInitSpeaker(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s (%s)\n" ,dev->description, dev->name);
 }
 
@@ -48,6 +50,7 @@ void play_sound(uint32_t frequency) {
 
  //Make a beep
  void speaker_beep(struct device* dev, uint32_t frequency, uint32_t milliseconds) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
  	 play_sound(frequency);
  	 sleep_wait(milliseconds);
  	 nosound();
