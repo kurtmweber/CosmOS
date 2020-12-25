@@ -37,6 +37,10 @@
 #define AC97_GENERAL_PURPOSE       0x20
 #define AC97_3D_CONTROL            0x22
 
+struct ac97_devicedata {
+    uint64_t base;
+} __attribute__((packed));
+
 void ac97_handle_irq(stackFrame *frame) {
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 }
@@ -46,7 +50,9 @@ void ac97_handle_irq(stackFrame *frame) {
 */
 void deviceInitAC97(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
-   	kprintf("Init %s at IRQ %llu\n",dev->description, dev->pci->irq);
+    struct ac97_devicedata* deviceData = (struct ac97_devicedata*) dev->deviceData;
+    deviceData->base = pci_calcbar(dev->pci);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &ac97_handle_irq);
 }
 
@@ -65,6 +71,12 @@ void AC97PCISearchCB(struct pci_device* dev){
 	*/
 	struct deviceapi_dsp* api = (struct deviceapi_dsp*) kmalloc (sizeof(struct deviceapi_dsp));
 	deviceinstance->api = api;
+    /*
+    * the deviceData
+    */
+    struct ac97_devicedata* deviceData = (struct ac97_devicedata*) kmalloc(sizeof(struct ac97_devicedata));
+    deviceData->base = 0;
+    deviceinstance->deviceData = deviceData;
 	/*
 	* register
 	*/

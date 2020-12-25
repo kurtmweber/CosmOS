@@ -15,12 +15,18 @@
 #include <dev/usb/ehci.h>
 #include <dev/usb/ohci.h>
 
+struct usbcontroller_devicedata {
+    uint64_t base;
+} __attribute__((packed));
+
 /*
 * perform device instance specific init here
 */
 void deviceInitUSB(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    struct usbcontroller_devicedata* deviceData = (struct usbcontroller_devicedata*) dev->deviceData;
+    deviceData->base = pci_calcbar(dev->pci);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
 }
 
 void USBSearchCB(struct pci_device* dev){
@@ -33,7 +39,16 @@ void USBSearchCB(struct pci_device* dev){
     deviceinstance->pci = dev;
     deviceinstance->devicetype = USB;
     devicemgr_set_device_description(deviceinstance, "Intel 82801 USB Controller");
-    devicemgr_register_device(deviceinstance);
+    /*
+    * the deviceData
+    */
+    struct usbcontroller_devicedata* deviceData = (struct usbcontroller_devicedata*) kmalloc(sizeof(struct usbcontroller_devicedata));
+    deviceData->base = 0;
+    deviceinstance->deviceData = deviceData;
+    /*
+    * register
+    */
+    devicemgr_register_device(deviceinstance);  
 }
 
 /**
