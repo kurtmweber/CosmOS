@@ -39,6 +39,8 @@ void keyboard_add_command_queue(uint8_t command){
 
 void keyboard_irq_read(stackFrame *frame){
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(keyboard_ringbuffer, "keyboard_ringbuffer cannot be null.  Has the keyboard been initialized?");
+
 	kprintf(".");
 	uint8_t read_byte;
 	static bool long_scan_code = false, longer_scan_code = false;

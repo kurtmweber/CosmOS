@@ -46,6 +46,8 @@ struct mouse_status* current_mouse_status;
 
 void mouse_irq_read(stackFrame *frame) {
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(current_mouse_status, "current_mouse_status cannot be null.  Has the mouse been initialized?");
+
     kprintf("$");
     switch(current_mouse_status->mouse_cycle) {
     case 0:
@@ -138,6 +140,7 @@ void deviceInitMouse(struct device* dev){
 
 struct mouse_status* ps2mouse_status(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(current_mouse_status, "current_mouse_status cannot be null.  Has the mouse been initialized?");
     return current_mouse_status;
 }
 
