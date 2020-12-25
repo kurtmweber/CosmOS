@@ -33,6 +33,7 @@ int8_t* DeviceTypeNames[] = {"None"
 	,"dsp"
     ,"cmos"
     ,"dma"
+    ,"cpu"
     }; 
 
 void devicemgr_init() {
@@ -95,6 +96,10 @@ void deviceInitIterator(struct device* dev) {
 */
 void devicemgr_init_devices(){
     kprintf("Initializing Devices\n");
+    /*
+    * CPU first before first?
+    */
+    deviceregistry_iterate_type(CPU, deviceInitIterator);
     /*
     * PIC first
     */
@@ -189,7 +194,6 @@ void devicemgr_register_devices() {
 	* ISA DMA Controller
 	*/
 	isadma_devicemgr_register_devices();
-
 	/*
 	* rest of this stuff can really happen in any order
 	*/
@@ -206,6 +210,7 @@ void devicemgr_register_devices() {
 //	sb16_devicemgr_register_devices();
 //	ac97_devicemgr_register_devices();
 //	adlib_devicemgr_register_devices();
+    cpu_devicemgr_register_devices();
 }
 
 

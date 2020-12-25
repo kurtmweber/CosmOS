@@ -31,7 +31,8 @@ typedef enum deviceType {
 	PIT=			0x0D,
 	DSP=			0x0E,
 	CMOS=			0x0F,
-	DMA=			0x10
+	DMA=			0x10,
+	CPU=			0x11
 } deviceType;
 
 /*
