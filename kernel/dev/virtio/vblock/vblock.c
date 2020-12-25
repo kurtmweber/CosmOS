@@ -92,7 +92,7 @@ void VBLOCKInit(struct device* dev){
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vblock_irq_handler);
     deviceData->base = pci_calcbar(dev->pci);
 
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
 
     // acknowledge device and set the driver loaded bit
     asm_out_b(deviceData->base+VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED);

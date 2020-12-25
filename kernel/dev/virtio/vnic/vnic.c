@@ -71,7 +71,7 @@ void VNICInit(struct device* dev){
     struct vnic_devicedata* deviceData = (struct vnic_devicedata*) dev->deviceData;
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);    
     deviceData->base = pci_calcbar(dev->pci);
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
 
     uint8_t virtio_mac[6];
     virtio_mac[0] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC1);
