@@ -80,3 +80,11 @@ void isadma_devicemgr_register_devices(){
 	deviceinstance->init =  &deviceInitISADMA;
 	devicemgr_register_device(deviceinstance);
 }
+
+void isadma_read(uint64_t* address, uint16_t size) {
+
+}
+
+void isadma_write(uint64_t address, uint16_t size) {
+
+}

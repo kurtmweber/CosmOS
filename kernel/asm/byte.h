@@ -5,14 +5,10 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _ISADMA_H
-#define _ISADMA_H
+#ifndef __BYTE_H
+#define __BYTE_H
 
-#include <types.h>
-
-void isadma_devicemgr_register_devices();
-
-void isadma_read(uint64_t* address, uint16_t size);
-void isadma_write(uint64_t address, uint16_t size);
+#define LOW_OF_W(x)(short)(x & 0x00FF)
+#define HIGH_OF_W(x)(short)((x&0xFF00)>>8)
 
 #endif
