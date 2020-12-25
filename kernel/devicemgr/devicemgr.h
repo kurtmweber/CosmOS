@@ -10,6 +10,8 @@
 
 #include <types.h>
 
+// forward declare these
+struct pci_device;
 struct device;
 
 typedef void (*deviceInit)(struct device* dev);
@@ -39,9 +41,6 @@ typedef enum deviceType {
 * array of names, indexed by deviceType
 */
 extern int8_t* DeviceTypeNames[];
-
-// forward declare this
-struct pci_device;
 
 typedef struct device {
 	/*

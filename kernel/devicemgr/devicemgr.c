@@ -41,6 +41,7 @@ void devicemgr_init() {
 }
 
 int8_t* createDeviceName(struct device* dev) {
+    ASSERT_NOT_NULL(dev, "dev cannot be null");
     int8_t nn[32];
     int8_t* ret = kmalloc(MAX_DEVICE_NAME_LENGTH);
     strcpy(ret, DeviceTypeNames[dev->devicetype]);
