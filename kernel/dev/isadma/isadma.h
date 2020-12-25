@@ -12,7 +12,7 @@
 
 void isadma_devicemgr_register_devices();
 
-void isadma_read(uint64_t* address, uint16_t size);
-void isadma_write(uint64_t address, uint16_t size);
+void isadma_read(uint8_t channel, uint64_t* address, uint16_t size);
+void isadma_write(uint8_t channel, uint64_t address, uint16_t size);
 
 #endif
