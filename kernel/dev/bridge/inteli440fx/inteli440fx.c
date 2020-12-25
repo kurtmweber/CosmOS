@@ -16,8 +16,7 @@
 * perform device instance specific init here
 */
 void deviceInitI440fx(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 }
 
 void I440fxSearchCB(struct pci_device* dev){
@@ -26,7 +25,7 @@ void I440fxSearchCB(struct pci_device* dev){
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInitI440fx;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = BRIDGE;
     devicemgr_set_device_description(deviceinstance, "Intel i440FX PCI Bridge");
     devicemgr_register_device(deviceinstance);

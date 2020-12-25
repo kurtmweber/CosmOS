@@ -44,9 +44,8 @@ void ac97_handle_irq(stackFrame *frame) {
 * perform device instance specific init here
 */
 void deviceInitAC97(struct device* dev){
-	struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-   	kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
-    interrupt_router_register_interrupt_handler(pci_dev->irq, &ac97_handle_irq);
+   	kprintf("Init %s at IRQ %llu\n",dev->description, dev->pci->irq);
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &ac97_handle_irq);
 }
 
 void AC97PCISearchCB(struct pci_device* dev){
@@ -55,7 +54,7 @@ void AC97PCISearchCB(struct pci_device* dev){
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInitAC97;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = DSP;
     devicemgr_set_device_description(deviceinstance, "Intel 82801AA AC97");
 	/*

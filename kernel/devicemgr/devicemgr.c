@@ -145,6 +145,7 @@ struct device* devicemgr_new_device() {
     ret->type_index=0;
     ret->devicetype=0;
     ret->api=0;
+    ret->pci=0;
     return ret;
 }
 

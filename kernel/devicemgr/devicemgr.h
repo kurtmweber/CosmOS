@@ -40,6 +40,9 @@ typedef enum deviceType {
 */
 extern int8_t* DeviceTypeNames[];
 
+// forward declare this
+struct pci_device;
+
 typedef struct device {
 	/*
 	* the combination of name (from DeviceTypeNames) and index
@@ -60,10 +63,13 @@ typedef struct device {
 	*/
 	int8_t* description;
 	/*
-	* For PCI devices, this is a struct pci_device*.   
-	* For non-PCI devices this is 0 or a custom struct provided by the driver
+	* device-specific data
 	*/
 	void* deviceData;
+	/*
+	* For PCI devices, this is a struct pci_device*.   
+	*/
+	struct pci_device* pci;
 	/*
 	* pointer to the type-specific API struct
 	*/

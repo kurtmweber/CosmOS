@@ -42,8 +42,7 @@ void ata_detect_addresses(){
 }
 
 void deviceInitATA(struct device* dev){
-	struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 	if (0==NUM_CONTROLLERS){
 		kprintf("No IDE controllers detected\n");
 		return;
@@ -95,7 +94,7 @@ void ATASearchCB(struct pci_device* dev){
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInitATA;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
 	deviceinstance->devicetype=ATA;
 	devicemgr_set_device_description(deviceinstance, "ATA");
 	/*

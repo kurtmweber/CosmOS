@@ -16,8 +16,7 @@
 * perform device instance specific init here
 */
 void deviceInit82371Bridge(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 }
 
 void Bridge82371SearchCB(struct pci_device* dev){
@@ -26,7 +25,7 @@ void Bridge82371SearchCB(struct pci_device* dev){
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInit82371Bridge;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = BRIDGE;
     devicemgr_set_device_description(deviceinstance, "Intel PIIX4/4E/4M Power Management Controller");
     devicemgr_register_device(deviceinstance);
