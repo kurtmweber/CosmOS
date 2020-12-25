@@ -24,6 +24,7 @@
 #include <devicemgr/deviceapi/deviceapi_pit.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
 #include <devicemgr/deviceapi/deviceapi_cpu.h>
+#include <devicemgr/deviceapi/deviceapi_dsp.h>
 
 void stringtest();
 void BeethovensFifth();
@@ -31,6 +32,8 @@ void chirp();
 void serialMessage(const uint8_t* message);
 void testFunctions();
 void show_cpu_data();
+void playsb16();
+
 void CosmOS(){
 	video_init();
 	video_select_driver(VIDEO_DRIVER_VGA);
@@ -82,6 +85,7 @@ void CosmOS(){
 	asm_sti();
 
 	show_cpu_data();
+	playsb16();
 	/*
 	* run various functions to show that things work....
 	*/
@@ -238,6 +242,14 @@ void BeethovensFifth() {
 	sleep_wait(100);
 	(*beep_func)(speaker,NOTE_D5, 400);
 	sleep_wait(100);
+}
+
+void playsb16() {
+	// get the sb
+	struct device* dsp = devicemgr_findDevice("dsp0");
+	struct deviceapi_dsp* dsp_api = (struct deviceapi_dsp*) dsp->api;
+	dsp_play_function play_func = dsp_api->play;
+	(*play_func)(dsp);
 }
 
 void chirp() {

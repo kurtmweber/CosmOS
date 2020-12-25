@@ -13,6 +13,8 @@
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
 #include <panic/panic.h>
+#include <sleep/sleep.h>
+#include <dev/isadma/isadma.h>
 
 // https://wiki.osdev.org/Sound_Blaster_16
 
@@ -54,6 +56,7 @@ struct sb16_devicedata {
 
 void sb16_handle_irq(stackFrame *frame) {
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	kprintf("S");
 }
 
 /*
@@ -65,6 +68,111 @@ void deviceInitSB16(struct device* dev){
     kprintf("Init %s at IRQ %llu Port %#X (%s)\n",dev->description, sb16_data->irq, sb16_data->port, dev->name);
     interrupt_router_register_interrupt_handler(sb16_data->irq, &sb16_handle_irq);
 }
+
+void sb16_reset(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	asm_out_b(sb16_data->port+SB16_PORT_RESET, 0x01);
+	sleep_wait(100);
+	asm_out_b(sb16_data->port+SB16_PORT_RESET, 0x0);
+}
+
+void sb16_speaker_on(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SPEAKER_ON);
+}
+
+void sb16_init_dma(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	// disable channel 1 (number of channel + 0x04)
+	asm_out_b(ISA_DMA_CHAN03_SINGLE_CHANNEL_MASK_REGISTER, 0x05);
+	// reset flip flip
+	asm_out_b(ISA_DMA_CHAN03_FLIP_FLOP_RESET_REGISTER, 0x01);
+	// transfer mode
+	asm_out_b(ISA_DMA_CHAN03_MODE_REGISTER, 0x49);
+
+	// PAGE TRANSFER (EXAMPLE POSITION IN MEMORY 0x[01]0F04) - SET THIS VALUE FOR YOU
+	asm_out_b(ISA_DMA_CHANNEL_PAGE_ADDRESS_1, 0x01);
+
+	// POSITION LOW BIT (EXAMPLE POSITION IN MEMORY 0x010F[04]) - SET THIS VALUE FOR YOU
+	asm_out_b(ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5, 0x04);
+
+	// POSITON HIGH BIT (EXAMPLE POSITION IN MEMORY 0x01[0F]04) - SET THIS VALUE FOR YOU
+	asm_out_b(ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5, 0x0F);
+
+	// COUNT LOW BIT (EXAMPLE 0x0FFF) - SET THIS VALUE FOR YOU
+	asm_out_b(ISA_DMA_CHAN03_COUNT_REGISTER_1_5, 0xFF);
+
+	// COUNT HIGH BIT (EXAMPLE 0x0FFF) - SET THIS VALUE FOR YOU
+	asm_out_b(ISA_DMA_CHAN03_COUNT_REGISTER_1_5, 0x0F);
+
+	// enable channel 1
+	asm_out_b(ISA_DMA_CHAN03_SINGLE_CHANNEL_MASK_REGISTER, 0x01);
+}
+
+/*
+* https://wiki.osdev.org/Sound_Blaster_16
+*/
+// ;SOUND BLASTER 16 driver in real mode
+ 
+//   ;reset sound blaster
+//   OUTB 0x226, 1 ;reset port
+//   mov ah, 86h
+//   mov cx, 0x0000
+//   mov dx, 0xFFFF
+//   int 15h ;wait
+//   OUTB 0x226, 0 ;reset port
+ 
+//   ;turn speaker on
+//   OUTB 0x22C, 0xD1
+ 
+//   ;DMA channel 1
+//   OUTB 0x0A, 5 ;disable channel 1 (number of channel + 0x04)
+//   OUTB 0x0C, 1 ;flip flop
+//   OUTB 0x0B, 0x49 ;transfer mode
+//   OUTB 0x83, 0x01 ;PAGE TRANSFER (EXAMPLE POSITION IN MEMORY 0x[01]0F04) - SET THIS VALUE FOR YOU
+//   OUTB 0x02, 0x04 ;POSITION LOW BIT (EXAMPLE POSITION IN MEMORY 0x010F[04]) - SET THIS VALUE FOR YOU
+//   OUTB 0x02, 0x0F ;POSITON HIGH BIT (EXAMPLE POSITION IN MEMORY 0x01[0F]04) - SET THIS VALUE FOR YOU
+//   OUTB 0x03, 0xFF ;COUNT LOW BIT (EXAMPLE 0x0FFF) - SET THIS VALUE FOR YOU
+//   OUTB 0x03, 0x0F ;COUNT HIGH BIT (EXAMPLE 0x0FFF) - SET THIS VALUE FOR YOU
+//   OUTB 0x0A, 1 ;enable channel 1
+ 
+//   ;program sound blaster 16
+//   OUTB 0x22C, 0x40 ;set time constant
+//   OUTB 0x22C, 165 ;10989 Hz
+//   OUTB 0x22C, 0xC0 ;8 bit sound
+//   OUTB 0x22C, 0x00 ;mono and unsigned sound data
+//   OUTB 0x22C, 0xFE ;COUNT LOW BIT - COUNT LENGHT-1 (EXAMPLE 0x0FFF SO 0x0FFE) - SET THIS VALUE FOR YOU
+//   OUTB 0x22C, 0x0F ;COUNT HIGH BIT - COUNT LENGHT-1 (EXAMPLE 0x0FFF SO 0x0FFE) - SET THIS VALUE FOR YOU
+ 
+//   ;now transfer start - dont forget to handle irq
+void play(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+
+	sb16_reset(dev);
+	sb16_speaker_on(dev);
+	sb16_init_dma(dev);
+
+	// set time constant
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
+	// 10989 Hz
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 165);
+	// 8 bit sound
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xC0);
+
+	// mono and unsigned sound data
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00);
+
+	// COUNT LOW BIT - COUNT LENGHT-1 (EXAMPLE 0x0FFF SO 0x0FFE) - SET THIS VALUE FOR YOU
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xFE);
+
+	// COUNT HIGH BIT - COUNT LENGHT-1 (EXAMPLE 0x0FFF SO 0x0FFE) - SET THIS VALUE FOR YOU
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x0F);
+}
+
 
 void sb16_devicemgr_register_device(uint64_t port){
    /*
@@ -78,6 +186,7 @@ void sb16_devicemgr_register_device(uint64_t port){
 	* device api
 	*/
 	struct deviceapi_dsp* api = (struct deviceapi_dsp*) kmalloc (sizeof(struct deviceapi_dsp));
+	api->play=play;
 	deviceinstance->api = api;
 	/*
 	* device data
