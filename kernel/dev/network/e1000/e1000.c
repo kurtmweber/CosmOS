@@ -28,9 +28,11 @@ void E1000Init(struct device* dev){
 }
 
 void e1000_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("Ethernet read not implemented yet");
 }
 void e1000_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("Ethernet write not implemented yet");
 }
 

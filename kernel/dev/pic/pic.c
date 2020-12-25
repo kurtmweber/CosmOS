@@ -50,7 +50,6 @@ void deviceInitPIC(struct device* dev){
 }
 
 void pic_devicemgr_register_devices(){
-
     /*
 	* register device
 	*/

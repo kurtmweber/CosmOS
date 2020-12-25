@@ -60,7 +60,6 @@ uint64_t pit_tickcount(struct device* dev) {
 
 void pit_devicemgr_register_devices(){
     pitEvents = list_new();
-
     /*
 	* register device
 	*/

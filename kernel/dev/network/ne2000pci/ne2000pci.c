@@ -143,9 +143,11 @@ void NE200PCIInit(struct device* dev){
 }
 
 void ne2000pci_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("Ethernet read not implemented yet");
 }
 void ne2000pci_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("Ethernet write not implemented yet");
 }
 

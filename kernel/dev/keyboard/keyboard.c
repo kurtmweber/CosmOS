@@ -38,6 +38,7 @@ void keyboard_add_command_queue(uint8_t command){
 }
 
 void keyboard_irq_read(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	kprintf(".");
 	uint8_t read_byte;
 	static bool long_scan_code = false, longer_scan_code = false;

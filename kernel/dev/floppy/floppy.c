@@ -207,9 +207,11 @@ void lba_2_chs(uint32_t lba, uint16_t* cyl, uint16_t* head, uint16_t* sector) {
 }
 
 void floppy_read(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("Floppy read not implemented yet");
 }
 void floppy_write(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("Floppy write not implemented yet");
 }
 

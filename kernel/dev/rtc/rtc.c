@@ -38,6 +38,7 @@ typedef enum rtc_registers{
 } rtc_registers;
 
 void rtc_handle_irq(stackFrame *frame) {	
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	for (uint32_t i=0; i< list_count(rtcEvents);i++){
 		RTCEvent rtcEvent = (RTCEvent) list_get(rtcEvents,i);
 		(*rtcEvent)();
@@ -72,6 +73,7 @@ void deviceInitRTC(struct device* dev){
 }
 
 rtc_time_t rtc_time(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	rtc_time_t a, b;
 	
 	a.second = cmos_read_register(RTC_REGISTER_SECOND);
@@ -119,6 +121,7 @@ rtc_time_t rtc_time(struct device* dev){
 }
 
 void rtc_subscribe(RTCEvent rtcEvent) {
+	ASSERT_NOT_NULL(rtcEvent, "rtcEvent cannot be null");
 	list_add(rtcEvents, rtcEvent);
 }
 
