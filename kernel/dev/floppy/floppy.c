@@ -96,6 +96,9 @@
 */
 struct floppy_devicedata {
     uint32_t port;
+	// 360 KB, 720 KB, etc
+	uint8_t master_type;
+	uint8_t slave_type;
 } __attribute__((packed));
 
 volatile uint64_t irq_count=0;
@@ -126,7 +129,6 @@ void printDriveType(uint8_t type){
 	}
 }
 
-
 void resetFloppy() {
 	uint64_t current_irq_count = irq_count;
 	/*
@@ -143,12 +145,14 @@ void resetFloppy() {
 		sleep_wait(10);
 	}
 	/*
-	* 
+	*  floppy is reset
 	*/
-	kprintf("&&");
+	kprintf("Floppy Reset\n");
 }
 
-
+/*
+* issue command
+*/
 void command(uint8_t commandByte) {
 	uint8_t msr_state = asm_in_b(FLOPPY_MAIN_STATUS_REGISTER);
 	// check that RQM=1 and DIO=0
@@ -159,6 +163,7 @@ void command(uint8_t commandByte) {
 	// send command to FIFO
 	asm_out_b(FLOPPY_DATA_FIFO, commandByte);
 }
+
 /*
 * perform device instance specific init here
 */
@@ -169,17 +174,17 @@ void deviceInitFloppy(struct device* dev){
 	interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);
 
 	uint8_t drives = cmos_read_register(CMOS_FLOPPY_DRIVES_PORT);
-	uint8_t master_drives = (drives & 0XF0)>> 4;
-	uint8_t slave_drives = (drives & 0X0F);
+	deviceData->master_type = (drives & 0XF0)>> 4;
+	deviceData->slave_type = (drives & 0X0F);
 	
-	if (0!=master_drives){
+	if (0!=deviceData->master_type){
 		kprintf("Master Floppy ");
-		printDriveType(master_drives);
+		printDriveType(deviceData->master_type);
 		kprintf("\n");
 	}
-	if (0!=slave_drives){
+	if (0!=deviceData->slave_type){
 		kprintf("Slave Floppy ");
-		printDriveType(slave_drives);
+		printDriveType(deviceData->slave_type);
 		kprintf("\n");
 	}
 
