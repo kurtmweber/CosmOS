@@ -10,9 +10,12 @@
 
 #include <types.h>
 
+// fwd declaration
+struct device;
+
 void vblock_devicemgr_register_devices();
 
 // TODO replace this with a uniform interface
-void vblock_read(uint32_t sector, uint8_t* target, uint32_t size);
+void vblock_read(struct device* dev, uint32_t sector, uint8_t* target, uint32_t size);
 
 #endif

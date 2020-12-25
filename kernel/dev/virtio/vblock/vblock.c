@@ -50,10 +50,11 @@
 #define VIRTIO_BLK_T_WRITE_ZEROES 13
 
 struct virtq* vblock_queue;
-uint32_t sectorLength;
 
 struct vblock_devicedata {
     uint64_t base;
+    uint32_t sectorLength;
+
 } __attribute__((packed));
 
 
@@ -127,8 +128,8 @@ void VBLOCKInit(struct device* dev){
     * length*totalSectors should equal the byte size of the mounted file (currently hda.img)
     */
     uint32_t totalSectors = asm_in_d(deviceData->base+VIRTIO_BLOCK_TOTAL_SECTORS);
-    sectorLength = asm_in_d(deviceData->base+VIRTIO_BLOCK_LENGTH);
-    uint64_t totalBytes = totalSectors*sectorLength;
+    deviceData->sectorLength = asm_in_d(deviceData->base+VIRTIO_BLOCK_LENGTH);
+    uint64_t totalBytes = totalSectors*(deviceData->sectorLength);
     kprintf("Total byte size of mounted media: %llu\n",totalBytes);
 
     // make the queue
@@ -165,14 +166,17 @@ void vblock_devicemgr_register_devices() {
     pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_BLOCK, &VBLOCKSearchCB);
 }
 
-void vblock_read(uint32_t sector, uint8_t* target, uint32_t size) {
+void vblock_read(struct device* dev, uint32_t sector, uint8_t* target, uint32_t size) {
+    ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+    struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
+
     /*
     * block request
     */
     struct vblock_block_request* req = vblock_block_request_new();
     req->type = VIRTIO_BLK_T_IN;
     req->sector = sector;
-    req->data = kmalloc(sectorLength);
+    req->data = kmalloc(deviceData->sectorLength);
 
     /*
     * descriptor
