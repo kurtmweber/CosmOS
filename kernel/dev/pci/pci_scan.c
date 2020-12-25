@@ -12,6 +12,9 @@
 #include <dev/pci/devicetree.h>
 #include <panic/panic.h>
 
+#define PCI_MAX_BUSSES 256
+#define PCI_MAX_DEVICES_PER_BUS 32
+
 void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_t function){
 	ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
 	ASSERT_NOT_NULL(dev, "dev must not be null");
@@ -103,19 +106,17 @@ void pci_scan(){
 		}
 	}*/
 	
-	for (i = 0; i < 256; i++){
+	for (i = 0; i < PCI_MAX_BUSSES; i++){
 		pci_scan_bus(i);
 	}
 }
 
 void pci_scan_bus(uint8_t bus){
 	uint8_t i;
-	
-	for (i = 0; i < 32; i++){
+	for (i = 0; i < PCI_MAX_DEVICES_PER_BUS; i++){
 		if (pci_device_exists(bus, i, 0)){
 			pci_found_device(bus, i, 0);
 		}
-		
 	}
 }
 
