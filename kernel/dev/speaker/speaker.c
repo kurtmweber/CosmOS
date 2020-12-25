@@ -41,7 +41,7 @@ void play_sound(uint32_t frequency) {
  	asm_out_b(0x42, (uint8_t) (div) );
  	asm_out_b(0x42, (uint8_t) (div >> 8));
  
-        //And play the sound using the PC speaker
+    //And play the sound using the PC speaker
  	tmp = asm_in_b(SPEAKER_PORT);
   	if (tmp != (tmp | 3)) {
  		asm_out_b(SPEAKER_PORT, tmp | 3);

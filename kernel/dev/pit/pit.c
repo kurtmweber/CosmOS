@@ -32,6 +32,7 @@ uint64_t tickcount=0;;
 
 // This is the perfect place to handle context switches.  Just saying.
 void pit_handle_irq(stackFrame *frame) {
+	ASSERT_NOT_NULL(pitEvents, "pitEvents cannot be null. Has the PIT been initialized?");
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
   //  kprintf("@");	
   tickcount=tickcount+1;
@@ -80,6 +81,7 @@ void pit_devicemgr_register_devices(){
 }
 
 void pit_subscribe(PITEvent pitEvent) {
+	ASSERT_NOT_NULL(pitEvents, "pitEvents cannot be null. Has the PIT been initialized?");
 	list_add(pitEvents, pitEvent);
 }
 
