@@ -30,7 +30,7 @@ void BeethovensFifth();
 void chirp();
 void serialMessage(const uint8_t* message);
 void testFunctions();
-
+void show_cpu_data();
 void CosmOS(){
 	video_init();
 	video_select_driver(VIDEO_DRIVER_VGA);
@@ -81,32 +81,7 @@ void CosmOS(){
 
 	asm_sti();
 
-	/*
-	* show CPU features
-	*/
-	// get the CPU
-	struct device* cpu = devicemgr_findDevice("cpu0");
-	struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
-	cpu_get_features_function features_function = cpu_api->features;
-
-	/*
-	* show all CPU features
-	*/
-	struct cpu_id id;
-	(*features_function)(&id);
-	kprintf("CPU Features %#X\n", id.edx);
-
-	/*
-	* check if APIC
-	*/
-	cpu_has_apic_function apic_function = cpu_api->apic;
-	bool apic = (*apic_function)();
-	if(apic){
-		kprintf("APIC present\n");
-	} else {
-		kprintf("APIC not present\n");
-	}
-	
+	show_cpu_data();
 	/*
 	* run various functions to show that things work....
 	*/
@@ -115,6 +90,39 @@ void CosmOS(){
 	while (1){
 		asm_hlt();
 	}
+}
+
+void show_cpu_data() {
+	/*
+	* show CPU features
+	*/
+	// get the CPU
+	struct device* cpu = devicemgr_findDevice("cpu0");
+	struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
+
+	/*
+	* show all CPU features
+	*/
+	struct cpu_id id;
+	(*cpu_api->features)(&id);
+	kprintf("CPU Features %#X\n", id.edx);
+
+	/*
+	* check if APIC
+	*/
+	bool apic = (*cpu_api->apic)();
+	if(apic){
+		kprintf("APIC present\n");
+	} else {
+		kprintf("APIC not present\n");
+	}
+	
+	/*
+	* show CPU manufacturer
+	*/ 
+  	uint8_t cpu_manufacturer_string[13];
+    (*cpu_api->manufacturer)((uint8_t*)&cpu_manufacturer_string);
+    kprintf("CPU Manufacturer: %s\n", cpu_manufacturer_string);
 }
 
 void testFunctions() {

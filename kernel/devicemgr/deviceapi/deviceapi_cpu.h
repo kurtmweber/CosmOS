@@ -90,10 +90,15 @@ typedef void (*cpu_get_features_function)(struct cpu_id* id);
 * check if APIC
 */
 typedef bool (*cpu_has_apic_function)();
+/*
+* CPU manufacturer. buffer must be 13 bytes long.
+*/
+typedef void (*cpu_manufacturer_id_function)(uint8_t* cpuid);
 
 struct deviceapi_cpu {
     cpu_get_features_function features;
     cpu_has_apic_function apic;
+    cpu_manufacturer_id_function manufacturer;
 };
 
 #endif
