@@ -42,8 +42,11 @@ QEMUARGS=                                                 \
   -monitor telnet::45454,server,nowait                    \
   -device floppy,drive=f0                                 \
   -blockdev driver=file,node-name=f0,filename=hda.img     \
-  -device usb-ehci                                       \
-  -device sb16,audiodev=audio0
+  -device usb-ehci                                        \
+  -device sb16,audiodev=audio0                            \
+  -nic user,model=virtio-net-pci                          \
+  -drive if=virtio,file=hda.img,format=raw
+  
 # note that we're mounting the hda.img as a floppy image. good enough for now.
 # the first bytes are FA B4 00 B0 03 CD 10 88 16 7C 7C B8 01 24 CD 15
 

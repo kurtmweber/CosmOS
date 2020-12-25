@@ -197,6 +197,7 @@ void devicemgr_register_devices() {
 //	ac97_devicemgr_register_devices();
 //	adlib_devicemgr_register_devices();
     cpu_devicemgr_register_devices();
+    virtio_devicemgr_register_devices();
 }
 
 

@@ -43,6 +43,7 @@ struct VirtioPacketHeader {
 };
 
 void vnic_irq_handler(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	kprintf("#");
 }
 
@@ -57,6 +58,7 @@ uint8_t vnic_get_status(){
 }
 
 uint64_t vnic_calcbar( struct pci_device* pci_dev){
+  ASSERT_NOT_NULL(pci_dev, "pci_dev cannot be null");
    uint64_t bar0 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
    uint64_t bar1 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
 
@@ -67,17 +69,15 @@ uint64_t vnic_calcbar( struct pci_device* pci_dev){
 * perform device instance specific init here
 */
 void VNICInit(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    interrupt_router_register_interrupt_handler(pci_dev->irq, &vnic_irq_handler);
+	  ASSERT_NOT_NULL(dev, "dev cannot be null");
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);
 
     // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
 
     
    // vnic_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
- vnic_base = vnic_calcbar(pci_dev);
-
-
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, vnic_base, dev->name);
+    vnic_base = vnic_calcbar(dev->pci);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 
     uint8_t virtio_mac[6];
     virtio_mac[0] = asm_in_b(vnic_base+VIRTIO_NIC_MAC1);
@@ -98,12 +98,13 @@ void VNICInit(struct device* dev){
 }
 
 void VNICSearchCB(struct pci_device* dev){
+    ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &VNICInit;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "Virtio NIC");
     devicemgr_register_device(deviceinstance);

@@ -72,11 +72,13 @@ struct vblock_block_request* vblock_block_request_new() {
 }
 
 void vblock_irq_handler(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	kprintf("#");
 }
 
 // https://wiki.osdev.org/PCI
 uint64_t calcbar( struct pci_device* pci_dev){
+   ASSERT_NOT_NULL(pci_dev, "pci_dev cannot be null");
    uint64_t bar0 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
    uint64_t bar1 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
 
@@ -87,14 +89,14 @@ uint64_t calcbar( struct pci_device* pci_dev){
 * perform device instance specific init here
 */
 void VBLOCKInit(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    interrupt_router_register_interrupt_handler(pci_dev->irq, &vblock_irq_handler);
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &vblock_irq_handler);
 
     // TODO. There is stuff to merge and when that happens, bar0 will be in the pci dev struct
    // vblock_base = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
-    vblock_base = calcbar(pci_dev);
+    vblock_base = calcbar(dev->pci);
 
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, vblock_base, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 
     // acknowledge device and set the driver loaded bit
     asm_out_b(vblock_base+VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED);
@@ -140,7 +142,7 @@ void VBLOCKSearchCB(struct pci_device* dev){
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &VBLOCKInit;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = ATA;
     devicemgr_set_device_description(deviceinstance, "Virtio ATA");
     devicemgr_register_device(deviceinstance);

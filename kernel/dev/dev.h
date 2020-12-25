@@ -29,5 +29,6 @@
 #include <dev/cmos/cmos.h>
 #include <dev/isadma/isadma.h>
 #include <dev/cpu/cpu.h>
+#include <dev/virtio/virtio.h>
 
 #endif
