@@ -61,14 +61,6 @@ void vnic_irq_handler(stackFrame *frame){
 //  return asm_in_b(deviceData->base+VIRTIO_NIC_STATUS);
 //}
 
-uint64_t vnic_calcbar( struct pci_device* pci_dev){
-  ASSERT_NOT_NULL(pci_dev, "pci_dev cannot be null");
-   uint64_t bar0 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
-   uint64_t bar1 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
-
-   return  ((bar0 & 0xFFFFFFF0) + ((bar1 & 0xFFFFFFFF) << 32)) ;
-}
-
 /*
 * perform device instance specific init here
 */
@@ -78,7 +70,7 @@ void VNICInit(struct device* dev){
 
     struct vnic_devicedata* deviceData = (struct vnic_devicedata*) dev->deviceData;
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);    
-    deviceData->base = vnic_calcbar(dev->pci);
+    deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 
     uint8_t virtio_mac[6];

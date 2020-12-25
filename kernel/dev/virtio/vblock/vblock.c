@@ -81,15 +81,6 @@ void vblock_irq_handler(stackFrame *frame){
 	kprintf("#");
 }
 
-// https://wiki.osdev.org/PCI
-uint64_t calcbar( struct pci_device* pci_dev){
-   ASSERT_NOT_NULL(pci_dev, "pci_dev cannot be null");
-   uint64_t bar0 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
-   uint64_t bar1 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
-
-   return  ((bar0 & 0xFFFFFFF0) + ((bar1 & 0xFFFFFFFF) << 32)) ;
-}
-
 /*
 * perform device instance specific init here
 */
@@ -99,7 +90,7 @@ void VBLOCKInit(struct device* dev){
 
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vblock_irq_handler);
-    deviceData->base = calcbar(dev->pci);
+    deviceData->base = pci_calcbar(dev->pci);
 
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 

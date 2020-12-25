@@ -8,6 +8,7 @@
 #include <types.h>
 #include <asm/asm.h>
 #include <dev/pci/pci.h>
+#include <panic/panic.h>
 
 uint32_t pci_header_read_bar0(uint8_t bus, uint8_t device, uint8_t function){
 	asm_out_d(PCI_CONFIG_ADDRESS_PORT, pci_config_address_build(bus, device, function, PCI_BAR0_OFFSET, 1));
@@ -109,4 +110,13 @@ void pci_header_set_irq(uint8_t bus, uint8_t device, uint8_t function, uint8_t i
 	asm_out_b(PCI_CONFIG_DATA_PORT, irq);
 	
 	return;
+}
+
+// https://wiki.osdev.org/PCI
+uint64_t pci_calcbar( struct pci_device* pci_dev){
+   ASSERT_NOT_NULL(pci_dev, "pci_dev cannot be null");
+   uint64_t bar0 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+   uint64_t bar1 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
+
+   return  ((bar0 & 0xFFFFFFF0) + ((bar1 & 0xFFFFFFFF) << 32)) ;
 }

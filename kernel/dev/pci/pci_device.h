@@ -30,6 +30,9 @@ typedef void (*pcideviceSearchCallback)(struct pci_device* dev);
 void pci_devicemgr_search_device(pci_class_codes pci_class, uint8_t pci_subclass, uint16_t vendor_id, uint16_t device_id, pcideviceSearchCallback cb);
 void pci_devicemgr_search_devicetype(pci_class_codes pci_class, uint8_t pci_subclass, pcideviceSearchCallback cb);
 
+// calc PCI base address
+uint64_t pci_calcbar( struct pci_device* pci_dev);
+
 extern struct list *pci_devices;
 
 #endif

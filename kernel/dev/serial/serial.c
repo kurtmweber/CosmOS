@@ -135,7 +135,9 @@ void registerRS232Device(uint8_t irq, uint64_t base) {
 */
 void serial_devicemgr_register_devices() {
     registerRS232Device(SERIAL_IRQ2,COM1_ADDRESS);
-    registerRS232Device(SERIAL_IRQ1,COM2_ADDRESS);
-    registerRS232Device(SERIAL_IRQ2,COM3_ADDRESS);
-    registerRS232Device(SERIAL_IRQ1,COM4_ADDRESS);
+
+    // TODO add code to check if these even exist
+//    registerRS232Device(SERIAL_IRQ1,COM2_ADDRESS);
+//    registerRS232Device(SERIAL_IRQ2,COM3_ADDRESS);
+//    registerRS232Device(SERIAL_IRQ1,COM4_ADDRESS);
 }
