@@ -49,14 +49,14 @@
 #define VIRTIO_BLK_T_DISCARD 11
 #define VIRTIO_BLK_T_WRITE_ZEROES 13
 
-struct virtq* vblock_queue;
-
+/*
+* vblock instance specific data
+*/
 struct vblock_devicedata {
     uint64_t base;
     uint32_t sectorLength;
-
+    struct virtq* vblock_queue;
 } __attribute__((packed));
-
 
 struct vblock_block_request {
   uint32_t type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
@@ -133,11 +133,11 @@ void VBLOCKInit(struct device* dev){
     kprintf("Total byte size of mounted media: %llu\n",totalBytes);
 
     // make the queue
-    vblock_queue = virtq_new();
+    deviceData->vblock_queue = virtq_new();
 
     // set the queue.  The API takes a 32 bit pointer, but we have a 64 bit pointer, so ... some conversions  
-    kprintf("Queue Address: %#hX\n", (uint64_t) vblock_queue);
-    asm_out_d(VIRTIO_QUEUE_ADDRESS, (uint32_t) (uint64_t) vblock_queue);
+    kprintf("Queue Address: %#hX\n", (uint64_t) deviceData->vblock_queue);
+    asm_out_d(VIRTIO_QUEUE_ADDRESS, (uint32_t) (uint64_t) deviceData->vblock_queue);
     asm_out_w(VIRTIO_QUEUE_SIZE, VIRTQUEUE_SIZE);
 }
 
@@ -186,7 +186,6 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* target, uint32_t 
     desc->flags=0;
 
     // enqueue
-    virtq_enqueue_descriptor(vblock_queue, desc);
-
+    virtq_enqueue_descriptor(deviceData->vblock_queue, desc);
 }
 

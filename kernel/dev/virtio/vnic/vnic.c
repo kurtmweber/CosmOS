@@ -41,7 +41,9 @@ struct VirtioPacketHeader {
   uint16_t ChecksumOffset;      // The position after ChecksumStart to store the checksum.
   uint16_t BufferCount;         // Used when merging buffers.
 };
-
+/*
+* vnic instance specific data
+*/
 struct vnic_devicedata {
     uint64_t base;
 } __attribute__((packed));
