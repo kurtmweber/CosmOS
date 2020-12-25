@@ -25,16 +25,6 @@ void sleep_update(){
 }
 
 void sleep_wait(uint64_t milliseconds) {
-
-	// once we have api structs, we can just ask for the RTC and then create a subscription
-	// for now.... use this is a test of looking up devices
-	struct device* rtc = devicemgr_findDevice("rtc0");
-	if (0==rtc){
-		panic("Cant find the RTC!");
-	} else {
-//		kprintf("Found rtc0 %s\n", rtc->description);
-	}
-
 	uint64_t tc;	// temporary count while we're working up to full value
 	
 	// to avoid getting progressively farther off due to the effects of integer division, we start by finding out

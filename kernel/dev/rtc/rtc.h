@@ -10,23 +10,9 @@
 
 #include <types.h>
 
-typedef struct rtc_time_t{
-	uint8_t second;
-	uint8_t minute;
-	uint8_t hour;
-	uint8_t weekday;
-	uint8_t monthday;
-	uint8_t month;
-	uint8_t year;
-	uint8_t century;
-} rtc_time_t;
-
-void rtc_handle_irq();
 void rtc_devicemgr_register_devices();
-rtc_time_t rtc_time();
 
 typedef void (*RTCEvent)();
-
 void rtc_subscribe(RTCEvent rtcEvent);
 
 #endif

@@ -10,6 +10,8 @@
 
 #include <types.h>
 
+// forward declare these
+struct pci_device;
 struct device;
 
 typedef void (*deviceInit)(struct device* dev);
@@ -31,7 +33,8 @@ typedef enum deviceType {
 	PIT=			0x0D,
 	DSP=			0x0E,
 	CMOS=			0x0F,
-	DMA=			0x10
+	DMA=			0x10,
+	CPU=			0x11
 } deviceType;
 
 /*
@@ -59,10 +62,13 @@ typedef struct device {
 	*/
 	int8_t* description;
 	/*
-	* For PCI devices, this is a struct pci_device*.   
-	* For non-PCI devices this is 0 or a custom struct provided by the driver
+	* device-specific data
 	*/
 	void* deviceData;
+	/*
+	* For PCI devices, this is a struct pci_device*.   
+	*/
+	struct pci_device* pci;
 	/*
 	* pointer to the type-specific API struct
 	*/
@@ -77,6 +83,9 @@ void devicemgr_register_device(struct device* dev);
 
 // init the device registry
 void devicemgr_init();
+
+// register all the devices
+void devicemgr_register_devices();
 
 // count of device instances
 uint16_t devicemgr_device_count();

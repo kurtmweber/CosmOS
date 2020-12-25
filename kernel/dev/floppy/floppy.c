@@ -13,6 +13,8 @@
 #include <devicemgr/devicemgr.h>
 #include <dev/cmos/cmos.h>
 #include <sleep/sleep.h>
+#include <devicemgr/deviceapi/deviceapi_floppy.h>
+#include <panic/panic.h>
 
 #define FLOPPY_IRQ_NUMBER   6
 #define FLOPPY_BASE         0x3F0
@@ -89,9 +91,17 @@
 #define FLOPPY_MOTOR_DELAY_MS_35			300 // 300ms for motor to spin up
 #define FLOPPY_MOTOR_DELAY_MS_525			500 // 500ms for motor to spin up
 
+/*
+* device parameters for an sb16
+*/
+struct floppy_devicedata {
+    uint32_t port;
+} __attribute__((packed));
+
 volatile uint64_t irq_count=0;
 
 void floppy_irq_read(stackFrame *frame) {
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	irq_count = irq_count+1;
     kprintf("^");
 }
@@ -148,13 +158,13 @@ void command(uint8_t commandByte) {
 
 	// send command to FIFO
 	asm_out_b(FLOPPY_DATA_FIFO, commandByte);
-
-
 }
 /*
 * perform device instance specific init here
 */
 void deviceInitFloppy(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct floppy_devicedata* deviceData = (struct floppy_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, FLOPPY_IRQ_NUMBER, dev->name);
 	interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);
 
@@ -196,16 +206,45 @@ void lba_2_chs(uint32_t lba, uint16_t* cyl, uint16_t* head, uint16_t* sector) {
     *sector = ((lba % (2 * FLOPPY_144_SECTORS_PER_TRACK)) % FLOPPY_144_SECTORS_PER_TRACK + 1);
 }
 
-/**
-* find all floppy devices and register them
-*/
-void floppy_devicemgr_register_devices() {
-    /*
+void floppy_read(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Floppy read not implemented yet");
+}
+void floppy_write(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Floppy write not implemented yet");
+}
+
+void floppy_register_floppy(uint64_t port){
+   /*
 	* register device
 	*/
 	struct device* deviceinstance = devicemgr_new_device();
 	deviceinstance->init =  &deviceInitFloppy;
 	deviceinstance->devicetype = FLOPPY;
 	devicemgr_set_device_description(deviceinstance, "Floppy");
+	/*
+    * the device api
+    */
+    struct deviceapi_floppy* api = (struct deviceapi_floppy*) kmalloc(sizeof(struct deviceapi_floppy));
+    api->write = &floppy_read;
+    api->read = &floppy_write;
+    deviceinstance->api = api;
+	/*
+	* device data
+	*/
+	struct floppy_devicedata* deviceData = (struct floppy_devicedata*) kmalloc(sizeof(struct floppy_devicedata));
+	deviceData->port = port;
+	deviceinstance->deviceData = deviceData;
+	/*
+	* register
+	*/
 	devicemgr_register_device(deviceinstance);
+}
+
+/**
+* find all floppy devices and register them
+*/
+void floppy_devicemgr_register_devices() {
+	floppy_register_floppy(FLOPPY_BASE);
 }

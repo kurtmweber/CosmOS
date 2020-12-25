@@ -14,6 +14,8 @@
 #include <devicemgr/devicemgr.h>
 #include <collection/list/list.h>
 #include <sleep/sleep.h>
+#include <devicemgr/deviceapi/deviceapi_rtc.h>
+#include <panic/panic.h>
 
 #define RTC_IRQ_NUMBER 		8
 
@@ -36,6 +38,7 @@ typedef enum rtc_registers{
 } rtc_registers;
 
 void rtc_handle_irq(stackFrame *frame) {	
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	for (uint32_t i=0; i< list_count(rtcEvents);i++){
 		RTCEvent rtcEvent = (RTCEvent) list_get(rtcEvents,i);
 		(*rtcEvent)();
@@ -53,7 +56,7 @@ void rtc_handle_irq(stackFrame *frame) {
 * perform device instance specific init here
 */
 void deviceInitRTC(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, RTC_IRQ_NUMBER, dev->name);
 	
 	rtcEvents = list_new();
@@ -69,22 +72,8 @@ void deviceInitRTC(struct device* dev){
 	interrupt_router_register_interrupt_handler(RTC_IRQ_NUMBER, &rtc_handle_irq);
 }
 
-/*
-* find all RTC devices and register them
-*/
-void rtc_devicemgr_register_devices(){
-	/*
-	* register device
-	*/
-	struct device* deviceinstance = devicemgr_new_device();
-	devicemgr_set_device_description(deviceinstance, "RTC");
-	deviceinstance->devicetype = RTC;
-	deviceinstance->init =  &deviceInitRTC;
-	devicemgr_register_device(deviceinstance);
-}
-
-
-rtc_time_t rtc_time(){
+rtc_time_t rtc_time(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	rtc_time_t a, b;
 	
 	a.second = cmos_read_register(RTC_REGISTER_SECOND);
@@ -132,8 +121,29 @@ rtc_time_t rtc_time(){
 }
 
 void rtc_subscribe(RTCEvent rtcEvent) {
+	ASSERT_NOT_NULL(rtcEvent, "rtcEvent cannot be null");
 	list_add(rtcEvents, rtcEvent);
 }
 
-
-
+/*
+* find all RTC devices and register them
+*/
+void rtc_devicemgr_register_devices(){
+	/*
+	* register device
+	*/
+	struct device* deviceinstance = devicemgr_new_device();
+	devicemgr_set_device_description(deviceinstance, "RTC");
+	deviceinstance->devicetype = RTC;
+	deviceinstance->init =  &deviceInitRTC;
+	/*
+	* device api
+	*/
+	struct deviceapi_rtc* api = (struct deviceapi_rtc*) kmalloc (sizeof(struct deviceapi_rtc));
+	api->rtc_time = &rtc_time;
+	deviceinstance->api = api;
+	/*
+	* register
+	*/
+	devicemgr_register_device(deviceinstance);
+}

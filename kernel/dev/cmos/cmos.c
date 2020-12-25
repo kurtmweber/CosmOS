@@ -9,6 +9,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
+#include <panic/panic.h>
 
 void cmos_write_register(uint8_t reg, uint8_t val){
 	uint8_t pv;
@@ -41,6 +42,7 @@ uint8_t cmos_read_register(uint8_t reg){
 */
 
 void deviceInitCMOS(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s (%s)\n",dev->description, dev->name);
 }
 

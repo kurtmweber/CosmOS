@@ -8,7 +8,8 @@
 #ifndef _ASM_H
 #define _ASM_H
 
-#include "io.h"
-#include "misc.h"
+#include <asm/io.h>
+#include <asm/misc.h>
+#include <asm/byte.h>
 
 #endif

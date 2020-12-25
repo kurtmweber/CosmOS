@@ -11,16 +11,18 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <dev/pci/pci.h>
+#include <panic/panic.h>
 
 /*
 * perform device instance specific init here
 */
 void deviceInitpciisa(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, dev->name);
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 }
 
 void pciisaSearchCB(struct pci_device* dev){
+    ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */

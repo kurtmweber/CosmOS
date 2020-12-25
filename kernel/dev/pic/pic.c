@@ -9,6 +9,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
+#include <panic/panic.h>
 
 // I/O ports
 #define PIC_PRIMARY_COMMAND		0x20
@@ -27,6 +28,7 @@
 * perform device instance specific init here
 */
 void deviceInitPIC(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s (%s)\n" ,dev->description, dev->name);
 
 	// send init command to prim/sec PICs
@@ -48,7 +50,6 @@ void deviceInitPIC(struct device* dev){
 }
 
 void pic_devicemgr_register_devices(){
-
     /*
 	* register device
 	*/

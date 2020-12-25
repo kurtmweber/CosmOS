@@ -6,15 +6,12 @@ ARFLAGS=-crs
 
 all: keyboard.a
 
-keyboard.a: keyboard.o keyboardbuffer.o abstract_keyboard.o
+keyboard.a: keyboard.o abstract_keyboard.o
 	$(AR) $(ARFLAGS) $@ $^
 	
 keyboard.o: keyboard.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
-	
-keyboardbuffer.o: keyboardbuffer.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
-	
+		
 abstract_keyboard.o: abstract_keyboard.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 

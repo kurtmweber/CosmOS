@@ -121,6 +121,44 @@ void *kmalloc(uint64_t size){
 	}
 }
 
+void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment){
+	// Expands block->len by 0 or more bytes, so that
+	// e.g. if block->base is 14, and alignment is 8, then block->len
+	// will be set to 2; this way the block ends at address 15
+
+	// If the block is already sized so that it ends at an appropriate address,
+	// then block->len remains unchanged
+
+	// This is used primarily to expand the last block in a page
+	// in preparation for setting aside succeeding pages for reserved uses
+	// such as DMA areas, page tables, etc. that need to be withheld from
+	// the heap space available to kmalloc(), but it conceivably might
+	// have other uses as well.
+
+	// returns the first address SUBSEQUENT to the end of the block, so e.g.
+	// in the above example it returns 16
+
+	void *end_addr;
+	uint64_t diff;
+
+	end_addr = block->base + block->len;
+	diff = (uint64_t)end_addr % alignment;
+	if (!diff){
+		return end_addr;
+	}
+
+	// EXAMPLE:
+	// alignment = 8, block->base = 2, block->len = 9
+	// so end_addr = 11, therefore diff = 3
+	// alignment - diff = 5, so we need to add 5 to block->len
+	// block->len is now 14, and block->base + block->len = 16, which 
+	// is the beginning of a new 8-byte-aligned block
+
+	block->len += (alignment - diff);
+	end_addr = block->base + block->len;
+	return end_addr;
+}
+
 void kmalloc_init(){
 	kmalloc_block_list = 0;
 	kmalloc_block_list_end = 0;
@@ -199,4 +237,10 @@ void *krealloc(void *ptr, uint64_t size){
 	
 	kfree(ptr);
 	return new_block;
+}
+
+void reset_brk_after_malloc(){
+	brk = kmalloc_align_block_end(kmalloc_block_list_end, 4096);
+
+	return;
 }

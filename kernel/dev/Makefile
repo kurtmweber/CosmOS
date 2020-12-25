@@ -4,7 +4,7 @@ EXTRA_CFLAGS= -I..
 
 all: devs.a 
 
-devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir display-dir rtc-dir pic-dir mouse-dir floppy-dir speaker-dir pit-dir sb16-dir ac97-dir adlib-dir cmos-dir isadma-dir virtio-dir
+devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir display-dir rtc-dir pic-dir mouse-dir floppy-dir speaker-dir pit-dir sb16-dir ac97-dir adlib-dir cmos-dir isadma-dir cpu-dir
 	$(AR) $(ARFLAGS)T $@ \
 	ata/ata.a \
 	pci/pci.a \
@@ -25,9 +25,8 @@ devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridg
 	adlib/adlib.o \
 	cmos/cmos.o \
 	isadma/isadma.o \
-	dev.o \
-	virtio/virtio.a
-
+	cpu/cpu.o \
+	dev.o
 	
 dev.o: dev.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
@@ -89,10 +88,10 @@ cmos-dir:
 isadma-dir:
 	cd isadma && $(MAKE)
 
-virtio-dir:
-	cd virtio && $(MAKE)
+cpu-dir:
+	cd cpu && $(MAKE)
 
-clean: ata-dir-clean keyboard-dir-clean pci-dir-clean serial-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean mouse-dir-clean floppy-dir-clean speaker-dir-clean pit-dir-clean sb16-dir-clean ac97-dir-clean adlib-dir-clean cmos-dir-clean isadma-dir-clean virtio-dir-clean
+clean: ata-dir-clean keyboard-dir-clean pci-dir-clean serial-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean mouse-dir-clean floppy-dir-clean speaker-dir-clean pit-dir-clean sb16-dir-clean ac97-dir-clean adlib-dir-clean cmos-dir-clean isadma-dir-clean cpu-dir-clean
 	$(RM) devs.a
 	$(RM) dev.o
 
@@ -153,5 +152,5 @@ cmos-dir-clean:
 isadma-dir-clean:
 	cd isadma && $(MAKE) clean
 
-virtio-dir-clean:
-	cd virtio && $(MAKE) clean
+cpu-dir-clean:
+	cd cpu && $(MAKE) clean

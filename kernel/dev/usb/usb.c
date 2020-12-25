@@ -11,22 +11,42 @@
 #include <dev/pci/pci.h>
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
+#include <panic/panic.h>
+
+#define USB_EHCI_CAPABILITY_REGISTER        0x00
+#define USB_EHCI_HCIVERSION_REGISTER        0x02
+#define USB_EHCI_HCSPARAMS_REGISTER         0x04
+#define USB_EHCI_HCCPARAMS_REGISTER         0x08
+#define USB_EHCI_HCSP_PORTROUTE_REGISTER    0x0C
+
+#define USB_EHCI_USBCMD_OPERATIONAL_REGISTER            0x00
+#define USB_EHCI_USBSTS_OPERATIONAL_REGISTER            0x04
+#define USB_EHCI_USBINTR_OPERATIONAL_REGISTER           0x08
+#define USB_EHCI_FRINDEX_OPERATIONAL_REGISTER           0x0C
+
+#define USB_EHCI_CTRLDSSEGMENT_OPERATIONAL_REGISTER     0x10
+#define USB_EHCI_PERIODICLISTBASE_OPERATIONAL_REGISTER  0x14
+#define USB_EHCI_ASYNCLISTADDR_OPERATIONAL_REGISTER     0x18
+
+#define USB_EHCI_CONFIGFLAG_OPERATIONAL_REGISTER        0x40
+#define USB_EHCI_PORTSC_OPERATIONAL_REGISTER            0x44
 
 /*
 * perform device instance specific init here
 */
 void deviceInitUSB(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, dev->name);
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 }
 
 void USBSearchCB(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInitUSB;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = USB;
     devicemgr_set_device_description(deviceinstance, "USB");
     devicemgr_register_device(deviceinstance);

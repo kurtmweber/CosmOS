@@ -12,6 +12,7 @@
 #include <string/string.h>
 #include <panic/panic.h>
 #include <devicemgr/deviceregistry.h>
+#include <dev/dev.h>
 
 #define MAX_DEVICE_NAME_LENGTH 64
 
@@ -32,6 +33,7 @@ int8_t* DeviceTypeNames[] = {"None"
 	,"dsp"
     ,"cmos"
     ,"dma"
+    ,"cpu"
     }; 
 
 void devicemgr_init() {
@@ -39,30 +41,20 @@ void devicemgr_init() {
 }
 
 int8_t* createDeviceName(struct device* dev) {
+    ASSERT_NOT_NULL(dev, "dev cannot be null");
     int8_t nn[32];
     int8_t* ret = kmalloc(MAX_DEVICE_NAME_LENGTH);
     strcpy(ret, DeviceTypeNames[dev->devicetype]);
     uitoa3(dev->type_index, nn, 32, 10);
     ret = strcat(ret, nn);
-  //  kprintf(ret);
     return ret;
 }
 
 void devicemgr_register_device(struct device* dev) {
-    if (0==dev){
-        panic("Attempt to register null device\n");
-    }
-    if (0==dev->description){
-        panic("Attempt to register device without description\n");
-    }
-    if (0==dev->devicetype){
-        kprintf(dev->description);
-        panic("Attempt to register device without deviceType\n");
-    }
-    if (0==dev->init){
-        kprintf(dev->description);
-        panic("Attempt to register device without init function\n");
-    }
+    ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev->description, "description cannot be null");
+    ASSERT_NOT_NULL(dev->devicetype, "devicetype cannot be null");
+    ASSERT_NOT_NULL(dev->init, "init cannot be null");
     /*
     * set index
     */
@@ -94,6 +86,10 @@ void deviceInitIterator(struct device* dev) {
 */
 void devicemgr_init_devices(){
     kprintf("Initializing Devices\n");
+    /*
+    * CPU first before first?
+    */
+    deviceregistry_iterate_type(CPU, deviceInitIterator);
     /*
     * PIC first
     */
@@ -139,27 +135,70 @@ struct device* devicemgr_new_device() {
     ret->type_index=0;
     ret->devicetype=0;
     ret->api=0;
+    ret->pci=0;
     return ret;
 }
 
 void devicemgr_set_device_description(struct device* dev, int8_t* description) {
-    if ((0!=description) && (0!=dev)){
-        uint32_t size = strlen(description);
-        if (0!=dev->description){
-            kfree(dev->description);
-        }
-        dev->description = kmalloc(size+1);
-        strcpy(dev->description, description);
-    } else {
-        panic("Invalid device or description passed to devicemgr_set_device_description\n");
+    ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(description, "description cannot be null");
+    uint32_t size = strlen(description);
+    if (0!=dev->description){
+        kfree(dev->description);
     }
+    dev->description = kmalloc(size+1);
+    strcpy(dev->description, description);
 }
 
 struct device* devicemgr_findDevice(const int8_t* name) {
-    if (0!=name){
-        return deviceregistry_findDevice(name);
-    } else {
-        panic("Invalid device name passed to devicemgr_findDevice\n");
-    }
+    ASSERT_NOT_NULL(name, "name cannot be null");
+    return deviceregistry_findDevice(name);
 }
+
+void devicemgr_register_devices() {
+	/*
+	* scan the PCI bus first
+	*/
+	pci_init();
+	/*
+	* register up the pic next
+	*/
+	pic_devicemgr_register_devices();
+	/* 
+	* and then RS232
+	*/
+	serial_devicemgr_register_devices();
+	/*
+	* and the then the PIT
+	*/
+	pit_devicemgr_register_devices();
+	/*
+	* we need the CMOS
+	*/
+	cmos_devicemgr_register_devices();
+	/*
+	* ISA DMA Controller
+	*/
+	isadma_devicemgr_register_devices();
+	/*
+	* rest of this stuff can really happen in any order
+	*/
+	rtc_devicemgr_register_devices();
+	keyboard_devicemgr_register_devices();
+	display_devicemgr_register_devices();
+	usb_devicemgr_register_devices();
+	network_devicemgr_register_devices();
+	bridge_devicemgr_register_devices();
+	ata_devicemgr_register_devices(); 
+    mouse_devicemgr_register_devices();
+    floppy_devicemgr_register_devices();
+    speaker_devicemgr_register_devices();
+	sb16_devicemgr_register_devices();
+//	ac97_devicemgr_register_devices();
+//	adlib_devicemgr_register_devices();
+    cpu_devicemgr_register_devices();
+}
+
+
+
 

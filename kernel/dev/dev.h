@@ -28,8 +28,6 @@
 #include <dev/adlib/adlib.h>
 #include <dev/cmos/cmos.h>
 #include <dev/isadma/isadma.h>
-#include <dev/virtio/virtio.h>
-
-void dev_devicemgr_register_devices();
+#include <dev/cpu/cpu.h>
 
 #endif

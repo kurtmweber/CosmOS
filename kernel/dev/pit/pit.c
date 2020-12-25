@@ -11,6 +11,8 @@
 #include <console/console.h>
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
+#include <devicemgr/deviceapi/deviceapi_pit.h>
+#include <panic/panic.h>
 
 // https://wiki.osdev.org/Programmable_Interval_Timer
 // http://www.osdever.net/bkerndev/Docs/pit.htm
@@ -30,6 +32,8 @@ uint64_t tickcount=0;;
 
 // This is the perfect place to handle context switches.  Just saying.
 void pit_handle_irq(stackFrame *frame) {
+	ASSERT_NOT_NULL(pitEvents, "pitEvents cannot be null. Has the PIT been initialized?");
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
   //  kprintf("@");	
   tickcount=tickcount+1;
 }
@@ -45,13 +49,18 @@ void pit_handle_irq(stackFrame *frame) {
 *  18.2065 Hz (or an IRQ every 54.9254 ms)"
 */
 void deviceInitPIT(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, PIT_IRQ, dev->name);
     interrupt_router_register_interrupt_handler(PIT_IRQ, &pit_handle_irq);
 }
 
+uint64_t pit_tickcount(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    return tickcount;
+}
+
 void pit_devicemgr_register_devices(){
     pitEvents = list_new();
-
     /*
 	* register device
 	*/
@@ -59,14 +68,20 @@ void pit_devicemgr_register_devices(){
 	devicemgr_set_device_description(deviceinstance, "8253/8254 PIT");
 	deviceinstance->devicetype = PIT;
 	deviceinstance->init =  &deviceInitPIT;
+	/*
+	* device api
+	*/
+	struct deviceapi_pit* api = (struct deviceapi_pit*) kmalloc (sizeof(struct deviceapi_pit));
+	api->tickcount = &pit_tickcount;
+	deviceinstance->api = api;
+	/*
+	* register
+	*/
 	devicemgr_register_device(deviceinstance);
 }
 
 void pit_subscribe(PITEvent pitEvent) {
+	ASSERT_NOT_NULL(pitEvents, "pitEvents cannot be null. Has the PIT been initialized?");
 	list_add(pitEvents, pitEvent);
-}
-
-uint64_t pit_tickcount() {
-    return tickcount;
 }
 

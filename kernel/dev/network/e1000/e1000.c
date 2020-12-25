@@ -11,18 +11,29 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <dev/pci/pci.h>
+#include <devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <panic/panic.h>
 
 void e1000_irq_handler(stackFrame *frame){
-
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 }
 
 /*
 * perform device instance specific init here
 */
 void E1000Init(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    interrupt_router_register_interrupt_handler(pci_dev->irq, &e1000_irq_handler);
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, dev->name);
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &e1000_irq_handler);
+}
+
+void e1000_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Ethernet read not implemented yet");
+}
+void e1000_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Ethernet write not implemented yet");
 }
 
 void E1000SearchCB(struct pci_device* dev){
@@ -31,9 +42,19 @@ void E1000SearchCB(struct pci_device* dev){
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &E1000Init;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "E1000 NIC");
+    /*
+    * the device api
+    */
+    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*) kmalloc(sizeof(struct deviceapi_ethernet));
+    api->write = &e1000_ethernet_read;
+    api->read = &e1000_ethernet_write;
+    deviceinstance->api = api;
+    /*
+    * register
+    */
     devicemgr_register_device(deviceinstance);
 }
 

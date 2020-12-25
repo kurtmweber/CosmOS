@@ -12,6 +12,8 @@
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
 #include <mm/mm.h>
+#include <devicemgr/deviceapi/deviceapi_mouse.h>
+#include <panic/panic.h>
 
 #define MOUSE_IRQ_NUMBER 12
 
@@ -40,16 +42,12 @@
 * https://forum.osdev.org/viewtopic.php?t=10247
 */
 
-struct mouse_status {
-    uint8_t mouse_cycle;
-    int8_t mouse_byte[3];
-    int8_t mouse_x;
-    int8_t mouse_y;
-};
-
 struct mouse_status* current_mouse_status;
 
 void mouse_irq_read(stackFrame *frame) {
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(current_mouse_status, "current_mouse_status cannot be null.  Has the mouse been initialized?");
+
     kprintf("$");
     switch(current_mouse_status->mouse_cycle) {
     case 0:
@@ -109,6 +107,7 @@ uint8_t mouse_read() {
 * perform device instance specific init here
 */
 void deviceInitMouse(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, MOUSE_IRQ_NUMBER, dev->name);
     interrupt_router_register_interrupt_handler(MOUSE_IRQ_NUMBER, &mouse_irq_read);
 
@@ -139,6 +138,12 @@ void deviceInitMouse(struct device* dev){
     mouse_read();  //Acknowledge
 }
 
+struct mouse_status* ps2mouse_status(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(current_mouse_status, "current_mouse_status cannot be null.  Has the mouse been initialized?");
+    return current_mouse_status;
+}
+
 /**
 * find all PS/2 mouse devices and register them
 */
@@ -150,5 +155,14 @@ void mouse_devicemgr_register_devices() {
 	deviceinstance->init =  &deviceInitMouse;
 	deviceinstance->devicetype = MOUSE;
 	devicemgr_set_device_description(deviceinstance, "PS2 Mouse");
+	/*
+	* device api
+	*/
+	struct deviceapi_mouse* api = (struct deviceapi_mouse*) kmalloc (sizeof(struct deviceapi_mouse));
+	api->status = &ps2mouse_status;
+	deviceinstance->api = api;
+	/*
+	* register
+	*/
 	devicemgr_register_device(deviceinstance);
 }

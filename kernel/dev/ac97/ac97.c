@@ -12,6 +12,8 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 #include <dev/pci/pci.h>
+#include <devicemgr/deviceapi/deviceapi_dsp.h>
+#include <panic/panic.h>
 
 // https://wiki.osdev.org/AC97
 
@@ -36,27 +38,37 @@
 #define AC97_3D_CONTROL            0x22
 
 void ac97_handle_irq(stackFrame *frame) {
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 }
 
 /*
 * perform device instance specific init here
 */
 void deviceInitAC97(struct device* dev){
-	struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-   	kprintf("Init %s at IRQ %llu\n",dev->description, pci_dev->irq);
-    interrupt_router_register_interrupt_handler(pci_dev->irq, &ac97_handle_irq);
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+   	kprintf("Init %s at IRQ %llu\n",dev->description, dev->pci->irq);
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &ac97_handle_irq);
 }
 
 void AC97PCISearchCB(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInitAC97;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = DSP;
     devicemgr_set_device_description(deviceinstance, "Intel 82801AA AC97");
-    devicemgr_register_device(deviceinstance);
+	/*
+	* device api
+	*/
+	struct deviceapi_dsp* api = (struct deviceapi_dsp*) kmalloc (sizeof(struct deviceapi_dsp));
+	deviceinstance->api = api;
+	/*
+	* register
+	*/
+	devicemgr_register_device(deviceinstance);
 }
 
 void ac97_devicemgr_register_devices(){
