@@ -23,6 +23,7 @@
 #include <devicemgr/deviceapi/deviceapi_speaker.h>
 #include <devicemgr/deviceapi/deviceapi_pit.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
+#include <devicemgr/deviceapi/deviceapi_cpu.h>
 
 void stringtest();
 void BeethovensFifth();
@@ -79,6 +80,16 @@ void CosmOS(){
 	kprintf("There are %llu devices\n", devicemgr_device_count());
 
 	asm_sti();
+
+	/*
+	* show CPU features
+	*/
+	// get the CPU
+	struct device* cpu = devicemgr_findDevice("cpu0");
+	struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
+	cpu_get_features_function features_function = cpu_api->features;
+	uint64_t features = (*features_function)();
+	kprintf("CPU Features %#X\n", features);
 
 	/*
 	* run various functions to show that things work....
