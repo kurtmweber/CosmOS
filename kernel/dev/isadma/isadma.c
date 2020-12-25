@@ -9,6 +9,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
+#include <panic/panic.h>
 
 // https://wiki.osdev.org/DMA
 // http://www.osdever.net/documents/dmaprogramming.pdf
@@ -63,24 +64,24 @@
 #define ISA_DMA_CHANNEL_PAGE_ADDRESS_6						0x89
 #define ISA_DMA_CHANNEL_PAGE_ADDRESS_7						0x8A
 
- //Mode Selection Bits 7:6
- #define ISA_DMA_DEMAND_MODE 		0 //00
- #define ISA_DMA_SINGLE_MODE 		64 //01
- #define ISA_DMA_BLOCK_MODE 		128 //10
- #define ISA_DMA_CASCADE_MODE 		192 //11
+ // mode selection bits 7:6
+ #define ISA_DMA_DEMAND_MODE 								0x00 //00
+ #define ISA_DMA_SINGLE_MODE 								0x40 //01
+ #define ISA_DMA_BLOCK_MODE 								0x80 //10
+ #define ISA_DMA_CASCADE_MODE 								0xC0 //11
 
- //Address Increment/Decrement bit 5
- #define ISA_DMA_ADDRESS_DECREMENT 	32 //1
- #define ISA_DMA_ADDRESS_INCREMENT 	0 //0
+ // address increment / decrement bit 5
+ #define ISA_DMA_ADDRESS_DECREMENT 							0x20 //1
+ #define ISA_DMA_ADDRESS_INCREMENT 							0x00 //0
  
- //AutoInitialization enable bit 4
- #define ISA_DMA_AUTO_INIT 			16 //1
- #define ISA_DMA_SINGLE_CYCLE 		0 //0
+ // autoInitialization enable bit 4
+ #define ISA_DMA_AUTO_INIT 									0x10 //1
+ #define ISA_DMA_SINGLE_CYCLE 								0x00 //0
  
- //Transfer Type bits 3:2
- #define ISA_DMA_VERIFY_TRANSFER 	0 //00
- #define ISA_DMA_WRITE_TRANSFER 	4 //01
- #define ISA_DMA_READ_TRANSFER 		8 //10
+ // transfer type bits 3:2
+ #define ISA_DMA_VERIFY_TRANSFER 							0x00 //00
+ #define ISA_DMA_WRITE_TRANSFER 							0x04 //01
+ #define ISA_DMA_READ_TRANSFER 								0x08 //10
 
 /*
 * perform device instance specific init here
@@ -106,4 +107,27 @@ void isadma_read(uint8_t channel, uint64_t* address, uint16_t size) {
 
 void isadma_write(uint8_t channel, uint64_t address, uint16_t size) {
 
+}
+
+uint16_t isadma_get_port(uint8_t channel){
+	switch(channel){
+		case 0:
+			return ISA_DMA_CHAN03_START_ADDRESS_REGISTER_0_4;
+		case 1:
+			return ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5;
+		case 2:
+			return ISA_DMA_CHAN03_START_ADDRESS_REGISTER_2_6;
+		case 3:
+			return ISA_DMA_CHAN03_START_ADDRESS_REGISTER_3_7;
+		case 4:
+			return ISA_DMA_CHAN47_START_ADDRESS_REGISTER_0_4;
+		case 5:
+			return ISA_DMA_CHAN47_START_ADDRESS_REGISTER_1_5;
+		case 6:
+			return ISA_DMA_CHAN47_START_ADDRESS_REGISTER_2_6;
+		case 7:
+			return ISA_DMA_CHAN47_START_ADDRESS_REGISTER_3_7;
+		default:
+			panic("Illegal ISA DMA channel");
+	}
 }
