@@ -63,6 +63,25 @@
 #define ISA_DMA_CHANNEL_PAGE_ADDRESS_6						0x89
 #define ISA_DMA_CHANNEL_PAGE_ADDRESS_7						0x8A
 
+ //Mode Selection Bits 7:6
+ #define ISA_DMA_DEMAND_MODE 		0 //00
+ #define ISA_DMA_SINGLE_MODE 		64 //01
+ #define ISA_DMA_BLOCK_MODE 		128 //10
+ #define ISA_DMA_CASCADE_MODE 		192 //11
+
+ //Address Increment/Decrement bit 5
+ #define ISA_DMA_ADDRESS_DECREMENT 	32 //1
+ #define ISA_DMA_ADDRESS_INCREMENT 	0 //0
+ 
+ //AutoInitialization enable bit 4
+ #define ISA_DMA_AUTO_INIT 			16 //1
+ #define ISA_DMA_SINGLE_CYCLE 		0 //0
+ 
+ //Transfer Type bits 3:2
+ #define ISA_DMA_VERIFY_TRANSFER 	0 //00
+ #define ISA_DMA_WRITE_TRANSFER 	4 //01
+ #define ISA_DMA_READ_TRANSFER 		8 //10
+
 /*
 * perform device instance specific init here
 */
