@@ -8,6 +8,7 @@
 #include <types.h>
 #include <asm/asm.h>
 #include <mm/mm.h>
+#include <mm/pagetables.h>
 #include <panic/panic.h>
 #include <string/string.h>
 
@@ -98,4 +99,11 @@ uint16_t vaddr_ptt_index(void *address, ptt_levels level){
 	}
 	
 	return ((uint64_t)address & mask) >> shift;
+}
+
+void *vaddr_to_physical(void *address, pttentry cr3){
+	pttentry *pml4_base;
+	cr3 = asm_cr3_read();
+
+	pml4_base = extract_cr3_base_address(cr3);
 }

@@ -81,8 +81,10 @@ extern mem_block *usable_phys_blocks;
 void mmu_init();
 void kfree(void *p);
 void *kmalloc(uint64_t size);
+void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment);
 void kmalloc_init();
 void *krealloc(void *ptr, uint64_t size);
+void reset_brk_after_malloc();
 
 extern void *brk;
 kmalloc_block *find_avail_kmalloc_block_list(uint64_t size);
