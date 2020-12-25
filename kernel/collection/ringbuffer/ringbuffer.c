@@ -12,51 +12,46 @@
 #define RINGBUFFER_SIZE 256
 
 void ringbuffer_add(struct ringbuffer* buffer, void* add) {
-    if (0!=buffer){
-        buffer->data[buffer->end] = add;
-	
-        if (buffer->end == RINGBUFFER_SIZE){
-            buffer->end = 0;
-        } else {
-            buffer->end++;
-        }
-        
-        if (buffer->end == buffer->start){
-            if (buffer->start == RINGBUFFER_SIZE){
-                buffer->start = 0;
-            } else {
-                buffer->start++;
-            }
-        }	
-    } else {
-        panic("null buffer passed to ringbuffer_add\n");
-    }
-}
+	ASSERT_NOT_NULL(buffer, "ringbuffer cannot be null");
+    buffer->data[buffer->end] = add;
 
-void* ringbuffer_consume(struct ringbuffer* buffer) {
-   if (0!=buffer){
-        uint16_t i;
-        
-        if ((buffer->end == 0) && (buffer->start == 0)){
-            return 0;
-        }
-        
-        i = buffer->start;	// we need this so we can return keyboard_buffer[i] in case we reset keyboard_buffer_start and keyboard_buffer_end to 0 if we reach the end
-        
+    if (buffer->end == RINGBUFFER_SIZE){
+        buffer->end = 0;
+    } else {
+        buffer->end++;
+    }
+    
+    if (buffer->end == buffer->start){
         if (buffer->start == RINGBUFFER_SIZE){
             buffer->start = 0;
         } else {
             buffer->start++;
         }
-        
-        if (buffer->start == buffer->end){
-            buffer->start = 0;
-            buffer->end = 0;
-        }
-        return buffer->data[i];
-    } else {
-        panic("null buffer passed to ringbuffer_consume\n");        
+    }	
+}
+
+void* ringbuffer_consume(struct ringbuffer* buffer) {
+	ASSERT_NOT_NULL(buffer, "ringbuffer cannot be null");
+
+    uint16_t i;
+    
+    if ((buffer->end == 0) && (buffer->start == 0)){
+        return 0;
     }
+    
+    i = buffer->start;	// we need this so we can return keyboard_buffer[i] in case we reset keyboard_buffer_start and keyboard_buffer_end to 0 if we reach the end
+    
+    if (buffer->start == RINGBUFFER_SIZE){
+        buffer->start = 0;
+    } else {
+        buffer->start++;
+    }
+    
+    if (buffer->start == buffer->end){
+        buffer->start = 0;
+        buffer->end = 0;
+    }
+    return buffer->data[i];
 }
 
 struct ringbuffer* ringbuffer_new() {
