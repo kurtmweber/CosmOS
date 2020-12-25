@@ -220,9 +220,7 @@ void BeethovensFifth() {
 	struct device* speaker = devicemgr_findDevice("speaker0");
 	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
 	speaker_beep_function beep_func = speaker_api->beep;
-	(*beep_func)(speaker, 4000, 50);
-
-
+//	(*beep_func)(speaker, 4000, 50);
 	(*beep_func)(speaker,NOTE_G5, 200);
 	sleep_wait(100);
 	(*beep_func)(speaker,NOTE_G5, 200);

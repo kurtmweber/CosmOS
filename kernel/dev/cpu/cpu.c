@@ -59,8 +59,8 @@ void cpu_manufacturer_id(uint8_t* cpuid) {
     cpuid[4]= (id.edx & 0x000000FF)>>0;
     cpuid[11]= (id.ecx & 0xFF000000)>>24;
     cpuid[10]= (id.ecx & 0x00FF0000)>>16;
-    cpuid[9]= (id.ecx & 0x0000FF00)>>8;
-    cpuid[8]= (id.ecx & 0x000000FF)>>0;
+    cpuid[9]=  (id.ecx & 0x0000FF00)>>8;
+    cpuid[8]=  (id.ecx & 0x000000FF)>>0;
     cpuid[12]= 0;
 }
 
