@@ -88,9 +88,25 @@ void CosmOS(){
 	struct device* cpu = devicemgr_findDevice("cpu0");
 	struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
 	cpu_get_features_function features_function = cpu_api->features;
-	uint64_t features = (*features_function)();
-	kprintf("CPU Features %#X\n", features);
 
+	/*
+	* show all CPU features
+	*/
+	struct cpu_id id;
+	(*features_function)(&id);
+	kprintf("CPU Features %#X\n", id.edx);
+
+	/*
+	* check if APIC
+	*/
+	cpu_has_apic_function apic_function = cpu_api->apic;
+	bool apic = (*apic_function)();
+	if(apic){
+		kprintf("APIC present\n");
+	} else {
+		kprintf("APIC not present\n");
+	}
+	
 	/*
 	* run various functions to show that things work....
 	*/

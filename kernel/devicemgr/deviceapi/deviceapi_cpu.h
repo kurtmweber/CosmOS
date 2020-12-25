@@ -75,10 +75,25 @@ enum {
     CPUID_FEAT_EDX_PBE          = 1 << 31
 };
 
-typedef uint64_t (*cpu_get_features_function)();
+struct cpu_id {
+    uint32_t eax;
+    uint32_t ebx;
+    uint32_t ecx;
+    uint32_t edx;
+};
+
+/*
+* full results of cpuid
+*/
+typedef void (*cpu_get_features_function)(struct cpu_id* id);
+/*
+* check if APIC
+*/
+typedef bool (*cpu_has_apic_function)();
 
 struct deviceapi_cpu {
     cpu_get_features_function features;
+    cpu_has_apic_function apic;
 };
 
 #endif
