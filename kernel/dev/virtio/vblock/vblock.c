@@ -137,6 +137,7 @@ void VBLOCKInit(struct device* dev){
 }
 
 void VBLOCKSearchCB(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
