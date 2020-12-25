@@ -14,7 +14,7 @@
 #include <dev/pic/pic.h>
 #include <dev/rtc/rtc.h>
 #include <dev/serial/serial.h>
-#include <dev/usb/usb.h>
+#include <dev/usb/usb_controller.h>
 #include <devicemgr/devicemgr.h>
 #include <dev/network/network.h>
 #include <dev/bridge/bridge.h>

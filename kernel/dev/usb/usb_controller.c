@@ -5,31 +5,15 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/usb/usb.h>
 #include <interrupts/interrupt_router.h>
 #include <asm/asm.h>
 #include <dev/pci/pci.h>
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
 #include <panic/panic.h>
-
-#define USB_EHCI_CAPABILITY_REGISTER        0x00
-#define USB_EHCI_HCIVERSION_REGISTER        0x02
-#define USB_EHCI_HCSPARAMS_REGISTER         0x04
-#define USB_EHCI_HCCPARAMS_REGISTER         0x08
-#define USB_EHCI_HCSP_PORTROUTE_REGISTER    0x0C
-
-#define USB_EHCI_USBCMD_OPERATIONAL_REGISTER            0x00
-#define USB_EHCI_USBSTS_OPERATIONAL_REGISTER            0x04
-#define USB_EHCI_USBINTR_OPERATIONAL_REGISTER           0x08
-#define USB_EHCI_FRINDEX_OPERATIONAL_REGISTER           0x0C
-
-#define USB_EHCI_CTRLDSSEGMENT_OPERATIONAL_REGISTER     0x10
-#define USB_EHCI_PERIODICLISTBASE_OPERATIONAL_REGISTER  0x14
-#define USB_EHCI_ASYNCLISTADDR_OPERATIONAL_REGISTER     0x18
-
-#define USB_EHCI_CONFIGFLAG_OPERATIONAL_REGISTER        0x40
-#define USB_EHCI_PORTSC_OPERATIONAL_REGISTER            0x44
+#include <dev/usb/usb_controller.h>
+#include <dev/usb/ehci.h>
+#include <dev/usb/ohci.h>
 
 /*
 * perform device instance specific init here
@@ -48,7 +32,7 @@ void USBSearchCB(struct pci_device* dev){
     deviceinstance->init =  &deviceInitUSB;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = USB;
-    devicemgr_set_device_description(deviceinstance, "USB");
+    devicemgr_set_device_description(deviceinstance, "Intel 82801 USB Controller");
     devicemgr_register_device(deviceinstance);
 }
 
@@ -56,5 +40,5 @@ void USBSearchCB(struct pci_device* dev){
 * find all USB devices and register them
 */
 void usb_devicemgr_register_devices() {
-    pci_devicemgr_search_devicetype(PCI_CLASS_SERIAL,PCI_SERIAL_SUBCLASS_USB, &USBSearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_SERIAL,PCI_SERIAL_SUBCLASS_USB,0x8086, 0x24CD,  &USBSearchCB);
 }

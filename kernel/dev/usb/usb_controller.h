@@ -5,8 +5,8 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _USB_H
-#define _USB_H
+#ifndef _USB_CONTROLLER_H
+#define _USB_CONTROLLER_H
 
 #include <types.h>
 
