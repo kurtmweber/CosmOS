@@ -134,9 +134,9 @@ void ne2000pci_irq_handler(stackFrame *frame){
 * perform device instance specific init here
 */
 void NE200PCIInit(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    interrupt_router_register_interrupt_handler(pci_dev->irq, &ne2000pci_irq_handler);
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id, dev->name);
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &ne2000pci_irq_handler);
     // do the init
     ne2000pci_init();
 }
@@ -154,7 +154,7 @@ void NE2000PCISearchCB(struct pci_device* dev){
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &NE200PCIInit;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "NE2000 PCI");
     /*
