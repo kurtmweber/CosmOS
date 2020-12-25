@@ -125,6 +125,10 @@
 */
 uint8_t net_mac_pci[6];
 
+struct ne2000pci_devicedata {
+    uint64_t base;
+} __attribute__((packed));
+
 void ne2000pci_init(void);
 
 void ne2000pci_irq_handler(stackFrame *frame){
@@ -136,7 +140,9 @@ void ne2000pci_irq_handler(stackFrame *frame){
 */
 void NE200PCIInit(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    struct ne2000pci_devicedata* deviceData = (struct ne2000pci_devicedata*) dev->deviceData;
+    deviceData->base = pci_calcbar(dev->pci);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &ne2000pci_irq_handler);
     // do the init
     ne2000pci_init();
@@ -167,6 +173,12 @@ void NE2000PCISearchCB(struct pci_device* dev){
     api->write = &ne2000pci_ethernet_read;
     api->read = &ne2000pci_ethernet_write;
     deviceinstance->api = api;
+   /*
+    * the deviceData
+    */
+    struct ne2000pci_devicedata* deviceData = (struct ne2000pci_devicedata*) kmalloc(sizeof(struct ne2000pci_devicedata));
+    deviceData->base = 0;
+    deviceinstance->deviceData = deviceData;
     /*
     * register
     */
