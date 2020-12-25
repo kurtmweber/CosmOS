@@ -128,6 +128,7 @@ uint8_t net_mac_pci[6];
 void ne2000pci_init(void);
 
 void ne2000pci_irq_handler(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	kprintf("%");
 }
 /*

@@ -15,7 +15,7 @@
 #include <panic/panic.h>
 
 void e1000_irq_handler(stackFrame *frame){
-
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 }
 
 /*

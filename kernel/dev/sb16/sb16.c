@@ -53,6 +53,7 @@ struct sb16_devicedata {
 } __attribute__((packed));
 
 void sb16_handle_irq(stackFrame *frame) {
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 }
 
 /*

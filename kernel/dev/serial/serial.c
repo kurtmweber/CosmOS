@@ -51,6 +51,7 @@ void serial_write_char(const uint8_t c){
 }
 
 void serial_irq_handler(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
     struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
     uint8_t data = asm_in_b((uint64_t)&(com1->data));
 

@@ -101,6 +101,7 @@ struct floppy_devicedata {
 volatile uint64_t irq_count=0;
 
 void floppy_irq_read(stackFrame *frame) {
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	irq_count = irq_count+1;
     kprintf("^");
 }

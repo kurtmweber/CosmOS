@@ -130,6 +130,7 @@ uint8_t net_mac_isa[6];
 void ne2000isa_init(void);
 
 void ne2000isa_irq_handler(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	kprintf("%");
 }
 /*

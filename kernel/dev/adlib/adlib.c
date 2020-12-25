@@ -15,6 +15,7 @@
 #include <panic/panic.h>
 
 void adlib_handle_irq(stackFrame *frame) {
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 }
 
 /*

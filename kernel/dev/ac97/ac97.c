@@ -38,6 +38,7 @@
 #define AC97_3D_CONTROL            0x22
 
 void ac97_handle_irq(stackFrame *frame) {
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 }
 
 /*

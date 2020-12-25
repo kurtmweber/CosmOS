@@ -45,6 +45,7 @@
 struct mouse_status* current_mouse_status;
 
 void mouse_irq_read(stackFrame *frame) {
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
     kprintf("$");
     switch(current_mouse_status->mouse_cycle) {
     case 0:
