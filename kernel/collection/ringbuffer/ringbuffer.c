@@ -7,7 +7,7 @@
 
 #include <collection/ringbuffer/ringbuffer.h>
 #include <mm/mm.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 #define RINGBUFFER_SIZE 256
 

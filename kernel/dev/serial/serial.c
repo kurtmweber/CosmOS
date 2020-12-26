@@ -10,7 +10,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 #include <console/console.h>
 
 #define COM1_ADDRESS (uint16_t) 0x3F8

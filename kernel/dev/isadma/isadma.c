@@ -9,7 +9,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 // https://wiki.osdev.org/DMA
 // http://www.osdever.net/documents/dmaprogramming.pdf

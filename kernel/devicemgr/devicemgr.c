@@ -10,7 +10,7 @@
 #include <collection/list/list.h>
 #include <mm/mm.h>
 #include <string/string.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 #include <devicemgr/deviceregistry.h>
 #include <dev/dev.h>
 

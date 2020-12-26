@@ -10,7 +10,7 @@
 #include <console/console.h>
 #include <dev/pci/pci.h>
 #include <dev/pci/devicetree.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 #define PCI_MAX_BUSSES 256
 #define PCI_MAX_DEVICES_PER_BUS 32

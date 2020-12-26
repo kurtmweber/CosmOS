@@ -15,7 +15,7 @@
 #include <collection/list/list.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_rtc.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 #define RTC_IRQ_NUMBER 		8
 

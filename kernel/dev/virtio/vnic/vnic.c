@@ -16,7 +16,7 @@
 #include <asm/io.h>
 #include <sleep/sleep.h>
 #include <dev/pci/pci.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 #include <dev/virtio/virtio.h>
 
 // virtio NIC flags

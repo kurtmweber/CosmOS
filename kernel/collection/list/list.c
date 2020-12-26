@@ -7,7 +7,7 @@
 
 #include <collection/list/list.h>
 #include <mm/mm.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 #define EXPAND_SIZE 64
 #define START_SIZE 16

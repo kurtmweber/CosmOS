@@ -10,7 +10,7 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <devicemgr/deviceapi/deviceapi_cpu.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 void cpu_manufacturer_id(uint8_t* cpuid);
 

@@ -9,7 +9,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 void cmos_write_register(uint8_t reg, uint8_t val){
 	uint8_t pv;

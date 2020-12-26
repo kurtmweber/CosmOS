@@ -7,7 +7,7 @@
 
 #include <dev/virtio/virtqueue.h>
 #include <mm/mm.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 // https://docs.oasis-open.org/virtio/virtio/v1.1/virtio-v1.1.pdf
 

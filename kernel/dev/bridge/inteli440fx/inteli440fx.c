@@ -11,7 +11,7 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <dev/pci/pci.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 /*
 * perform device instance specific init here

@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <devicemgr/devicetypes.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 #include <console/console.h>
 
 struct array* types;

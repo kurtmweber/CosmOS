@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 void uitoa3(uint64_t n, char *s, uint16_t len, uint8_t base){
 	ASSERT_NOT_NULL(s, "s must not be null");

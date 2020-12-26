@@ -9,7 +9,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 
 // I/O ports
 #define PIC_PRIMARY_COMMAND		0x20

@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 #include <interrupts/interrupts.h>
 
 __attribute__ ((interrupt)) void isrDE(stackFrame *frame){

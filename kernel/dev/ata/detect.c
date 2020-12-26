@@ -9,7 +9,7 @@
 #include <dev/ata/ata.h>
 #include <console/console.h>
 #include <mm/mm.h>
-#include <panic/panic.h>
+#include <panic/assert.h>
 #include <string/string.h>
 #include <sleep/sleep.h>
 
