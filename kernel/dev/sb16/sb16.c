@@ -100,44 +100,6 @@ void sb16_speaker_off(struct device* dev) {
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SPEAKER_OFF);
 }
 
-void sb16_init_dma(struct device* dev, uint64_t address, uint32_t len) {
-	uint16_t page = address >> 16;
-	uint16_t buffer = address - (page << 16);
-
-//	kprintf("page %#X\n", page);
-//	kprintf("buffer %#X\n", buffer);
-
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
-	// disable channel 1 (number of channel + 0x04)
-	asm_out_b(ISA_DMA_CHAN03_SINGLE_CHANNEL_MASK_REGISTER, 0x05);
-
-	// reset flip flip
-	asm_out_b(ISA_DMA_CHAN03_FLIP_FLOP_RESET_REGISTER, 0x01);
-	
-	// transfer mode
-	uint8_t mode=ISA_DMA_SINGLE_MODE|ISA_DMA_ADDRESS_INCREMENT|ISA_DMA_SINGLE_CYCLE|ISA_DMA_READ_TRANSFER|ISA_DMA_CHANNEL_1_5;
-	asm_out_b(ISA_DMA_CHAN03_MODE_REGISTER, mode);
-
-	// PAGE TRANSFER
-	asm_out_b(ISA_DMA_CHANNEL_PAGE_ADDRESS_1, page);
-
-	// POSITION LOW BITBYTE
-	asm_out_b(ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5, LOW_OF_W(buffer));
-
-	// POSITON HIGH BITBYTE
-	asm_out_b(ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5, HIGH_OF_W(buffer));
-
-	// COUNT LOW BYTE
-	asm_out_b(ISA_DMA_CHAN03_COUNT_REGISTER_1_5, LOW_OF_W(DMA_SIZE-1));
-
-	// COUNT HIGH BYTE
-	asm_out_b(ISA_DMA_CHAN03_COUNT_REGISTER_1_5, HIGH_OF_W(DMA_SIZE-1));
-
-	// enable channel 1
-	asm_out_b(ISA_DMA_CHAN03_SINGLE_CHANNEL_MASK_REGISTER, ISA_DMA_CHANNEL_1_5);
-}
-
 /*
 * https://wiki.osdev.org/Sound_Blaster_16
 */
@@ -190,7 +152,7 @@ void play(struct device* dev, uint8_t* buffer, uint32_t len) {
 
 	sb16_reset(dev);
 	sb16_speaker_on(dev);
-	sb16_init_dma(dev, DMA_AREA_ADDRESS, DMA_SIZE);
+	isadma_init_dma_read(SB16_DMA, DMA_AREA_ADDRESS, DMA_SIZE);
 
 	// set time constant
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
