@@ -12,6 +12,7 @@
 #include <devicemgr/deviceapi/deviceapi_serial.h>
 #include <panic/assert.h>
 #include <console/console.h>
+#include <collection/ringbuffer/ringbuffer.h>
 
 #define COM1_ADDRESS (uint16_t) 0x3F8
 #define COM2_ADDRESS (uint16_t) 0x2F8
@@ -21,9 +22,11 @@
 #define SERIAL_IRQ1 (uint8_t) 0x3
 #define SERIAL_IRQ2 (uint8_t) 0x4
 
-struct comport {
+struct serial_devicedata {
     uint8_t irq;
     uint16_t address;
+    struct ringbuffer* buffer;
+
 } __attribute__((packed));
 
 struct rs232_16550 {
@@ -38,22 +41,22 @@ struct rs232_16550 {
 } __attribute__((packed)) rs232_16550_t;
 
 int is_transmit_empty() {
-    struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
-    uint8_t data = asm_in_b((uint64_t)&(com1->linestatus));
+    struct rs232_16550* comport = (struct rs232_16550*) COM1_ADDRESS;
+    uint8_t data = asm_in_b((uint64_t)&(comport->linestatus));
     return data & 0x20;
 }
 
 void serial_write_char(const uint8_t c){
-    struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
+    struct rs232_16550* comport = (struct rs232_16550*) COM1_ADDRESS;
 
     while (is_transmit_empty() == 0);
-    asm_out_b((uint64_t) &(com1->data),c);
+    asm_out_b((uint64_t) &(comport->data),c);
 }
 
 void serial_irq_handler(stackFrame *frame){
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
-    struct rs232_16550* com1 = (struct rs232_16550*) COM1_ADDRESS;
-    uint8_t data = asm_in_b((uint64_t)&(com1->data));
+    struct rs232_16550* comport = (struct rs232_16550*) COM1_ADDRESS;
+    uint8_t data = asm_in_b((uint64_t)&(comport->data));
 
     // echo the data
     serial_write_char(data);
@@ -69,22 +72,22 @@ void serial_write(const uint8_t* c){
 // https://wiki.osdev.org/Serial_Ports
 void init_port(uint64_t portAddress) {
 
-    struct rs232_16550* com1 = (struct rs232_16550*) portAddress;
+    struct rs232_16550* comport = (struct rs232_16550*) portAddress;
 
     // enable interrupt on received data
-    asm_out_b((uint64_t)&(com1->interrupt),0x01);
+    asm_out_b((uint64_t)&(comport->interrupt),0x01);
 
     // set 38400 baud
-    asm_out_b((uint64_t)&(com1->linecontrol),0x80);
-    asm_out_b((uint64_t)&(com1->data),0x03);
-    asm_out_b((uint64_t)&(com1->interrupt),0x00);
-    asm_out_b((uint64_t)&(com1->linecontrol),0x03);
+    asm_out_b((uint64_t)&(comport->linecontrol),0x80);
+    asm_out_b((uint64_t)&(comport->data),0x03);
+    asm_out_b((uint64_t)&(comport->interrupt),0x00);
+    asm_out_b((uint64_t)&(comport->linecontrol),0x03);
 
     // FIFO on
-    asm_out_b((uint64_t)&(com1->fifocontrol),0xC7);
+    asm_out_b((uint64_t)&(comport->fifocontrol),0xC7);
 
     // IRQ on, RTD/DSR set
-    asm_out_b((uint64_t)&(com1->modemcontrol),0x0B);
+    asm_out_b((uint64_t)&(comport->modemcontrol),0x0B);
 }
 
 /*
@@ -92,10 +95,10 @@ void init_port(uint64_t portAddress) {
 */
 void deviceInitSerial(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
-    struct comport* cp = (struct comport*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, cp->irq, dev->name);
-    interrupt_router_register_interrupt_handler(cp->irq, &serial_irq_handler);
-    init_port(cp->address);
+    struct serial_devicedata* deviceData = (struct serial_devicedata*) dev->deviceData;
+    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, deviceData->irq, dev->name);
+    interrupt_router_register_interrupt_handler(deviceData->irq, &serial_irq_handler);
+    init_port(deviceData->address);
 }
 
 void deviceTypeSerial_write(struct device* dev, const int8_t* c) {
@@ -107,15 +110,16 @@ void registerRS232Device(uint8_t irq, uint64_t base) {
     /*
     * ISA serial port specific data
     */
-    struct comport* cp = kmalloc(sizeof(struct comport));
-    cp->irq=irq;
-    cp->address=base;
+    struct serial_devicedata* deviceData = kmalloc(sizeof(struct serial_devicedata));
+    deviceData->irq=irq;
+    deviceData->address=base;
+    deviceData->buffer = ringbuffer_new();
     /*
     * the device instance
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInitSerial;
-    deviceinstance->deviceData = cp;
+    deviceinstance->deviceData = deviceData;
     deviceinstance->devicetype = SERIAL;
     devicemgr_set_device_description(deviceinstance, "RS232");
     /*
