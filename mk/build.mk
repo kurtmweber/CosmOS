@@ -55,4 +55,3 @@ QEMUARGS=                                                 \
 
 # -device AC97,audiodev=audio0
 # -device adlib,audiodev=audio0
-
