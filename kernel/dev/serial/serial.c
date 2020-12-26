@@ -12,6 +12,7 @@
 #include <devicemgr/deviceapi/deviceapi_serial.h>
 #include <panic/panic.h>
 #include <console/console.h>
+#include <collection/ringbuffer/ringbuffer.h>
 
 #define COM1_ADDRESS (uint16_t) 0x3F8
 #define COM2_ADDRESS (uint16_t) 0x2F8
@@ -24,6 +25,8 @@
 struct comport {
     uint8_t irq;
     uint16_t address;
+    struct ringbuffer* buffer;
+
 } __attribute__((packed));
 
 struct rs232_16550 {
@@ -110,6 +113,7 @@ void registerRS232Device(uint8_t irq, uint64_t base) {
     struct comport* cp = kmalloc(sizeof(struct comport));
     cp->irq=irq;
     cp->address=base;
+    cp->buffer = ringbuffer_new();
     /*
     * the device instance
     */
