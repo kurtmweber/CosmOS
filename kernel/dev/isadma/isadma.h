@@ -19,6 +19,6 @@ void isadma_init_dma_read(uint8_t channel, uint64_t address, uint32_t len);
 /*
 * device writing to memory
 */
-//void isadma_init_dma_write8(uint8_t channel, uint64_t address, uint32_t len);
+void isadma_init_dma_write8(uint8_t channel, uint64_t address, uint32_t len);
 
 #endif

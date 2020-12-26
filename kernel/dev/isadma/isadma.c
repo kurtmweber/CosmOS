@@ -97,6 +97,7 @@ struct isa_dma_channel_parameters {
 	uint32_t DMAClearReg;
 	uint32_t DMAModeReg;
 	bool eightbit;	
+	uint8_t  DMAChannelFlags; // bits 0:1 in channel mode registers
 };
 
 /*
@@ -171,41 +172,49 @@ void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parame
 			parameters->DMAAddressPort=ISA_DMA_CHAN03_START_ADDRESS_REGISTER_0_4;
 			parameters->DMACountPort=ISA_DMA_CHAN03_COUNT_REGISTER_0_4;
 			parameters->DMAPagePort=ISA_DMA_CHANNEL_PAGE_ADDRESS_0;
+			parameters->DMAChannelFlags=ISA_DMA_CHANNEL_0_4;
 			break;
 		case 1:
 			parameters->DMAAddressPort=ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5;
 			parameters->DMACountPort=ISA_DMA_CHAN03_COUNT_REGISTER_1_5;
 			parameters->DMAPagePort=ISA_DMA_CHANNEL_PAGE_ADDRESS_1;
+			parameters->DMAChannelFlags=ISA_DMA_CHANNEL_1_5;
 			break;
 		case 2:
 			parameters->DMAAddressPort=ISA_DMA_CHAN03_START_ADDRESS_REGISTER_2_6;
 			parameters->DMACountPort=ISA_DMA_CHAN03_COUNT_REGISTER_2_6;
 			parameters->DMAPagePort=ISA_DMA_CHANNEL_PAGE_ADDRESS_2;
+			parameters->DMAChannelFlags=ISA_DMA_CHANNEL_2_6;
 			break;
 		case 3:
 			parameters->DMAAddressPort=ISA_DMA_CHAN03_START_ADDRESS_REGISTER_3_7;
 			parameters->DMACountPort=ISA_DMA_CHAN03_COUNT_REGISTER_3_7;
 			parameters->DMAPagePort=ISA_DMA_CHANNEL_PAGE_ADDRESS_3;
+			parameters->DMAChannelFlags=ISA_DMA_CHANNEL_3_7;
 			break;
 		case 4:
 			parameters->DMAAddressPort=ISA_DMA_CHAN47_START_ADDRESS_REGISTER_0_4;
 			parameters->DMACountPort=ISA_DMA_CHAN47_COUNT_REGISTER_0_4;
 			parameters->DMAPagePort=ISA_DMA_CHANNEL_PAGE_ADDRESS_4;
+			parameters->DMAChannelFlags=ISA_DMA_CHANNEL_0_4;
 			break;
 		case 5:
 			parameters->DMAAddressPort=ISA_DMA_CHAN47_START_ADDRESS_REGISTER_1_5;
 			parameters->DMACountPort=ISA_DMA_CHAN47_COUNT_REGISTER_1_5;
 			parameters->DMAPagePort=ISA_DMA_CHANNEL_PAGE_ADDRESS_5;
+			parameters->DMAChannelFlags=ISA_DMA_CHANNEL_1_5;
 			break;
 		case 6:
 			parameters->DMAAddressPort=ISA_DMA_CHAN47_START_ADDRESS_REGISTER_2_6;
 			parameters->DMACountPort=ISA_DMA_CHAN47_COUNT_REGISTER_2_6;
 			parameters->DMAPagePort=ISA_DMA_CHANNEL_PAGE_ADDRESS_6;
+			parameters->DMAChannelFlags=ISA_DMA_CHANNEL_2_6;
 			break;
 		case 7:
 			parameters->DMAAddressPort=ISA_DMA_CHAN47_START_ADDRESS_REGISTER_3_7;
 			parameters->DMACountPort=ISA_DMA_CHAN47_COUNT_REGISTER_3_7;
 			parameters->DMAPagePort=ISA_DMA_CHANNEL_PAGE_ADDRESS_7;
+			parameters->DMAChannelFlags=ISA_DMA_CHANNEL_3_7;
 			break;
 	}
 	if (channel <4){
@@ -221,15 +230,21 @@ void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parame
 	}
 }
 
-void isadma_init_dma_read(uint8_t channel, uint64_t address, uint32_t len) {
+/*
+* this function shared by read and write
+*/
+void isadma_init_dma(uint8_t channel, uint64_t address, uint32_t len, uint8_t rw_mode) {
+//	kprintf("channel %#X\n", channel);
+
 	ASSERT(channel>=0, "channel must be greater than or equal to 0");
 	ASSERT(channel<=7, "channel must be less than or equal to 7");
+//	ASSERT(channel!=0, "DMA channel 0 is unusable (RAM refresh channel)");
+//	ASSERT(channel!=4, "DMA channel 4 is unusable (cascade channel)");
 
 	uint16_t page = address >> 16;
 	uint16_t buffer = address - (page << 16);
 	struct isa_dma_channel_parameters channel_parameters;
 	getDMAParameters(channel, &channel_parameters);
-//	kprintf("channel %#X\n", channel);
 
 //	kprintf("DMAAddressPort %#X\n", channel_parameters.DMAAddressPort);
 //	kprintf("DMACountPort %#X\n", channel_parameters.DMACountPort);
@@ -245,7 +260,7 @@ void isadma_init_dma_read(uint8_t channel, uint64_t address, uint32_t len) {
 	asm_out_b(channel_parameters.DMAClearReg, 0x01);
 	
 	// transfer mode
-	uint8_t mode=ISA_DMA_SINGLE_MODE|ISA_DMA_ADDRESS_INCREMENT|ISA_DMA_SINGLE_CYCLE|ISA_DMA_READ_TRANSFER|ISA_DMA_CHANNEL_1_5;
+	uint8_t mode=ISA_DMA_SINGLE_MODE|ISA_DMA_ADDRESS_INCREMENT|ISA_DMA_SINGLE_CYCLE|rw_mode|channel_parameters.DMAChannelFlags;
 	asm_out_b(channel_parameters.DMAModeReg, mode);
 
 	// PAGE TRANSFER
@@ -266,3 +281,12 @@ void isadma_init_dma_read(uint8_t channel, uint64_t address, uint32_t len) {
 	// enable channel 1
 	asm_out_b(channel_parameters.DMAMaskReg, ISA_DMA_CHANNEL_1_5);
 }
+
+void isadma_init_dma_read(uint8_t channel, uint64_t address, uint32_t len) {
+	isadma_init_dma(channel, address, len, ISA_DMA_READ_TRANSFER);
+}
+
+void isadma_init_dma_write(uint8_t channel, uint64_t address, uint32_t len) {
+	isadma_init_dma(channel, address, len, ISA_DMA_WRITE_TRANSFER);
+}
+
