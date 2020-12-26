@@ -238,8 +238,8 @@ void isadma_init_dma(uint8_t channel, uint64_t address, uint32_t len, uint8_t rw
 
 	ASSERT(channel>=0, "channel must be greater than or equal to 0");
 	ASSERT(channel<=7, "channel must be less than or equal to 7");
-//	ASSERT(channel!=0, "DMA channel 0 is unusable (RAM refresh channel)");
-//	ASSERT(channel!=4, "DMA channel 4 is unusable (cascade channel)");
+	ASSERT(channel!=0, "DMA channel 0 is unusable (RAM refresh channel)");
+	ASSERT(channel!=4, "DMA channel 4 is unusable (cascade channel)");
 
 	uint16_t page = address >> 16;
 	uint16_t buffer = address - (page << 16);
