@@ -12,7 +12,7 @@ kernel: cosmos
 cosmos: $(KERNEL_ELF)
 	$(OBJCOPY) $(OBJCOPYFLAGS) $(KERNEL_ELF) $(KERNEL_BIN)
 
-$(KERNEL_ELF): dev-subsystem cosmos.o asm-dir console-dir interrupts-dir mm-dir panic-dir string-dir sleep-dir video-dir devicemgr-dir collection-dir ethernet-dir
+$(KERNEL_ELF): dev-subsystem cosmos.o asm-dir console-dir interrupts-dir mm-dir panic-dir string-dir sleep-dir video-dir devicemgr-dir collection-dir ethernet-dir sound-dir
 	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) \
 	cosmos.o \
 	console/console.a \
@@ -26,7 +26,8 @@ $(KERNEL_ELF): dev-subsystem cosmos.o asm-dir console-dir interrupts-dir mm-dir 
 	devicemgr/devicemgr.a \
 	ethernet/ethernet.o \
 	dev/devs.a \
-	collection/collection.a 
+	collection/collection.a \
+	sound/tone.o 
 
 dev-subsystem:
 	cd dev && $(MAKE)
@@ -67,7 +68,10 @@ collection-dir:
 ethernet-dir:
 	cd ethernet && $(MAKE)
 
-clean: dev-clean kernel-clean asm-dir-clean console-dir-clean interrupts-dir-clean mm-dir-clean panic-dir-clean string-dir-clean sleep-dir-clean video-dir-clean devicemgr-dir-clean collection-dir-clean ethernet-dir-clean
+sound-dir:
+	cd sound && $(MAKE)
+
+clean: dev-clean kernel-clean asm-dir-clean console-dir-clean interrupts-dir-clean mm-dir-clean panic-dir-clean string-dir-clean sleep-dir-clean video-dir-clean devicemgr-dir-clean collection-dir-clean ethernet-dir-clean sound-dir-clean
 
 dev-clean:
 	cd dev && $(MAKE) clean
@@ -77,7 +81,7 @@ kernel-clean: cosmos-o-clean
 
 cosmos-o-clean:
 	$(RM) cosmos.o cosmos.map cosmos.elf
-	
+
 asm-dir-clean:
 	cd asm && $(MAKE) clean
 	
@@ -110,5 +114,8 @@ collection-dir-clean:
 
 ethernet-dir-clean:
 	cd ethernet && $(MAKE) clean
+
+sound-dir-clean:
+	cd sound && $(MAKE) clean
 
 

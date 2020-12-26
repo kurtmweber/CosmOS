@@ -4,19 +4,13 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-/*
-* this file defines the interface that all DSP devices will implement
-*/
-#ifndef _DEVICEAPI_DSP_H
-#define _DEVICEAPI_DSP_H
+
+#ifndef _TONEDATA_H
+#define _TONEDATA_H
 
 #include <types.h>
-#include <devicemgr/devicemgr.h>
 
-typedef void (*dsp_play_function)(struct device* dev, uint8_t* buffer, uint32_t len);
-
-struct deviceapi_dsp {
-    dsp_play_function play;
-};
+extern uint64_t _tone_s, _tone_e;
 
 #endif
+

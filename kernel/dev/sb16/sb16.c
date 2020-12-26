@@ -15,11 +15,15 @@
 #include <panic/panic.h>
 #include <sleep/sleep.h>
 #include <dev/isadma/isadma.h>
+#include <string/string.h>
+
+#define DMA_AREA_ADDRESS 	0x0F04
+#define DMA_SIZE			0x1000		// 4k
 
 // https://wiki.osdev.org/Sound_Blaster_16
 
 #define SB16_IRQ        5
-#define SB16_DMA       1
+#define SB16_DMA        1
 
 // ports
 #define SB16_PORT_MIXER 			0x04
@@ -96,7 +100,13 @@ void sb16_speaker_off(struct device* dev) {
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SPEAKER_OFF);
 }
 
-void sb16_init_dma(struct device* dev) {
+void sb16_init_dma(struct device* dev, uint64_t address, uint32_t len) {
+	uint16_t page = address >> 16;
+	uint16_t buffer = address - (page << 16);
+
+//	kprintf("page %#X\n", page);
+//	kprintf("buffer %#X\n", buffer);
+
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 	// disable channel 1 (number of channel + 0x04)
@@ -106,25 +116,26 @@ void sb16_init_dma(struct device* dev) {
 	asm_out_b(ISA_DMA_CHAN03_FLIP_FLOP_RESET_REGISTER, 0x01);
 	
 	// transfer mode
-	asm_out_b(ISA_DMA_CHAN03_MODE_REGISTER, 0x49);
+	uint8_t mode=ISA_DMA_SINGLE_MODE|ISA_DMA_ADDRESS_INCREMENT|ISA_DMA_SINGLE_CYCLE|ISA_DMA_READ_TRANSFER|ISA_DMA_CHANNEL_1_5;
+	asm_out_b(ISA_DMA_CHAN03_MODE_REGISTER, mode);
 
-	// PAGE TRANSFER (EXAMPLE POSITION IN MEMORY 0x[01]0F04) - SET THIS VALUE FOR YOU
-	asm_out_b(ISA_DMA_CHANNEL_PAGE_ADDRESS_1, 0x01);
+	// PAGE TRANSFER
+	asm_out_b(ISA_DMA_CHANNEL_PAGE_ADDRESS_1, page);
 
-	// POSITION LOW BIT (EXAMPLE POSITION IN MEMORY 0x010F[04]) - SET THIS VALUE FOR YOU
-	asm_out_b(ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5, 0x04);
+	// POSITION LOW BITBYTE
+	asm_out_b(ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5, LOW_OF_W(buffer));
 
-	// POSITON HIGH BIT (EXAMPLE POSITION IN MEMORY 0x01[0F]04) - SET THIS VALUE FOR YOU
-	asm_out_b(ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5, 0x0F);
+	// POSITON HIGH BITBYTE
+	asm_out_b(ISA_DMA_CHAN03_START_ADDRESS_REGISTER_1_5, HIGH_OF_W(buffer));
 
-	// COUNT LOW BIT (EXAMPLE 0x0FFF) - SET THIS VALUE FOR YOU
-	asm_out_b(ISA_DMA_CHAN03_COUNT_REGISTER_1_5, 0xFF);
+	// COUNT LOW BYTE
+	asm_out_b(ISA_DMA_CHAN03_COUNT_REGISTER_1_5, LOW_OF_W(DMA_SIZE-1));
 
-	// COUNT HIGH BIT (EXAMPLE 0x0FFF) - SET THIS VALUE FOR YOU
-	asm_out_b(ISA_DMA_CHAN03_COUNT_REGISTER_1_5, 0x0F);
+	// COUNT HIGH BYTE
+	asm_out_b(ISA_DMA_CHAN03_COUNT_REGISTER_1_5, HIGH_OF_W(DMA_SIZE-1));
 
 	// enable channel 1
-	asm_out_b(ISA_DMA_CHAN03_SINGLE_CHANNEL_MASK_REGISTER, 0x01);
+	asm_out_b(ISA_DMA_CHAN03_SINGLE_CHANNEL_MASK_REGISTER, ISA_DMA_CHANNEL_1_5);
 }
 
 /*
@@ -163,19 +174,32 @@ void sb16_init_dma(struct device* dev) {
 //   OUTB 0x22C, 0x0F ;COUNT HIGH BIT - COUNT LENGHT-1 (EXAMPLE 0x0FFF SO 0x0FFE) - SET THIS VALUE FOR YOU
  
 //   ;now transfer start - dont forget to handle irq
-void play(struct device* dev) {
+void play(struct device* dev, uint8_t* buffer, uint32_t len) {
+//	kprintf("Data %#X %#X %#X %#X %#X\n",buffer[0],buffer[1],buffer[2],buffer[3],buffer[4]);
+
+	uint32_t chunks = len / DMA_SIZE;
+//	kprintf("chunks len dma %#X %#X %#X\n", chunks, len, DMA_SIZE);
+
+	uint8_t* address = (uint8_t*)DMA_AREA_ADDRESS;
+
+	memcpy((void*) DMA_AREA_ADDRESS, buffer, DMA_SIZE);
+//	kprintf("Data %#X %#X %#X %#X %#X\n",(uint8_t*) address[0],(uint8_t*) address[1],(uint8_t*) address[2],(uint8_t*) address[3],(uint8_t*) address[4]);
+
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 
 	sb16_reset(dev);
 	sb16_speaker_on(dev);
-	sb16_init_dma(dev);
+	sb16_init_dma(dev, DMA_AREA_ADDRESS, DMA_SIZE);
 
 	// set time constant
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
 	
-	// 10989 Hz
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 165);
+	// 256 - (1000000 / (SampleChannels * SampleRate))
+	// for 10898 hz we get 256 - (1000000/10989)=165
+	// for 44100 hz we get 256 - (1000000/44100)=234
+	// 44100 Hz
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 234);
 
 	// 8 bit sound
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_TRANSFER_8BIT);
@@ -183,13 +207,12 @@ void play(struct device* dev) {
 	// mono and unsigned sound data
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00);
 
-	// COUNT LOW BIT - COUNT LENGHT-1 (EXAMPLE 0x0FFF SO 0x0FFE) - SET THIS VALUE FOR YOU
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xFE);
+	// COUNT LOW BYTE - COUNT LENGTH-1
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, LOW_OF_W(DMA_SIZE-1));
 
-	// COUNT HIGH BIT - COUNT LENGHT-1 (EXAMPLE 0x0FFF SO 0x0FFE) - SET THIS VALUE FOR YOU
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x0F);
+	// COUNT HIGH BYTE - COUNT LENGTH-1
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, HIGH_OF_W(DMA_SIZE-1));
 }
-
 
 void sb16_devicemgr_register_device(uint64_t port){
    /*

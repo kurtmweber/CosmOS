@@ -25,6 +25,7 @@
 #include <devicemgr/deviceapi/deviceapi_serial.h>
 #include <devicemgr/deviceapi/deviceapi_cpu.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
+#include <tonedata.h>
 
 void stringtest();
 void BeethovensFifth();
@@ -85,6 +86,7 @@ void CosmOS(){
 	asm_sti();
 
 	show_cpu_data();
+
 	playsb16();
 	/*
 	* run various functions to show that things work....
@@ -245,11 +247,19 @@ void BeethovensFifth() {
 }
 
 void playsb16() {
+	
+	uint64_t start = (uint64_t)&_tone_s;
+	uint64_t end = (uint64_t)&_tone_e;
+	uint64_t size = (uint64_t)&_tone_e-(uint64_t)&_tone_s;
+
+	// show the tone data.  byte size should be the same as tone8.raw
+	kprintf("Tone Data is from %#X to %#X with byte size %llu\n",start ,end, size);
+	
 	// get the sb
 	struct device* dsp = devicemgr_findDevice("dsp0");
 	struct deviceapi_dsp* dsp_api = (struct deviceapi_dsp*) dsp->api;
 	dsp_play_function play_func = dsp_api->play;
-	(*play_func)(dsp);
+	(*play_func)(dsp, (uint8_t*)start, size);
 }
 
 void chirp() {

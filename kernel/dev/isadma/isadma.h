@@ -82,6 +82,13 @@
 #define ISA_DMA_WRITE_TRANSFER 							    0x04 //01
 #define ISA_DMA_READ_TRANSFER 								0x08 //10
 
+// channel, bits 1:0
+#define ISA_DMA_CHANNEL_0_4 								0x00 //00
+#define ISA_DMA_CHANNEL_1_5								    0x01 //01
+#define ISA_DMA_CHANNEL_2_6								    0x02 //10
+#define ISA_DMA_CHANNEL_3_7								    0x03 //11
+
+
 void isadma_devicemgr_register_devices();
 
 void isadma_read(uint8_t channel, uint64_t* address, uint16_t size);
