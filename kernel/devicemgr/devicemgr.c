@@ -109,7 +109,9 @@ void devicemgr_init_devices(){
     /*
     * DMA
     */
-    deviceregistry_iterate_type(DMA, deviceInitIterator);
+   //    // TODO DMA disabled for now until we can allocate DMA mem
+
+//    deviceregistry_iterate_type(DMA, deviceInitIterator);
     /*
     * everything else
     */
@@ -121,8 +123,10 @@ void devicemgr_init_devices(){
     deviceregistry_iterate_type(BRIDGE, deviceInitIterator);
     deviceregistry_iterate_type(ATA, deviceInitIterator);
     deviceregistry_iterate_type(MOUSE, deviceInitIterator);
-    deviceregistry_iterate_type(FLOPPY, deviceInitIterator);
-    deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
+  
+    // TODO floppy and speaker disabled for now until we can allocate DMA mem
+  //  deviceregistry_iterate_type(FLOPPY, deviceInitIterator);
+ //   deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
     deviceregistry_iterate_type(DSP, deviceInitIterator);
 }
 

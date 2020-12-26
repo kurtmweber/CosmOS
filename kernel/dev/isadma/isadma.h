@@ -15,10 +15,17 @@ void isadma_devicemgr_register_devices();
 /*
 * device reading from memory
 */
-void isadma_init_dma_read(uint8_t channel, uint64_t address, uint32_t len);
+void isadma_init_dma_read(uint8_t channel, uint16_t len);
 /*
 * device writing to memory
 */
-void isadma_init_dma_write8(uint8_t channel, uint64_t address, uint32_t len);
+void isadma_init_dma_write8(uint8_t channel, uint16_t);
 
+/*
+* this is a horrible hack, for now. ISA DMA can only take place
+* in the lower 64MB of RAM and the memory block can't cross
+* a 16MB boundary.  This function returns such a block.  Really, it
+* should delegate to a function in mm.h
+*/
+uint64_t isadma_get_dma_block(uint8_t channel, uint16_t len);
 #endif

@@ -87,7 +87,7 @@ void CosmOS(){
 
 	show_cpu_data();
 
-	playsb16();
+//	playsb16();
 	/*
 	* run various functions to show that things work....
 	*/

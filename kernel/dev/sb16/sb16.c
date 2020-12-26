@@ -17,7 +17,7 @@
 #include <dev/isadma/isadma.h>
 #include <string/string.h>
 
-#define DMA_AREA_ADDRESS 	0x0F04
+//#define DMA_AREA_ADDRESS 	0x0F04
 #define DMA_SIZE			0x1000		// 4k
 
 // https://wiki.osdev.org/Sound_Blaster_16
@@ -137,22 +137,25 @@ void sb16_speaker_off(struct device* dev) {
  
 //   ;now transfer start - dont forget to handle irq
 void play(struct device* dev, uint8_t* buffer, uint32_t len) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(buffer, "buffer cannot be null");
+
 //	kprintf("Data %#X %#X %#X %#X %#X\n",buffer[0],buffer[1],buffer[2],buffer[3],buffer[4]);
 
 	uint32_t chunks = len / DMA_SIZE;
 //	kprintf("chunks len dma %#X %#X %#X\n", chunks, len, DMA_SIZE);
 
-	uint8_t* address = (uint8_t*)DMA_AREA_ADDRESS;
+	uint64_t* address = (uint64_t*) isadma_get_dma_block(1, DMA_SIZE);
+	kprintf("DMA block for SB16 dma %#X \n", address);
 
-	memcpy((void*) DMA_AREA_ADDRESS, buffer, DMA_SIZE);
+	memcpy(address, buffer, DMA_SIZE);
 //	kprintf("Data %#X %#X %#X %#X %#X\n",(uint8_t*) address[0],(uint8_t*) address[1],(uint8_t*) address[2],(uint8_t*) address[3],(uint8_t*) address[4]);
 
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 
 	sb16_reset(dev);
 	sb16_speaker_on(dev);
-	isadma_init_dma_read(SB16_DMA, DMA_AREA_ADDRESS, DMA_SIZE);
+	isadma_init_dma_read(SB16_DMA, DMA_SIZE);
 
 	// set time constant
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
