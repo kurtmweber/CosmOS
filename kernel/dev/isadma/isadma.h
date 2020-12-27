@@ -10,10 +10,9 @@
 
 #include <types.h>
 
-// buffer-related stuff = 128kb in size, 64kb-aligned
 #define ISA_DMA_64M             0x4000000                                // DMA chips can only use first 64M RAM
 #define ISA_DMA_NUM_BUFFERS     0x08                                     // There are 8 channels
-#define ISA_DMA_BUFFER_SIZE     0x4000
+#define ISA_DMA_BUFFER_SIZE     0x4000                                   // 16k blocks
 #define ISA_DMA_ALIGNMENT       0x10000                                  // channels must be 64k aligned
 #define ISA_DMA_BUFSIZ          ISA_DMA_NUM_BUFFERS* ISA_DMA_BUFFER_SIZE // 0x20000
 
@@ -33,6 +32,9 @@ void isadma_init_dma_write8(uint8_t channel, uint16_t);
 */
 uint64_t isadma_get_dma_block(uint8_t channel, uint16_t len);
 
+/*
+* location of the DMA buffers, set by the MM
+*/
 extern void *isadma_buf;
 
 #endif
