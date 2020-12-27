@@ -28,4 +28,7 @@ void isadma_init_dma_write8(uint8_t channel, uint16_t);
 * should delegate to a function in mm.h
 */
 uint64_t isadma_get_dma_block(uint8_t channel, uint16_t len);
+
+extern void *isadma_buf;
+
 #endif
