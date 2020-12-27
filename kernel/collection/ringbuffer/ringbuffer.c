@@ -9,70 +9,56 @@
 #include <mm/mm.h>
 #include <panic/panic.h>
 
-struct ringbuffer* ringbuffer_new(uint16_t size) {
-    struct ringbuffer* ret = (struct ringbuffer*) kmalloc(sizeof(ringbuffer_t));
-    ret->arr = array_new(size);
-    ret->head=0;
-    ret->tail=0;
-}
+#define RINGBUFFER_SIZE 256
 
-void ringbuffer_delete(struct ringbuffer* rb) {
-    if (0!=rb){
-        if (0==rb->arr){
-            panic("why is the underlying array null?!");
-        }
-        array_delete(rb->arr);
-        kfree(rb);
+void ringbuffer_add(struct ringbuffer* buffer, void* add) {
+	ASSERT_NOT_NULL(buffer, "ringbuffer cannot be null");
+    buffer->data[buffer->end] = add;
+
+    if (buffer->end == RINGBUFFER_SIZE){
+        buffer->end = 0;
     } else {
-        panic("null ringbuffer\n");
+        buffer->end++;
     }
-}
-
-void ringbuffer_add(struct ringbuffer* rb, uint64_t value) {
-    if (0!=rb){
-        if (0==rb->arr){
-            panic("why is the underlying array null?!");
-        }
-        if (rb->head > rb->tail) {
-            array_set(rb->arr, rb->head, (void*) value);
-            rb->head=rb->head+1;
-            // wrap
-            if (rb->head == array_size(rb->arr)){
-                rb->head=0;
-            }
-        }  else {
-            panic("ringbuffer overflow");
-        }
-    } else {
-        panic("null ringbuffer\n");
-    }   
-}
-
-uint64_t ringbuffer_remove(struct ringbuffer* rb) {
-    if (0!=rb){
-        if (0==rb->arr){
-            panic("why is the underlying array null?!");
-        }
-        if (rb->head > rb->tail) {
-            uint64_t ret = (uint64_t) array_get(rb->arr, rb->tail);      
-            rb->tail=rb->tail+1;
-            // wrap
-            if (rb->tail == array_size(rb->arr)){
-                rb->tail=0;
-            }
+    
+    if (buffer->end == buffer->start){
+        if (buffer->start == RINGBUFFER_SIZE){
+            buffer->start = 0;
         } else {
-            panic("ringbuffer underflow");
+            buffer->start++;
         }
-    } else {
-        panic("null ringbuffer\n");
-    }   
+    }	
 }
 
-uint16_t ringbuffer_available(struct ringbuffer* rb) {
-     if (0!=rb){
-        return (rb->head - rb->tail);
+void* ringbuffer_consume(struct ringbuffer* buffer) {
+	ASSERT_NOT_NULL(buffer, "ringbuffer cannot be null");
+
+    uint16_t i;
+    
+    if ((buffer->end == 0) && (buffer->start == 0)){
+        return 0;
+    }
+    
+    i = buffer->start;	// we need this so we can return keyboard_buffer[i] in case we reset keyboard_buffer_start and keyboard_buffer_end to 0 if we reach the end
+    
+    if (buffer->start == RINGBUFFER_SIZE){
+        buffer->start = 0;
     } else {
-        panic("null ringbuffer\n");
-    }     
+        buffer->start++;
+    }
+    
+    if (buffer->start == buffer->end){
+        buffer->start = 0;
+        buffer->end = 0;
+    }
+    return buffer->data[i];
+}
+
+struct ringbuffer* ringbuffer_new() {
+    struct ringbuffer* ret = (struct ringbuffer*) kmalloc(sizeof(struct ringbuffer));
+    ret->start = 0;
+    ret->end=0;
+    ret->data = kmalloc(sizeof(void*)*RINGBUFFER_SIZE);
+    return ret;
 }
 

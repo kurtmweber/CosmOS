@@ -11,24 +11,40 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <dev/pci/pci.h>
+#include <panic/panic.h>
+
+struct intel440fx_deviceddata {
+    uint64_t base;
+} __attribute__((packed));
 
 /*
 * perform device instance specific init here
 */
 void deviceInitI440fx(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
-}
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct intel440fx_deviceddata* deviceData = (struct intel440fx_deviceddata*) dev->deviceData;
+    deviceData->base = pci_calcbar(dev->pci);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
+ }
 
 void I440fxSearchCB(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &deviceInitI440fx;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = BRIDGE;
     devicemgr_set_device_description(deviceinstance, "Intel i440FX PCI Bridge");
+	/*
+	* device data
+	*/
+	struct intel440fx_deviceddata* deviceData = (struct intel440fx_deviceddata*) kmalloc(sizeof(struct intel440fx_deviceddata));
+	deviceinstance->deviceData = deviceData;
+    /*
+    * register
+    */
     devicemgr_register_device(deviceinstance);
 }
 

@@ -12,6 +12,4 @@
 
 void mouse_devicemgr_register_devices();
 
-extern struct mouse_status* current_mouse_status;
-
 #endif

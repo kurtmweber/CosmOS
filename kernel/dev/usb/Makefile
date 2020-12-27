@@ -5,10 +5,10 @@ ARFLAGS=-crs
 
 all: usb.a
 
-usb.a: usb.o 
+usb.a: usb_controller.o 
 	$(AR) $(ARFLAGS) $@ $^
 	
-usb.o: usb.c
+usb_controller.o: usb_controller.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
 
 clean:

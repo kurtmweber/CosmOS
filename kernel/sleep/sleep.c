@@ -7,7 +7,8 @@
 
 #include <asm/asm.h>
 #include <console/console.h>
-#include <dev/rtc/rtc.h>
+#include <devicemgr/devicemgr.h>
+#include <panic/panic.h>
 
 volatile uint64_t sleep_countdown;
 
@@ -23,7 +24,7 @@ void sleep_update(){
 	return;
 }
 
-void sleep_wait(uint64_t milliseconds){
+void sleep_wait(uint64_t milliseconds) {
 	uint64_t tc;	// temporary count while we're working up to full value
 	
 	// to avoid getting progressively farther off due to the effects of integer division, we start by finding out

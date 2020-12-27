@@ -8,6 +8,7 @@
 #include <types.h>
 #include <asm/asm.h>
 #include <interrupts/interrupts.h>
+#include <panic/panic.h>
 
 #define IDT_SIZE 256
 
@@ -46,6 +47,7 @@ void idt_init(){
 }
 
 void idt_add_ISR(void *func, intVectors vector){
+	ASSERT_NOT_NULL(func, "func cannot be null");
 	idt[vector].offsetWordLow = (uint16_t)((uint64_t)func & 0xFFFF);
 	idt[vector].selector = 8;
 	idt[vector].ist = 0;

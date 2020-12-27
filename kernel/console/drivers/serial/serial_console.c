@@ -6,6 +6,7 @@
 
 #include <console/drivers/drivers.h>
 #include <console/drivers/serial/serial_console.h>
+#include <devicemgr/deviceapi/deviceapi_serial.h>
 #include <dev/serial/serial.h>
 
 void serial_console_init(){	
@@ -13,7 +14,7 @@ void serial_console_init(){
 }
 
 uint8_t serial_console_write(const char *c) {
-    serial_write(c);
+	 serial_write(c);
 }
 
 void serial_console_register(){

@@ -5,13 +5,10 @@ ARFLAGS=-crs
 
 all: rtc.a
 
-rtc.a: rtc.o cmos.o
+rtc.a: rtc.o
 	$(AR) $(ARFLAGS) $@ $^
 	
 rtc.o: rtc.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
-cmos.o: cmos.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 
 clean:

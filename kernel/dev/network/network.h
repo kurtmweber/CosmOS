@@ -12,6 +12,7 @@
 #include <dev/network/ne2000isa/ne2000isa.h>
 #include <dev/network/rtl8139/rtl8139.h>
 #include <dev/network/e1000/e1000.h>
+#include <dev/virtio/vnic/vnic.h>
 
 void network_devicemgr_register_devices();
 

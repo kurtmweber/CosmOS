@@ -17,6 +17,8 @@
 #include <types.h>
 #include <asm/io.h>
 #include <sleep/sleep.h>
+#include <devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <panic/panic.h>
 
 // REGISTERS
 #define CR				0x00 // Command Register
@@ -123,20 +125,36 @@
 */
 uint8_t net_mac_pci[6];
 
+struct ne2000pci_devicedata {
+    uint64_t base;
+} __attribute__((packed));
+
 void ne2000pci_init(void);
 
 void ne2000pci_irq_handler(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	kprintf("%");
 }
 /*
 * perform device instance specific init here
 */
 void NE200PCIInit(struct device* dev){
-    struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    interrupt_router_register_interrupt_handler(pci_dev->irq, &ne2000pci_irq_handler);
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX\n",dev->description, pci_dev->irq,pci_dev->vendor_id, pci_dev->device_id);
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    struct ne2000pci_devicedata* deviceData = (struct ne2000pci_devicedata*) dev->deviceData;
+    deviceData->base = pci_calcbar(dev->pci);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &ne2000pci_irq_handler);
     // do the init
     ne2000pci_init();
+}
+
+void ne2000pci_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Ethernet read not implemented yet");
+}
+void ne2000pci_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Ethernet write not implemented yet");
 }
 
 void NE2000PCISearchCB(struct pci_device* dev){
@@ -145,9 +163,25 @@ void NE2000PCISearchCB(struct pci_device* dev){
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &NE200PCIInit;
-    deviceinstance->deviceData = dev;
+    deviceinstance->pci = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "NE2000 PCI");
+    /*
+    * the device api
+    */
+    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*) kmalloc(sizeof(struct deviceapi_ethernet));
+    api->write = &ne2000pci_ethernet_read;
+    api->read = &ne2000pci_ethernet_write;
+    deviceinstance->api = api;
+   /*
+    * the deviceData
+    */
+    struct ne2000pci_devicedata* deviceData = (struct ne2000pci_devicedata*) kmalloc(sizeof(struct ne2000pci_devicedata));
+    deviceData->base = 0;
+    deviceinstance->deviceData = deviceData;
+    /*
+    * register
+    */
     devicemgr_register_device(deviceinstance);
 }
 

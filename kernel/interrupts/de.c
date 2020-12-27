@@ -10,5 +10,6 @@
 #include <interrupts/interrupts.h>
 
 __attribute__ ((interrupt)) void isrDE(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	panic("Division by zero!");
 }

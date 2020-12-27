@@ -5,8 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/rtc/cmos.h>
+#include <dev/cmos/cmos.h>
 #include <asm/asm.h>
+#include <devicemgr/devicemgr.h>
+#include <console/console.h>
+#include <panic/panic.h>
 
 void cmos_write_register(uint8_t reg, uint8_t val){
 	uint8_t pv;
@@ -32,4 +35,24 @@ uint8_t cmos_read_register(uint8_t reg){
 	asm_sti();
 	
 	return b;
+}
+
+/*
+* perform device instance specific init here
+*/
+
+void deviceInitCMOS(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    kprintf("Init %s (%s)\n",dev->description, dev->name);
+}
+
+void cmos_devicemgr_register_devices(){
+    /*
+	* register device
+	*/
+	struct device* deviceinstance = devicemgr_new_device();
+	devicemgr_set_device_description(deviceinstance, "i386 CMOS");
+	deviceinstance->devicetype = CMOS;
+	deviceinstance->init =  &deviceInitCMOS;
+	devicemgr_register_device(deviceinstance);
 }

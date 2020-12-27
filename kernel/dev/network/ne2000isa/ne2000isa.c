@@ -16,6 +16,8 @@
 #include <types.h>
 #include <asm/io.h>
 #include <sleep/sleep.h>
+#include <devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <panic/panic.h>
 
 #define NE2000ISA_BASE_ADDRESS 0x300
 #define NE2000ISA_IRQ 9
@@ -128,16 +130,27 @@ uint8_t net_mac_isa[6];
 void ne2000isa_init(void);
 
 void ne2000isa_irq_handler(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	kprintf("%");
 }
 /*
 * perform device instance specific init here
 */
 void NE200ISAInit(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
     interrupt_router_register_interrupt_handler(NE2000ISA_IRQ, &ne2000isa_irq_handler);
-    kprintf("Init %s at IRQ %llu\n",dev->description, NE2000ISA_IRQ);
+    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, NE2000ISA_IRQ, dev->name);
     // do the init
     ne2000isa_init();
+}
+
+void ne2000isa_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Ethernet read not implemented yet");
+}
+void ne2000isa_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Ethernet write not implemented yet");
 }
 
 /**
@@ -151,7 +164,18 @@ void ne2000isa_devicemgr_register_devices() {
     deviceinstance->init =  &NE200ISAInit;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "NE2000 ISA");
-    devicemgr_register_device(deviceinstance);}
+    /*
+    * the device api
+    */
+    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*) kmalloc(sizeof(struct deviceapi_ethernet));
+    api->write = &ne2000isa_ethernet_read;
+    api->read = &ne2000isa_ethernet_write;
+    deviceinstance->api = api;
+    /*
+    * register
+    */
+    devicemgr_register_device(deviceinstance);
+}
 
 void ne2000isa_init() {	
 	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));     // set page 0, turn off DMA, tell the NIC to stop

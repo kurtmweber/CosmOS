@@ -4,16 +4,21 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-
-#ifndef _DEVICETYPE_SERIAL_H
-#define _DEVICETYPE_SERIAL_H
+/*
+* this file defines the interface that all Ethernet devices will implement
+*/
+#ifndef _DEVICEAPI_ETHERNET_H
+#define _DEVICEAPI_ETHERNET_H
 
 #include <types.h>
+#include <devicemgr/devicemgr.h>
 
-typedef void (*DeviceTypeSerial_write)(struct device* dev, const uint8_t* c);
+typedef void (*ethernet_read)(struct device* dev, uint8_t* data, uint8_t* size);
+typedef void (*ethernet__write)(struct device* dev, uint8_t* data, uint8_t* size);
 
-struct DeviceType_serial {
-    DeviceTypeSerial_write deviceTypeSerial_write;
+struct deviceapi_ethernet {
+    ethernet_read read;
+    ethernet__write write;
 };
 
 #endif
