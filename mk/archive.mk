@@ -29,6 +29,10 @@ $(ARCHIVE_FILE): $(OBJS)
 %.o: %.c $(HEADERS_C)
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -c -o $@ $<
 
+# asm files	
+%.o: %.asm
+	$(NASM) $(NASMARGS) -f elf64 $< -o $@ 
+
 clean:
 	$(RM) $(OBJS)
 	$(RM) $(ARCHIVE_FILE)
