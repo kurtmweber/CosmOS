@@ -68,7 +68,7 @@ ethernet-dir:
 	cd ethernet && $(MAKE)
 
 clean: dev-clean kernel-clean asm-dir-clean console-dir-clean interrupts-dir-clean mm-dir-clean panic-dir-clean string-dir-clean sleep-dir-clean video-dir-clean devicemgr-dir-clean collection-dir-clean ethernet-dir-clean
-
+	
 dev-clean:
 	cd dev && $(MAKE) clean
 
