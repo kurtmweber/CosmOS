@@ -4,4 +4,5 @@ ARCHIVE_FILE=rtc.a
 
 include ../../../mk/archive.mk
 
-EXTRA_CFLAGS+=-DRTC_SLEEP
+EXTRA_CFLAGS+=-DRTC_SLEEP -I../..
+

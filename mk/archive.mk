@@ -2,7 +2,6 @@
 ## generic instructions for building an archive
 ## everything below this point is the same for every archive.....
 
-EXTRA_CFLAGS= -I../..
 ARFLAGS=-crs
 SRC_DIR=.
 
