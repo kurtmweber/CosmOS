@@ -107,6 +107,8 @@ struct isa_dma_channel_parameters {
 #define MEM_16k 0x4000
 #define MAX_DMA_SIZE 0x4000 // 16k
 
+void *isadma_buf;
+
 /*
 * perform device instance specific init here
 */

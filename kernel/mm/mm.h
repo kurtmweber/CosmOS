@@ -74,6 +74,7 @@ void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks);
 mem_block *find_containing_block(void *addr, mem_block *list);
 void init_usable_phys_blocks(int_15_map base);
 void sort_usable_phys_blocks();
+void *find_aligned_after(void *address, uint64_t alignment);
 
 extern mem_block init_phys_block;
 extern mem_block *usable_phys_blocks;
