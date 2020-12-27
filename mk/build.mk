@@ -7,6 +7,11 @@
 
 NASM=nasm
 NASMARGS=-O0
+
+# recursively delete objects and archives
+RM_OBJECTS= find . -type f -name '*.o' -exec rm {} +
+RM_ARCHIVES= find . -type f -name '*.a' -exec rm {} +
+
 RM=rm -f
 MAKE=make
 DD=dd
