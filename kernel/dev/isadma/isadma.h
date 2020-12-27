@@ -10,6 +10,10 @@
 
 #include <types.h>
 
+// buffer-related stuff = 128kb in size, 64kb-aligned
+#define ISA_DMA_ALIGNMENT   65536
+#define ISA_DMA_BUFSIZ      131072
+
 void isadma_devicemgr_register_devices();
 
 /*
