@@ -57,6 +57,8 @@
 #define SB16_TRANSFER_FIFO_ON					0x01 // bit 1
 #define SB16_TRANSFER_FIFO_OFF					0x00 // bit 1
 
+
+
 /*
 * device parameters for an sb16
 */
@@ -170,6 +172,9 @@ void play(struct device* dev, uint8_t* buffer, uint32_t len) {
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_TRANSFER_8BIT);
 
 	// mono and unsigned sound data
+	// http://archive.gamedev.net/archive/reference/articles/article443.html
+	// TODO should this be 0x14
+
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00);
 
 	// COUNT LOW BYTE - COUNT LENGTH-1
