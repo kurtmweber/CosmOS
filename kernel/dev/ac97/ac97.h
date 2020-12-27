@@ -5,11 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _USB_H
-#define _USB_H
+#ifndef _AC97_H
+#define _AC97_H
 
 #include <types.h>
 
-void usb_devicemgr_register_devices();
+void ac97_devicemgr_register_devices();
 
 #endif

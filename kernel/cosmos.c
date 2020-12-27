@@ -16,11 +16,23 @@
 #include <video/video.h>
 #include <video/vga/vga.h>
 #include <collection/kernelstring/kernelstring.h>
-#include <dev/dev.h>
 #include <sleep/sleep.h>
 #include <notes.h>
+#include <devicemgr/devicemgr.h>
+#include <devicemgr/deviceapi/deviceapi_rtc.h>
+#include <devicemgr/deviceapi/deviceapi_speaker.h>
+#include <devicemgr/deviceapi/deviceapi_pit.h>
+#include <devicemgr/deviceapi/deviceapi_serial.h>
+#include <devicemgr/deviceapi/deviceapi_cpu.h>
+#include <devicemgr/deviceapi/deviceapi_dsp.h>
 
 void stringtest();
+void BeethovensFifth();
+void chirp();
+void serialMessage(const uint8_t* message);
+void testFunctions();
+void show_cpu_data();
+void playsb16();
 
 void CosmOS(){
 	video_init();
@@ -59,25 +71,96 @@ void CosmOS(){
 	devicemgr_init();
 
 	/*
-	* Register devices
+	* Register all devices
 	*/
-	dev_devicemgr_register_devices();
+	devicemgr_register_devices();
 	kprintf("Registered %llu devices\n", devicemgr_device_count());
 
 	/*
-	* init all devices
+	* Init all devices
 	*/
 	devicemgr_init_devices();
 	kprintf("There are %llu devices\n", devicemgr_device_count());
 
 	asm_sti();
 
-//	speaker_beep(4000,100);
+	show_cpu_data();
+//	playsb16();
+	/*
+	* run various functions to show that things work....
+	*/
+	testFunctions();
+
+	while (1){
+		asm_hlt();
+	}
+}
+
+void show_cpu_data() {
+	/*
+	* show CPU features
+	*/
+	// get the CPU
+	struct device* cpu = devicemgr_findDevice("cpu0");
+	struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
+
+	/*
+	* show all CPU features
+	*/
+	struct cpu_id id;
+	(*cpu_api->features)(&id);
+	kprintf("CPU Features %#X\n", id.edx);
+
+	/*
+	* check if APIC
+	*/
+	bool apic = (*cpu_api->apic)();
+	if(apic){
+		kprintf("APIC present\n");
+	} else {
+		kprintf("APIC not present\n");
+	}
+	
+	/*
+	* show CPU manufacturer
+	*/ 
+  	uint8_t cpu_manufacturer_string[13];
+    (*cpu_api->manufacturer)((uint8_t*)&cpu_manufacturer_string);
+    kprintf("CPU Manufacturer: %s\n", cpu_manufacturer_string);
+}
+
+void testFunctions() {
+	/*
+	* exercise the uniform serial API
+	*/
+	serialMessage("This message brought to you by the uniform serial API, the letters R and S and the Digits 2, 3 and 2\n");
+
+	/*
+	* make some noise
+	*/
+	//chirp();
+	//BeethovensFifth();
+
+	// get the PIT
+	struct device* pit = devicemgr_findDevice("pit0");
+	struct deviceapi_pit* pit_api = (struct deviceapi_pit*) pit->api;
+	pit_tickcount_function tickcount_func = pit_api->tickcount;
 
 	// show the tick count, since we can
-	kprintf("Ticks: %llu\n", pit_tickcount());
+	uint64_t tc = (*tickcount_func)(pit);
+	kprintf("Ticks: %llu\n", tc);
 	sleep_wait(1000);
-	kprintf("Ticks: %llu\n", pit_tickcount());
+	tc = (*tickcount_func)(pit);
+	kprintf("Ticks: %llu\n", tc);
+
+	// get the time, b/c we can
+	struct device* rtc = devicemgr_findDevice("rtc0");
+	struct deviceapi_rtc* rtc_api = (struct deviceapi_rtc*) rtc->api;
+	rtc_time_function time_func = rtc_api->rtc_time;
+	rtc_time_t daTime = (*time_func)(rtc);
+	kprintf("Hour: %llu Minute: %llu Second: %llu\n",daTime.hour, daTime.minute, daTime.second);
+
+
 
 	mem_block *tmp;
 	tmp = usable_phys_blocks;
@@ -95,10 +178,6 @@ void CosmOS(){
 	} while((tmp = tmp->next)); */
 	
 //	stringtest();
-
-	while (1){
-		asm_hlt();
-	}
 }
 
 void stringtest() {
@@ -141,22 +220,54 @@ void stringtest() {
 }
 
 void BeethovensFifth() {
-	speaker_beep(NOTE_G5, 200);
+	// get the speaker
+	struct device* speaker = devicemgr_findDevice("speaker0");
+	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
+	speaker_beep_function beep_func = speaker_api->beep;
+//	(*beep_func)(speaker, 4000, 50);
+	(*beep_func)(speaker,NOTE_G5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_G5, 200);
+	(*beep_func)(speaker,NOTE_G5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_G5, 200);
+	(*beep_func)(speaker,NOTE_G5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_DS5, 400);
+	(*beep_func)(speaker,NOTE_DS5, 400);
 	sleep_wait(400);
 
-	speaker_beep(NOTE_F5, 200);
+	(*beep_func)(speaker,NOTE_F5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_F5, 200);
+	(*beep_func)(speaker,NOTE_F5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_F5, 200);
+	(*beep_func)(speaker,NOTE_F5, 200);
 	sleep_wait(100);
-	speaker_beep(NOTE_D5, 400);
+	(*beep_func)(speaker,NOTE_D5, 400);
 	sleep_wait(100);
+}
+
+void playsb16() {
+	// get the sb
+	struct device* dsp = devicemgr_findDevice("dsp0");
+	struct deviceapi_dsp* dsp_api = (struct deviceapi_dsp*) dsp->api;
+	dsp_play_function play_func = dsp_api->play;
+	(*play_func)(dsp);
+}
+
+void chirp() {
+	// get the speaker
+	struct device* speaker = devicemgr_findDevice("speaker0");
+	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
+	speaker_beep_function beep_func = speaker_api->beep;
+	(*beep_func)(speaker, 4000, 50);
+}
+
+/*
+* write a message via the uniform serial api
+*/
+void serialMessage(const uint8_t* message) {
+   	// get serial0
+	struct device* serial0 = devicemgr_findDevice("serial0");
+	struct deviceapi_serial* serial_api = (struct deviceapi_serial*) serial0->api;
+	serial_write_function write_func = serial_api->write;
+	(*write_func)(serial0, message);	
 }
 

@@ -5,7 +5,10 @@ ARFLAGS=-crs
 
 all: collection.a
 
-collection.a: array.o list.o ringbuffer.o kernelstring.o
+collection.a: array.o \
+	list.o \
+	ringbuffer.o \
+	kernelstring.o
 	$(AR) $(ARFLAGS) $@ $^
 	
 array.o: array/array.c

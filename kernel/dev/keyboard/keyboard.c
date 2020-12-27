@@ -14,7 +14,9 @@
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/devicemgr.h>
 #include <dev/keyboard/abstract_keyboard.h>
-#include <dev/keyboard/keyboardbuffer.h>
+#include <collection/ringbuffer/ringbuffer.h>
+#include <devicemgr/deviceapi/deviceapi_keyboard.h>
+#include <panic/panic.h>
 
 #define KB_IRQ_NUMBER 1
 
@@ -30,15 +32,20 @@
 #define KBD_TEST_FAILED_2	0xFD
 #define KBD_TEST_PASSED		0xAA
 
+struct ringbuffer* keyboard_ringbuffer;
+
 void keyboard_add_command_queue(uint8_t command){
 }
 
 void keyboard_irq_read(stackFrame *frame){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(keyboard_ringbuffer, "keyboard_ringbuffer cannot be null.  Has the keyboard been initialized?");
+
 	kprintf(".");
 	uint8_t read_byte;
 	static bool long_scan_code = false, longer_scan_code = false;
 	static bool prnt_scrn_scan_code = false;
-	key_action_t keypress;
+	key_action_t* keypress = kmalloc(sizeof(key_action_t));
 	
 	read_byte = asm_in_b(KBD_PORT);
 	
@@ -49,18 +56,16 @@ void keyboard_irq_read(stackFrame *frame){
 	
 	if (prnt_scrn_scan_code){
 		if (read_byte == 0x37){
-			keypress.key = P(0,13);
-			keypress.state = KEYPRESS_MAKE;
-			keyboard_buffer_add(keypress);
-			
+			keypress->key = P(0,13);
+			keypress->state = KEYPRESS_MAKE;
+			ringbuffer_add(keyboard_ringbuffer, keypress);
 			prnt_scrn_scan_code = false;	// done processing scan codes for print screen
 		}
 		
-		if ((read_byte == 0xAA)){
-			keypress.key = P(0,13);
-			keypress.state = KEYPRESS_BREAK;
-			keyboard_buffer_add(keypress);
-			
+		if ((read_byte = 0xAA)){
+			keypress->key = P(0,13);
+			keypress->state = KEYPRESS_BREAK;
+			ringbuffer_add(keyboard_ringbuffer, keypress);
 			prnt_scrn_scan_code = false;
 		}
 		
@@ -87,14 +92,14 @@ void keyboard_irq_read(stackFrame *frame){
 		// otherwise, it's a normal two-byte scancode
 		
 		if (read_byte >= 0x80){		// we have a BREAK scancode
-			keypress.key = abstract_keyboard_grid_2byte[read_byte - 0x80];
-			keypress.state = KEYPRESS_BREAK;
+			keypress->key = abstract_keyboard_grid_2byte[read_byte - 0x80];
+			keypress->state = KEYPRESS_BREAK;
 		} else {
-			keypress.key = abstract_keyboard_grid_2byte[read_byte];
-			keypress.state = KEYPRESS_MAKE;
+			keypress->key = abstract_keyboard_grid_2byte[read_byte];
+			keypress->state = KEYPRESS_MAKE;
 		}
 		
-		keyboard_buffer_add(keypress);
+		ringbuffer_add(keyboard_ringbuffer, keypress);
 		
 		long_scan_code = false;
 		
@@ -106,12 +111,12 @@ void keyboard_irq_read(stackFrame *frame){
 	// but the process is essentially the same as for Print Screen
 	if (longer_scan_code){
 		if (read_byte == 0xC5){
-			keypress.key = P(0,15);
-			keypress.state = KEYPRESS_MAKE;
-			keyboard_buffer_add(keypress);
-			keypress.key = P(0,15);
-			keypress.state = KEYPRESS_BREAK;
-			keyboard_buffer_add(keypress);
+			keypress->key = P(0,15);
+			keypress->state = KEYPRESS_MAKE;
+			ringbuffer_add(keyboard_ringbuffer, keypress);
+			keypress->key = P(0,15);
+			keypress->state = KEYPRESS_BREAK;
+			ringbuffer_add(keyboard_ringbuffer, keypress);
 			
 			longer_scan_code = false;
 		}
@@ -144,13 +149,13 @@ void keyboard_irq_read(stackFrame *frame){
 			break;
 		default:
 			if (read_byte >= 0x80){
-				keypress.key = abstract_keyboard_grid[read_byte - 0x80];
-				keypress.state = KEYPRESS_BREAK;
-				keyboard_buffer_add(keypress);
+				keypress->key = abstract_keyboard_grid[read_byte - 0x80];
+				keypress->state = KEYPRESS_BREAK;
+				ringbuffer_add(keyboard_ringbuffer, keypress);
 			} else {
-				keypress.key = abstract_keyboard_grid[read_byte];
-				keypress.state = KEYPRESS_MAKE;
-				keyboard_buffer_add(keypress);
+				keypress->key = abstract_keyboard_grid[read_byte];
+				keypress->state = KEYPRESS_MAKE;
+				ringbuffer_add(keyboard_ringbuffer, keypress);
 			}
 			
 			break;
@@ -169,16 +174,22 @@ void keyboard_send_command_queue(){
 * perform device instance specific init here
 */
 void deviceInitKeyboard(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu\n",dev->description, KB_IRQ_NUMBER);
+    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, KB_IRQ_NUMBER, dev->name);
 	interrupt_router_register_interrupt_handler(KB_IRQ_NUMBER, &keyboard_irq_read);
+}
+
+key_action_t keyboard_read(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Keyboard read not implemented yet");
 }
 
 /**
 * find all keyboard devices and register them
 */
 void keyboard_devicemgr_register_devices(){
-	keyboard_buffer_init();
+	keyboard_ringbuffer = ringbuffer_new();
 
 	/*
 	* register device
@@ -186,8 +197,17 @@ void keyboard_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	deviceinstance->init =  &deviceInitKeyboard;
 	deviceinstance->devicetype = KEYBOARD;
-	devicemgr_set_device_description(deviceinstance, "Keyboard");
-	devicemgr_register_device(deviceinstance);
+	devicemgr_set_device_description(deviceinstance, "PS2 Keyboard");
+    /*
+    * the device api
+    */
+    struct deviceapi_keyboard* api = (struct deviceapi_keyboard*) kmalloc(sizeof(struct deviceapi_keyboard));
+    api->read = &keyboard_read;
+    deviceinstance->api = api;
+    /*
+    * register
+    */
+    devicemgr_register_device(deviceinstance);
 }
 
 

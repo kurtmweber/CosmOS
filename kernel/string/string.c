@@ -50,3 +50,31 @@ char * strcpy(char *dest, const char *src) {
 	return dest;
 }
 
+char *strcat(char *dest, const char *src) {
+	uint16_t i=0;
+	while (dest[i]!=0){
+		i++;
+	}
+	uint16_t j=0;
+	while (src[j]!=0){
+
+		dest[i+j]=src[j];
+		j++;
+	}
+	dest[i+j+1]=0;
+	return dest;
+}
+
+char strcmp(const char *str1, const char *str2) {
+	for (int i = 0; ; i++) {
+        if (str1[i] != str2[i]){
+            return str1[i] < str2[i] ? -1 : 1;
+        }
+        if (str1[i] == '\0'){
+            return 0;
+        }
+    }
+}
+
+
+

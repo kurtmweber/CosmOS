@@ -10,9 +10,14 @@
 #include <console/console.h>
 #include <dev/pci/pci.h>
 #include <dev/pci/devicetree.h>
+#include <panic/panic.h>
+
+#define PCI_MAX_BUSSES 256
+#define PCI_MAX_DEVICES_PER_BUS 32
 
 void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_t function){
-		
+	ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
+	ASSERT_NOT_NULL(dev, "dev must not be null");
 	dev->bus = bus;
 	dev->device = device;
 	dev->function = function;
@@ -22,6 +27,12 @@ void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_
 	dev->irq = pci_header_read_irq(bus, device, function);
 	dev->vendor_id = pci_header_read_vendor(bus, device, function);
 	dev->device_id = pci_header_read_device_id(bus, device, function);
+	dev->bars[0]= pci_header_read_bar0(bus, device, function);
+	dev->bars[1]= pci_header_read_bar1(bus, device, function);
+	dev->bars[2]= pci_header_read_bar2(bus, device, function);
+	dev->bars[3]= pci_header_read_bar3(bus, device, function);
+	dev->bars[4]= pci_header_read_bar4(bus, device, function);
+	dev->bars[5]= pci_header_read_bar5(bus, device, function);
 }
 
 bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function){
@@ -33,6 +44,7 @@ bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function){
 }
 
 void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
+	ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
 	uint8_t i;
 	
 	// new device
@@ -58,6 +70,7 @@ void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
 }
 
 void pci_scan(){
+    ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
 	uint16_t bus = 0, device = 0, function = 0;
 	uint32_t register_dword;
 	uint16_t device_id, vendor_id;
@@ -93,23 +106,17 @@ void pci_scan(){
 		}
 	}*/
 	
-	for (i = 0; i < 256; i++){
+	for (i = 0; i < PCI_MAX_BUSSES; i++){
 		pci_scan_bus(i);
 	}
-	
-	return;
 }
 
 void pci_scan_bus(uint8_t bus){
 	uint8_t i;
-	
-	for (i = 0; i < 32; i++){
+	for (i = 0; i < PCI_MAX_DEVICES_PER_BUS; i++){
 		if (pci_device_exists(bus, i, 0)){
 			pci_found_device(bus, i, 0);
 		}
-		
 	}
-	
-	return;
 }
 

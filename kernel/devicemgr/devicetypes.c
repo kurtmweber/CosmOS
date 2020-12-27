@@ -20,6 +20,7 @@ void devicetypes_init() {
 }
 
 struct list* devicetypes_get_devicelist(deviceType dt) {
+    ASSERT_NOT_NULL(types, "types cannot be null.  Has devicetypes been initialized?");
     if ((dt>=0) && (dt<MAX_DEVICE_TYPES)){
        return (struct list*) array_get(types, dt);
     } else {
@@ -29,6 +30,7 @@ struct list* devicetypes_get_devicelist(deviceType dt) {
 }
 
 void devicetypes_set_devicelist(deviceType dt, struct list* lst) {
+    ASSERT_NOT_NULL(types, "types cannot be null.  Has devicetypes been initialized?");
     if ((dt>=0) && (dt<MAX_DEVICE_TYPES)){
         array_set(types, dt, lst);
     } else {

@@ -15,5 +15,4 @@ void pit_devicemgr_register_devices();
 typedef void (*PITEvent)();
 
 void pit_subscribe(PITEvent pitEvent);
-uint64_t pit_tickcount();
 #endif
