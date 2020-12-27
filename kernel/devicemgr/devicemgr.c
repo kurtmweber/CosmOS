@@ -111,7 +111,7 @@ void devicemgr_init_devices(){
     */
    //    // TODO DMA disabled for now until we can allocate DMA mem
 
-//    deviceregistry_iterate_type(DMA, deviceInitIterator);
+    deviceregistry_iterate_type(DMA, deviceInitIterator);
     /*
     * everything else
     */

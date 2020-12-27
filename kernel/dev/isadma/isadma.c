@@ -90,7 +90,10 @@
 #define ISA_DMA_CHANNEL_2_6								    0x02 //10
 #define ISA_DMA_CHANNEL_3_7								    0x03 //11
 
-struct array* dma_areas;
+/*
+* this variable is set up by the MM
+*/
+void *isadma_buf;
 
 struct isa_dma_channel_parameters {
 	uint32_t DMAAddressPort;
@@ -103,36 +106,25 @@ struct isa_dma_channel_parameters {
 	uint8_t  DMAChannelFlags; // bits 0:1 in channel mode registers
 };
 
-#define MEM_64M 0x1000000
-#define MEM_16k 0x4000
-#define MAX_DMA_SIZE 0x4000 // 16k
-
-void *isadma_buf;
-
 /*
 * perform device instance specific init here
 */
-/*
-* @kurtw help pls.  TODO.
-*/
 void deviceInitISADMA(struct device* dev){
+	ASSERT_NOT_NULL(isadma_buf, "isadma_buf cannot be null.  Has the MM been initialized?");
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+
     kprintf("Init %s (%s)\n",dev->description, dev->name);
 	/*
-	* get DMA mem
+	* show DMA mem
 	*/
-	uint64_t dma_area = (uint64_t) kmalloc(MAX_DMA_SIZE*8);
-	kprintf("DMA area starts at location %#X\n",  dma_area);
-
-	uint64_t end_dma_area = dma_area+MAX_DMA_SIZE*8;
-	ASSERT((end_dma_area<MEM_64M), "DMA area too high in mem");
+	uint64_t end_dma_area = (uint64_t)isadma_buf+ISA_DMA_BUFSIZ;
+	ASSERT((end_dma_area>=ISA_DMA_64M), "DMA area too high in mem");
+	kprintf("DMA area is %#X-%#X\n",  isadma_buf, end_dma_area);
 	/*
-	* allocate DMA areas
+	* show DMA areas
 	*/
-	dma_areas = array_new(8);
-	for (uint8_t i=0; i<8;i++){
-		uint64_t area = dma_area+(i*MAX_DMA_SIZE);
-		array_set(dma_areas,i, (void*) area);
+	for (uint8_t i=0; i<ISA_DMA_NUM_BUFFERS;i++){
+		uint64_t area = isadma_get_dma_block(i, ISA_DMA_BUFFER_SIZE);
 		kprintf("DMA area %llu is at location %#X\n", i, area);
 	}
 }
@@ -194,7 +186,7 @@ void isadma_initialize_floppy_DMA() {
 // http://www.osdever.net/documents/dmaprogramming.pdf
 void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parameters){
 	ASSERT(channel>=0, "channel must be greater than or equal to 0");
-	ASSERT(channel<=7, "channel must be less than or equal to 7");
+	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
 
 	switch(channel){
 		case 0:
@@ -263,12 +255,12 @@ void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parame
 * this function shared by read and write
 */
 void isadma_init_dma(uint8_t channel, uint16_t len, uint8_t rw_mode) {
-//	kprintf("channel %#X\n", channel);
-
 	ASSERT(channel>=0, "channel must be greater than or equal to 0");
-	ASSERT(channel<=7, "channel must be less than or equal to 7");
+	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
 	ASSERT(channel!=0, "DMA channel 0 is unusable (RAM refresh channel)");
 	ASSERT(channel!=4, "DMA channel 4 is unusable (cascade channel)");
+
+	kprintf("DMA init for channel %#X with len %#X\n", channel, len);
 
 	/*
 	* get the DMA block for this channel
@@ -324,17 +316,14 @@ void isadma_init_dma_read(uint8_t channel, uint16_t len) {
 void isadma_init_dma_write(uint8_t channel, uint16_t len) {
 	isadma_init_dma(channel, len, ISA_DMA_WRITE_TRANSFER);
 }
-
 /*
-* @kurtw help pls.  TODO.
+* get the DMA address for a channel
 */
 uint64_t isadma_get_dma_block(uint8_t channel, uint16_t len) {
 	ASSERT(channel>=0, "channel must be greater than or equal to 0");
-	ASSERT(channel<=7, "channel must be less than or equal to 7");
-	if (len > MAX_DMA_SIZE){
+	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
+	if (len > ISA_DMA_BUFFER_SIZE){
 		panic("buffer too large for DMA");
 	}
-	return (uint64_t) array_get(dma_areas,channel);
+	return (uint64_t) ((uint64_t)isadma_buf+  (ISA_DMA_BUFFER_SIZE*channel));
 }
-
-
