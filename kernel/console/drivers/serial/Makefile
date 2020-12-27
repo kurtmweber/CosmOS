@@ -1,16 +1,7 @@
 include ../../../../mk/build.mk
 
-EXTRA_CFLAGS=-I../../..
-ARFLAGS=-crs
+ARCHIVE_FILE=serial_console.a
 
-all: serial_console.a
+include ../../../../mk/archive.mk
 
-serial_console.a: serial_console.o
-	$(AR) $(ARFLAGS) $@ $^
-	
-serial_console.o: serial_console.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I../../..
