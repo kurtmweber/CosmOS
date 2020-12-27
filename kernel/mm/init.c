@@ -7,6 +7,7 @@
 
 #include <types.h>
 #include <console/console.h>
+#include <dev/isadma/isadma.h>
 #include <mm/mm.h>
 
 void mmu_init(){
@@ -16,6 +17,10 @@ void mmu_init(){
 	mem_block *b;
 	
 	brk = &_end;
+
+	kprintf("Reserving ISA DMA memory...\n");
+	isadma_buf = find_aligned_after(brk, ISA_DMA_ALIGNMENT);
+	brk = isadma_buf + ISA_DMA_BUFSIZ;
 	
 	kmalloc_init();
 	
