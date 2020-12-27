@@ -96,10 +96,12 @@ int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block);
 mem_block *phys_alloc_slab(uint64_t size, uint64_t align);
 mem_block *phys_split_block(mem_block *src, void *base, uint64_t size);
 
+// mm.h
 bool is_page_aligned(void *address);
 bool is_page_allocated(void *address);
 pttentry *extract_cr3_base_address(pttentry entry);
 pttentry *extract_pttentry_base_address(pttentry entry);
 uint16_t vaddr_ptt_index(void *address, ptt_levels level);
+void *vaddr_to_physical(void *address, pttentry cr3);
 
 #endif

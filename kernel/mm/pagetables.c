@@ -7,6 +7,7 @@
 
 #include <types.h>
 #include <asm/asm.h>
+#include <console/console.h>
 #include <mm/mm.h>
 #include <mm/pagetables.h>
 #include <panic/panic.h>
@@ -102,8 +103,30 @@ uint16_t vaddr_ptt_index(void *address, ptt_levels level){
 }
 
 void *vaddr_to_physical(void *address, pttentry cr3){
-	pttentry *pml4_base;
-	cr3 = asm_cr3_read();
+	pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
+	uint16_t idx;
 
-	pml4_base = extract_cr3_base_address(cr3);
+	// function does not work--need way to translate physical addresses in page tables to virtual addresses.
+
+	/*pml4_base = extract_cr3_base_address(cr3);
+	idx = vaddr_ptt_index(address, PML4);
+	kprintf("PML4 idx: %u\n", idx);
+	kprintf("PML4 entry: %llX\n", (uint64_t)pml4_base[idx]);
+
+	pdp_base = extract_pttentry_base_address(pml4_base[idx]);
+	idx = vaddr_ptt_index(address, PDP);
+	kprintf("PDP base: %llX\n", (uint64_t)pdp_base);
+	kprintf("PDP idx: %u\n", idx);
+	kprintf("PDP entry: %llX\n", (uint64_t)pdp_base[idx]);
+
+	pd_base = extract_pttentry_base_address(pdp_base[idx]);
+	idx = vaddr_ptt_index(address, PD);
+	kprintf("PD base: %llX\n", (uint64_t)pd_base);
+	kprintf("PD idx: %u\n", idx);
+	kprintf("PD entry: %llX\n", (uint64_t)pd_base[idx]);
+
+	pt_base = extract_pttentry_base_address(pd_base[idx]);
+	idx = vaddr_ptt_index(address, PT);*/
+
+	return (void *)((uint64_t)pt_base[idx] * 4096);
 }
