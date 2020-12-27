@@ -19,7 +19,7 @@ $(KERNEL_ELF): dev-subsystem cosmos.o asm-dir console-dir interrupts-dir mm-dir 
 	video/video.a \
 	interrupts/interrupts.a \
 	mm/mm.a \
-	sleep/sleep.o \
+	sleep/sleep.a \
 	asm/asm.a \
 	panic/panic.a \
 	string/string.a \
