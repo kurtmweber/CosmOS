@@ -1,16 +1,5 @@
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I../..
-ARFLAGS=-crs
+ARCHIVE_FILE=floppy.a
 
-all: floppy.a
-
-floppy.a: floppy.o 
-	$(AR) $(ARFLAGS) $@ $^
-	
-floppy.o: floppy.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+include ../../../mk/archive.mk
