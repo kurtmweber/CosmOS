@@ -11,6 +11,8 @@
 #include <console/console.h>
 #include <panic/panic.h>
 
+void *isadma_buf;
+
 /*
 * perform device instance specific init here
 */

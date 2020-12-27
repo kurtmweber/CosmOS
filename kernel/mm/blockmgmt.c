@@ -6,6 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
+#include <console/console.h>
 #include <mm/mm.h>
 
 void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks){

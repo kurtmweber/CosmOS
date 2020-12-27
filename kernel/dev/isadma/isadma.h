@@ -13,6 +13,10 @@
 // https://wiki.osdev.org/DMA
 // http://www.osdever.net/documents/dmaprogramming.pdf
 
+// buffer-related stuff = 128kb in size, 64kb-aligned
+#define ISA_DMA_ALIGNMENT   65536
+#define ISA_DMA_BUFSIZ      131072
+
 // channels 0-3 (8 bit)
 #define ISA_DMA_CHAN03_START_ADDRESS_REGISTER_0_4 			0x00
 #define ISA_DMA_CHAN03_COUNT_REGISTER_0_4 					0x01
@@ -86,5 +90,7 @@ void isadma_devicemgr_register_devices();
 
 void isadma_read(uint8_t channel, uint64_t* address, uint16_t size);
 void isadma_write(uint8_t channel, uint64_t address, uint16_t size);
+
+extern void *isadma_buf;
 
 #endif
