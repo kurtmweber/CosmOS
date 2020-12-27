@@ -18,14 +18,14 @@ devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridg
 	pic/pic.a \
 	mouse/mouse.a \
 	floppy/floppy.a \
-	speaker/speaker.o \
-	pit/pit.o \
-	sb16/sb16.o \
-	ac97/ac97.o \
-	adlib/adlib.o \
-	cmos/cmos.o \
-	isadma/isadma.o \
-	cpu/cpu.o \
+	speaker/speaker.a \
+	pit/pit.a \
+	sb16/sb16.a \
+	ac97/ac97.a \
+	adlib/adlib.a \
+	cmos/cmos.a \
+	isadma/isadma.a \
+	cpu/cpu.a \
 	virtio/virtio.a \
 	dev.o
 	

@@ -19,12 +19,12 @@ $(KERNEL_ELF): dev-subsystem cosmos.o asm-dir console-dir interrupts-dir mm-dir 
 	video/video.a \
 	interrupts/interrupts.a \
 	mm/mm.a \
-	sleep/sleep.o \
+	sleep/sleep.a \
 	asm/asm.a \
 	panic/panic.a \
 	string/string.a \
 	devicemgr/devicemgr.a \
-	ethernet/ethernet.o \
+	ethernet/ethernet.a \
 	dev/devs.a \
 	collection/collection.a \
 	sound/tone.o 
