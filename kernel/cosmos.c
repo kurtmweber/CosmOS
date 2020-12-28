@@ -74,10 +74,7 @@ void CosmOS(){
 	* enable interrupts
 	*/
 	asm_sti();
-
-
-//	test_debug();
-
+	
 	while (1){
 		asm_hlt();
 	}
