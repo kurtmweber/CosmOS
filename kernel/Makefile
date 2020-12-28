@@ -5,11 +5,9 @@ EXTRA_CFLAGS=-I.
 KERNEL_ELF=cosmos.elf
 KERNEL_BIN=cosmos.bin
 
-all: kernel
+all: $(KERNEL_BIN)
 
-kernel: cosmos
-
-cosmos: $(KERNEL_ELF)
+$(KERNEL_BIN): $(KERNEL_ELF)
 	$(OBJCOPY) $(OBJCOPYFLAGS) $(KERNEL_ELF) $(KERNEL_BIN)
 
 $(KERNEL_ELF): dev-subsystem cosmos.o asm-dir console-dir interrupts-dir mm-dir panic-dir string-dir sleep-dir video-dir devicemgr-dir collection-dir ethernet-dir
