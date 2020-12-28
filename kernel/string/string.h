@@ -17,6 +17,4 @@ char *strcpy(char *dest, const char *src);
 char *strcat(char *dest, const char *src);
 char strcmp(const char *str1, const char *str2);
 
-void* memcpy(void* restrict dstptr, const void* restrict srcptr, uint64_t size);
-
 #endif

@@ -15,7 +15,7 @@
 #include <panic/assert.h>
 #include <sleep/sleep.h>
 #include <dev/isadma/isadma.h>
-#include <string/string.h>
+#include <string/mem.h>
 
 // https://wiki.osdev.org/Sound_Blaster_16
 
@@ -144,11 +144,11 @@ void play(struct device* dev, uint8_t* buffer, uint32_t len) {
 	uint32_t chunks = len / ISA_DMA_BUFFER_SIZE;
 	kprintf("chunks len dma %#X %#X %#X\n", chunks, len, ISA_DMA_BUFFER_SIZE);
 
-	uint64_t* address = (uint64_t*) isadma_get_dma_block(1, ISA_DMA_BUFFER_SIZE);
+	uint8_t* address = (uint8_t*) isadma_get_dma_block(1, ISA_DMA_BUFFER_SIZE);
 	kprintf("DMA block for SB16 dma %#X \n", address);
 
 	memcpy(address, buffer, ISA_DMA_BUFFER_SIZE-1);
-	kprintf("Data %#X %#X %#X %#X %#X\n",(uint8_t*) address[0],(uint8_t*) address[1],(uint8_t*) address[2],(uint8_t*) address[3],(uint8_t*) address[4]);
+	kprintf("Data %#X %#X %#X %#X %#X\n", address[0], address[1],address[2], address[3], address[4]);
 
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 
