@@ -54,8 +54,6 @@
 #define SB16_TRANSFER_FIFO_ON					0x01 // bit 1
 #define SB16_TRANSFER_FIFO_OFF					0x00 // bit 1
 
-
-
 /*
 * device parameters for an sb16
 */
