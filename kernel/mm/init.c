@@ -18,7 +18,7 @@ void mmu_init(){
 	
 	brk = &_end;
 
-	kprintf("Reserving ISA DMA memory...\n");
+	kprintf("   Reserving ISA DMA memory...\n");
 	isadma_buf = find_aligned_after(brk, ISA_DMA_ALIGNMENT);
 	brk = isadma_buf + ISA_DMA_BUFSIZ;
 	

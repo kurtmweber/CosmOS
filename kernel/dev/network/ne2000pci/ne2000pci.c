@@ -214,7 +214,7 @@ void ne2000pci_init() {
 	net_mac_pci[4]=54;
 	net_mac_pci[5]=32;
 		
-	kprintf("MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac_pci[0],net_mac_pci[1],net_mac_pci[2],net_mac_pci[3],net_mac_pci[4],net_mac_pci[5]);
+	kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac_pci[0],net_mac_pci[1],net_mac_pci[2],net_mac_pci[3],net_mac_pci[4],net_mac_pci[5]);
 
 	asm_out_b(CR, (CR_PAGE1|CR_NODMA|CR_STOP));
 	asm_out_b(PAR0,net_mac_pci[0]);

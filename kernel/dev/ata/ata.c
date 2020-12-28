@@ -57,8 +57,8 @@ void deviceInitATA(struct device* dev){
 	ata_detect_addresses();
 
 	for (i = 0; i < NUM_CONTROLLERS; i++){
-		kprintf("Primary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io, ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io_ctrl);
-		kprintf("Secondary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io, ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io_ctrl);
+		kprintf("   Primary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io, ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io_ctrl);
+		kprintf("   Secondary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io, ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io_ctrl);
 	}
 	
 	ata_setup_irq();

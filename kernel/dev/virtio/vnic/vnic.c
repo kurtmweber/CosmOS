@@ -88,7 +88,7 @@ void VNICInit(struct device* dev){
       panic("Unexpected virtio MAC address");
     }
 
-	  kprintf("MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",virtio_mac[0],virtio_mac[1],virtio_mac[2],virtio_mac[3],virtio_mac[4],virtio_mac[5]);
+	  kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",virtio_mac[0],virtio_mac[1],virtio_mac[2],virtio_mac[3],virtio_mac[4],virtio_mac[5]);
 }
 
 void VNICSearchCB(struct pci_device* dev){

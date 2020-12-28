@@ -121,13 +121,13 @@ void VBLOCKInit(struct device* dev){
     uint32_t totalSectors = asm_in_d(deviceData->base+VIRTIO_BLOCK_TOTAL_SECTORS);
     deviceData->sectorLength = asm_in_d(deviceData->base+VIRTIO_BLOCK_LENGTH);
     uint64_t totalBytes = totalSectors*(deviceData->sectorLength);
-    kprintf("Total byte size of mounted media: %llu\n",totalBytes);
+    kprintf("   Total byte size of mounted media: %llu\n",totalBytes);
 
     // make the queue
     deviceData->vblock_queue = virtq_new();
 
     // set the queue.  The API takes a 32 bit pointer, but we have a 64 bit pointer, so ... some conversions  
-    kprintf("Queue Address: %#hX\n", (uint64_t) deviceData->vblock_queue);
+    kprintf("   Queue Address: %#hX\n", (uint64_t) deviceData->vblock_queue);
     asm_out_d(VIRTIO_QUEUE_ADDRESS, (uint32_t) (uint64_t) deviceData->vblock_queue);
     asm_out_w(VIRTIO_QUEUE_SIZE, VIRTQUEUE_SIZE);
 }

@@ -119,13 +119,13 @@ void deviceInitISADMA(struct device* dev){
 	*/
 	uint64_t end_dma_area = (uint64_t)isadma_buf+ISA_DMA_BUFSIZ;
 	ASSERT((end_dma_area>=ISA_DMA_64M), "DMA area too high in mem");
-	kprintf("DMA area is %#X-%#X\n",  isadma_buf, end_dma_area);
+	kprintf("   DMA area is %#X-%#X\n",  isadma_buf, end_dma_area-1);
 	/*
 	* show DMA areas
 	*/
 	for (uint8_t i=0; i<ISA_DMA_NUM_BUFFERS;i++){
 		uint64_t area = isadma_get_dma_block(i, ISA_DMA_BUFFER_SIZE);
-		kprintf("DMA area %llu is at location %#X\n", i, area);
+		kprintf("   DMA area %llu is %#X-%#X\n", i, area, (area+ISA_DMA_BUFFER_SIZE-1));
 	}
 }
 

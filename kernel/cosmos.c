@@ -82,6 +82,11 @@ void CosmOS(){
 	*/
 	devicemgr_init_devices();
 	kprintf("There are %llu devices\n", devicemgr_device_count());
+	kprintf("\n");
+	kprintf("************************************\n");
+	kprintf("** Device Initialization Complete **\n");
+	kprintf("************************************\n");
+	kprintf("\n");
 
 	asm_sti();
 

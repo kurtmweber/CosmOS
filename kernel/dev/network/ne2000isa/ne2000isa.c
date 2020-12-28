@@ -200,7 +200,7 @@ void ne2000isa_init() {
 	net_mac_isa[4]=asm_in_b(PAR4);
 	net_mac_isa[5]=asm_in_b(PAR5);
 		
-	kprintf("MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac_isa[0],net_mac_isa[1],net_mac_isa[2],net_mac_isa[3],net_mac_isa[4],net_mac_isa[5]);
+	kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac_isa[0],net_mac_isa[1],net_mac_isa[2],net_mac_isa[3],net_mac_isa[4],net_mac_isa[5]);
 	
 	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));
 	asm_out_b(DCR, DCR_FIFO8|DCR_NOLPBK|DCR_ARM);
