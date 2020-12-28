@@ -100,6 +100,16 @@ void sb16_speaker_off(struct device* dev) {
 }
 
 /*
+* upper nibble is left, lower nibble is right, volume is b/t 0-F
+*/
+void sb16_set_master_volume(struct device* dev, uint8_t v){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	asm_out_b(sb16_data->port+SB16_PORT_MIXER, SB16_COMMAND_MASTER_VOLUME);
+	asm_out_b(sb16_data->port+SB16_PORT_MIXER_DATA, v);
+}
+
+/*
 * https://wiki.osdev.org/Sound_Blaster_16
 */
 // ;SOUND BLASTER 16 driver in real mode
@@ -156,6 +166,7 @@ void play(struct device* dev, uint8_t* buffer, uint64_t len) {
 
 	sb16_reset(dev);
 	sb16_speaker_on(dev);
+	sb16_set_master_volume(dev,0xff);
 	isadma_init_dma_read(SB16_DMA, ISA_DMA_BUFFER_SIZE);
 
 	// set time constant
