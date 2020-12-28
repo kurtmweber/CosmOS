@@ -9,7 +9,7 @@
 
 #include <collection/kernelstring/kernelstring.h>
 #include <devicemgr/deviceapi/deviceapi_speaker.h>
-#include <tonedata.h>
+#include <rawdata.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
 #include <notes.h>

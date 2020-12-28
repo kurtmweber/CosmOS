@@ -5,8 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _TONEDATA_H
-#define _TONEDATA_H
+/*
+*  this header defines symbols we export from rawdata.asm
+*/
+#ifndef _RAWDATA_H
+#define _RAWDATA_H
 
 #include <types.h>
 
