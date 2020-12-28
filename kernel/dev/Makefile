@@ -5,7 +5,7 @@ EXTRA_CFLAGS= -I..
 all: devs.a 
 
 # this finds the names of all subdirectories under this one, that contain a Makefile
-SUBDIRS=$(shell find . -mindepth 2 -type f -name 'Makefile' | awk -F '/' '{print $$2}')
+SUBDIRS=$(shell find ./* -mindepth 1 -type f -name 'Makefile' | awk -F '/' '{print $$2}')
 $(info $$SUBDIRS is [${SUBDIRS}])
 
 devs.a: dev.o build-subprojects
