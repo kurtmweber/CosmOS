@@ -25,7 +25,7 @@ $(KERNEL_ELF): dev-subsystem cosmos.o asm-dir console-dir interrupts-dir mm-dir 
 	string/string.a \
 	devicemgr/devicemgr.a \
 	ethernet/ethernet.a \
-	dev/devs.a \
+	dev/dev.a \
 	collection/collection.a 
 
 dev-subsystem:

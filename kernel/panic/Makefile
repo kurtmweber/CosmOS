@@ -1,6 +1,6 @@
 include ../../mk/build.mk
 
-ARCHIVE_FILE=sleep.a
+ARCHIVE_FILE=panic.a
 
 include ../../mk/archive.mk
 
