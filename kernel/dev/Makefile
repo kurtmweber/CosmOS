@@ -8,35 +8,22 @@ all: devs.a
 SUBDIRS=$(shell find ./* -mindepth 1 -type f -name 'Makefile' | awk -F '/' '{print $$2}')
 $(info $$SUBDIRS is [${SUBDIRS}])
 
-devs.a: dev.o build-subprojects
-	$(AR) $(ARFLAGS)T $@ \
-	ata/ata.a \
-	pci/pci.a \
-	keyboard/keyboard.a \
-	serial/serial.a \
-	usb/usb.a \
-	network/network.a \
-	bridge/bridge.a \
-	display/display.a \
-	rtc/rtc.a \
-	pic/pic.a \
-	mouse/mouse.a \
-	floppy/floppy.a \
-	speaker/speaker.a \
-	pit/pit.a \
-	sb16/sb16.a \
-	ac97/ac97.a \
-	adlib/adlib.a \
-	cmos/cmos.a \
-	isadma/isadma.a \
-	cpu/cpu.a \
-	virtio/virtio.a \
-	dev.o
+ARCHIVE_DIRS=$(addsuffix /, $(SUBDIRS))
+$(info $$ARCHIVE_DIRS is [${ARCHIVE_DIRS}])
+
+ARCHIVE_NAMES=$(addsuffix .a, $(SUBDIRS))
+$(info $$ARCHIVE_NAMES is [${ARCHIVE_NAMES}])
+
+ARCHIVES=$(join $(ARCHIVE_DIRS),$(ARCHIVE_NAMES))
+$(info $$ARCHIVES is [${ARCHIVES}])
+
+devs.a: dev.o $(ARCHIVES)
+	$(AR) $(ARFLAGS)T $@ dev.o $(ARCHIVES)
 	
 dev.o: dev.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 
-build-subprojects:
+$(ARCHIVES):
 	$(foreach file, $(SUBDIRS), cd $(file) && make && cd ..;)
 
 
