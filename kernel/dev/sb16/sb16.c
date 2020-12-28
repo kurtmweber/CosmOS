@@ -17,9 +17,6 @@
 #include <dev/isadma/isadma.h>
 #include <string/string.h>
 
-//#define DMA_AREA_ADDRESS 	0x0F04
-#define DMA_SIZE			0x1000		// 4k
-
 // https://wiki.osdev.org/Sound_Blaster_16
 
 #define SB16_IRQ        5
@@ -142,22 +139,22 @@ void play(struct device* dev, uint8_t* buffer, uint32_t len) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(buffer, "buffer cannot be null");
 
-//	kprintf("Data %#X %#X %#X %#X %#X\n",buffer[0],buffer[1],buffer[2],buffer[3],buffer[4]);
+	kprintf("Data %#X %#X %#X %#X %#X\n",buffer[0],buffer[1],buffer[2],buffer[3],buffer[4]);
 
-	uint32_t chunks = len / DMA_SIZE;
-//	kprintf("chunks len dma %#X %#X %#X\n", chunks, len, DMA_SIZE);
+	uint32_t chunks = len / ISA_DMA_BUFFER_SIZE;
+	kprintf("chunks len dma %#X %#X %#X\n", chunks, len, ISA_DMA_BUFFER_SIZE);
 
-	uint64_t* address = (uint64_t*) isadma_get_dma_block(1, DMA_SIZE);
+	uint64_t* address = (uint64_t*) isadma_get_dma_block(1, ISA_DMA_BUFFER_SIZE);
 	kprintf("DMA block for SB16 dma %#X \n", address);
 
-	memcpy(address, buffer, DMA_SIZE);
-//	kprintf("Data %#X %#X %#X %#X %#X\n",(uint8_t*) address[0],(uint8_t*) address[1],(uint8_t*) address[2],(uint8_t*) address[3],(uint8_t*) address[4]);
+	memcpy(address, buffer, ISA_DMA_BUFFER_SIZE-1);
+	kprintf("Data %#X %#X %#X %#X %#X\n",(uint8_t*) address[0],(uint8_t*) address[1],(uint8_t*) address[2],(uint8_t*) address[3],(uint8_t*) address[4]);
 
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 
 	sb16_reset(dev);
 	sb16_speaker_on(dev);
-	isadma_init_dma_read(SB16_DMA, DMA_SIZE);
+	isadma_init_dma_read(SB16_DMA, ISA_DMA_BUFFER_SIZE);
 
 	// set time constant
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
@@ -178,10 +175,10 @@ void play(struct device* dev, uint8_t* buffer, uint32_t len) {
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00);
 
 	// COUNT LOW BYTE - COUNT LENGTH-1
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, LOW_OF_W(DMA_SIZE-1));
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
 
 	// COUNT HIGH BYTE - COUNT LENGTH-1
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, HIGH_OF_W(DMA_SIZE-1));
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
 }
 
 void sb16_devicemgr_register_device(uint64_t port){
