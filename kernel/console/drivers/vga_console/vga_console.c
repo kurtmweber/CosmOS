@@ -11,14 +11,10 @@
 #include <video/video.h>
 #include <video/vga/vga.h>
 
-#define VGA_CONSOLE_ENABLED
-
-
 uint16_t vga_console_x_width;
 uint16_t vga_console_y_height;
 uint8_t vga_console_xpos;
 uint8_t vga_console_ypos;
-
 
 void vga_console_init(){
 	video_query_resolution(&vga_console_x_width, &vga_console_y_height);

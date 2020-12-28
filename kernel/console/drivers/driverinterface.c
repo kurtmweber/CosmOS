@@ -15,9 +15,7 @@ void console_driver_interface_init(){
 	uint8_t i;
 
 	serial_console_register();
-#ifdef VGA_CONSOLE_ENABLED
 	vga_console_register();
-#endif
 	
 	for (i = 0; i < CONSOLE_DRIVER_LAST; i++){
 		console_interfaces[i].init();
