@@ -5,11 +5,17 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _DEBUG_H
-#define _DEBUG_H
+#ifndef __TESTS_H
+#define __TESTS_H
 
 #include <types.h>
 
-void debug_show_memblock(uint8_t*, uint16_t size);
+void stringtest();
+void test_debug();
+void serialMessage(const uint8_t* message);
+void BeethovensFifth();
+void playsb16();
+void chirp();
+void testFunctions();
 
 #endif
