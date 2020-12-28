@@ -55,6 +55,7 @@ $(ARCHIVE_FILE): $(ARCHIVES) $(OBJS)
 %.o: %.asm
 	$(NASM) $(NASMARGS) -f elf64 $< -o $@ 
 
+# archives
 $(ARCHIVES):
 	$(foreach file, $(SUBDIRS), cd $(file) && make archive && cd ..;)
 
