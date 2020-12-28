@@ -12,9 +12,9 @@ ARFLAGS=-crs
 SRC_DIR=.
 
 # sources
-SRCS_C=$(shell find $(SRC_DIR) -type f -iname '*.c')
-HEADERS_C=$(shell find $(SRC_DIR) -type f -iname '*.h')
-SRCS_ASM=$(shell find $(SRC_DIR) -type f -iname '*.asm')
+SRCS_C=$(shell find $(SRC_DIR) -type f -iname '*.c' | sort)
+HEADERS_C=$(shell find $(SRC_DIR) -type f -iname '*.h' | sort)
+SRCS_ASM=$(shell find $(SRC_DIR) -type f -iname '*.asm' | sort)
 
 # object files
 OBJS_C=$(subst $(SRC_DIR)/, , $(SRCS_C:.c=.o))
