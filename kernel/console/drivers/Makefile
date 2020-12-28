@@ -1,32 +1,7 @@
-
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS=-I../..
-ARFLAGS=-crsT
+ARCHIVE_FILE=drivers.a
 
-all: vga-dir serial-dir drivers.a
+include ../../../mk/archive.mk
 
-drivers.a: driverinterface.o vga/vga.a serial/serial_console.a drivers.o
-	$(AR) $(ARFLAGS) $@ $^
-
-driverinterface.o: driverinterface.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
-drivers.o: drivers.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
-vga-dir:
-	cd vga && $(MAKE)
-
-serial-dir:
-	cd serial && $(MAKE)
-
-clean: vga-dir-clean serial-dir-clean
-	$(RM) *.o
-	$(RM) *.a
-	
-vga-dir-clean:
-	cd vga && $(MAKE) clean
-
-serial-dir-clean:
-	cd serial && $(MAKE) clean
+EXTRA_CFLAGS+= -I../..

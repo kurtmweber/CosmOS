@@ -8,8 +8,8 @@
 #include <types.h>
 #include <console/console.h>
 #include <console/drivers/drivers.h>
-#include <console/drivers/vga/vga.h>
-#include <console/drivers/serial/serial_console.h>
+#include <console/drivers/vga_console/vga_console.h>
+#include <console/drivers/serial_console/serial_console.h>
 
 void console_driver_interface_init(){
 	uint8_t i;

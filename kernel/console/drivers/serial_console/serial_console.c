@@ -5,7 +5,7 @@
 // ****************************************************************
 
 #include <console/drivers/drivers.h>
-#include <console/drivers/serial/serial_console.h>
+#include <console/drivers/serial_console/serial_console.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
 #include <dev/serial/serial.h>
 
