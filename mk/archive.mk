@@ -35,7 +35,7 @@ vpath %.c .
 vpath %.h .
 vpath %.asm .
 
-all: $(ARCHIVE_FILE)
+archive: $(ARCHIVE_FILE)
 
 $(ARCHIVE_FILE): $(ARCHIVES) $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^
@@ -49,7 +49,7 @@ $(ARCHIVE_FILE): $(ARCHIVES) $(OBJS)
 	$(NASM) $(NASMARGS) -f elf64 $< -o $@ 
 
 $(ARCHIVES):
-	$(foreach file, $(SUBDIRS), cd $(file) && make && cd ..;)
+	$(foreach file, $(SUBDIRS), cd $(file) && make archive && cd ..;)
 
 clean: clean-subprojects
 	$(RM) $(OBJS)

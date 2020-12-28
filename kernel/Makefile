@@ -27,7 +27,7 @@ $(KERNEL_ELF): dev-subsystem cosmos.o asm-dir console-dir interrupts-dir mm-dir 
 	collection/collection.a 
 
 dev-subsystem:
-	cd dev && $(MAKE)
+	cd dev && $(MAKE) archive
 
 cosmos.o: cosmos.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o cosmos.o cosmos.c
