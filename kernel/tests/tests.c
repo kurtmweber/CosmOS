@@ -88,7 +88,6 @@ void BeethovensFifth() {
 }
 
 void playsb16() {
-	
 	uint64_t start = (uint64_t)&_tone_s;
 	uint64_t end = (uint64_t)&_tone_e;
 	uint64_t size = (uint64_t)&_tone_e-(uint64_t)&_tone_s;
@@ -96,6 +95,8 @@ void playsb16() {
 	// show the tone data.  byte size should be the same as tone8.raw
 	kprintf("Tone Data is from %#X to %#X with byte size %llu\n",start ,end, size);
 	
+	debug_show_memblock((uint8_t*)start,32);
+
 	// get the sb
 	struct device* dsp = devicemgr_findDevice("dsp0");
 	struct deviceapi_dsp* dsp_api = (struct deviceapi_dsp*) dsp->api;

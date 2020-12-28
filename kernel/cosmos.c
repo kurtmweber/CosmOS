@@ -75,6 +75,11 @@ void CosmOS(){
 	*/
 	asm_sti();
 	
+	/*
+	* play
+	*/
+	playsb16();
+
 	while (1){
 		asm_hlt();
 	}

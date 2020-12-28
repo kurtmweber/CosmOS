@@ -13,9 +13,11 @@
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
 #include <debug/assert.h>
+#include <debug/debug.h>
 #include <sleep/sleep.h>
 #include <dev/isadma/isadma.h>
 #include <string/mem.h>
+
 
 // https://wiki.osdev.org/Sound_Blaster_16
 
