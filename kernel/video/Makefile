@@ -3,7 +3,7 @@ include ../../mk/build.mk
 EXTRA_CFLAGS= -I..
 ARFLAGS=-crsT
 
-all: vga-dir video.a
+archive: vga-dir video.a
 
 video.a: text.o video.o vga/vga.a
 	$(AR) $(ARFLAGS) $@ $^

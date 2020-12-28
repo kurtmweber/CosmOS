@@ -3,7 +3,7 @@ include ../../mk/build.mk
 EXTRA_CFLAGS= -I..
 ARFLAGS=-crsT
 
-all: drivers-dir console.a
+archive: drivers-dir console.a
 
 console.a: kprintf.o drivers/drivers.a
 	$(AR) $(ARFLAGS) $@ $^
