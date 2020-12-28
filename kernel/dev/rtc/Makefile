@@ -1,16 +1,8 @@
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I../.. -DRTC_SLEEP
-ARFLAGS=-crs
+ARCHIVE_FILE=rtc.a
 
-all: rtc.a
+include ../../../mk/archive.mk
 
-rtc.a: rtc.o
-	$(AR) $(ARFLAGS) $@ $^
-	
-rtc.o: rtc.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
+EXTRA_CFLAGS+=-DRTC_SLEEP -I../..
 
-clean:
-	$(RM) *.o
-	$(RM) *.a

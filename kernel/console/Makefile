@@ -1,22 +1,7 @@
 include ../../mk/build.mk
 
-EXTRA_CFLAGS= -I..
-ARFLAGS=-crsT
+ARCHIVE_FILE=console.a
 
-all: drivers-dir console.a
+include ../../mk/archive.mk
 
-console.a: kprintf.o drivers/drivers.a
-	$(AR) $(ARFLAGS) $@ $^
-
-kprintf.o: kprintf.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
-	
-drivers-dir:
-	cd drivers && $(MAKE)
-	
-clean: drivers-dir-clean
-	$(RM) *.o
-	$(RM) *.a	
-	
-drivers-dir-clean:
-	cd drivers && $(MAKE) clean
+EXTRA_CFLAGS+= -I..

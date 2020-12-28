@@ -1,26 +1,8 @@
+
 include ../../mk/build.mk
 
-EXTRA_CFLAGS= -I..
-ISRCFLAGS=-mgeneral-regs-only
-ARFLAGS=-crs
+ARCHIVE_FILE=interrupts.a
 
-all: interrupts.a
+include ../../mk/archive.mk
 
-interrupts.a: de.o idt.o irq.o interrupt_router.o
-	$(AR) $(ARFLAGS) interrupts.a de.o idt.o irq.o interrupt_router.o
-	
-de.o: de.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $<
-
-idt.o: idt.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
-	
-irq.o: irq.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $<
-	
-interrupt_router.o: interrupt_router.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I.. -mgeneral-regs-only

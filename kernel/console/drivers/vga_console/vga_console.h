@@ -10,8 +10,6 @@
 
 #include <types.h>
 
-#define VGA_CONSOLE_ENABLED
-
 extern uint16_t vga_console_x_width;
 extern uint16_t vga_console_y_height;
 extern uint8_t vga_console_xpos;

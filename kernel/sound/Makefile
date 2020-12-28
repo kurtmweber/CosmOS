@@ -1,13 +1,7 @@
 include ../../mk/build.mk
 
-ARFLAGS=-crs
-EXTRA_CFLAGS=-I..
+ARCHIVE_FILE=sound.a
 
-all: tone.o
-	
-tone.o: tone.asm
-	$(NASM) $(NASMARGS) -f elf64 tone.asm -o tone.o
+include ../../mk/archive.mk
 
-clean: 
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I..

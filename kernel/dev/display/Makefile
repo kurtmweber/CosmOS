@@ -1,16 +1,7 @@
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I../..
-ARFLAGS=-crs
+ARCHIVE_FILE=display.a
 
-all: display.a
+include ../../../mk/archive.mk
 
-display.a: display.o 
-	$(AR) $(ARFLAGS) $@ $^
-	
-display.o: display.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I../..

@@ -1,16 +1,7 @@
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I../..
-ARFLAGS=-crs
+ARCHIVE_FILE=usb.a
 
-all: usb.a
+include ../../../mk/archive.mk
 
-usb.a: usb_controller.o 
-	$(AR) $(ARFLAGS) $@ $^
-	
-usb_controller.o: usb_controller.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I../..

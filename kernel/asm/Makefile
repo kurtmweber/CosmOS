@@ -1,19 +1,7 @@
 include ../../mk/build.mk
 
-ARFLAGS=-crs
-EXTRA_CFLAGS=-I..
+ARCHIVE_FILE=asm.a
 
-all: asm.a
+include ../../mk/archive.mk
 
-asm.a: misc.o io.o
-	$(AR) $(ARFLAGS) asm.a misc.o io.o
-	
-io.o: io.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
-	
-misc.o: misc.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
-	
-clean: 
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I..

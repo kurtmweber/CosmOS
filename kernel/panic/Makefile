@@ -1,16 +1,7 @@
 include ../../mk/build.mk
 
-EXTRA_CFLAGS= -I..
-ARFLAGS=-crs
+ARCHIVE_FILE=panic.a
 
-all: panic.a
+include ../../mk/archive.mk
 
-panic.a: panic.o
-	$(AR) $(ARFLAGS) $@ $^
-	
-panic.o: panic.c panic.h
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
-	
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I..
