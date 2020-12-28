@@ -5,10 +5,13 @@ ARFLAGS=-crs
 
 all: mm.a
 
-mm.a: blockmgmt.o init.o kmalloc.o map.o pagetables.o phys_alloc.o mm.o
+mm.a: blockmgmt.o directmap.o init.o kmalloc.o map.o pagetables.o phys_alloc.o mm.o
 	$(AR) $(ARFLAGS) $@ $?
 	
 blockmgmt.o: blockmgmt.c mm.h
+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
+
+directmap.o: directmap.c mm.h
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $<
 	
 init.o: init.c mm.h

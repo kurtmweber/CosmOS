@@ -9,6 +9,7 @@
 #include <console/console.h>
 #include <dev/isadma/isadma.h>
 #include <mm/mm.h>
+#include <mm/pagetables.h>
 
 void mmu_init(){
 	int_15_map *map;
@@ -26,10 +27,7 @@ void mmu_init(){
 	
 	map = read_int_15_map(&num_blocks, &lrg_block);
 
-	for (i = 0; i < num_blocks; i++){
-		kprintf("Base: %llX\n Len: %llX\n Type: %hu\n", (uint64_t)map[i].base, (uint64_t)map[i].len, (uint8_t)map[i].type);
-
-	}
+	setup_direct_map(map);
 	
 	init_usable_phys_blocks(map[lrg_block]);
 	
@@ -38,8 +36,6 @@ void mmu_init(){
 	sort_usable_phys_blocks();
 
 	reset_brk_after_malloc();
-
-	kprintf("New brk: %llX\n", (uint64_t *)brk);
 
 	// split off the first three blocks of physical memory we've allocated:
 	// 0x0000000000000000 - 0x00000000000FFFFF: ID-mapped first megabyte
