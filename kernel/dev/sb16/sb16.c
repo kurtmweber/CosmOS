@@ -184,13 +184,14 @@ void play(struct device* dev, uint8_t* buffer, uint64_t len) {
 	// mono and unsigned sound data
 	// http://archive.gamedev.net/archive/reference/articles/article443.html
 	// TODO should this be 0x14
-
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00);
 
 	// COUNT LOW BYTE - COUNT LENGTH-1
+	kprintf("Low %#X\n",LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
 
 	// COUNT HIGH BYTE - COUNT LENGTH-1
+	kprintf("High %#X\n",HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
 }
 

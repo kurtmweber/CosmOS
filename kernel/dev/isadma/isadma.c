@@ -277,12 +277,12 @@ void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
 	struct isa_dma_channel_parameters channel_parameters;
 	getDMAParameters(channel, &channel_parameters);
 
-//	kprintf("DMAAddressPort %#X\n", channel_parameters.DMAAddressPort);
-//	kprintf("DMACountPort %#X\n", channel_parameters.DMACountPort);
-//	kprintf("DMAPagePort %#X\n", channel_parameters.DMAPagePort);
+	kprintf("DMAAddressPort %#X\n", channel_parameters.DMAAddressPort);
+	kprintf("DMACountPort %#X\n", channel_parameters.DMACountPort);
+	kprintf("DMAPagePort %#X\n", channel_parameters.DMAPagePort);
 
-//	kprintf("page %#X\n", page);
-//	kprintf("buffer %#X\n", buffer);
+	kprintf("page %#X\n", page);
+	kprintf("buffer %#X\n", buffer);
 
 	// disable channel (number of channel + 0x04)
 	asm_out_b(channel_parameters.DMAMaskReg, channel+0x04);
@@ -298,15 +298,23 @@ void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
 	asm_out_b(channel_parameters.DMAPagePort, page);
 
 	// POSITION LOW BITBYTE
+		kprintf("Low %#X\n",LOW_OF_W(buffer));
+
 	asm_out_b(channel_parameters.DMAAddressPort, LOW_OF_W(buffer));
 
 	// POSITON HIGH BITBYTE
+		kprintf("High %#X\n",HIGH_OF_W(buffer));
+
 	asm_out_b(channel_parameters.DMAAddressPort, HIGH_OF_W(buffer));
 
 	// COUNT LOW BYTE
+			kprintf("Low %#X\n",LOW_OF_W(len-1));
+
 	asm_out_b(channel_parameters.DMACountPort, LOW_OF_W(len-1));
 
 	// COUNT HIGH BYTE
+			kprintf("High %#X\n",LOW_OF_W(len-1));
+
 	asm_out_b(channel_parameters.DMACountPort, HIGH_OF_W(len-1));
 
 	// enable channel 1
