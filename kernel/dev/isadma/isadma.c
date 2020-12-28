@@ -251,10 +251,14 @@ void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parame
 	}
 }
 
+uint16_t getPage(uint64_t address){
+	return address >> 16;
+}
+
 /*
 * this function shared by read and write
 */
-void isadma_init_dma(uint8_t channel, uint16_t len, uint8_t rw_mode) {
+void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
 	ASSERT(channel>=0, "channel must be greater than or equal to 0");
 	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
 	ASSERT(channel!=0, "DMA channel 0 is unusable (RAM refresh channel)");
@@ -268,7 +272,7 @@ void isadma_init_dma(uint8_t channel, uint16_t len, uint8_t rw_mode) {
 	uint64_t address = isadma_get_dma_block(channel, len);
 	kprintf("DMA channel %#X, IO Block %#X\n", channel,address);
 
-	uint16_t page = address >> 16;
+	uint16_t page = getPage(address);
 	uint16_t buffer = address - (page << 16);
 	struct isa_dma_channel_parameters channel_parameters;
 	getDMAParameters(channel, &channel_parameters);
@@ -309,21 +313,28 @@ void isadma_init_dma(uint8_t channel, uint16_t len, uint8_t rw_mode) {
 	asm_out_b(channel_parameters.DMAMaskReg, ISA_DMA_CHANNEL_1_5);
 }
 
-void isadma_init_dma_read(uint8_t channel, uint16_t len) {
+void isadma_init_dma_read(uint8_t channel, uint32_t len) {
 	isadma_init_dma(channel, len, ISA_DMA_READ_TRANSFER);
 }
 
-void isadma_init_dma_write(uint8_t channel, uint16_t len) {
+void isadma_init_dma_write(uint8_t channel, uint32_t len) {
 	isadma_init_dma(channel, len, ISA_DMA_WRITE_TRANSFER);
 }
 /*
 * get the DMA address for a channel
 */
-uint64_t isadma_get_dma_block(uint8_t channel, uint16_t len) {
+uint64_t isadma_get_dma_block(uint8_t channel, uint32_t len) {
 	ASSERT(channel>=0, "channel must be greater than or equal to 0");
 	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
 	if (len > ISA_DMA_BUFFER_SIZE){
 		panic("buffer too large for DMA");
 	}
-	return (uint64_t) ((uint64_t)isadma_buf+  (ISA_DMA_BUFFER_SIZE*channel));
+
+	uint64_t start = (uint64_t) ((uint64_t)isadma_buf+  (ISA_DMA_BUFFER_SIZE*channel));
+	uint64_t end = start+ISA_DMA_BUFFER_SIZE-1;
+
+	if (getPage(start) !=getPage(end)){
+		panic("DMA buffer crosses page boundary");
+	}
+	return start;
 }
