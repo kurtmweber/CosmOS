@@ -135,22 +135,24 @@ void sb16_speaker_off(struct device* dev) {
 //   OUTB 0x22C, 0x0F ;COUNT HIGH BIT - COUNT LENGHT-1 (EXAMPLE 0x0FFF SO 0x0FFE) - SET THIS VALUE FOR YOU
  
 //   ;now transfer start - dont forget to handle irq
-void play(struct device* dev, uint8_t* buffer, uint32_t len) {
+void play(struct device* dev, uint8_t* buffer, uint64_t len) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(buffer, "buffer cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
 
-	kprintf("Data %#X %#X %#X %#X %#X\n",buffer[0],buffer[1],buffer[2],buffer[3],buffer[4]);
+	kprintf("Incoming buffer %#X\n",buffer);
+	debug_show_memblock(buffer,32);
 
 	uint32_t chunks = len / ISA_DMA_BUFFER_SIZE;
-	kprintf("chunks len dma %#X %#X %#X\n", chunks, len, ISA_DMA_BUFFER_SIZE);
+	kprintf("Chunks: %#X data len:  %#X dma size: %#X\n", chunks, len, ISA_DMA_BUFFER_SIZE);
 
-	uint8_t* address = (uint8_t*) isadma_get_dma_block(1, ISA_DMA_BUFFER_SIZE);
-	kprintf("DMA block for SB16 dma %#X \n", address);
+	uint8_t* dma_block_address = (uint8_t*) isadma_get_dma_block(1, ISA_DMA_BUFFER_SIZE);
+	kprintf("DMA block for SB16 dma %#X\n", dma_block_address);
 
-	memcpy(address, buffer, ISA_DMA_BUFFER_SIZE-1);
-	kprintf("Data %#X %#X %#X %#X %#X\n", address[0], address[1],address[2], address[3], address[4]);
-
-	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	memcpy(dma_block_address, buffer, ISA_DMA_BUFFER_SIZE-1);
+	kprintf("DMA buffer %#X\n",dma_block_address);
+	debug_show_memblock(dma_block_address,32);
 
 	sb16_reset(dev);
 	sb16_speaker_on(dev);

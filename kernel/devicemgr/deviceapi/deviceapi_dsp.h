@@ -13,7 +13,7 @@
 #include <types.h>
 #include <devicemgr/devicemgr.h>
 
-typedef void (*dsp_play_function)(struct device* dev, uint8_t* buffer, uint32_t len);
+typedef void (*dsp_play_function)(struct device* dev, uint8_t* buffer, uint64_t len);
 
 struct deviceapi_dsp {
     dsp_play_function play;
