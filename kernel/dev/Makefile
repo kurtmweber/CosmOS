@@ -4,7 +4,11 @@ EXTRA_CFLAGS= -I..
 
 all: devs.a 
 
-devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridge-dir display-dir rtc-dir pic-dir mouse-dir floppy-dir speaker-dir pit-dir sb16-dir ac97-dir adlib-dir cmos-dir isadma-dir cpu-dir virtio-dir
+# this finds the names of all subdirectories under this one, that contain a Makefile
+SUBDIRS=$(shell find . -mindepth 2 -type f -name 'Makefile' | awk -F '/' '{print $$2}')
+$(info $$SUBDIRS is [${SUBDIRS}])
+
+devs.a: dev.o build-subprojects
 	$(AR) $(ARFLAGS)T $@ \
 	ata/ata.a \
 	pci/pci.a \
@@ -32,132 +36,13 @@ devs.a:  dev.o ata-dir keyboard-dir pci-dir serial-dir usb-dir network-dir bridg
 dev.o: dev.c
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
 
-ata-dir:
-	cd ata && $(MAKE)
-	
-keyboard-dir:
-	cd keyboard && $(MAKE)
+build-subprojects:
+	$(foreach file, $(SUBDIRS), cd $(file) && make && cd ..;)
 
-pci-dir:
-	cd pci && $(MAKE)
 
-serial-dir:
-	cd serial && $(MAKE)
-
-usb-dir:
-	cd usb && $(MAKE)
-
-network-dir:
-	cd network && $(MAKE)
-
-bridge-dir:
-	cd bridge && $(MAKE)
-
-display-dir:
-	cd display && $(MAKE)
-
-rtc-dir:
-	cd rtc && $(MAKE)
-
-pic-dir:
-	cd pic && $(MAKE)
-
-mouse-dir:
-	cd mouse && $(MAKE)
-
-floppy-dir:
-	cd floppy && $(MAKE)
-
-speaker-dir:
-	cd speaker && $(MAKE)
-
-pit-dir:
-	cd pit && $(MAKE)
-
-sb16-dir:
-	cd sb16 && $(MAKE)
-
-ac97-dir:
-	cd ac97 && $(MAKE)
-
-adlib-dir:
-	cd adlib && $(MAKE)
-
-cmos-dir:
-	cd cmos && $(MAKE)
-
-isadma-dir:
-	cd isadma && $(MAKE)
-
-cpu-dir:
-	cd cpu && $(MAKE)
-
-virtio-dir:
-	cd virtio && $(MAKE)
-
-clean: ata-dir-clean keyboard-dir-clean pci-dir-clean serial-dir-clean usb-dir-clean network-dir-clean bridge-dir-clean display-dir-clean rtc-dir-clean pic-dir-clean mouse-dir-clean floppy-dir-clean speaker-dir-clean pit-dir-clean sb16-dir-clean ac97-dir-clean adlib-dir-clean cmos-dir-clean isadma-dir-clean cpu-dir-clean virtio-dir-clean
+clean: clean-subprojects
 	$(RM) devs.a
 	$(RM) dev.o
 
-ata-dir-clean:
-	cd ata && $(MAKE) clean
-		
-keyboard-dir-clean:
-	cd keyboard && $(MAKE) clean
-	
-pci-dir-clean:
-	cd pci && $(MAKE) clean
-
-serial-dir-clean:
-	cd serial && $(MAKE) clean
-
-usb-dir-clean:
-	cd usb && $(MAKE) clean
-
-network-dir-clean:
-	cd network && $(MAKE) clean
-
-bridge-dir-clean:
-	cd bridge && $(MAKE) clean
-
-display-dir-clean:
-	cd display && $(MAKE) clean
-
-rtc-dir-clean:
-	cd rtc && $(MAKE) clean
-
-pic-dir-clean:
-	cd pic && $(MAKE) clean
- 
-mouse-dir-clean:
-	cd mouse && $(MAKE) clean
-
-floppy-dir-clean:
-	cd floppy && $(MAKE) clean
-
-speaker-dir-clean:
-	cd speaker && $(MAKE) clean
-
-pit-dir-clean:
-	cd pit && $(MAKE) clean
-
-sb16-dir-clean:
-	cd sb16 && $(MAKE) clean
-
-ac97-dir-clean:
-	cd ac97 && $(MAKE) clean
-
-adlib-dir-clean:
-	cd adlib && $(MAKE) clean
-
-cmos-dir-clean:
-	cd cmos && $(MAKE) clean
-
-isadma-dir-clean:
-	cd isadma && $(MAKE) clean
-
-cpu-dir-clean:
-	cd cpu && $(MAKE) clean
-
-virtio-dir-clean:
-	cd virtio && $(MAKE) clean
+clean-subprojects:
+	$(foreach file, $(SUBDIRS), cd $(file) && make clean && cd ..;)
