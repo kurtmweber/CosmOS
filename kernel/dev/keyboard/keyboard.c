@@ -16,7 +16,7 @@
 #include <dev/keyboard/abstract_keyboard.h>
 #include <collection/ringbuffer/ringbuffer.h>
 #include <devicemgr/deviceapi/deviceapi_keyboard.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 #define KB_IRQ_NUMBER 1
 

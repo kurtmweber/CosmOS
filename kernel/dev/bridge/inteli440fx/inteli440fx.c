@@ -11,7 +11,7 @@
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <dev/pci/pci.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 struct intel440fx_deviceddata {
     uint64_t base;

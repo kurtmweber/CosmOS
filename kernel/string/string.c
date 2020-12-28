@@ -8,7 +8,7 @@
 #include <types.h>
 #include <mm/mm.h>
 #include <string/string.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 uint64_t strlen(const char *s){
 	ASSERT_NOT_NULL(s, "s must not be null");

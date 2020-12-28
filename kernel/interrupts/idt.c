@@ -8,7 +8,7 @@
 #include <types.h>
 #include <asm/asm.h>
 #include <interrupts/interrupts.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 #define IDT_SIZE 256
 

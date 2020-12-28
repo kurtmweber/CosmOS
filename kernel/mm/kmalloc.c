@@ -7,7 +7,7 @@
 
 #include <types.h>
 #include <console/console.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 #include <mm/mm.h>
 
 kmalloc_block *kmalloc_block_list;

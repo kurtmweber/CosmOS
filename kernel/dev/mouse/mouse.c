@@ -13,7 +13,7 @@
 #include <devicemgr/devicemgr.h>
 #include <mm/mm.h>
 #include <devicemgr/deviceapi/deviceapi_mouse.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 #define MOUSE_IRQ_NUMBER 12
 

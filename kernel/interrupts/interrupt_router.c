@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <interrupts/interrupt_router.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 #include <collection/array/array.h>
 #include <collection/list/list.h>
 

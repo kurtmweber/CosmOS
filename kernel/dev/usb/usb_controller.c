@@ -10,7 +10,7 @@
 #include <dev/pci/pci.h>
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 #include <dev/usb/usb_controller.h>
 #include <dev/usb/ehci.h>
 #include <dev/usb/ohci.h>

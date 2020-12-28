@@ -12,7 +12,7 @@
 #include <dev/pci/pci.h>
 #include <devicemgr/devicemgr.h>
 #include <devicemgr/deviceapi/deviceapi_ata.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 struct list *ide_controllers;
 

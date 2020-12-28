@@ -10,7 +10,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 #include <console/console.h>
 #include <collection/ringbuffer/ringbuffer.h>
 

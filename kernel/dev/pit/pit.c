@@ -12,7 +12,7 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/deviceapi/deviceapi_pit.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 // https://wiki.osdev.org/Programmable_Interval_Timer
 // http://www.osdever.net/bkerndev/Docs/pit.htm

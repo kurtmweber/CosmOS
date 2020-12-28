@@ -17,7 +17,7 @@
 #include <asm/io.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_ethernet.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 #define NE2000ISA_BASE_ADDRESS 0x300
 #define NE2000ISA_IRQ 9

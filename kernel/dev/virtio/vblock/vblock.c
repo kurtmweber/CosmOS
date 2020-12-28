@@ -18,7 +18,7 @@
 #include <dev/pci/pci.h>
 #include <mm/mm.h>
 #include <dev/virtio/virtio.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 #include <dev/virtio/virtqueue.h>
 
 // registers

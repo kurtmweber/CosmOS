@@ -12,7 +12,7 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 #include <sleep/sleep.h>
 #include <dev/isadma/isadma.h>
 #include <string/mem.h>

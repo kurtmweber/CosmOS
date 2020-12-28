@@ -14,7 +14,7 @@
 #include <dev/cmos/cmos.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_floppy.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 #define FLOPPY_IRQ_NUMBER   6
 #define FLOPPY_BASE         0x3F0

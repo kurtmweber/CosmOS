@@ -9,7 +9,7 @@
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 #include <collection/array/array.h>
 
 // https://wiki.osdev.org/DMA

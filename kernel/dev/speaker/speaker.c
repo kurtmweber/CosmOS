@@ -11,7 +11,7 @@
 #include <console/console.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_speaker.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 // https://wiki.osdev.org/PC_Speaker
 

@@ -18,7 +18,7 @@
 #include <asm/io.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_ethernet.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 // REGISTERS
 #define CR				0x00 // Command Register

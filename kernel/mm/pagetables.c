@@ -9,7 +9,7 @@
 #include <asm/asm.h>
 #include <mm/mm.h>
 #include <mm/pagetables.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 #include <string/string.h>
 
 #ifdef COMPILE_PLATFORM_LINUX 

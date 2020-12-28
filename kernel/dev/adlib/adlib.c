@@ -12,7 +12,7 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
-#include <panic/assert.h>
+#include <debug/assert.h>
 
 void adlib_handle_irq(stackFrame *frame) {
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");

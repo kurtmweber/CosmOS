@@ -22,7 +22,7 @@ OBJS_ASM=$(subst $(SRC_DIR)/, , $(SRCS_ASM:.asm=.o))
 OBJS=$(OBJS_C) $(OBJS_ASM)
 
 # this finds the names of all subdirectories under this one, that contain a Makefile
-SUBDIRS=$(shell find ./* -mindepth 1 -type f -name 'Makefile'| awk -F '/' '{print $$2}' | uniq) 
+SUBDIRS=$(shell find ./* -mindepth 1 -type f -name 'Makefile'| awk -F '/' '{print $$2}' | uniq | sort) 
 #$(info $$SUBDIRS is [${SUBDIRS}])
 
 # build a list of directories to archives
