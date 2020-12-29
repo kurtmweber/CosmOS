@@ -107,12 +107,36 @@ struct isa_dma_channel_parameters {
 	uint32_t DMAModeReg;
 	bool eightbit;	
 	uint8_t  DMAChannelFlags; // bits 0:1 in channel mode registers
+
+	/*
+	* block assigned by the MM
+	*/
+	uint64_t DMABlock;
+	/*
+	* DMA channel
+	*/
+	uint8_t channel;
 };
+
+void isadma_show_dma_parameters(struct isa_dma_channel_parameters* parameters){
+	kprintf("   DMA channel %#X, IO Block %#X\n", parameters->channel, parameters->DMABlock);
+	uint16_t page = isadma_address_to_page(parameters->DMABlock);
+	uint16_t buffer = isadma_address_to_buffer(parameters->DMABlock);
+	kprintf("   DMA page %#X, buffer %#X\n", page, buffer);
+	kprintf("   DMAAddressPort %#X\n", parameters->DMAAddressPort);
+	kprintf("   DMACountPort %#X\n", parameters->DMACountPort);
+	kprintf("   DMAPagePort %#X\n", parameters->DMAPagePort);
+	kprintf("   DMAMaskReg %#X\n", parameters->DMAMaskReg);
+	kprintf("   DMAClearReg %#X\n", parameters->DMAClearReg);
+	kprintf("   DMAModeReg %#X\n", parameters->DMAModeReg);
+	kprintf("   DMAChannelFlags %#X\n", parameters->DMAChannelFlags);
+	kprintf("   8-bit %#X\n", parameters->eightbit);
+}
 
 /*
 * perform device instance specific init here
 */
-void deviceInitISADMA(struct device* dev){
+void isadma_device_init(struct device* dev){
 	ASSERT_NOT_NULL(isadma_buf, "isadma_buf cannot be null.  Has the MM been initialized?");
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 
@@ -123,13 +147,6 @@ void deviceInitISADMA(struct device* dev){
 	uint64_t end_dma_area = (uint64_t)isadma_buf+ISA_DMA_BUFSIZ;
 	ASSERT((end_dma_area>=ISA_DMA_64M), "DMA area too high in mem");
 	kprintf("   DMA area is %#X-%#X\n",  isadma_buf, end_dma_area-1);
-	/*
-	* show DMA areas
-	*/
-	for (uint8_t i=0; i<ISA_DMA_NUM_BUFFERS;i++){
-		uint64_t area = isadma_get_dma_block(i, ISA_DMA_BUFFER_SIZE);
-		kprintf("   DMA area %llu is %#X-%#X\n", i, area, (area+ISA_DMA_BUFFER_SIZE-1));
-	}
 }
 
 void isadma_devicemgr_register_devices(){
@@ -139,7 +156,7 @@ void isadma_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	devicemgr_set_device_description(deviceinstance, "8237 ISA DMA");
 	deviceinstance->devicetype = DMA;
-	deviceinstance->init =  &deviceInitISADMA;
+	deviceinstance->init =  &isadma_device_init;
 	devicemgr_register_device(deviceinstance);
 }
 
@@ -190,7 +207,9 @@ void isadma_initialize_floppy_DMA() {
 void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parameters){
 	ASSERT(channel>=0, "channel must be greater than or equal to 0");
 	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
+	ASSERT_NOT_NULL(parameters, "parameters must not be null");
 
+	parameters->channel=channel;
 	switch(channel){
 		case 0:
 			parameters->DMAAddressPort=ISA_DMA_CHAN03_START_ADDRESS_REGISTER_0_4;
@@ -252,6 +271,10 @@ void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parame
 		parameters->DMAModeReg=ISA_DMA_CHAN47_MODE_REGISTER;
 		parameters->eightbit=0;
 	}
+	/*
+	* DMA memory block
+	*/
+	parameters->DMABlock = isadma_get_dma_block(channel, ISA_DMA_BUFFER_SIZE);
 }
 
 /*
@@ -265,23 +288,13 @@ void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
 
 	kprintf("DMA init for channel %#X with len %#X\n", channel, len);
 
-	/*
-	* get the DMA block for this channel
-	*/
-	uint64_t address = isadma_get_dma_block(channel, len);
-	kprintf("DMA channel %#X, IO Block %#X\n", channel,address);
-
-	uint16_t page = isadma_address_to_page(address);
-	uint16_t buffer = isadma_address_to_buffer(address);
 	struct isa_dma_channel_parameters channel_parameters;
 	getDMAParameters(channel, &channel_parameters);
 
-	kprintf("DMAAddressPort %#X\n", channel_parameters.DMAAddressPort);
-	kprintf("DMACountPort %#X\n", channel_parameters.DMACountPort);
-	kprintf("DMAPagePort %#X\n", channel_parameters.DMAPagePort);
+	isadma_show_dma_parameters(&channel_parameters);
 
-	kprintf("page %#X\n", page);
-	kprintf("buffer %#X\n", buffer);
+	uint16_t page = isadma_address_to_page(channel_parameters.DMABlock);
+	uint16_t buffer = isadma_address_to_buffer(channel_parameters.DMABlock);
 
 	// disable channel (number of channel + 0x04)
 	asm_out_b(channel_parameters.DMAMaskReg, channel+0x04);
