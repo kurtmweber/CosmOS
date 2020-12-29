@@ -40,7 +40,7 @@ typedef enum rtc_registers{
 void rtc_handle_irq(stackFrame *frame) {	
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	for (uint32_t i=0; i< list_count(rtcEvents);i++){
-		RTCEvent rtcEvent = (RTCEvent) list_get(rtcEvents,i);
+		rtc_event rtcEvent = (rtc_event) list_get(rtcEvents,i);
 		(*rtcEvent)();
 	}
 
@@ -120,9 +120,10 @@ rtc_time_t rtc_time(struct device* dev){
 	return b;	
 }
 
-void rtc_subscribe(RTCEvent rtcEvent) {
-	ASSERT_NOT_NULL(rtcEvent, "rtcEvent cannot be null");
-	list_add(rtcEvents, rtcEvent);
+void rtc_subscribe(rtc_event event) {
+	ASSERT_NOT_NULL(rtcEvents, "rtcEvents cannot be null. Has the PIT been initialized?");
+	ASSERT_NOT_NULL(event, "event cannot be null");
+	list_add(rtcEvents, event);
 }
 
 /*
@@ -141,6 +142,7 @@ void rtc_devicemgr_register_devices(){
 	*/
 	struct deviceapi_rtc* api = (struct deviceapi_rtc*) kmalloc (sizeof(struct deviceapi_rtc));
 	api->rtc_time = &rtc_time;
+	api->subscribe = &rtc_subscribe;
 	deviceinstance->api = api;
 	/*
 	* register

@@ -12,8 +12,5 @@
 
 void rtc_devicemgr_register_devices();
 
-typedef void (*RTCEvent)();
-void rtc_subscribe(RTCEvent rtcEvent);
-
 #endif
 
