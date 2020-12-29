@@ -6,11 +6,11 @@
 // ****************************************************************
 
 #include <dev/isadma/isadma.h>
+#include <dev/isadma/isadma_page.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
 #include <debug/assert.h>
-#include <collection/array/array.h>
 
 // https://wiki.osdev.org/DMA
 // http://www.osdever.net/documents/dmaprogramming.pdf
@@ -95,6 +95,9 @@
 */
 void *isadma_buf;
 
+/*
+* parameters for a channel
+*/
 struct isa_dma_channel_parameters {
 	uint32_t DMAAddressPort;
 	uint32_t DMACountPort;
@@ -251,10 +254,6 @@ void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parame
 	}
 }
 
-uint16_t getPage(uint64_t address){
-	return address >> 16;
-}
-
 /*
 * this function shared by read and write
 */
@@ -272,8 +271,8 @@ void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
 	uint64_t address = isadma_get_dma_block(channel, len);
 	kprintf("DMA channel %#X, IO Block %#X\n", channel,address);
 
-	uint16_t page = getPage(address);
-	uint16_t buffer = address - (page << 16);
+	uint16_t page = isadma_address_to_page(address);
+	uint16_t buffer = isadma_address_to_buffer(address);
 	struct isa_dma_channel_parameters channel_parameters;
 	getDMAParameters(channel, &channel_parameters);
 
@@ -337,7 +336,7 @@ uint64_t isadma_get_dma_block(uint8_t channel, uint32_t len) {
 	uint64_t start = (uint64_t) ((uint64_t)isadma_buf+  (ISA_DMA_BUFFER_SIZE*channel));
 	uint64_t end = start+ISA_DMA_BUFFER_SIZE-1;
 
-	if (getPage(start) !=getPage(end)){
+	if (isadma_address_to_page(start) !=isadma_address_to_page(end)){
 		panic("DMA buffer crosses page boundary");
 	}
 	return start;
