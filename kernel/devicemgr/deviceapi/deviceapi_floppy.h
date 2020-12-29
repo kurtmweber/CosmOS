@@ -13,8 +13,8 @@
 #include <types.h>
 #include <devicemgr/devicemgr.h>
 
-typedef void (*floppy_read_sector)(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size);
-typedef void (*floppy_write_sector)(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size);
+typedef void (*floppy_read_sector)(struct device* dev, uint32_t sector, uint8_t* data, uint16_t size);
+typedef void (*floppy_write_sector)(struct device* dev, uint32_t sector, uint8_t* data, uint16_t size);
 
 struct deviceapi_floppy {
     floppy_read_sector read;

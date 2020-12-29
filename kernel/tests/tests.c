@@ -17,6 +17,7 @@
 #include <devicemgr/deviceapi/deviceapi_rtc.h>
 #include <devicemgr/deviceapi/deviceapi_pit.h>
 #include <devicemgr/deviceapi/deviceapi_cpu.h>
+#include <devicemgr/deviceapi/deviceapi_floppy.h>
 #include <mm/mm.h>
 #include <debug/debug.h>
 #include <string/string.h>
@@ -190,8 +191,6 @@ void testFunctions() {
 	rtc_time_t daTime = (*time_func)(rtc);
 	kprintf("Hour: %llu Minute: %llu Second: %llu\n",daTime.hour, daTime.minute, daTime.second);
 
-
-
 	mem_block *tmp;
 	tmp = usable_phys_blocks;
 
@@ -208,6 +207,16 @@ void testFunctions() {
 	} while((tmp = tmp->next)); */
 	
 //	stringtest();
+}
+
+void floppyread() {
+	// get the floppy
+	struct device* floppy = devicemgr_findDevice("floppy0");
+	struct deviceapi_floppy* floppy_api = (struct deviceapi_floppy*) floppy->api;
+
+	uint8_t data[256];
+	(*floppy_api->read)(floppy, 0, data, 255);
+	debug_show_memblock(data, 32);
 }
 
 

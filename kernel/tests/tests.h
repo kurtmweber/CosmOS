@@ -17,5 +17,6 @@ void BeethovensFifth();
 void playsb16();
 void chirp();
 void testFunctions();
+void floppyread();
 
 #endif

@@ -78,8 +78,8 @@ void CosmOS(){
 	/*
 	* play
 	*/
-	playsb16();
-
+	//playsb16();
+	floppyread();	
 	while (1){
 		asm_hlt();
 	}
