@@ -55,12 +55,16 @@
 #define SB16_TRANSFER_FIFO_ON					0x01 // bit 1
 #define SB16_TRANSFER_FIFO_OFF					0x00 // bit 1
 
+// forward declarations
+uint8_t get_dsp_version(struct device* dev);
+
 /*
 * device parameters for an sb16
 */
 struct sb16_devicedata {
     uint32_t port;
 	uint8_t irq;
+	uint8_t dsp_version;
 } __attribute__((packed));
 
 /*
@@ -80,7 +84,21 @@ void deviceInitSB16(struct device* dev){
 	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
     kprintf("Init %s at IRQ %llu Port %#X (%s)\n",dev->description, sb16_data->irq, sb16_data->port, dev->name);
     interrupt_router_register_interrupt_handler(sb16_data->irq, &sb16_handle_irq);
+	sb16_data->dsp_version = get_dsp_version(dev);
+	kprintf("   DSP Version: %llu\n", sb16_data->dsp_version);
 }
+
+/*
+* get the DSP version
+*/
+uint8_t get_dsp_version(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
+
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_GET_DSP_VERSION); 
+	return asm_in_b(sb16_data->port+SB16_PORT_READ);
+} 
 
 /*
 * reset the device
@@ -124,6 +142,8 @@ void sb16_set_master_volume(struct device* dev, uint8_t v){
 	asm_out_b(sb16_data->port+SB16_PORT_MIXER, SB16_COMMAND_MASTER_VOLUME);
 	asm_out_b(sb16_data->port+SB16_PORT_MIXER_DATA, v);
 }
+
+
 
 /*
 * https://wiki.osdev.org/Sound_Blaster_16
