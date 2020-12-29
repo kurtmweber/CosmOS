@@ -5,11 +5,14 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#ifndef _DE_H
+#define _DE_H
+
+
 #include <types.h>
 #include <debug/assert.h>
-#include <interrupts/de.h>
+#include <interrupts/irq.h>
 
-__attribute__ ((interrupt)) void isrDE(stackFrame *frame){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
-	panic("Division by zero!");
-}
+void isrDE(stackFrame *frame);
+
+#endif

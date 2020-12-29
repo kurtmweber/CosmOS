@@ -10,7 +10,7 @@
 #include <console/drivers/drivers.h>
 #include <dev/keyboard/keyboard.h>
 #include <console/console.h>
-#include <interrupts/interrupts.h>
+#include <interrupts/irq.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/devicemgr.h>
 #include <dev/keyboard/abstract_keyboard.h>

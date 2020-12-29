@@ -8,7 +8,6 @@
 #include <types.h>
 #include <console/console.h>
 #include <console/drivers/drivers.h>
-#include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
 #include <video/video.h>
 #include <video/vga/vga.h>
@@ -16,6 +15,7 @@
 #include <mm/mm.h>
 #include <devicemgr/devicemgr.h>
 #include <asm/asm.h>
+#include <interrupts/idt.h>
 
 void CosmOS(){
 	video_init();
