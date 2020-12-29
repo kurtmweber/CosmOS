@@ -278,6 +278,70 @@ void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parame
 }
 
 /*
+* reset the flip flop
+*/ 
+void isadma_reset_flipflop(struct isa_dma_channel_parameters* channel_parameters) {
+	asm_out_b(channel_parameters->DMAClearReg, 0xFF);
+}
+
+/*
+* set byte count
+*/
+void isadma_set_transfer_size(struct isa_dma_channel_parameters* channel_parameters, uint16_t len) {
+	isadma_reset_flipflop(channel_parameters);
+	uint8_t count_low = LOW_OF_W(len-1);
+	uint8_t count_high = HIGH_OF_W(len-1);
+	kprintf("   Count %#X %#X\n",count_high, count_low);
+
+	asm_out_b(channel_parameters->DMACountPort, count_low);
+	asm_out_b(channel_parameters->DMACountPort, count_high);
+}
+
+/*
+* set address of buffer
+*/
+void isadma_set_buffer_address(struct isa_dma_channel_parameters* channel_parameters) {
+	isadma_reset_flipflop(channel_parameters);
+	uint16_t page = isadma_address_to_page(channel_parameters->DMABlock);
+	uint16_t buffer = isadma_address_to_buffer(channel_parameters->DMABlock);
+
+	// page
+	asm_out_b(channel_parameters->DMAPagePort, page);
+	kprintf("   Page %#X\n",page);
+
+	// buffer
+	uint8_t position_low = LOW_OF_W(buffer);
+	uint8_t position_high = HIGH_OF_W(buffer);
+	kprintf("   Position %#X %#X\n",position_high, position_low);
+
+	asm_out_b(channel_parameters->DMAAddressPort, position_low);
+	asm_out_b(channel_parameters->DMAAddressPort, position_high);
+}
+
+/*
+* mask channel
+*/
+void isadma_mask_channel(struct isa_dma_channel_parameters* channel_parameters) {
+	asm_out_b(channel_parameters->DMAMaskReg, channel_parameters->channel+0x04);
+}
+
+/*
+* unmask channel
+*/
+void isadma_unmask_channel(struct isa_dma_channel_parameters* channel_parameters) {
+	asm_out_b(channel_parameters->DMAMaskReg, channel_parameters->channel);
+}
+
+/**
+ * transfer mode
+ */
+void isadma_set_transfer_mode(struct isa_dma_channel_parameters* channel_parameters,uint8_t mode) {
+	asm_out_b(channel_parameters->DMAModeReg, mode);
+	kprintf("   Transfer Mode %#X\n",mode);
+
+}
+
+/*
 * this function shared by read and write
 */
 void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
@@ -288,45 +352,31 @@ void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
 
 	kprintf("DMA init for channel %#X with len %#X\n", channel, len);
 
+	/*
+	* get the channel parameters
+	*/
 	struct isa_dma_channel_parameters channel_parameters;
 	getDMAParameters(channel, &channel_parameters);
-
 	isadma_show_dma_parameters(&channel_parameters);
 
-	uint16_t page = isadma_address_to_page(channel_parameters.DMABlock);
-	uint16_t buffer = isadma_address_to_buffer(channel_parameters.DMABlock);
-
-	// disable channel (number of channel + 0x04)
-	asm_out_b(channel_parameters.DMAMaskReg, channel+0x04);
+	// mask channel
+	isadma_mask_channel(&channel_parameters);
 
 	// reset flip-flop
-	asm_out_b(channel_parameters.DMAClearReg, 0x01);
-	
+	isadma_reset_flipflop(&channel_parameters);
+
 	// transfer mode
 	uint8_t mode=ISA_DMA_SINGLE_MODE|ISA_DMA_ADDRESS_INCREMENT|ISA_DMA_SINGLE_CYCLE|rw_mode|channel_parameters.DMAChannelFlags;
-	asm_out_b(channel_parameters.DMAModeReg, mode);
+	isadma_set_transfer_mode(&channel_parameters, mode);
 
-	// PAGE TRANSFER
-	asm_out_b(channel_parameters.DMAPagePort, page);
+	// buffer address
+	isadma_set_buffer_address(&channel_parameters);
 
-	// POSITION LOW BITBYTE
-	kprintf("Low %#X\n",LOW_OF_W(buffer));
-	asm_out_b(channel_parameters.DMAAddressPort, LOW_OF_W(buffer));
-
-	// POSITON HIGH BITBYTE
-	kprintf("High %#X\n",HIGH_OF_W(buffer));
-	asm_out_b(channel_parameters.DMAAddressPort, HIGH_OF_W(buffer));
-
-	// COUNT LOW BYTE
-	kprintf("Low %#X\n",LOW_OF_W(len-1));
-	asm_out_b(channel_parameters.DMACountPort, LOW_OF_W(len-1));
-
-	// COUNT HIGH BYTE
-	kprintf("High %#X\n",HIGH_OF_W(len-1));
-	asm_out_b(channel_parameters.DMACountPort, HIGH_OF_W(len-1));
+	// transfer size	
+	isadma_set_transfer_size(&channel_parameters, len);
 
 	// enable channel 1
-	asm_out_b(channel_parameters.DMAMaskReg, ISA_DMA_CHANNEL_1_5);
+	isadma_unmask_channel(&channel_parameters);
 }
 
 void isadma_init_dma_read(uint8_t channel, uint32_t len) {

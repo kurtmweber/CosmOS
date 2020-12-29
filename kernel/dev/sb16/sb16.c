@@ -56,6 +56,8 @@
 #define SB16_TRANSFER_FIFO_ON					0x01 // bit 1
 #define SB16_TRANSFER_FIFO_OFF					0x00 // bit 1
 
+uint16_t SB_BASE_PORTS[] = {0x220, 0x240, 0x260, 0x280};
+
 // forward declarations
 uint8_t sb16_get_dsp_version(struct device* dev);
 
@@ -73,7 +75,7 @@ struct sb16_devicedata {
 */
 void sb16_handle_irq(stackFrame *frame) {
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
-	kprintf("S");
+	kprintf("SSSSSSSSSSSSSSS");
 }
 
 /*
@@ -88,6 +90,22 @@ void deviceInitSB16(struct device* dev){
 	sb16_data->dsp_version = sb16_get_dsp_version(dev);
 	kprintf("   DSP Version: %llu\n", sb16_data->dsp_version);
 }
+
+/*
+* stereo 
+*/
+uint8_t sb16_set_stereo_output(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
+	/*
+	* set stero
+	*/
+	asm_out_b(sb16_data->port+SB16_PORT_MIXER, 0x0e);
+	uint8_t temp = asm_in_b(sb16_data->port+SB16_PORT_MIXER_DATA);
+	asm_out_b(sb16_data->port+SB16_PORT_MIXER_DATA, (temp | 0x2));
+}
+
 
 /*
 * get the speaker status
@@ -156,6 +174,48 @@ void sb16_set_master_volume(struct device* dev, uint8_t v){
 	asm_out_b(sb16_data->port+SB16_PORT_MIXER_DATA, v);
 }
 
+/*
+* time constant
+*/
+void sb16_set_time_constant(struct device* dev, uint32_t samplerate, uint8_t channels) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
+
+	// calc time constant
+	uint16_t constant = 256 - (1000000 / (channels * samplerate));
+	kprintf("   Time Constant %llu\n",constant);
+
+	// set time constant
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, constant);
+}
+
+/*
+* start a transfer
+* 24h 8-bit PCM input
+* 14h 8-bit PCM output
+* 75h 8-bit to 4-bit ADPCM output with reference byte
+* 77h 8-bit to 3-bit ADPCM output with reference byte
+* 17h 8-bit to 2-bit ADPCM output with reference byte
+*/
+
+void sb16_start_transfer_size(struct device* dev, uint16_t size, uint8_t type) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
+
+	// set block size
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, type);
+
+	// calc
+	uint8_t low = LOW_OF_W(size);
+	uint8_t high = HIGH_OF_W(size);
+
+	kprintf("   Transfer size %#X %#X\n",high, low);
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, low);
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, high);
+}
 
 
 /*
@@ -201,22 +261,34 @@ void play(struct device* dev, uint8_t* buffer, uint64_t len) {
 	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
 
 	kprintf("Incoming buffer %#X\n",buffer);
-	debug_show_memblock(buffer,32);
+	debug_show_memblock(buffer,16);
 
 	uint32_t chunks = len / ISA_DMA_BUFFER_SIZE;
-	kprintf("Chunks: %#X data len:  %#X dma size: %#X\n", chunks, len, ISA_DMA_BUFFER_SIZE);
+	kprintf("Chunks: %#X data len: %#X dma size: %#X\n", chunks, len, ISA_DMA_BUFFER_SIZE);
 
 	uint8_t* dma_block_address = (uint8_t*) isadma_get_dma_block(1, ISA_DMA_BUFFER_SIZE);
 	kprintf("DMA block for SB16 dma %#X\n", dma_block_address);
 
-	memcpy(dma_block_address, buffer, ISA_DMA_BUFFER_SIZE-1);
+	memcpy(dma_block_address, buffer, ISA_DMA_BUFFER_SIZE);
 	kprintf("DMA buffer %#X\n",dma_block_address);
-	debug_show_memblock(dma_block_address,32);
+	debug_show_memblock(dma_block_address,16);
 
 	sb16_reset(dev);
 	sb16_speaker_on(dev);
 	sb16_set_master_volume(dev,0xff);
 	isadma_init_dma_read(SB16_DMA, ISA_DMA_BUFFER_SIZE);
+
+	// v4 code, for QEMU
+	if (sb16_data->dsp_version==4){
+		// stereo
+		sb16_set_stereo_output(dev);
+		// time constant
+		sb16_set_time_constant(dev, 44100, 2);
+		// transfer size
+		sb16_start_transfer_size(dev, ISA_DMA_BUFFER_SIZE-1, 0x14);
+	} else {
+		panic("Unknown SB DSP");
+	}
 
 	// set time constant
 //	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
@@ -228,12 +300,12 @@ void play(struct device* dev, uint8_t* buffer, uint64_t len) {
 //	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 234);
 
 
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x41); // output
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xac); // 0xAC44 (44100)
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x44);
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x41); // output
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xac); // 0xAC44 (44100)
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x44);
 
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xc0); // 8 bit output
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00); // 8 bit mono unsigned output
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xc0); // 8 bit output
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00); // 8 bit mono unsigned output
 
 
 	// 8 bit sound
@@ -245,12 +317,12 @@ void play(struct device* dev, uint8_t* buffer, uint64_t len) {
 //	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x14);
 
 	// COUNT LOW BYTE - COUNT LENGTH-1
-	kprintf("Low %#X\n",LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
+//	kprintf("Low %#X\n",LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
 
 	// COUNT HIGH BYTE - COUNT LENGTH-1
-	kprintf("High %#X\n",HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
+//	kprintf("High %#X\n",HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
 }
 
 void sb16_devicemgr_register_device(uint64_t port){
@@ -297,15 +369,11 @@ bool sb16_detect(uint32_t port){
 	return false;
 }
 
-void sb16_devicemgr_register_devices(){
-	if (sb16_detect(0x220)){
-		sb16_devicemgr_register_device(0x220);
-	}
-	if (sb16_detect(0x240)){
-		sb16_devicemgr_register_device(0x240);
-	}
-	if (sb16_detect(0x260)){
-		sb16_devicemgr_register_device(0x260);
+void sb16_devicemgr_register_devices() {
+	for (uint8_t i=0; i<4; i++){
+		if (sb16_detect(SB_BASE_PORTS[i])){
+			sb16_devicemgr_register_device(SB_BASE_PORTS[i]);
+		}
 	}
 }
 
