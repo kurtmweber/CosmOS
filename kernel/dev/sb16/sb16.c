@@ -41,6 +41,7 @@
 #define SB16_COMMAND_RESUME_8_BIT 				0xD4
 #define SB16_COMMAND_STOP_16_BIT 				0xD5
 #define SB16_COMMAND_RESUME_16_BIT 				0xD6
+#define SB16_COMMAND_GET_SPEAKER_STATUS 		0xD8
 #define SB16_COMMAND_GET_DSP_VERSION 			0xE1
 
 // commands (MIXER)
@@ -56,7 +57,7 @@
 #define SB16_TRANSFER_FIFO_OFF					0x00 // bit 1
 
 // forward declarations
-uint8_t get_dsp_version(struct device* dev);
+uint8_t sb16_get_dsp_version(struct device* dev);
 
 /*
 * device parameters for an sb16
@@ -84,14 +85,26 @@ void deviceInitSB16(struct device* dev){
 	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
     kprintf("Init %s at IRQ %llu Port %#X (%s)\n",dev->description, sb16_data->irq, sb16_data->port, dev->name);
     interrupt_router_register_interrupt_handler(sb16_data->irq, &sb16_handle_irq);
-	sb16_data->dsp_version = get_dsp_version(dev);
+	sb16_data->dsp_version = sb16_get_dsp_version(dev);
 	kprintf("   DSP Version: %llu\n", sb16_data->dsp_version);
 }
 
 /*
+* get the speaker status
+*/
+uint8_t sb16_get_speaker_status(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
+
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_GET_SPEAKER_STATUS); 
+	return asm_in_b(sb16_data->port+SB16_PORT_READ);
+} 
+
+/*
 * get the DSP version
 */
-uint8_t get_dsp_version(struct device* dev){
+uint8_t sb16_get_dsp_version(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
