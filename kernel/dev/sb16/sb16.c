@@ -170,21 +170,30 @@ void play(struct device* dev, uint8_t* buffer, uint64_t len) {
 	isadma_init_dma_read(SB16_DMA, ISA_DMA_BUFFER_SIZE);
 
 	// set time constant
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SET_TIME_CONSTANT);
 	
 	// 256 - (1000000 / (SampleChannels * SampleRate))
 	// for 10898 hz we get 256 - (1000000/10989)=165
 	// for 44100 hz we get 256 - (1000000/44100)=234
 	// 44100 Hz
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 234);
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 234);
+
+
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x41); // output
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xac); // 0xAC44 (44100)
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x44);
+
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0xc0); // 8 bit output
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00); // 8 bit mono unsigned output
+
 
 	// 8 bit sound
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_TRANSFER_8BIT);
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_TRANSFER_8BIT);
 
 	// mono and unsigned sound data
 	// http://archive.gamedev.net/archive/reference/articles/article443.html
 	// TODO should this be 0x14
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x00);
+//	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x14);
 
 	// COUNT LOW BYTE - COUNT LENGTH-1
 	kprintf("Low %#X\n",LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
