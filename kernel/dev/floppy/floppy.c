@@ -97,8 +97,9 @@
 struct floppy_devicedata {
     uint32_t port;
 	// 360 KB, 720 KB, etc
-	uint8_t master_type;
-	uint8_t slave_type;
+	uint8_t type;
+	// master or slave
+	bool master;
 } __attribute__((packed));
 
 volatile uint64_t irq_count=0;
@@ -171,22 +172,8 @@ void deviceInitFloppy(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct floppy_devicedata* deviceData = (struct floppy_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, FLOPPY_IRQ_NUMBER, dev->name);
+//	printDriveType(deviceData->type);
 	interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);
-
-	uint8_t drives = cmos_read_register(CMOS_FLOPPY_DRIVES_PORT);
-	deviceData->master_type = (drives & 0XF0)>> 4;
-	deviceData->slave_type = (drives & 0X0F);
-	
-	if (0!=deviceData->master_type){
-		kprintf("Master Floppy ");
-		printDriveType(deviceData->master_type);
-		kprintf("\n");
-	}
-	if (0!=deviceData->slave_type){
-		kprintf("Slave Floppy ");
-		printDriveType(deviceData->slave_type);
-		kprintf("\n");
-	}
 
 	// set CCR, DSR to zero
 	asm_out_b(FLOPPY_CONFIGURATION_CONTROL_REGISTER ,0x00);
@@ -211,19 +198,28 @@ void lba_2_chs(uint32_t lba, uint16_t* cyl, uint16_t* head, uint16_t* sector) {
     *sector = ((lba % (2 * FLOPPY_144_SECTORS_PER_TRACK)) % FLOPPY_144_SECTORS_PER_TRACK + 1);
 }
 
-void floppy_read(struct device* dev, uint32_t sector, uint8_t* data, uint16_t size) {
+// api
+void floppy_read(struct device* dev, uint32_t lba, uint8_t* data, uint16_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 
 //	panic("Floppy read not implemented yet");
 }
-void floppy_write(struct device* dev, uint32_t sector, uint8_t* data, uint16_t size) {
+
+// api
+void floppy_write(struct device* dev, uint32_t lba, uint8_t* data, uint16_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 //	panic("Floppy write not implemented yet");
 }
 
-void floppy_register_floppy(uint64_t port){
+// api
+void floppy_reset(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("Floppy reset not implemented yet");
+}
+
+void floppy_register_device(uint64_t port, uint8_t type, bool master){
    /*
 	* register device
 	*/
@@ -237,17 +233,37 @@ void floppy_register_floppy(uint64_t port){
     struct deviceapi_floppy* api = (struct deviceapi_floppy*) kmalloc(sizeof(struct deviceapi_floppy));
     api->write = &floppy_read;
     api->read = &floppy_write;
+	api->reset = &floppy_reset;
     deviceinstance->api = api;
 	/*
 	* device data
 	*/
 	struct floppy_devicedata* deviceData = (struct floppy_devicedata*) kmalloc(sizeof(struct floppy_devicedata));
-	deviceData->port = port;
+	deviceData->port=port;
+	deviceData->type=type;
+	deviceData->master=master;
 	deviceinstance->deviceData = deviceData;
 	/*
 	* register
 	*/
 	devicemgr_register_device(deviceinstance);
+}
+
+void floppy_register_floppy(uint64_t port){
+	uint8_t drives = cmos_read_register(CMOS_FLOPPY_DRIVES_PORT);
+
+	uint8_t master_type = (drives & 0XF0)>> 4;
+	uint8_t slave_type = (drives & 0X0F);
+
+	
+	if (0!=master_type){
+		floppy_register_device(port, master_type, true);
+	}
+	if (0!=slave_type){
+	//	kprintf("Slave Floppy ");
+	//	floppy_register_device(port, slave_type, false);
+	//	kprintf("\n");
+	}
 }
 
 /**
