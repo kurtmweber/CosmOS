@@ -26,7 +26,6 @@ struct list* devicetypes_get_devicelist(deviceType dt) {
     } else {
         panic("Invalid device type passed to devicetypes_get_devicelist");
     }
-
 }
 
 void devicetypes_set_devicelist(deviceType dt, struct list* lst) {
@@ -37,4 +36,3 @@ void devicetypes_set_devicelist(deviceType dt, struct list* lst) {
         panic("Invalid device type passed to devicetypes_set_devicelist");
     }
 }
-
