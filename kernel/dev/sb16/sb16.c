@@ -18,7 +18,6 @@
 #include <dev/isadma/isadma.h>
 #include <string/mem.h>
 
-
 // https://wiki.osdev.org/Sound_Blaster_16
 
 #define SB16_IRQ        5
@@ -64,6 +63,9 @@ struct sb16_devicedata {
 	uint8_t irq;
 } __attribute__((packed));
 
+/*
+* interrupt handler
+*/
 void sb16_handle_irq(stackFrame *frame) {
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	kprintf("S");
@@ -75,27 +77,40 @@ void sb16_handle_irq(stackFrame *frame) {
 void deviceInitSB16(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
     kprintf("Init %s at IRQ %llu Port %#X (%s)\n",dev->description, sb16_data->irq, sb16_data->port, dev->name);
     interrupt_router_register_interrupt_handler(sb16_data->irq, &sb16_handle_irq);
 }
 
+/*
+* reset the device
+*/
 void sb16_reset(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
 	asm_out_b(sb16_data->port+SB16_PORT_RESET, 0x01);
 	sleep_wait(100);
 	asm_out_b(sb16_data->port+SB16_PORT_RESET, 0x0);
 }
 
+/*
+* speaker on
+*/
 void sb16_speaker_on(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SPEAKER_ON);
 }
 
+/*
+* speaker off
+*/
 void sb16_speaker_off(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, SB16_COMMAND_SPEAKER_OFF);
 }
 
@@ -105,6 +120,7 @@ void sb16_speaker_off(struct device* dev) {
 void sb16_set_master_volume(struct device* dev, uint8_t v){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
+	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
 	asm_out_b(sb16_data->port+SB16_PORT_MIXER, SB16_COMMAND_MASTER_VOLUME);
 	asm_out_b(sb16_data->port+SB16_PORT_MIXER_DATA, v);
 }
