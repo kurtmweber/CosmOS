@@ -250,6 +250,7 @@ void floppy_register_device(uint64_t port, uint8_t type, bool master){
 }
 
 void floppy_register_floppy(uint64_t port){
+
 	uint8_t drives = cmos_read_register(CMOS_FLOPPY_DRIVES_PORT);
 
 	uint8_t master_type = (drives & 0XF0)>> 4;

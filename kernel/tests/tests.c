@@ -66,49 +66,61 @@ void stringtest() {
 void BeethovensFifth() {
 	// get the speaker
 	struct device* speaker = devicemgr_findDevice("speaker0");
-	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
-	speaker_beep_function beep_func = speaker_api->beep;
-//	(*beep_func)(speaker, 4000, 50);
-	(*beep_func)(speaker,NOTE_G5, 200);
-	sleep_wait(100);
-	(*beep_func)(speaker,NOTE_G5, 200);
-	sleep_wait(100);
-	(*beep_func)(speaker,NOTE_G5, 200);
-	sleep_wait(100);
-	(*beep_func)(speaker,NOTE_DS5, 400);
-	sleep_wait(400);
+	if (0!=speaker){
+		struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
+		speaker_beep_function beep_func = speaker_api->beep;
+	//	(*beep_func)(speaker, 4000, 50);
+		(*beep_func)(speaker,NOTE_G5, 200);
+		sleep_wait(100);
+		(*beep_func)(speaker,NOTE_G5, 200);
+		sleep_wait(100);
+		(*beep_func)(speaker,NOTE_G5, 200);
+		sleep_wait(100);
+		(*beep_func)(speaker,NOTE_DS5, 400);
+		sleep_wait(400);
 
-	(*beep_func)(speaker,NOTE_F5, 200);
-	sleep_wait(100);
-	(*beep_func)(speaker,NOTE_F5, 200);
-	sleep_wait(100);
-	(*beep_func)(speaker,NOTE_F5, 200);
-	sleep_wait(100);
-	(*beep_func)(speaker,NOTE_D5, 400);
-	sleep_wait(100);
+		(*beep_func)(speaker,NOTE_F5, 200);
+		sleep_wait(100);
+		(*beep_func)(speaker,NOTE_F5, 200);
+		sleep_wait(100);
+		(*beep_func)(speaker,NOTE_F5, 200);
+		sleep_wait(100);
+		(*beep_func)(speaker,NOTE_D5, 400);
+		sleep_wait(100);
+	} else {
+		kprintf("Unable to find speaker0\n");
+	}
 }
 
-void playsb16() {
-	uint64_t start = (uint64_t)&_tone_s;
-	uint64_t end = (uint64_t)&_tone_e;
-	uint64_t size = (uint64_t)&_tone_e-(uint64_t)&_tone_s;
-
-	// show the tone data.  byte size should be the same as tone8.raw
-	kprintf("8 bit PCM for tone8.raw is from %#X to %#X with byte size %llu\n",start ,end, size);
-	
+void playsb16() {	
 	// get the sb
 	struct device* dsp = devicemgr_findDevice("dsp0");
-	struct deviceapi_dsp* dsp_api = (struct deviceapi_dsp*) dsp->api;
-	dsp_play_function play_func = dsp_api->play;
-	(*play_func)(dsp, (uint8_t*)start, size);
+	if (0!=dsp) {
+		uint64_t start = (uint64_t)&_tone_s;
+		uint64_t end = (uint64_t)&_tone_e;
+		uint64_t size = (uint64_t)&_tone_e-(uint64_t)&_tone_s;
+
+		// show the tone data.  byte size should be the same as tone8.raw
+		kprintf("8 bit PCM for tone8.raw is from %#X to %#X with byte size %llu\n",start ,end, size);
+
+		struct deviceapi_dsp* dsp_api = (struct deviceapi_dsp*) dsp->api;
+		dsp_play_function play_func = dsp_api->play;
+		(*play_func)(dsp, (uint8_t*)start, size);
+	} else {
+		kprintf("Unable to find dsp0\n");
+	}
 }
 
 void chirp() {
 	// get the speaker
 	struct device* speaker = devicemgr_findDevice("speaker0");
-	struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
-	speaker_beep_function beep_func = speaker_api->beep;
-	(*beep_func)(speaker, 4000, 50);
+	if (0!=speaker){
+		struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
+		speaker_beep_function beep_func = speaker_api->beep;
+		(*beep_func)(speaker, 4000, 50);
+	} else {
+		kprintf("Unable to find speaker0\n");
+	}
 }
 
 /*
@@ -117,9 +129,13 @@ void chirp() {
 void serialMessage(const uint8_t* message) {
    	// get serial0
 	struct device* serial0 = devicemgr_findDevice("serial0");
-	struct deviceapi_serial* serial_api = (struct deviceapi_serial*) serial0->api;
-	serial_write_function write_func = serial_api->write;
-	(*write_func)(serial0, message);	
+	if (0!=serial0){
+		struct deviceapi_serial* serial_api = (struct deviceapi_serial*) serial0->api;
+		serial_write_function write_func = serial_api->write;
+		(*write_func)(serial0, message);
+	} else {
+		kprintf("Unable to find serial0\n");
+	}
 }
 
 void test_debug() {
@@ -212,11 +228,15 @@ void testFunctions() {
 void floppyread() {
 	// get the floppy
 	struct device* floppy = devicemgr_findDevice("floppy0");
-	struct deviceapi_floppy* floppy_api = (struct deviceapi_floppy*) floppy->api;
+	if (0!=floppy){
+		struct deviceapi_floppy* floppy_api = (struct deviceapi_floppy*) floppy->api;
 
-	uint8_t data[256];
-	(*floppy_api->read)(floppy, 0, data, 255);
-	debug_show_memblock(data, 32);
+		uint8_t data[256];
+		(*floppy_api->read)(floppy, 0, data, 255);
+		debug_show_memblock(data, 32);
+	} else {
+		kprintf("Unable to find floppy0\n");
+	}
 }
 
 
