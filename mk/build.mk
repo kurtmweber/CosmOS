@@ -42,7 +42,6 @@ QEMUARGS=                                                 \
   -smp 1                                                  \
   -nic user,ipv6=off,model=ne2k_pci,mac=52:54:98:76:54:32 \
   -serial stdio                                           \
-  -machine pcspk-audiodev=audio0                          \
   -audiodev coreaudio,id=audio0                           \
   -monitor telnet::45454,server,nowait                    \
   -device floppy,drive=f0                                 \
@@ -60,3 +59,5 @@ QEMUARGS=                                                 \
 
 # -device AC97,audiodev=audio0
 # -device adlib,audiodev=audio0
+
+#  -machine pcspk-audiodev=audio0                          \

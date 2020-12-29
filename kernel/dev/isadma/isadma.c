@@ -298,23 +298,19 @@ void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
 	asm_out_b(channel_parameters.DMAPagePort, page);
 
 	// POSITION LOW BITBYTE
-		kprintf("Low %#X\n",LOW_OF_W(buffer));
-
+	kprintf("Low %#X\n",LOW_OF_W(buffer));
 	asm_out_b(channel_parameters.DMAAddressPort, LOW_OF_W(buffer));
 
 	// POSITON HIGH BITBYTE
-		kprintf("High %#X\n",HIGH_OF_W(buffer));
-
+	kprintf("High %#X\n",HIGH_OF_W(buffer));
 	asm_out_b(channel_parameters.DMAAddressPort, HIGH_OF_W(buffer));
 
 	// COUNT LOW BYTE
-			kprintf("Low %#X\n",LOW_OF_W(len-1));
-
+	kprintf("Low %#X\n",LOW_OF_W(len-1));
 	asm_out_b(channel_parameters.DMACountPort, LOW_OF_W(len-1));
 
 	// COUNT HIGH BYTE
-			kprintf("High %#X\n",LOW_OF_W(len-1));
-
+	kprintf("High %#X\n",HIGH_OF_W(len-1));
 	asm_out_b(channel_parameters.DMACountPort, HIGH_OF_W(len-1));
 
 	// enable channel 1
