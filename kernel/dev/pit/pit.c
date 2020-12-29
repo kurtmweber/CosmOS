@@ -59,6 +59,12 @@ uint64_t pit_tickcount(struct device* dev) {
     return tickcount;
 }
 
+void pit_subscribe(pit_event event) {
+	ASSERT_NOT_NULL(pitEvents, "pitEvents cannot be null. Has the PIT been initialized?");
+	ASSERT_NOT_NULL(event, "event cannot be null");
+	list_add(pitEvents, event);
+}
+
 void pit_devicemgr_register_devices(){
     pitEvents = list_new();
     /*
@@ -73,6 +79,7 @@ void pit_devicemgr_register_devices(){
 	*/
 	struct deviceapi_pit* api = (struct deviceapi_pit*) kmalloc (sizeof(struct deviceapi_pit));
 	api->tickcount = &pit_tickcount;
+	api->subscribe = &pit_subscribe;
 	deviceinstance->api = api;
 	/*
 	* register
@@ -80,8 +87,5 @@ void pit_devicemgr_register_devices(){
 	devicemgr_register_device(deviceinstance);
 }
 
-void pit_subscribe(PITEvent pitEvent) {
-	ASSERT_NOT_NULL(pitEvents, "pitEvents cannot be null. Has the PIT been initialized?");
-	list_add(pitEvents, pitEvent);
-}
+
 

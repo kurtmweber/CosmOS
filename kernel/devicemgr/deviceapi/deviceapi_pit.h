@@ -13,10 +13,14 @@
 #include <types.h>
 #include <devicemgr/devicemgr.h>
 
+typedef void (*pit_event)();
 typedef uint64_t (*pit_tickcount_function)(struct device* dev);
+typedef void (*pit_subscribe_function)(pit_event event);
+
 
 struct deviceapi_pit {
     pit_tickcount_function tickcount;
+    pit_subscribe_function subscribe;
 };
 
 #endif
