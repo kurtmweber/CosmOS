@@ -319,7 +319,7 @@ void isadma_set_buffer_address(struct isa_dma_channel_parameters* channel_parame
 }
 
 /*
-* mask channel
+* mask channel (the +0x04 is b/c bit 2 of the register enables masking)
 */
 void isadma_mask_channel(struct isa_dma_channel_parameters* channel_parameters) {
 	asm_out_b(channel_parameters->DMAMaskReg, channel_parameters->channel+0x04);
