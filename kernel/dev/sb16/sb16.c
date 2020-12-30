@@ -106,7 +106,6 @@ uint8_t sb16_set_stereo_output(struct device* dev){
 	asm_out_b(sb16_data->port+SB16_PORT_MIXER_DATA, (temp | 0x2));
 }
 
-
 /*
 * get the speaker status
 */
@@ -200,13 +199,16 @@ void sb16_set_time_constant(struct device* dev, uint32_t samplerate, uint8_t cha
 * 17h 8-bit to 2-bit ADPCM output with reference byte
 */
 
-void sb16_start_transfer_size(struct device* dev, uint16_t size, uint8_t type) {
+void sb16_start_transfer_size(struct device* dev, uint16_t size, uint8_t command, uint8_t mode) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
 
-	// set block size
-	asm_out_b(sb16_data->port+SB16_PORT_WRITE, type);
+	// command
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, command);
+
+	// mode
+	asm_out_b(sb16_data->port+SB16_PORT_WRITE, mode);
 
 	// calc
 	uint8_t low = LOW_OF_W(size);
@@ -216,7 +218,6 @@ void sb16_start_transfer_size(struct device* dev, uint16_t size, uint8_t type) {
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, low);
 	asm_out_b(sb16_data->port+SB16_PORT_WRITE, high);
 }
-
 
 /*
 * https://wiki.osdev.org/Sound_Blaster_16
@@ -285,7 +286,11 @@ void play(struct device* dev, uint8_t* buffer, uint64_t len) {
 		// time constant
 		sb16_set_time_constant(dev, 44100, 2);
 		// transfer size
-		sb16_start_transfer_size(dev, ISA_DMA_BUFFER_SIZE-1, 0x14);
+		/*
+		* C0 Program 8-bit DMA mode digitized sound I/O
+		* 0x00 mono unsigned
+		*/
+		sb16_start_transfer_size(dev, ISA_DMA_BUFFER_SIZE-1, 0xC0, 0x00);
 	} else {
 		panic("Unknown SB DSP");
 	}
