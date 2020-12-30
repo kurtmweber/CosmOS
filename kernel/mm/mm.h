@@ -10,6 +10,9 @@
 
 #include <types.h>
 
+// How much physical address space the bootloader has mapped
+#define BOOT_MAPPED_PHYS	0x1100000
+
 #define PTTENTRY_BASE_MASK 0x000FFFFFFFFFF000
 #define INIT_UNMAPPED_PHYS_BASE	0xB00000
 

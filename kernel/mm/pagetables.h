@@ -36,10 +36,17 @@ typedef uint64_t ptt_t;     // page translation table
                                     // use 4-kb pages so it should always be 0
 #define PTT_FLAG_GLOBAL     256     // 1 for global page
 
+typedef struct page_directory_t{
+    uint64_t ref_count;
+    uint64_t proc_count;
+    uint64_t type;
+    uint64_t flags;
+} page_directory_t;
+
 // pagetables.c
 ptt_t ptt_entry_create(uint64_t base_address, bool present, bool rw, bool user);
 
 // directmap.c
-void setup_direct_map(int_15_map *phys_map);
+void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
 
 #endif
