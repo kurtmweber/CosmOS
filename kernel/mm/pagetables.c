@@ -75,17 +75,19 @@ bool is_page_allocated(void *address){
 	return true;
 }
 
-ptt_t ptt_entry_create(uint64_t base_address, bool present, bool rw, bool user){
-	// Use this function to create PTT entries rather than setting address + flags directly,
-	// unless there's a good reason not to.  This way, if the system default settings
-	// ever need to change, we only have to do it in one place
+pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user){
+	/*
+	 * Use this function to create PTT entries rather than setting address + flags directly,
+	 * unless there's a good reason not to.  This way, if the system default settings
+	 * ever need to change, we only have to do it in one place
+	 */
 	
 	// If you're setting up PTT entries manually and things break, well, I warned you
 
-	ptt_t r;
+	pttentry r;
 
 	// clear the bottom twelve bits
-	r = ((base_address >> 12) << 12);
+	r = (((uint64_t)base_address >> 12) << 12);
 
 	if (present){
 		r |= PTT_FLAG_PRESENT;
@@ -98,6 +100,8 @@ ptt_t ptt_entry_create(uint64_t base_address, bool present, bool rw, bool user){
 	if (user){
 		r |= PTT_FLAG_USER;
 	}
+
+	return r;
 }
 
 uint16_t vaddr_ptt_index(void *address, ptt_levels level){

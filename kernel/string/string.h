@@ -10,7 +10,13 @@
 
 #include <types.h>
 
+// memops.c
+void *memset(void *s, uint8_t c, size_t n);
+
+// itoa.c
 void uitoa3(uint64_t n, char *s, uint16_t len, uint8_t base);
+
+// string.c
 uint64_t strlen(const char *s);
 char *strtrim(const char *s);
 char *strcpy(char *dest, const char *src);

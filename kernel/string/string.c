@@ -43,7 +43,7 @@ char *strtrim(const char *s){
 	return tgt;
 }
 
-char * strcpy(char *dest, const char *src) {
+char *strcpy(char *dest, const char *src) {
 	uint32_t i;
 	for (i = 0; src[i] != '\0'; i++)
 		dest[i] = src[i];

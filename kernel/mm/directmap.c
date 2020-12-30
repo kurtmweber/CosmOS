@@ -118,6 +118,7 @@ void *find_last_phys_addr(int_15_map *phys_map, uint8_t num_blocks){
 
 void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
     ptt_t cr3;
+    void *cur_phys_loc = (void *)EARLY_PAGE_TABLE_PHYS_BASE;
     uint16_t idx;
     int_15_map best_block;
     void *last_phys_addr = 0;
@@ -146,15 +147,13 @@ void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
     idx = vaddr_ptt_index(((void *)DIRECT_MAP_OFFSET) + best_block.len, PML4);
     kprintf("PML4 index: %u\n", idx);
     pml4 = (pttentry *)PTT_EXTRACT_BASE(cr3);
-    
-
 
     /*
      * Bootloader clears PML4 area for us, so we can count on this being a reliable test as to whether
      * there is already an entry there or not.  If there is, we follow it; if not, we write a new one.
      */
     if (!pml4[idx]){
-        //pml4[idx] = 
+        pml4[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
     }
 
     return;

@@ -44,7 +44,7 @@ typedef struct page_directory_t{
 } page_directory_t;
 
 // pagetables.c
-ptt_t ptt_entry_create(uint64_t base_address, bool present, bool rw, bool user);
+pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
 
 // directmap.c
 void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
