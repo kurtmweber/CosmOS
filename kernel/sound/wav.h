@@ -10,6 +10,8 @@
 
 #include <types.h>
 
+// http://soundfile.sapp.org/doc/WaveFormat/
+
 struct wav_header {
     // "RIFF"
     uint8_t riff_header[4];
