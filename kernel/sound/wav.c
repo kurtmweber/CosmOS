@@ -4,19 +4,15 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-/*
-* this file defines the interface that all DSP devices will implement
-*/
-#ifndef _DEVICEAPI_DSP_H
-#define _DEVICEAPI_DSP_H
 
-#include <types.h>
-#include <devicemgr/devicemgr.h>
+#include <sound/wav.h>
+#include <debug/assert.h>
+#include <console/console.h>
 
-typedef void (*dsp_play_function)(struct device* dev, uint8_t* buffer, uint16_t rate, uint8_t depth,uint8_t channels, uint64_t len);
+uint8_t* wav_pcm_start(struct wav_header* header) {
+    ASSERT_NOT_NULL(header, "header must not be null");
+	uint8_t* ret =(uint8_t*) ((uint64_t) header)+sizeof(struct wav_header);
+	kprintf("PCM start %#X\n", (uint64_t) ret);
+    return ret;
+}
 
-struct deviceapi_dsp {
-    dsp_play_function play;
-};
-
-#endif

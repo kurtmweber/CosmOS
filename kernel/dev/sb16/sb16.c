@@ -21,7 +21,8 @@
 // https://wiki.osdev.org/Sound_Blaster_16
 
 #define SB16_IRQ        5
-#define SB16_DMA        1
+#define SB16_DMA_8BIT   1
+#define SB16_DMA_16BIT  5
 
 // ports
 #define SB16_PORT_MIXER 			0x04
@@ -255,13 +256,18 @@ void sb16_start_transfer_size(struct device* dev, uint16_t size, uint8_t command
 //   OUTB 0x22C, 0x0F ;COUNT HIGH BIT - COUNT LENGHT-1 (EXAMPLE 0x0FFF SO 0x0FFE) - SET THIS VALUE FOR YOU
  
 //   ;now transfer start - dont forget to handle irq
-void play(struct device* dev, uint8_t* buffer, uint64_t len) {
+void sb16_play(struct device* dev, uint8_t* buffer, uint16_t rate, uint8_t depth, uint8_t channels, uint64_t len) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(buffer, "buffer cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
 
 	kprintf("Incoming buffer %#X\n",buffer);
+    kprintf("Channels %llu\n",channels);
+    kprintf("Sample rate %llu\n",rate);
+    kprintf("Sample depth %llu\n",depth);
+    kprintf("PCM data size %llu\n",len);
+	
 	debug_show_memblock(buffer,16);
 
 	uint32_t chunks = len / ISA_DMA_BUFFER_SIZE;
@@ -277,20 +283,37 @@ void play(struct device* dev, uint8_t* buffer, uint64_t len) {
 	sb16_reset(dev);
 	sb16_speaker_on(dev);
 	sb16_set_master_volume(dev,0xff);
-	isadma_init_dma_read(SB16_DMA, ISA_DMA_BUFFER_SIZE);
 
+	if (depth==8) {
+		isadma_init_dma_read(SB16_DMA_8BIT, ISA_DMA_BUFFER_SIZE);
+	} else if (depth==16) {
+		isadma_init_dma_read(SB16_DMA_16BIT, ISA_DMA_BUFFER_SIZE);
+	} else {
+		panic("SB16 unknown bit depth");
+	}
 	// v4 code, for QEMU
 	if (sb16_data->dsp_version==4){
 		// stereo
-		sb16_set_stereo_output(dev);
+		if (channels==2) {
+			sb16_set_stereo_output(dev);
+		}
 		// time constant
-		sb16_set_time_constant(dev, 44100, 2);
+		sb16_set_time_constant(dev, rate, channels);
 		// transfer size
-		/*
-		* C0 Program 8-bit DMA mode digitized sound I/O
-		* 0x00 mono unsigned
-		*/
-		sb16_start_transfer_size(dev, ISA_DMA_BUFFER_SIZE-1, 0xC0, 0x00);
+
+		if (depth==8) {
+			/*
+			* C0 Program 8-bit DMA mode digitized sound I/O
+			* 0x00 mono unsigned
+			*/
+			sb16_start_transfer_size(dev, ISA_DMA_BUFFER_SIZE-1, 0xC0, 0x00);
+		} else if (depth==16) {
+			/*
+			* 0xB6 Program 16-bit DMA mode digitized sound I/O
+			* 0x30 16 bit stereo unsigned			
+			*/
+			sb16_start_transfer_size(dev, ISA_DMA_BUFFER_SIZE-1, 0xB6, 0x30);
+		}
 	} else {
 		panic("Unknown SB DSP");
 	}
@@ -342,7 +365,7 @@ void sb16_devicemgr_register_device(uint64_t port){
 	* device api
 	*/
 	struct deviceapi_dsp* api = (struct deviceapi_dsp*) kmalloc (sizeof(struct deviceapi_dsp));
-	api->play=play;
+	api->play=sb16_play;
 	deviceinstance->api = api;
 	/*
 	* device data

@@ -9,7 +9,7 @@
 
 #include <collection/kernelstring/kernelstring.h>
 #include <devicemgr/deviceapi/deviceapi_speaker.h>
-#include <rawdata.h>
+#include <sound/tone.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
 #include <notes.h>
@@ -96,16 +96,15 @@ void playsb16() {
 	// get the sb
 	struct device* dsp = devicemgr_findDevice("dsp0");
 	if (0!=dsp) {
-		uint64_t start = (uint64_t)&_tone_s;
-		uint64_t end = (uint64_t)&_tone_e;
-		uint64_t size = (uint64_t)&_tone_e-(uint64_t)&_tone_s;
+		struct wav_header* wav = sound_get_tone();
 
-		// show the tone data.  byte size should be the same as tone8.raw
-		kprintf("8 bit PCM for tone8.raw is from %#X to %#X with byte size %llu\n",start ,end, size);
+
 
 		struct deviceapi_dsp* dsp_api = (struct deviceapi_dsp*) dsp->api;
 		dsp_play_function play_func = dsp_api->play;
-		(*play_func)(dsp, (uint8_t*)start, size);
+		uint8_t* pcmstart =wav_pcm_start(wav);
+
+		(*play_func)(dsp, pcmstart, wav->sample_rate, wav->bit_depth, wav->num_channels, wav->data_bytes);
 	} else {
 		kprintf("Unable to find dsp0\n");
 	}
