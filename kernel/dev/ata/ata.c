@@ -41,7 +41,7 @@ void ata_detect_addresses(){
 	}
 }
 
-void deviceInitATA(struct device* dev){
+void ata_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 	if (0==NUM_CONTROLLERS){
@@ -84,7 +84,7 @@ void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size
 	panic("ATA write not implemented yet");
 }
 
-void ATASearchCB(struct pci_device* dev){
+void ata_register_device(struct pci_device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	/*
 	* save in IDE list
@@ -92,12 +92,11 @@ void ATASearchCB(struct pci_device* dev){
 	struct ide_controller_t* ide_controller = kmalloc(sizeof(struct ide_controller_t));
 	ide_controller->pci = dev;
 	list_add(ide_controllers, ide_controller);
-
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &deviceInitATA;
+    deviceinstance->init = &ata_device_init;
     deviceinstance->pci = dev;
 	deviceinstance->devicetype=ATA;
 	devicemgr_set_device_description(deviceinstance, "ATA");
@@ -114,9 +113,17 @@ void ATASearchCB(struct pci_device* dev){
     devicemgr_register_device(deviceinstance);
 }
 
+/*
+* search callback finds controllers
+* register master, and slave
+*/
+void ata_search_cb(struct pci_device* dev){
+	ata_register_device(dev);
+}
+
 void ata_devicemgr_register_devices() {
 	ide_controllers = list_new();
-	pci_devicemgr_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ATASearchCB);	
+	pci_devicemgr_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ata_search_cb);	
 }
 
 void ata_setup_irq(){
