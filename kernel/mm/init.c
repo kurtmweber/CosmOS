@@ -8,6 +8,8 @@
 #include <types.h>
 #include <console/console.h>
 #include <dev/isadma/isadma.h>
+#include <dev/virtio/virtqueue.h>
+
 #include <mm/mm.h>
 
 void mmu_init(){
@@ -18,9 +20,13 @@ void mmu_init(){
 	
 	brk = &_end;
 
-	kprintf("   Reserving ISA DMA memory...\n");
 	isadma_buf = find_aligned_after(brk, ISA_DMA_ALIGNMENT);
+	kprintf("   Reserved ISA DMA memory of size %#hX at %#hX\n", ISA_DMA_BUFSIZ, isadma_buf);
 	brk = isadma_buf + ISA_DMA_BUFSIZ;
+
+	virtqueue_buf = find_aligned_after(brk, VIRTQUEUE_ALIGNMENT);
+	kprintf("   Reserved Virtqueue memory of size %#hX at %#hX\n",VIRTQUEUE_BUFSIZ, virtqueue_buf);
+	brk = isadma_buf + VIRTQUEUE_BUFSIZ;
 	
 	kmalloc_init();
 	

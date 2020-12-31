@@ -22,6 +22,11 @@
 #define VIRTQ_USED_F_NO_NOTIFY 1
 
 /*
+* this variable is set up by the MM
+*/
+void *virtqueue_buf;
+
+/*
 * create virtq
 */
 struct virtq* virtq_new(uint16_t size) {

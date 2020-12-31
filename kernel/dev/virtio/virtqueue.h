@@ -10,6 +10,11 @@
 
 #include <types.h>
 
+#define VIRTQUEUE_NUM_BUFFERS   0x08                                         // 8 buffers (1 per device * 8 devices)
+#define VIRTQUEUE_BUFFER_SIZE   sizeof(struct virtq)                         // 8k blocks
+#define VIRTQUEUE_ALIGNMENT     0x10000                                      // channels must be 64k aligned
+#define VIRTQUEUE_BUFSIZ        VIRTQUEUE_NUM_BUFFERS* VIRTQUEUE_BUFFER_SIZE // this is used by mm to reserve space
+
 // https://www.redhat.com/en/blog/virtqueues-and-virtio-ring-how-data-travels
 
 #define VIRTQ_DESC_F_AVAIL (1 << 7)
@@ -62,5 +67,9 @@ uint16_t virtq_get_available_idx(struct virtq* queue);
 // used
 uint16_t virtq_get_used_idx(struct virtq* queue);
 
+/*
+* location of the virtqueue buffers, set by the MM
+*/
+extern void *virtqueue_buf;
 
 #endif
