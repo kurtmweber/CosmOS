@@ -138,7 +138,7 @@ void ne2000pci_irq_handler(stackFrame *frame){
 /*
 * perform device instance specific init here
 */
-void NE200PCIInit(struct device* dev){
+void ne2000_pci_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     struct ne2000pci_devicedata* deviceData = (struct ne2000pci_devicedata*) dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
@@ -161,12 +161,12 @@ void ne2000pci_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) 
 	panic("Ethernet write not implemented yet");
 }
 
-void NE2000PCISearchCB(struct pci_device* dev){
+void ne2000_pci_search_cb(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &NE200PCIInit;
+    deviceinstance->init =  &ne2000_pci_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "NE2000 PCI");
@@ -193,7 +193,7 @@ void NE2000PCISearchCB(struct pci_device* dev){
 * find all NE2000 devices and register them
 */
 void ne2000pci_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000PCISearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &ne2000_pci_search_cb);
 }
 
 void ne2000pci_init() {	

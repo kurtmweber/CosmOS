@@ -21,7 +21,7 @@ void rtl8139_irq_handler(stackFrame *frame){
 /*
 * perform device instance specific init here
 */
-void RTL8139Init(struct device* dev){
+void rtl8139_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &rtl8139_irq_handler);
@@ -40,12 +40,12 @@ void rtl8139_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
 	panic("Ethernet write not implemented yet");
 }
 
-void RTL8139SearchCB(struct pci_device* dev){
+void rtl8139_search_cb(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &RTL8139Init;
+    deviceinstance->init =  &rtl8139_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "Realtek RTL8139 10/100 NIC");
@@ -66,5 +66,5 @@ void RTL8139SearchCB(struct pci_device* dev){
 * find all RTL8139 devices and register them
 */
 void rtl8139_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8139, &RTL8139SearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8139, &rtl8139_search_cb);
 }

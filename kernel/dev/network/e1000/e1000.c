@@ -21,7 +21,7 @@ void e1000_irq_handler(stackFrame *frame){
 /*
 * perform device instance specific init here
 */
-void E1000Init(struct device* dev){
+void e1000_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &e1000_irq_handler);
@@ -40,12 +40,12 @@ void e1000_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
 	panic("Ethernet write not implemented yet");
 }
 
-void E1000SearchCB(struct pci_device* dev){
+void e1000_search_cb(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &E1000Init;
+    deviceinstance->init =  &e1000_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "E1000 NIC");
@@ -65,5 +65,5 @@ void E1000SearchCB(struct pci_device* dev){
 /**
 */
 void e1000_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x8086,0x100E, &E1000SearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x8086,0x100E, &e1000_search_cb);
 }

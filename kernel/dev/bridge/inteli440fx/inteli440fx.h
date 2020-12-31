@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void bridge_register_i440fx();
+void i440fx_bridge_register();
 
 #endif

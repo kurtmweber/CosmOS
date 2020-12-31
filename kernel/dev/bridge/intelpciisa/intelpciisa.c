@@ -20,20 +20,20 @@ struct intelisapca_deviceddata {
 /*
 * perform device instance specific init here
 */
-void deviceInitpciisa(struct device* dev){
+void pciisa_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct intelisapca_deviceddata* deviceData = (struct intelisapca_deviceddata*) dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
  }
 
-void pciisaSearchCB(struct pci_device* dev){
+void pciisa_search_cb(struct pci_device* dev){
     ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &deviceInitpciisa;
+    deviceinstance->init =  &pciisa_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = BRIDGE;
     devicemgr_set_device_description(deviceinstance, "Intel PIIX3 PCI-to-ISA Bridge (Triton II)");
@@ -51,6 +51,6 @@ void pciisaSearchCB(struct pci_device* dev){
 /**
 * find all bridge devices and register them
 */
-void bridge_register_pciisa() {
-    pci_devicemgr_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_ISA, &pciisaSearchCB);
+void pciisa_bridge_register() {
+    pci_devicemgr_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_ISA, &pciisa_search_cb);
 }
