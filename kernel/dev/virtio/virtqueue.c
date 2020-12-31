@@ -21,6 +21,9 @@
 // set this flag in the used queue if we dont want interrupts
 #define VIRTQ_USED_F_NO_NOTIFY 1
 
+/*
+* create virtq
+*/
 struct virtq* virtq_new() {
     struct virtq* ret = kmalloc(sizeof(struct virtq));
     /*
@@ -50,6 +53,9 @@ struct virtq* virtq_new() {
     return ret; 
 }
 
+/*
+* delete virtq
+*/
 void virtq_delete(struct virtq* queue) {
 	ASSERT_NOT_NULL(queue, "queue cannot be null");
     /*
@@ -80,30 +86,31 @@ uint16_t find_first_empty_slot(struct virtq* queue) {
     return -1;
 }
 
+/*
+* enqueue descriptor
+*/
 uint32_t virtq_enqueue_descriptor(struct virtq* queue, struct virtq_descriptor* descriptor) {
 	ASSERT_NOT_NULL(queue, "queue cannot be null");
-    if (0!=descriptor){
-        // find a slot in the descriptor table
-        uint16_t slot = find_first_empty_slot(queue);
-        // put descriptor into  descriptor table
-        queue->descriptors[slot]=descriptor;
-        // point to the descriptor in the avail ring
-        queue->avail.ring[queue->avail.idx]=slot;
-        // save index
-        uint32_t saved = queue->avail.idx;
-        // increment the avail ring
-        queue->avail.idx = queue->avail.idx+1;
-        if (queue->avail.idx==VIRTQUEUE_SIZE){
-            queue->avail.idx=0;
-        }
-        return saved;
-    } else {
-        panic("Invalid buffer passed to virtq_enqueue_buffer");
+	ASSERT_NOT_NULL(descriptor, "descriptor cannot be null");
+
+    // find a slot in the descriptor table
+    uint16_t slot = find_first_empty_slot(queue);
+    // put descriptor into  descriptor table
+    queue->descriptors[slot]=descriptor;
+    // point to the descriptor in the avail ring
+    queue->avail.ring[queue->avail.idx]=slot;
+    // save index
+    uint32_t saved = queue->avail.idx;
+    // increment the avail ring
+    queue->avail.idx = queue->avail.idx+1;
+    if (queue->avail.idx==VIRTQUEUE_SIZE){
+        queue->avail.idx=0;
     }
+    return saved;
 }
 
 /*
-* descriptors
+* new descriptor
 */
 struct virtq_descriptor* virtq_descriptor_new(uint8_t* buffer, uint32_t len) {
 	ASSERT_NOT_NULL(buffer, "buffer cannot be null");
@@ -115,6 +122,9 @@ struct virtq_descriptor* virtq_descriptor_new(uint8_t* buffer, uint32_t len) {
     return ret;
 }
 
+/*
+* delete descriptor
+*/
 void virtq_descriptor_delete(struct virtq_descriptor* descriptor) {
 	ASSERT_NOT_NULL(descriptor, "descriptor cannot be null");
     if (0!=descriptor->addr){

@@ -11,8 +11,10 @@
 #include <debug/debug.h>
 
 void test_ata() {
-	// get the ata
-	struct device* ata = devicemgr_findDevice("ata0");
+	// get virtual block device
+	uint8_t devicename[] ={"ata1"};
+
+	struct device* ata = devicemgr_findDevice(devicename);
 	if (0!=ata){
 		struct deviceapi_ata* ata_api = (struct deviceapi_ata*) ata->api;
 
@@ -20,7 +22,7 @@ void test_ata() {
 		(*ata_api->read)(ata, 0, data, 255);
 		debug_show_memblock(data, 32);
 	} else {
-		kprintf("Unable to find ata0\n");
+		kprintf("Unable to find %s\n",devicename);
 	}
 }
 

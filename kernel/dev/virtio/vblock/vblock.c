@@ -141,6 +141,11 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t si
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
 
     /*
+    * drop a message
+    */
+   kprintf("read sector %llu, size %llu\n", sector, size);
+
+    /*
     * block request
     */
     struct vblock_block_request* req = vblock_block_request_new();
