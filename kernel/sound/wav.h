@@ -39,7 +39,7 @@ struct wav_header {
     uint8_t data_header[4]; // Contains "data"
     // Number of bytes in data. Number of samples * num_channels * sample byte size
     uint32_t data_bytes; 
-};
+} __attribute__((packed));
 
 uint8_t* wav_pcm_start(struct wav_header* header);
 
