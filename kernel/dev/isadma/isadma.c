@@ -5,6 +5,8 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+//#define ISADMA_DEBUG
+
 #include <dev/isadma/isadma.h>
 #include <dev/isadma/isadma_page.h>
 #include <asm/asm.h>
@@ -131,33 +133,6 @@ void isadma_show_dma_parameters(struct isa_dma_channel_parameters* parameters){
 	kprintf("   DMAModeReg %#X\n", parameters->DMAModeReg);
 	kprintf("   DMAChannelFlags %#X\n", parameters->DMAChannelFlags);
 	kprintf("   8-bit %#X\n", parameters->eightbit);
-}
-
-/*
-* perform device instance specific init here
-*/
-void isadma_device_init(struct device* dev){
-	ASSERT_NOT_NULL(isadma_buf, "isadma_buf cannot be null.  Has the MM been initialized?");
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-
-    kprintf("Init %s (%s)\n",dev->description, dev->name);
-	/*
-	* show DMA mem
-	*/
-	uint64_t end_dma_area = (uint64_t)isadma_buf+ISA_DMA_BUFSIZ;
-	ASSERT((end_dma_area>=ISA_DMA_64M), "DMA area too high in mem");
-	kprintf("   DMA area is %#X-%#X\n",  isadma_buf, end_dma_area-1);
-}
-
-void isadma_devicemgr_register_devices(){
-    /*
-	* register device
-	*/
-	struct device* deviceinstance = devicemgr_new_device();
-	devicemgr_set_device_description(deviceinstance, "8237 ISA DMA");
-	deviceinstance->devicetype = DMA;
-	deviceinstance->init =  &isadma_device_init;
-	devicemgr_register_device(deviceinstance);
 }
 
 /*
@@ -319,7 +294,7 @@ void isadma_set_buffer_address(struct isa_dma_channel_parameters* channel_parame
 }
 
 /*
-* mask channel
+* mask channel (the +0x04 is b/c bit 2 of the register enables masking)
 */
 void isadma_mask_channel(struct isa_dma_channel_parameters* channel_parameters) {
 	asm_out_b(channel_parameters->DMAMaskReg, channel_parameters->channel+0x04);
@@ -403,4 +378,42 @@ uint64_t isadma_get_dma_block(uint8_t channel, uint32_t len) {
 		panic("DMA buffer crosses page boundary");
 	}
 	return start;
+}
+
+/*
+* perform device instance specific init here
+*/
+void isadma_device_init(struct device* dev){
+	ASSERT_NOT_NULL(isadma_buf, "isadma_buf cannot be null.  Has the MM been initialized?");
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+
+    kprintf("Init %s (%s)\n",dev->description, dev->name);
+	/*
+	* show DMA mem
+	*/
+	uint64_t end_dma_area = (uint64_t)isadma_buf+ISA_DMA_BUFSIZ;
+	ASSERT((end_dma_area>=ISA_DMA_64M), "DMA area too high in mem");
+	kprintf("   DMA area is %#X-%#X\n",  isadma_buf, end_dma_area-1);
+	/*
+	* show DMA parameters
+	*/
+#ifdef ISADMA_DEBUG
+	for (uint8_t i=0; i<8;i++) {
+		struct isa_dma_channel_parameters channel_parameters;
+		getDMAParameters(i, &channel_parameters);
+		kprintf("\n");
+		isadma_show_dma_parameters(&channel_parameters);
+	}
+#endif
+}
+
+void isadma_devicemgr_register_devices(){
+    /*
+	* register device
+	*/
+	struct device* deviceinstance = devicemgr_new_device();
+	devicemgr_set_device_description(deviceinstance, "8237 ISA DMA");
+	deviceinstance->devicetype = DMA;
+	deviceinstance->init =  &isadma_device_init;
+	devicemgr_register_device(deviceinstance);
 }

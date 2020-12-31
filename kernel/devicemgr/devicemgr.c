@@ -182,7 +182,7 @@ void devicemgr_register_devices() {
 	/*
 	* ISA DMA Controller
 	*/
-//	isadma_devicemgr_register_devices();
+	isadma_devicemgr_register_devices();
 	/*
 	* rest of this stuff can really happen in any order
 	*/
@@ -196,7 +196,7 @@ void devicemgr_register_devices() {
     mouse_devicemgr_register_devices();
    // floppy_devicemgr_register_devices();
     speaker_devicemgr_register_devices();
-//	sb16_devicemgr_register_devices();
+	sb16_devicemgr_register_devices();
 //	ac97_devicemgr_register_devices();
 //	adlib_devicemgr_register_devices();
     cpu_devicemgr_register_devices();

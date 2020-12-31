@@ -4,19 +4,12 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-/*
-* this file defines the interface that all DSP devices will implement
-*/
-#ifndef _DEVICEAPI_DSP_H
-#define _DEVICEAPI_DSP_H
 
-#include <types.h>
-#include <devicemgr/devicemgr.h>
+#include <tests/testdebug.h>
+#include <debug/debug.h>
 
-typedef void (*dsp_play_function)(struct device* dev, uint8_t* buffer, uint16_t rate, uint8_t depth,uint8_t channels, uint64_t len);
+void test_debug() {
+	uint8_t testdata[] = {0x01, 0x03, 0x05, 0x07, 0x09, 0x0B, 0x11, 0x13, 0x15, 0x17, 0x19, 0x1B };
+	debug_show_memblock(testdata,10);
+}
 
-struct deviceapi_dsp {
-    dsp_play_function play;
-};
-
-#endif
