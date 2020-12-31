@@ -183,9 +183,9 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t si
     virtq_enqueue_descriptor(deviceData->vblock_queue, desc);
 
     // there is an available buffer
-    uint16_t avail_idx = virtq_get_available_idx(deviceData->vblock_queue);
-    kprintf("avail_idx %llu\n",avail_idx);
-    asm_out_w(deviceData->base+VIRTIO_QUEUE_NOTIFY, avail_idx);
+//    uint16_t avail_idx = virtq_get_available_idx(deviceData->vblock_queue);
+//    kprintf("avail_idx %llu\n",avail_idx);
+    asm_out_w(deviceData->base+VIRTIO_QUEUE_NOTIFY, 0);
 }
 
 void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
