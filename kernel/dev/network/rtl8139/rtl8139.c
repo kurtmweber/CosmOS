@@ -29,10 +29,14 @@ void RTL8139Init(struct device* dev){
 
 void rtl8139_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet read not implemented yet");
 }
 void rtl8139_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet write not implemented yet");
 }
 

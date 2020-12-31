@@ -133,7 +133,10 @@ void vblock_init(struct device* dev){
     asm_out_w(VIRTIO_QUEUE_SIZE, VIRTQUEUE_SIZE);
 }
 
-void vblock_read_sector(struct device* dev, uint32_t sector, uint8_t* target, uint32_t size) {
+void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
     ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
 
@@ -155,13 +158,9 @@ void vblock_read_sector(struct device* dev, uint32_t sector, uint8_t* target, ui
     // enqueue
     virtq_enqueue_descriptor(deviceData->vblock_queue, desc);
 }
-
-void vblock_read(struct device* dev, uint32_t lba, uint8_t* data, uint32_t size) {
+void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	panic("vblock read not implemented yet");
-}
-void vblock_write(struct device* dev, uint32_t lba, uint8_t* data, uint32_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
 	panic("vblock write not implemented yet");
 }
 
