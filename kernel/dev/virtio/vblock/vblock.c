@@ -20,6 +20,7 @@
 #include <dev/virtio/virtio.h>
 #include <debug/assert.h>
 #include <dev/virtio/virtqueue.h>
+#include <devicemgr/deviceapi/deviceapi_ata.h>
 
 // registers
 #define VIRTIO_BLOCK_TOTAL_SECTORS      0x14
@@ -84,7 +85,7 @@ void vblock_irq_handler(stackFrame *frame){
 /*
 * perform device instance specific init here
 */
-void VBLOCKInit(struct device* dev){
+void vblock_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
 
@@ -132,32 +133,7 @@ void VBLOCKInit(struct device* dev){
     asm_out_w(VIRTIO_QUEUE_SIZE, VIRTQUEUE_SIZE);
 }
 
-void VBLOCKSearchCB(struct pci_device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-    /*
-    * register device
-    */
-    struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &VBLOCKInit;
-    deviceinstance->pci = dev;
-    deviceinstance->devicetype = ATA;
-    devicemgr_set_device_description(deviceinstance, "Virtio ATA");
-	/*
-	* device data
-	*/
-	struct vblock_devicedata* deviceData = (struct vblock_devicedata*) kmalloc(sizeof(struct vblock_devicedata));
-	deviceinstance->deviceData = deviceData;
-    devicemgr_register_device(deviceinstance);
-}
-
-/**
-* find all virtio block devices and register them
-*/
-void vblock_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_BLOCK, &VBLOCKSearchCB);
-}
-
-void vblock_read(struct device* dev, uint32_t sector, uint8_t* target, uint32_t size) {
+void vblock_read_sector(struct device* dev, uint32_t sector, uint8_t* target, uint32_t size) {
     ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
 
@@ -178,5 +154,49 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* target, uint32_t 
 
     // enqueue
     virtq_enqueue_descriptor(deviceData->vblock_queue, desc);
+}
+
+void vblock_read(struct device* dev, uint32_t lba, uint8_t* data, uint32_t size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("vblock read not implemented yet");
+}
+void vblock_write(struct device* dev, uint32_t lba, uint8_t* data, uint32_t size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("vblock write not implemented yet");
+}
+
+void vblock_search_cb(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    /*
+    * register device
+    */
+    struct device* deviceinstance = devicemgr_new_device();
+    deviceinstance->init =  &vblock_init;
+    deviceinstance->pci = dev;
+    deviceinstance->devicetype = ATA;
+    devicemgr_set_device_description(deviceinstance, "Virtio ATA");
+	/*
+	* device data
+	*/
+	struct vblock_devicedata* deviceData = (struct vblock_devicedata*) kmalloc(sizeof(struct vblock_devicedata));
+	deviceinstance->deviceData = deviceData;
+    /*
+    * the device api
+    */
+    struct deviceapi_ata* api = (struct deviceapi_ata*) kmalloc(sizeof(struct deviceapi_ata));
+    api->write = &vblock_read;
+    api->read = &vblock_read;
+    deviceinstance->api = api;
+    /*
+    * register
+    */
+    devicemgr_register_device(deviceinstance);
+}
+
+/**
+* find all virtio block devices and register them
+*/
+void vblock_devicemgr_register_devices() {
+    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_BLOCK, &vblock_search_cb);
 }
 
