@@ -70,6 +70,7 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
 }
 
 void kfree(void *p){
+	ASSERT_NOT_NULL(p, "p must not be null");
 	kmalloc_block *b;
 	
 	// The following is arithmetic on a void pointer, which is not permitted per C standard.
@@ -122,6 +123,8 @@ void *kmalloc(uint64_t size){
 }
 
 void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment){
+	ASSERT_NOT_NULL(block, "block must not be null");
+
 	// Expands block->len by 0 or more bytes, so that
 	// e.g. if block->base is 14, and alignment is 8, then block->len
 	// will be set to 2; this way the block ends at address 15
@@ -165,7 +168,9 @@ void kmalloc_init(){
 	
 	return;
 }
-
+/*
+* last can be null here
+*/
 kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size){
 	kmalloc_block *new;
 	
@@ -200,6 +205,8 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size){
 }
 
 void *krealloc(void *ptr, uint64_t size){
+	ASSERT_NOT_NULL(ptr, "ptr must not be null");
+
 	kmalloc_block *b;
 	void *new_block;
 	BYTE *dest, *src;
