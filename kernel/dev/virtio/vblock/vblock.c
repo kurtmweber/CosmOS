@@ -110,7 +110,7 @@ void vblock_init(struct device* dev){
     // read features ok.  we good?
     uint32_t status = asm_in_b(deviceData->base+VIRTIO_DEVICE_STATUS);
     if (VIRTIO_STATUS_FEATURES_OK!=status) {
-      panic("virtio feature negotiation failed");
+        panic("virtio feature negotiation failed");
     }
 
     // cool
@@ -151,7 +151,7 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t si
     struct vblock_block_request* req = vblock_block_request_new();
     req->type = VIRTIO_BLK_T_IN;
     req->sector = sector;
-    req->data = kmalloc(deviceData->sectorLength);
+    req->data = data;
 
     /*
     * descriptor
