@@ -12,8 +12,6 @@
 
 // https://www.redhat.com/en/blog/virtqueues-and-virtio-ring-how-data-travels
 
-#define VIRTQUEUE_SIZE 16
-
 #define VIRTQ_DESC_F_AVAIL (1 << 7)
 #define VIRTQ_DESC_F_USED (1 << 15)
 
@@ -27,7 +25,7 @@ struct virtq_descriptor {
 struct virtq_avail {
     uint16_t flags;
     uint16_t idx;
-    uint16_t ring[VIRTQUEUE_SIZE];
+    uint16_t* ring;
 };
 
 struct virtq_used_elem {
@@ -38,23 +36,31 @@ struct virtq_used_elem {
 struct virtq_used {
     uint16_t flags;
     uint16_t idx;
-    struct virtq_used_elem ring[VIRTQUEUE_SIZE];
+    struct virtq_used_elem* ring;
     uint16_t avail_event;                           // Only if VIRTIO_F_EVENT_IDX
 };
 
 struct virtq {
-    struct virtq_descriptor* descriptors[VIRTQUEUE_SIZE];
+    uint16_t size;
+    struct virtq_descriptor** descriptors;
     struct virtq_avail avail;
     struct virtq_used used;
 };
 
 // virtq
-struct virtq* virtq_new();
+struct virtq* virtq_new(uint16_t size);
 void virtq_delete(struct virtq* queue);
 uint32_t virtq_enqueue_descriptor(struct virtq* queue, struct virtq_descriptor* descriptor);
 
 // descriptors
-struct virtq_descriptor* virtq_descriptor_new(uint8_t* buffer, uint32_t len);
+struct virtq_descriptor* virtq_descriptor_new(uint8_t* buffer, uint32_t len, bool writable);
 void virtq_descriptor_delete(struct virtq_descriptor* descriptor);
+
+// available
+uint16_t virtq_get_available_idx(struct virtq* queue);
+
+// used
+uint16_t virtq_get_used_idx(struct virtq* queue);
+
 
 #endif

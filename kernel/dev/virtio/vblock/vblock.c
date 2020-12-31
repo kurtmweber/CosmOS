@@ -82,6 +82,11 @@ void vblock_irq_handler(stackFrame *frame){
 	kprintf("#");
 }
 
+bool isAligned(uint64_t address, uint32_t alignment){
+    return ((address/alignment)*alignment)==address;
+}
+
+
 /*
 * perform device instance specific init here
 */
@@ -124,13 +129,25 @@ void vblock_init(struct device* dev){
     uint64_t totalBytes = totalSectors*(deviceData->sectorLength);
     kprintf("   Total byte size of mounted media: %llu\n",totalBytes);
 
+    // select queue 0
+    asm_out_w(deviceData->base+VIRTIO_QUEUE_SELECT, 0);
+
+    // get the needed size
+    uint16_t queue_size_needed = asm_in_w(deviceData->base+VIRTIO_QUEUE_SIZE);
+    kprintf("   Queue size needed: %llu\n", queue_size_needed);
+
     // make the queue
-    deviceData->vblock_queue = virtq_new();
+    struct virtq*  q = virtq_new(queue_size_needed);
+    bool all = isAligned(((uint64_t)q),4096);
+    ASSERT(all, "q is not 4096 byte aligned");
+    deviceData->vblock_queue = q;
+
+    // divide by 4096
+    uint32_t q_shifted = (uint64_t)q >> 12;
 
     // set the queue.  The API takes a 32 bit pointer, but we have a 64 bit pointer, so ... some conversions  
-    kprintf("   Queue Address: %#hX\n", (uint64_t) deviceData->vblock_queue);
-    asm_out_d(VIRTIO_QUEUE_ADDRESS, (uint32_t) (uint64_t) deviceData->vblock_queue);
-    asm_out_w(VIRTIO_QUEUE_SIZE, VIRTQUEUE_SIZE);
+    kprintf("   Queue Address: %#hX %#hX\n", q, q_shifted);
+    asm_out_d(deviceData->base+VIRTIO_QUEUE_ADDRESS, q_shifted);
 }
 
 void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
@@ -156,13 +173,21 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t si
     /*
     * descriptor
     */
-    struct virtq_descriptor* desc = virtq_descriptor_new((uint8_t*)req, sizeof(struct vblock_block_request));
-    // 0 for read, 1 for write
-    desc->flags=0;
+    struct virtq_descriptor* desc = virtq_descriptor_new((uint8_t*)req, sizeof(struct vblock_block_request), true);
+    kprintf("desc addr %#hX\n",desc->addr);
+    kprintf("desc length %llu\n",desc->len);
+    kprintf("desc flags %llu\n",desc->flags);
+    kprintf("desc next %llu\n",desc->next);
 
     // enqueue
     virtq_enqueue_descriptor(deviceData->vblock_queue, desc);
+
+    // there is an available buffer
+    uint16_t avail_idx = virtq_get_available_idx(deviceData->vblock_queue);
+    kprintf("avail_idx %llu\n",avail_idx);
+    asm_out_w(deviceData->base+VIRTIO_QUEUE_NOTIFY, avail_idx);
 }
+
 void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
@@ -203,4 +228,3 @@ void vblock_search_cb(struct pci_device* dev){
 void vblock_devicemgr_register_devices() {
     pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_BLOCK, &vblock_search_cb);
 }
-
