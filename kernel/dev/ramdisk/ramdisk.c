@@ -5,8 +5,6 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-// https://wiki.osdev.org/Virtio
-
 #include <dev/ramdisk/ramdisk.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
