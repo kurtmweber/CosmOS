@@ -168,7 +168,7 @@ void command(uint8_t commandByte) {
 /*
 * perform device instance specific init here
 */
-void deviceInitFloppy(struct device* dev){
+void floppy_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct floppy_devicedata* deviceData = (struct floppy_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, FLOPPY_IRQ_NUMBER, dev->name);
@@ -224,7 +224,7 @@ void floppy_register_device(uint64_t port, uint8_t type, bool master){
 	* register device
 	*/
 	struct device* deviceinstance = devicemgr_new_device();
-	deviceinstance->init =  &deviceInitFloppy;
+	deviceinstance->init =  &floppy_device_init;
 	deviceinstance->devicetype = FLOPPY;
 	devicemgr_set_device_description(deviceinstance, "Floppy");
 	/*

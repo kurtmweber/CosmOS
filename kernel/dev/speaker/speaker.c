@@ -20,7 +20,7 @@
 /*
 * perform device instance specific init here
 */
-void deviceInitSpeaker(struct device* dev){
+void speaker_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s (%s)\n" ,dev->description, dev->name);
 }
@@ -64,7 +64,7 @@ void speaker_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	devicemgr_set_device_description(deviceinstance, "Speaker");
 	deviceinstance->devicetype = SPEAKER;
-	deviceinstance->init =  &deviceInitSpeaker;
+	deviceinstance->init =  &speaker_device_init;
 	/*
 	* device api
 	*/

@@ -82,7 +82,7 @@ void sb16_handle_irq(stackFrame *frame) {
 /*
 * perform device instance specific init here
 */
-void deviceInitSB16(struct device* dev){
+void sb16_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct sb16_devicedata* sb16_data = (struct sb16_devicedata*) dev->deviceData;
 	ASSERT_NOT_NULL(sb16_data, "sb16_data cannot be null");
@@ -360,7 +360,7 @@ void sb16_devicemgr_register_device(uint64_t port){
 	struct device* deviceinstance = devicemgr_new_device();
 	devicemgr_set_device_description(deviceinstance, "Soundblaster 16");
 	deviceinstance->devicetype = DSP;
-	deviceinstance->init =  &deviceInitSB16;
+	deviceinstance->init =  &sb16_device_init;
 	/*
 	* device api
 	*/

@@ -22,20 +22,20 @@ struct usbcontroller_devicedata {
 /*
 * perform device instance specific init here
 */
-void deviceInitUSB(struct device* dev){
+void usb_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     struct usbcontroller_devicedata* deviceData = (struct usbcontroller_devicedata*) dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
 }
 
-void USBSearchCB(struct pci_device* dev){
+void usb_search_cb(struct pci_device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &deviceInitUSB;
+    deviceinstance->init =  &usb_device_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = USB;
     devicemgr_set_device_description(deviceinstance, "Intel 82801 USB Controller");
@@ -55,5 +55,5 @@ void USBSearchCB(struct pci_device* dev){
 * find all USB devices and register them
 */
 void usb_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_SERIAL,PCI_SERIAL_SUBCLASS_USB,0x8086, 0x24CD,  &USBSearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_SERIAL,PCI_SERIAL_SUBCLASS_USB,0x8086, 0x24CD,  &usb_search_cb);
 }

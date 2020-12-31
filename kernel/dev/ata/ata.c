@@ -41,7 +41,7 @@ void ata_detect_addresses(){
 	}
 }
 
-void deviceInitATA(struct device* dev){
+void device_init_ata(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 	if (0==NUM_CONTROLLERS){
@@ -97,7 +97,7 @@ uint32_t ata_total_sectors(struct device* dev){
     return 0;
 }
 
-void ATASearchCB(struct pci_device* dev){
+void ata_search_cb(struct pci_device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	/*
 	* save in IDE list
@@ -110,7 +110,7 @@ void ATASearchCB(struct pci_device* dev){
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &deviceInitATA;
+    deviceinstance->init =  &device_init_ata;
     deviceinstance->pci = dev;
 	deviceinstance->devicetype=ATA;
 	devicemgr_set_device_description(deviceinstance, "ATA");
@@ -131,7 +131,7 @@ void ATASearchCB(struct pci_device* dev){
 
 void ata_devicemgr_register_devices() {
 	ide_controllers = list_new();
-	pci_devicemgr_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ATASearchCB);	
+	pci_devicemgr_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ata_search_cb);	
 }
 
 void ata_setup_irq(){

@@ -93,7 +93,7 @@ void init_port(uint64_t portAddress) {
 /*
 * perform device instance specific init here
 */
-void deviceInitSerial(struct device* dev){
+void serial_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     struct serial_devicedata* deviceData = (struct serial_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, deviceData->irq, dev->name);
@@ -118,7 +118,7 @@ void registerRS232Device(uint8_t irq, uint64_t base) {
     * the device instance
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &deviceInitSerial;
+    deviceinstance->init =  &serial_device_init;
     deviceinstance->deviceData = deviceData;
     deviceinstance->devicetype = SERIAL;
     devicemgr_set_device_description(deviceinstance, "RS232");

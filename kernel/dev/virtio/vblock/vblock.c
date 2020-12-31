@@ -87,7 +87,6 @@ bool isAligned(uint64_t address, uint32_t alignment){
     return ((address/alignment)*alignment)==address;
 }
 
-
 /*
 * perform device instance specific init here
 */

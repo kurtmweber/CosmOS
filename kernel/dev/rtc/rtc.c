@@ -55,7 +55,7 @@ void rtc_handle_irq(stackFrame *frame) {
 /*
 * perform device instance specific init here
 */
-void deviceInitRTC(struct device* dev){
+void rtc_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, RTC_IRQ_NUMBER, dev->name);
 	
@@ -136,7 +136,7 @@ void rtc_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	devicemgr_set_device_description(deviceinstance, "RTC");
 	deviceinstance->devicetype = RTC;
-	deviceinstance->init =  &deviceInitRTC;
+	deviceinstance->init =  &rtc_device_init;
 	/*
 	* device api
 	*/

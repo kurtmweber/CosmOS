@@ -27,7 +27,7 @@
 /*
 * perform device instance specific init here
 */
-void deviceInitPIC(struct device* dev){
+void pic_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s (%s)\n" ,dev->description, dev->name);
 
@@ -56,7 +56,7 @@ void pic_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	devicemgr_set_device_description(deviceinstance, "8259 PIC");
 	deviceinstance->devicetype = PIC;
-	deviceinstance->init =  &deviceInitPIC;
+	deviceinstance->init =  &pic_device_init;
 	devicemgr_register_device(deviceinstance);
 
 	return;
