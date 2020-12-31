@@ -88,6 +88,15 @@ void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size
 	panic("ATA write not implemented yet");
 }
 
+uint16_t ata_sector_size(struct device* dev) {
+    panic("Not Implemented");
+    return 0;
+}
+uint32_t ata_total_sectors(struct device* dev){
+    panic("Not Implemented");
+    return 0;
+}
+
 void ATASearchCB(struct pci_device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	/*
@@ -111,6 +120,8 @@ void ATASearchCB(struct pci_device* dev){
     struct deviceapi_ata* api = (struct deviceapi_ata*) kmalloc(sizeof(struct deviceapi_ata));
     api->write = &ata_read;
     api->read = &ata_write;
+    api->sector_size = &ata_sector_size;
+    api->total_sectors = &ata_total_sectors;
     deviceinstance->api = api;
 	/*
 	* register

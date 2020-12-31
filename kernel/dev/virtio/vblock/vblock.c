@@ -194,6 +194,15 @@ void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t s
 	panic("vblock write not implemented yet");
 }
 
+uint16_t vblock_sector_size(struct device* dev) {
+    panic("Not Implemented");
+    return 0;
+}
+uint32_t vblock_total_sectors(struct device* dev){
+    panic("Not Implemented");
+    return 0;
+}
+
 void vblock_search_cb(struct pci_device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
@@ -215,6 +224,8 @@ void vblock_search_cb(struct pci_device* dev){
     struct deviceapi_ata* api = (struct deviceapi_ata*) kmalloc(sizeof(struct deviceapi_ata));
     api->write = &vblock_write;
     api->read = &vblock_read;
+    api->sector_size = &vblock_sector_size;
+    api->total_sectors = &vblock_total_sectors;
     deviceinstance->api = api;
     /*
     * register
