@@ -20,7 +20,7 @@
 #include <dev/virtio/virtio.h>
 #include <debug/assert.h>
 #include <dev/virtio/virtqueue.h>
-#include <devicemgr/deviceapi/deviceapi_ata.h>
+#include <devicemgr/deviceapi/deviceapi_block.h>
 
 // registers
 #define VIRTIO_BLOCK_TOTAL_SECTORS      0x14
@@ -226,7 +226,7 @@ void vblock_search_cb(struct pci_device* dev){
     /*
     * the device api
     */
-    struct deviceapi_ata* api = (struct deviceapi_ata*) kmalloc(sizeof(struct deviceapi_ata));
+    struct deviceapi_block* api = (struct deviceapi_block*) kmalloc(sizeof(struct deviceapi_block));
     api->write = &vblock_write;
     api->read = &vblock_read;
     api->sector_size = &vblock_sector_size;

@@ -10,7 +10,7 @@
 #include <console/console.h>
 #include <types.h>
 #include <debug/assert.h>
-#include <devicemgr/deviceapi/deviceapi_ata.h>
+#include <devicemgr/deviceapi/deviceapi_block.h>
 #include <mm/mm.h>
 #include <string/mem.h>
 
@@ -93,7 +93,7 @@ void ramdisk_devicemgr_register_devices() {
     /*
     * the device api
     */
-    struct deviceapi_ata* api = (struct deviceapi_ata*) kmalloc(sizeof(struct deviceapi_ata));
+    struct deviceapi_block* api = (struct deviceapi_block*) kmalloc(sizeof(struct deviceapi_block));
     api->write = &ramdisk_write;
     api->read = &ramdisk_read;
     api->sector_size = &ramdisk_sector_size;

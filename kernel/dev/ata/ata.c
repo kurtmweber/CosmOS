@@ -11,7 +11,7 @@
 #include <mm/mm.h>
 #include <dev/pci/pci.h>
 #include <devicemgr/devicemgr.h>
-#include <devicemgr/deviceapi/deviceapi_ata.h>
+#include <devicemgr/deviceapi/deviceapi_block.h>
 #include <debug/assert.h>
 
 struct list *ide_controllers;
@@ -117,7 +117,7 @@ void ata_search_cb(struct pci_device* dev){
 	/*
     * the device api
     */
-    struct deviceapi_ata* api = (struct deviceapi_ata*) kmalloc(sizeof(struct deviceapi_ata));
+    struct deviceapi_block* api = (struct deviceapi_block*) kmalloc(sizeof(struct deviceapi_block));
     api->write = &ata_read;
     api->read = &ata_write;
     api->sector_size = &ata_sector_size;

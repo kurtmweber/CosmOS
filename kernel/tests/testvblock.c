@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <tests/testvblock.h>
-#include <devicemgr/deviceapi/deviceapi_ata.h>
+#include <devicemgr/deviceapi/deviceapi_block.h>
 #include <console/console.h>
 #include <debug/debug.h>
 #include <string/string.h>
@@ -19,7 +19,7 @@ void test_vblock() {
 
 	struct device* ata = devicemgr_findDevice(devicename);
 	if (0!=ata){
-		struct deviceapi_ata* ata_api = (struct deviceapi_ata*) ata->api;
+		struct deviceapi_block* ata_api = (struct deviceapi_block*) ata->api;
 
 		uint8_t data[256];
         memset(data, 0, 255);
