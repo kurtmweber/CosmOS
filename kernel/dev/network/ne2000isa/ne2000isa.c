@@ -136,7 +136,7 @@ void ne2000isa_irq_handler(stackFrame *frame){
 /*
 * perform device instance specific init here
 */
-void NE200ISAInit(struct device* dev){
+void ne2000_isa_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     interrupt_router_register_interrupt_handler(NE2000ISA_IRQ, &ne2000isa_irq_handler);
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, NE2000ISA_IRQ, dev->name);
@@ -165,7 +165,7 @@ void ne2000isa_devicemgr_register_devices() {
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &NE200ISAInit;
+    deviceinstance->init =  &ne2000_isa_init;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "NE2000 ISA");
     /*

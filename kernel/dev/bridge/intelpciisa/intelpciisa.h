@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void bridge_register_pciisa();
+void pciisa_bridge_register();
 
 #endif

@@ -18,7 +18,7 @@
 * find all bridge devices and register them
 */
 void bridge_devicemgr_register_devices() {
-    bridge_register_i440fx();
-    bridge_register_82371();
-    bridge_register_pciisa();
+    i440fx_bridge_register();
+    i982371_bridge_register();
+    pciisa_bridge_register();
 }

@@ -21,20 +21,20 @@ struct intel8237_deviceddata {
 /*
 * perform device instance specific init here
 */
-void deviceInit82371Bridge(struct device* dev){
+void i982371_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct intel8237_deviceddata* deviceData = (struct intel8237_deviceddata*) dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
 }
 
-void Bridge82371SearchCB(struct pci_device* dev){
+void i982371_search_cb(struct pci_device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &deviceInit82371Bridge;
+    deviceinstance->init =  &i982371_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = BRIDGE;
     devicemgr_set_device_description(deviceinstance, "Intel PIIX4/4E/4M Power Management Controller");
@@ -52,6 +52,6 @@ void Bridge82371SearchCB(struct pci_device* dev){
 /**
 * find all bridge devices and register them
 */
-void bridge_register_82371() {
-    pci_devicemgr_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_OTHER, &Bridge82371SearchCB);
+void i982371_bridge_register() {
+    pci_devicemgr_search_devicetype(PCI_CLASS_BRIDGE,PCI_BRIDGE_SUBCLASS_OTHER, &i982371_search_cb);
 }

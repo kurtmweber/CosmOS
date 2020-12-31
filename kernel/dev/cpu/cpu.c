@@ -17,7 +17,7 @@ void cpu_manufacturer_id(uint8_t* cpuid);
 /*
 * perform device instance specific init here
 */
-void deviceInitCPU(struct device* dev){
+void cpu_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s (%s)\n",dev->description, dev->name);
 }
@@ -42,7 +42,7 @@ void cpu_get_features(struct cpu_id* id) {
 /* 
 * https://en.wikipedia.org/wiki/CPUID
 */
-bool has_apic_function() {
+bool cpu_has_apic() {
     struct cpu_id id;
     cpu_get_features(&id);
     return ((id.edx & CPUID_FEAT_EDX_APIC)>0);
@@ -75,13 +75,13 @@ void cpu_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	devicemgr_set_device_description(deviceinstance, "CPU");
 	deviceinstance->devicetype = CPU;
-	deviceinstance->init =  &deviceInitCPU;
+	deviceinstance->init =  &cpu_device_init;
 	/*
 	* device api
 	*/
 	struct deviceapi_cpu* api = (struct deviceapi_cpu*) kmalloc (sizeof(struct deviceapi_cpu));
 	api->features = &cpu_get_features;
-    api->apic = &has_apic_function;
+    api->apic = &cpu_has_apic;
     api->manufacturer = &cpu_manufacturer_id;
 	deviceinstance->api = api;
     /*
