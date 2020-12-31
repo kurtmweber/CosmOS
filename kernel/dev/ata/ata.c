@@ -75,11 +75,11 @@ void ata_device_init(struct device* dev){
 	return;
 }
 
-void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+void ata_read(struct device* dev, uint32_t lba, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("ATA read not implemented yet");
 }
-void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+void ata_write(struct device* dev, uint32_t lba, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("ATA write not implemented yet");
 }

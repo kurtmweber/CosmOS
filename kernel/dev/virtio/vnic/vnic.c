@@ -18,6 +18,7 @@
 #include <dev/pci/pci.h>
 #include <debug/assert.h>
 #include <dev/virtio/virtio.h>
+#include <devicemgr/deviceapi/deviceapi_ethernet.h>
 
 // virtio NIC flags
 #define VIRTIO_NIC_MAC1             0x14
@@ -91,7 +92,17 @@ void VNICInit(struct device* dev){
 	  kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",virtio_mac[0],virtio_mac[1],virtio_mac[2],virtio_mac[3],virtio_mac[4],virtio_mac[5]);
 }
 
-void VNICSearchCB(struct pci_device* dev){
+void vnic_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("vnic read not implemented yet");
+}
+
+void vnic_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	panic("vnic write not implemented yet");
+}
+
+void vnic_search_cb(struct pci_device* dev){
     ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
@@ -101,11 +112,21 @@ void VNICSearchCB(struct pci_device* dev){
     deviceinstance->pci = dev;
     deviceinstance->devicetype = ETHERNET;
     devicemgr_set_device_description(deviceinstance, "Virtio NIC");
+    /*
+    * the device api
+    */
+    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*) kmalloc(sizeof(struct deviceapi_ethernet));
+    api->write = &vnic_ethernet_read;
+    api->read = &vnic_ethernet_write;
+    deviceinstance->api = api;
   	/*
     * device data
     */
     struct vnic_devicedata* deviceData = (struct vnic_devicedata*) kmalloc(sizeof(struct vnic_devicedata));
     deviceinstance->deviceData = deviceData;
+    /*
+    * register
+    */
     devicemgr_register_device(deviceinstance);
 }
 
@@ -113,5 +134,5 @@ void VNICSearchCB(struct pci_device* dev){
 * find all virtio ethernet devices and register them
 */
 void vnic_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_NETWORK, &VNICSearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_NETWORK, &vnic_search_cb);
 }
