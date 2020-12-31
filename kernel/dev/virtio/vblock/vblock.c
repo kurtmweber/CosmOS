@@ -57,7 +57,7 @@ struct vblock_devicedata {
     uint64_t base;
     uint32_t sectorLength;
     uint32_t totalSectors;
-    struct virtq* vblock_queue;
+    struct virtq* request_queue;
 } __attribute__((packed));
 
 struct vblock_block_request {
@@ -140,7 +140,7 @@ void vblock_init(struct device* dev){
     struct virtq*  q = virtq_new(queue_size_needed);
     bool all = isAligned(((uint64_t)q),4096);
     ASSERT(all, "q is not 4096 byte aligned");
-    deviceData->vblock_queue = q;
+    deviceData->request_queue = q;
 
     // divide by 4096
     uint32_t q_shifted = (uint64_t)q >> 12;
@@ -180,7 +180,7 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t si
     kprintf("desc next %llu\n",desc->next);
 
     // enqueue
-    virtq_enqueue_descriptor(deviceData->vblock_queue, desc);
+    virtq_enqueue_descriptor(deviceData->request_queue, desc);
 
     // there is an available buffer
 //    uint16_t avail_idx = virtq_get_available_idx(deviceData->vblock_queue);

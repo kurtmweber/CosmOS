@@ -20,6 +20,8 @@
 #include <dev/virtio/virtio.h>
 #include <devicemgr/deviceapi/deviceapi_ethernet.h>
 
+#define VNIC_QUEUE_SIZE 255
+
 // virtio NIC flags
 #define VIRTIO_NIC_MAC1             0x14
 #define VIRTIO_NIC_MAC2             0x15
@@ -47,6 +49,8 @@ struct VirtioPacketHeader {
 */
 struct vnic_devicedata {
     uint64_t base;
+    struct virtq* send_queue;
+    struct virtq* recieve_queue;
 } __attribute__((packed));
 
 void vnic_irq_handler(stackFrame *frame){
@@ -73,6 +77,18 @@ void VNICInit(struct device* dev){
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);    
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
+
+    // make the request queue
+    struct virtq*  q = virtq_new(VNIC_QUEUE_SIZE);
+    bool all = isAligned(((uint64_t)q),4096);
+    ASSERT(all, "q is not 4096 byte aligned");
+    deviceData->recieve_queue = q;
+    
+    // make the send queue
+    struct virtq*  q = virtq_new(VNIC_QUEUE_SIZE);
+    bool all = isAligned(((uint64_t)q),4096);
+    ASSERT(all, "q is not 4096 byte aligned");
+    deviceData->send_queue = q;
 
     uint8_t virtio_mac[6];
     virtio_mac[0] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC1);
