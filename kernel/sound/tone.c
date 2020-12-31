@@ -8,7 +8,7 @@
 
 #include <sound/tone.h>
 #include <sound/wav.h>
-#include <rawdata.h>
+#include <rawdata/rawdata.h>
 #include <debug/assert.h>
 #include <console/console.h>
 
