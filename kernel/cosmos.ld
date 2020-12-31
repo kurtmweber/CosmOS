@@ -7,7 +7,6 @@ SECTIONS
 		*(.rodata*)
 		. = ALIGN(4096);
 	}
-
 	.data :
 	{
 		_tone_s = .;
