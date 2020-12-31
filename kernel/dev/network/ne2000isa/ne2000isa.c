@@ -166,7 +166,7 @@ void ne2000isa_devicemgr_register_devices() {
     */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &ne2000_isa_init;
-    deviceinstance->devicetype = ETHERNET;
+    deviceinstance->devicetype = NIC;
     devicemgr_set_device_description(deviceinstance, "NE2000 ISA");
     /*
     * the device api

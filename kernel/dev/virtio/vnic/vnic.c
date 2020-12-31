@@ -113,7 +113,7 @@ void vnic_search_cb(struct pci_device* dev){
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &VNICInit;
     deviceinstance->pci = dev;
-    deviceinstance->devicetype = ETHERNET;
+    deviceinstance->devicetype = VNIC;
     devicemgr_set_device_description(deviceinstance, "Virtio NIC");
     /*
     * the device api

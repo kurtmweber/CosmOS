@@ -17,11 +17,11 @@
 #define MAX_DEVICE_NAME_LENGTH 64
 
 int8_t* DeviceTypeNames[] = {"None"
-	, "serial"
+	,"serial"
 	,"vga"
 	,"rtc"
 	,"keyboard"
-	,"ethernet"
+	,"nic"
 	,"bridge"
 	,"usb"
 	,"ata"
@@ -34,6 +34,9 @@ int8_t* DeviceTypeNames[] = {"None"
     ,"cmos"
     ,"dma"
     ,"cpu"
+    ,"rd"
+    ,"vnic"
+    ,"vblock"
     }; 
 
 void devicemgr_init() {
@@ -109,9 +112,12 @@ void devicemgr_init_devices(){
     /*
     * DMA
     */
-   //    // TODO DMA disabled for now until we can allocate DMA mem
-
     deviceregistry_iterate_type(DMA, deviceInitIterator);
+    /*
+    * virtual devices
+    */ 
+    deviceregistry_iterate_type(VNIC, deviceInitIterator);
+    deviceregistry_iterate_type(VBLOCK, deviceInitIterator);
     /*
     * everything else
     */
@@ -119,14 +125,14 @@ void devicemgr_init_devices(){
     deviceregistry_iterate_type(KEYBOARD, deviceInitIterator); 
     deviceregistry_iterate_type(VGA, deviceInitIterator);
     deviceregistry_iterate_type(USB, deviceInitIterator);
-    deviceregistry_iterate_type(ETHERNET, deviceInitIterator);
+    deviceregistry_iterate_type(NIC, deviceInitIterator);
     deviceregistry_iterate_type(BRIDGE, deviceInitIterator);
     deviceregistry_iterate_type(ATA, deviceInitIterator);
     deviceregistry_iterate_type(MOUSE, deviceInitIterator);
-  
     deviceregistry_iterate_type(FLOPPY, deviceInitIterator);
     deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
     deviceregistry_iterate_type(DSP, deviceInitIterator);
+    deviceregistry_iterate_type(RAMDISK, deviceInitIterator);
 }
 
 struct device* devicemgr_new_device() {
@@ -200,9 +206,8 @@ void devicemgr_register_devices() {
 //	ac97_devicemgr_register_devices();
 //	adlib_devicemgr_register_devices();
     cpu_devicemgr_register_devices();
- //   virtio_devicemgr_register_devices();
-     ramdisk_devicemgr_register_devices();
-
+//  virtio_devicemgr_register_devices();
+    ramdisk_devicemgr_register_devices();
 }
 
 

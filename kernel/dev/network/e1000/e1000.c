@@ -47,7 +47,7 @@ void e1000_search_cb(struct pci_device* dev){
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &e1000_init;
     deviceinstance->pci = dev;
-    deviceinstance->devicetype = ETHERNET;
+    deviceinstance->devicetype = NIC;
     devicemgr_set_device_description(deviceinstance, "E1000 NIC");
     /*
     * the device api

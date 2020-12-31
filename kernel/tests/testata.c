@@ -21,7 +21,7 @@ And we gave her all our money but our subway fares.";
 
 void test_ata() {
 	// get virtual block device
-	uint8_t devicename[] ={"ata1"};
+	uint8_t devicename[] ={"rd0"};
 
 	struct device* ata = devicemgr_findDevice(devicename);
 	if (0!=ata){

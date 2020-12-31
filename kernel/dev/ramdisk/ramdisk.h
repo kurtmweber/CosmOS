@@ -10,6 +10,10 @@
 
 #include <types.h>
 
+/*
+* note that ramdisk uses the ata api
+*/
+
 void ramdisk_devicemgr_register_devices();
 
 #endif

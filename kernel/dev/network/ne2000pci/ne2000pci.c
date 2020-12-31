@@ -168,7 +168,7 @@ void ne2000_pci_search_cb(struct pci_device* dev){
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &ne2000_pci_init;
     deviceinstance->pci = dev;
-    deviceinstance->devicetype = ETHERNET;
+    deviceinstance->devicetype = NIC;
     devicemgr_set_device_description(deviceinstance, "NE2000 PCI");
     /*
     * the device api

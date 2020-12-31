@@ -81,7 +81,7 @@ void ramdisk_devicemgr_register_devices() {
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init =  &ramdisk_init;
     deviceinstance->pci = 0;
-    deviceinstance->devicetype = ATA;
+    deviceinstance->devicetype = RAMDISK;
     devicemgr_set_device_description(deviceinstance, "RAM disk");
 	/*
 	* device data
