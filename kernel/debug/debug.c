@@ -32,6 +32,6 @@ void debug_show_memblock(uint8_t* block, uint16_t size) {
             out[idx++]='\n';    
         }
         out[idx++]=0;
-        serial_write(out);
+        serial_write_string(out);
     }
 }

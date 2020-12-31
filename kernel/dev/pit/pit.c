@@ -48,7 +48,7 @@ void pit_handle_irq(stackFrame *frame) {
 *  or 0 (which translates to 65536), which gives an output frequency of 
 *  18.2065 Hz (or an IRQ every 54.9254 ms)"
 */
-void deviceInitPIT(struct device* dev){
+void pit_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, PIT_IRQ, dev->name);
     interrupt_router_register_interrupt_handler(PIT_IRQ, &pit_handle_irq);
@@ -73,7 +73,7 @@ void pit_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	devicemgr_set_device_description(deviceinstance, "8253/8254 PIT");
 	deviceinstance->devicetype = PIT;
-	deviceinstance->init =  &deviceInitPIT;
+	deviceinstance->init =  &pit_init;
 	/*
 	* device api
 	*/

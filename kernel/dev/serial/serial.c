@@ -40,7 +40,7 @@ struct rs232_16550 {
     uint8_t scratch;    
 } __attribute__((packed)) rs232_16550_t;
 
-int is_transmit_empty() {
+int serial_is_transmit_empty() {
     struct rs232_16550* comport = (struct rs232_16550*) COM1_ADDRESS;
     uint8_t data = asm_in_b((uint64_t)&(comport->linestatus));
     return data & 0x20;
@@ -49,7 +49,7 @@ int is_transmit_empty() {
 void serial_write_char(const uint8_t c){
     struct rs232_16550* comport = (struct rs232_16550*) COM1_ADDRESS;
 
-    while (is_transmit_empty() == 0);
+    while (serial_is_transmit_empty() == 0);
     asm_out_b((uint64_t) &(comport->data),c);
 }
 
@@ -62,7 +62,7 @@ void serial_irq_handler(stackFrame *frame){
     serial_write_char(data);
 }
 
-void serial_write(const uint8_t* c){
+void serial_write_string(const uint8_t* c){
     uint16_t i =0;
     while(c[i]!=0){
         serial_write_char(c[i++]);
@@ -70,7 +70,7 @@ void serial_write(const uint8_t* c){
 }
 
 // https://wiki.osdev.org/Serial_Ports
-void init_port(uint64_t portAddress) {
+void serial_init_port(uint64_t portAddress) {
 
     struct rs232_16550* comport = (struct rs232_16550*) portAddress;
 
@@ -98,15 +98,15 @@ void serial_device_init(struct device* dev){
     struct serial_devicedata* deviceData = (struct serial_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, deviceData->irq, dev->name);
     interrupt_router_register_interrupt_handler(deviceData->irq, &serial_irq_handler);
-    init_port(deviceData->address);
+    serial_init_port(deviceData->address);
 }
 
-void deviceTypeSerial_write(struct device* dev, const int8_t* c) {
+void serial_write(struct device* dev, const int8_t* c) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
-   serial_write(c);
+   serial_write_string(c);
 }
 
-void registerRS232Device(uint8_t irq, uint64_t base) {
+void serial_register_device(uint8_t irq, uint64_t base) {
     /*
     * ISA serial port specific data
     */
@@ -126,7 +126,7 @@ void registerRS232Device(uint8_t irq, uint64_t base) {
     * the device api
     */
     struct deviceapi_serial* api = (struct deviceapi_serial*) kmalloc(sizeof(struct deviceapi_serial));
-    api->write = &deviceTypeSerial_write;
+    api->write = &serial_write;
     deviceinstance->api = api;
     /*
     * register
@@ -138,7 +138,7 @@ void registerRS232Device(uint8_t irq, uint64_t base) {
 * find all RS232 devices and register them
 */
 void serial_devicemgr_register_devices() {
-    registerRS232Device(SERIAL_IRQ2,COM1_ADDRESS);
+    serial_register_device(SERIAL_IRQ2,COM1_ADDRESS);
 
     // TODO add code to check if these even exist
 //    registerRS232Device(SERIAL_IRQ1,COM2_ADDRESS);

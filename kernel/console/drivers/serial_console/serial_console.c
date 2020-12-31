@@ -14,7 +14,7 @@ void serial_console_init(){
 }
 
 uint8_t serial_console_write(const char *c) {
-	 serial_write(c);
+	 serial_write_string(c);
 }
 
 void serial_console_register(){
