@@ -213,7 +213,7 @@ void vblock_search_cb(struct pci_device* dev){
     * the device api
     */
     struct deviceapi_ata* api = (struct deviceapi_ata*) kmalloc(sizeof(struct deviceapi_ata));
-    api->write = &vblock_read;
+    api->write = &vblock_write;
     api->read = &vblock_read;
     deviceinstance->api = api;
     /*

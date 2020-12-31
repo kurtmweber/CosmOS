@@ -81,7 +81,7 @@ void CosmOS(){
 //	playsb16();
 //	floppyread();	
 
-//	test_ata();
+	test_ata();
 
 	while (1){
 		asm_hlt();
