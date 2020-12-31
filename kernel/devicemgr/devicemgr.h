@@ -22,10 +22,10 @@ typedef enum deviceType {
 	VGA = 			0x02,
 	RTC=			0x03,
 	KEYBOARD=		0x04,
-	NIC=		    0x05,  // uses NIC API
+	NIC=		    0x05,   // uses NIC API
 	BRIDGE=			0x06,
 	USB=			0x07,
-	ATA=			0x08,  // uses Block API
+	ATA=			0x08,   // uses Block API
 	PIC=			0x09,
 	MOUSE=			0x0A,
 	FLOPPY=			0x0B,

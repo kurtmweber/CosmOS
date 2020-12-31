@@ -78,7 +78,7 @@ void serial_init_port(uint64_t portAddress) {
 void serial_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     struct serial_devicedata* deviceData = (struct serial_devicedata*) dev->deviceData;
-    kprintf("Init %s at IRQ %llu (%s)\n",dev->description, deviceData->irq, dev->name);
+    kprintf("Init %s at IRQ %llu Base %#hX (%s)\n",dev->description, deviceData->irq, deviceData->address, dev->name);
     interrupt_router_register_interrupt_handler(deviceData->irq, &serial_irq_handler);
     serial_init_port(deviceData->address);
 }
