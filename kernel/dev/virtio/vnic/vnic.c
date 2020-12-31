@@ -92,12 +92,12 @@ void VNICInit(struct device* dev){
 	  kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",virtio_mac[0],virtio_mac[1],virtio_mac[2],virtio_mac[3],virtio_mac[4],virtio_mac[5]);
 }
 
-void vnic_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+void vnic_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("vnic read not implemented yet");
 }
 
-void vnic_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+void vnic_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	panic("vnic write not implemented yet");
 }
