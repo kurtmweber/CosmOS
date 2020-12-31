@@ -146,10 +146,14 @@ void NE200ISAInit(struct device* dev){
 
 void ne2000isa_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet read not implemented yet");
 }
 void ne2000isa_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet write not implemented yet");
 }
 

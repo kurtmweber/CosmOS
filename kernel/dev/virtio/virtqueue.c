@@ -24,7 +24,7 @@
 struct virtq* virtq_new() {
     struct virtq* ret = kmalloc(sizeof(struct virtq));
     /*
-    *  descriptor array
+    *  allocate descriptor array
     */
     for(uint16_t i=0;i<VIRTQUEUE_SIZE;i++){
        (ret->descriptors)[i]= 0;
