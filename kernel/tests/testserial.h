@@ -11,5 +11,5 @@
 #include <types.h>
 
 void serialMessage(const uint8_t* message);
-
+void test_serial();
 #endif

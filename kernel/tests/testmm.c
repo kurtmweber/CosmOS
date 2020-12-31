@@ -5,19 +5,24 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef __TESTS_H
-#define __TESTS_H
-
-#include <types.h>
-#include <tests/testsb16.h>
-#include <tests/testspeaker.h>
-#include <tests/testfloppy.h>
-#include <tests/testserial.h>
-#include <tests/teststring.h>
-#include <tests/testdebug.h>
-#include <tests/testcpu.h>
 #include <tests/testmm.h>
-#include <tests/testrtc.h>
-#include <tests/testpit.h>
+#include <debug/debug.h>
+#include <mm/mm.h>
+#include <console/console.h>
 
-#endif
+void test_mm() {
+    mem_block *tmp;
+	tmp = usable_phys_blocks;
+
+	do {
+		kprintf("Base: %llX, Length: %llX\n", (uint64_t)tmp->base, tmp->len);
+	} while((tmp = tmp->next));
+
+	phys_alloc_slab(65536, 65536);
+
+	tmp = usable_phys_blocks;
+
+	do {
+		kprintf("Base: %llX, Length: %llX\n", (uint64_t)tmp->base, tmp->len);
+	} while((tmp = tmp->next)); 
+}

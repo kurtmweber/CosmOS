@@ -24,3 +24,10 @@ void serialMessage(const uint8_t* message) {
 		kprintf("Unable to find serial0\n");
 	}
 }
+
+void test_serial() {
+	/*
+	* exercise the uniform serial API
+	*/
+	serialMessage("This message brought to you by the uniform serial API, the letters R and S and the Digits 2, 3 and 2\n");
+}

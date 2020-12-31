@@ -10,34 +10,34 @@
 #include <console/console.h>
 
 void show_cpu_data() {
-	/*
-	* show CPU features
-	*/
 	// get the CPU
 	struct device* cpu = devicemgr_findDevice("cpu0");
-	struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
+    if (0!=cpu){
+        struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
+        /*
+        * show all CPU features
+        */
+        struct cpu_id id;
+        (*cpu_api->features)(&id);
+        kprintf("CPU Features %#X\n", id.edx);
 
-	/*
-	* show all CPU features
-	*/
-	struct cpu_id id;
-	(*cpu_api->features)(&id);
-	kprintf("CPU Features %#X\n", id.edx);
-
-	/*
-	* check if APIC
-	*/
-	bool apic = (*cpu_api->apic)();
-	if(apic){
-		kprintf("APIC present\n");
-	} else {
-		kprintf("APIC not present\n");
-	}
-	
-	/*
-	* show CPU manufacturer
-	*/ 
-  	uint8_t cpu_manufacturer_string[13];
-    (*cpu_api->manufacturer)((uint8_t*)&cpu_manufacturer_string);
-    kprintf("CPU Manufacturer: %s\n", cpu_manufacturer_string);
+        /*
+        * check if APIC
+        */
+        bool apic = (*cpu_api->apic)();
+        if(apic){
+            kprintf("APIC present\n");
+        } else {
+            kprintf("APIC not present\n");
+        }
+        
+        /*
+        * show CPU manufacturer
+        */ 
+        uint8_t cpu_manufacturer_string[13];
+        (*cpu_api->manufacturer)((uint8_t*)&cpu_manufacturer_string);
+        kprintf("CPU Manufacturer: %s\n", cpu_manufacturer_string);
+    } else {
+        kprintf("Unable to find cpu0\n");
+    }
 }
