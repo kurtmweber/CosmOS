@@ -9,7 +9,7 @@
 
 // normally this is not encouraged and instead the devivemgr should be used
 // however, for debug, this might actually be a better approach
-#include <dev/serial/serial.h>
+#include <dev/serial/com1.h>
 
 #define DEBUG_LINE_WIDTH 8
 
@@ -32,6 +32,6 @@ void debug_show_memblock(uint8_t* block, uint16_t size) {
             out[idx++]='\n';    
         }
         out[idx++]=0;
-        serial_write_string(out);
+        com1_serial_write(out);
     }
 }

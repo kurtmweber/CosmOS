@@ -13,14 +13,7 @@
 #include <debug/assert.h>
 #include <console/console.h>
 #include <collection/ringbuffer/ringbuffer.h>
-
-#define COM1_ADDRESS (uint16_t) 0x3F8
-#define COM2_ADDRESS (uint16_t) 0x2F8
-#define COM3_ADDRESS (uint16_t) 0x3E8
-#define COM4_ADDRESS (uint16_t) 0x2E8
-
-#define SERIAL_IRQ1 (uint8_t) 0x3
-#define SERIAL_IRQ2 (uint8_t) 0x4
+#include <dev/serial/ns16550.h>
 
 struct serial_devicedata {
     uint8_t irq;
@@ -28,17 +21,6 @@ struct serial_devicedata {
     struct ringbuffer* buffer;
 
 } __attribute__((packed));
-
-struct rs232_16550 {
-    uint8_t data;
-    uint8_t interrupt;
-    uint8_t fifocontrol;
-    uint8_t linecontrol;
-    uint8_t modemcontrol;
-    uint8_t linestatus;
-    uint8_t modemstatus;
-    uint8_t scratch;    
-} __attribute__((packed)) rs232_16550_t;
 
 int serial_is_transmit_empty() {
     struct rs232_16550* comport = (struct rs232_16550*) COM1_ADDRESS;
