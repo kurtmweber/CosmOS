@@ -20,5 +20,7 @@
 #include <tests/testrtc.h>
 #include <tests/testpit.h>
 #include <tests/testata.h>
+#include <tests/testvblock.h>
+#include <tests/testramdisk.h>
 
 #endif

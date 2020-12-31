@@ -16,6 +16,7 @@
 #include <devicemgr/devicemgr.h>
 #include <asm/asm.h>
 #include <interrupts/idt.h>
+#include <tests/testvblock.h>
 
 void CosmOS(){
 	video_init();
@@ -81,7 +82,8 @@ void CosmOS(){
 //	playsb16();
 //	floppyread();	
 
-	test_ata();
+//	test_ata();
+	test_vblock();
 
 	while (1){
 		asm_hlt();

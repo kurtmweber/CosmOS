@@ -8,6 +8,7 @@
 #include <dev/virtio/virtqueue.h>
 #include <mm/mm.h>
 #include <debug/assert.h>
+#include <console/console.h>
 
 // https://docs.oasis-open.org/virtio/virtio/v1.1/virtio-v1.1.pdf
 
@@ -30,11 +31,13 @@ void *virtqueue_buf;
 * create virtq
 */
 struct virtq* virtq_new(uint16_t size) {
-    struct virtq* ret = kmalloc(sizeof(struct virtq));
+//    struct virtq* ret = kmalloc(sizeof(struct virtq));
+    struct virtq* ret = (struct virtq*) virtqueue_buf;
+ //   kprintf("VirtQ at %#hX\n", ret);
     /*
     * size
     */
-   ret->size = size;
+    ret->size = size;
     /*
     *  allocate descriptor pointer array
     */
@@ -107,6 +110,9 @@ uint32_t virtq_enqueue_descriptor(struct virtq* queue, struct virtq_descriptor* 
 
     // find a slot in the descriptor table
     uint16_t slot = find_first_empty_slot(queue);
+    if (-1==slot) {
+        panic("Ran out of virtual queue slots\n");
+    }
     // put descriptor into  descriptor table
     queue->descriptors[slot]=descriptor;
     // point to the descriptor in the avail ring

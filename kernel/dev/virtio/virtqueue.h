@@ -42,7 +42,7 @@ struct virtq_used {
     uint16_t flags;
     uint16_t idx;
     struct virtq_used_elem* ring;
-    uint16_t avail_event;                           // Only if VIRTIO_F_EVENT_IDX
+    uint16_t avail_event;   // Only if VIRTIO_F_EVENT_IDX
 };
 
 struct virtq {
