@@ -5,11 +5,12 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _VBLOCK_H
-#define _VBLOCK_H
+#ifndef _RAMDISK_H
+#define _RAMDISK_H
 
 #include <types.h>
 
-void vblock_devicemgr_register_devices();
+void ramdisk_devicemgr_register_devices();
 
 #endif
+

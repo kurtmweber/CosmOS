@@ -30,5 +30,6 @@
 #include <dev/isadma/isadma.h>
 #include <dev/cpu/cpu.h>
 #include <dev/virtio/virtio.h>
+#include <dev/ramdisk/ramdisk.h>
 
 #endif

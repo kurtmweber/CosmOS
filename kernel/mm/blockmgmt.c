@@ -8,8 +8,10 @@
 #include <types.h>
 #include <console/console.h>
 #include <mm/mm.h>
+#include <debug/assert.h>
 
 void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks){
+	ASSERT_NOT_NULL(map, "map must not be null");
 	mem_block *b;
 	uint8_t i;
 	
@@ -34,6 +36,8 @@ void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks){
 }
 
 mem_block *find_containing_block(void *addr, mem_block *list){
+	ASSERT_NOT_NULL(addr, "addr must not be null");
+
 	// returns NULL if the requested address is not found within a block in the list
 	mem_block *tmp;
 

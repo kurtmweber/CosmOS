@@ -10,6 +10,7 @@
 #include <console/console.h>
 #include <mm/mm.h>
 #include <string/string.h>
+#include <debug/assert.h>
 
 const uint16_t map_base_addr = 0x500;
 const uint8_t map_increment = 24;
