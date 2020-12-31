@@ -13,8 +13,8 @@
 #include <types.h>
 #include <devicemgr/devicemgr.h>
 
-typedef void (*ata_read_sector)(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size);
-typedef void (*ata_write_sector)(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size);
+typedef void (*ata_read_sector)(struct device* dev, uint32_t lba, uint8_t* data, uint32_t size);
+typedef void (*ata_write_sector)(struct device* dev, uint32_t lba, uint8_t* data, uint32_t size);
 
 struct deviceapi_ata {
     ata_read_sector read;
