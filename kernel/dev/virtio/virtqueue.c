@@ -57,7 +57,9 @@ void virtq_delete(struct virtq* queue) {
     */
     if (0!=queue->descriptors){
         for(uint16_t i=0;i<VIRTQUEUE_SIZE;i++){
-            kfree((queue->descriptors)[i]);
+            if (0!=(queue->descriptors)[i]) {
+                kfree((queue->descriptors)[i]);
+            }
         }
     } else {
         panic("descriptor array should not be null in virtq_delete");
