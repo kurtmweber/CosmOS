@@ -56,6 +56,7 @@
 struct vblock_devicedata {
     uint64_t base;
     uint32_t sectorLength;
+    uint32_t totalSectors;
     struct virtq* vblock_queue;
 } __attribute__((packed));
 
@@ -124,9 +125,9 @@ void vblock_init(struct device* dev){
     /*
     * length*totalSectors should equal the byte size of the mounted file (currently hda.img)
     */
-    uint32_t totalSectors = asm_in_d(deviceData->base+VIRTIO_BLOCK_TOTAL_SECTORS);
+    deviceData->totalSectors = asm_in_d(deviceData->base+VIRTIO_BLOCK_TOTAL_SECTORS);
     deviceData->sectorLength = asm_in_d(deviceData->base+VIRTIO_BLOCK_LENGTH);
-    uint64_t totalBytes = totalSectors*(deviceData->sectorLength);
+    uint64_t totalBytes = deviceData->totalSectors*(deviceData->sectorLength);
     kprintf("   Total byte size of mounted media: %llu\n",totalBytes);
 
     // select queue 0
@@ -195,12 +196,17 @@ void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t s
 }
 
 uint16_t vblock_sector_size(struct device* dev) {
-    panic("Not Implemented");
-    return 0;
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+    struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
+    return deviceData->sectorLength;
 }
+
 uint32_t vblock_total_sectors(struct device* dev){
-    panic("Not Implemented");
-    return 0;
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+    struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
+    return deviceData->totalSectors;
 }
 
 void vblock_search_cb(struct pci_device* dev){
