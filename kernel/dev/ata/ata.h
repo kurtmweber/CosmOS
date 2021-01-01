@@ -22,9 +22,24 @@
 #define ATA_CHANNEL(x, y) (ATA_CONTROLLER(x)->channels[y])
 #define ATA_SECTORS(x) (x / 512)
 
+// https://wiki.osdev.org/PCI_IDE_Controller
+
 typedef enum ata_commands {
+	ATA_CMD_READ_PIO = 0x20,
+	ATA_CMD_READ_PIO_EXT = 0x24,
+	ATA_CMD_READ_DMA = 0xC8,
+	ATA_CMD_READ_DMA_EXT = 0x25,
+	ATA_CMD_WRITE_PIO = 0x30,
+	ATA_CMD_WRITE_PIO_EXT = 0x34,
+	ATA_CMD_WRITE_DMA = 0xCA,
+	ATA_CMD_WRITE_DMA_EXT = 0x35,
+	ATA_CMD_CACHE_FLUSH = 0xE7,
+	ATA_CMD_CACHE_FLUSH_EXT = 0xEA,
+	ATA_CMD_PACKET = 0xA0,
 	ATA_COMMAND_IDENTIFY_PACKET = 0xA1,
-	ATA_COMMAND_IDENTIFY = 0xEC
+	ATA_COMMAND_IDENTIFY = 0xEC,
+	ATAPI_CMD_READ = 0xA8,
+	ATAPI_CMD_EJECT = 0x1B
 } ata_commands;
 
 typedef enum ata_drive_selector {
@@ -56,6 +71,26 @@ typedef enum ata_identify_offsets {
 	ATA_IDENTIFY_OFFSET_PLSS = 212,		// Physical Sector Size / Logical Sector Size
 	ATA_IDENTIFY_OFFSET_SECTOR_SIZE = 234
 } ata_identify_offsets;
+
+typedef enum ata_type {
+	IDE_ATA = 0x00,
+	IDE_ATAPI = 0x01	
+} ata_type;
+
+typedef enum ata_master_slave {
+	ATA_MASTER = 0x00,
+	ATA_SLAVE = 0x01	
+} ata_master_slave;
+
+typedef enum ata_primary_secondary {
+	ATA_PRIMARY = 0x00,
+	ATA_SECONDARY = 0x01	
+} ata_primary_secondary;
+
+typedef enum ata_direction {
+	ATA_READ = 0x00,
+	ATA_WRITE = 0x01	
+} ata_direction;
 
 typedef enum ata_registers {
 	ATA_REGISTER_DATA,
