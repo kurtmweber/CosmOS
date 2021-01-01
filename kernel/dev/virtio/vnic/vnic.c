@@ -19,6 +19,7 @@
 #include <debug/assert.h>
 #include <dev/virtio/virtio.h>
 #include <devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <dev/virtio/virtqueue.h>
 
 #define VNIC_QUEUE_SIZE 255
 
@@ -78,17 +79,17 @@ void VNICInit(struct device* dev){
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
 
-    // make the request queue
-    struct virtq*  q = virtq_new(VNIC_QUEUE_SIZE);
-    bool all = isAligned(((uint64_t)q),4096);
-    ASSERT(all, "q is not 4096 byte aligned");
-    deviceData->recieve_queue = q;
+    // make the recieve queue
+    struct virtq* recieve_q = virtq_new(VNIC_QUEUE_SIZE);
+    bool recieve_q_aligned = virtio_isAligned(((uint64_t)recieve_q),4096);
+    ASSERT(recieve_q_aligned, "recieve_q is not 4096 byte aligned");
+    deviceData->recieve_queue = recieve_q;
     
     // make the send queue
-    struct virtq*  q = virtq_new(VNIC_QUEUE_SIZE);
-    bool all = isAligned(((uint64_t)q),4096);
-    ASSERT(all, "q is not 4096 byte aligned");
-    deviceData->send_queue = q;
+    struct virtq* send_q = virtq_new(VNIC_QUEUE_SIZE);
+    bool send_q_aligned = virtio_isAligned(((uint64_t)send_q),4096);
+    ASSERT(send_q_aligned, "send_q is not 4096 byte aligned");
+    deviceData->send_queue = send_q;
 
     uint8_t virtio_mac[6];
     virtio_mac[0] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC1);

@@ -14,3 +14,7 @@ void virtio_devicemgr_register_devices() {
     vblock_devicemgr_register_devices();
     vnic_devicemgr_register_devices();
 }
+
+bool virtio_isAligned(uint64_t address, uint32_t alignment){
+    return ((address/alignment)*alignment)==address;
+}
