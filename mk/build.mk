@@ -44,16 +44,12 @@ QEMUARGS=                                                 \
   -serial stdio                                           \
   -audiodev coreaudio,id=audio0                           \
   -monitor telnet::45454,server,nowait                    \
-  -device floppy,drive=f0                                 \
-  -blockdev driver=file,node-name=f0,filename=hda.img     \
   -device sb16,audiodev=audio0                            \
   -nic user,model=virtio-net-pci                          \
   -drive if=virtio,file=hda.img,format=raw                \
-  -device sdhci-pci                                       
-
+  
  #  -device usb-ehci                                        \
 
-#  -device sd-card                              
   
 # note that we're mounting the hda.img as a floppy image. good enough for now.
 # the first bytes are FA B4 00 B0 03 CD 10 88 16 7C 7C B8 01 24 CD 15
@@ -65,3 +61,10 @@ QEMUARGS=                                                 \
 # -device adlib,audiodev=audio0
 
 #  -machine pcspk-audiodev=audio0                          \
+
+# -device floppy,drive=f0                                 \
+#  -blockdev driver=file,node-name=f0,filename=hda.img     \
+ 
+# -device sdhci-pci                                       \
+#  -blockdev driver=file,node-name=sddrive,filename=hda.img \
+#  -device sd-card                                                   

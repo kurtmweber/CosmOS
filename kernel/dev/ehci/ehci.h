@@ -5,14 +5,16 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+// https://wiki.osdev.org/Enhanced_Host_Controller_Interface
+
 #ifndef _EHCI_H
 #define _EHCI_H
 
-#define USB_EHCI_CAPABILITY_REGISTER        0x00
-#define USB_EHCI_HCIVERSION_REGISTER        0x02
-#define USB_EHCI_HCSPARAMS_REGISTER         0x04
-#define USB_EHCI_HCCPARAMS_REGISTER         0x08
-#define USB_EHCI_HCSP_PORTROUTE_REGISTER    0x0C
+#define USB_EHCI_CAPABILITY_REGISTER                    0x00
+#define USB_EHCI_HCIVERSION_REGISTER                    0x02
+#define USB_EHCI_HCSPARAMS_REGISTER                     0x04
+#define USB_EHCI_HCCPARAMS_REGISTER                     0x08
+#define USB_EHCI_HCSP_PORTROUTE_REGISTER                0x0C
 
 #define USB_EHCI_USBCMD_OPERATIONAL_REGISTER            0x00
 #define USB_EHCI_USBSTS_OPERATIONAL_REGISTER            0x04
