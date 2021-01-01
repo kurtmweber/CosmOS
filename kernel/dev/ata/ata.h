@@ -11,9 +11,6 @@
 #include <dev/pci/pci_device.h>
 #include <collection/list/list.h>
 
-#define IDE_CHANNEL_PRIMARY		0
-#define IDE_CHANNEL_SECONDARY	1
-
 #define IDE_SERIAL_IRQ			14
 
 #define ATA_CONTROLLER(x) ((struct ide_controller_t*)list_get(ide_controllers, x))

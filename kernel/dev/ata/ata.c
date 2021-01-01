@@ -28,16 +28,16 @@ void ata_detect_addresses(){
 		uint8_t function = ATA_CONTROLLER(i)->pci->function;
 
 		bar_result = pci_header_read_bar0(bus, device, function);
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io = (((bar_result == 0) || (bar_result == 1)) ? 0x1F0 : bar_result);
+		ATA_CONTROLLER(i)->channels[ATA_PRIMARY].base_io = (((bar_result == 0) || (bar_result == 1)) ? 0x1F0 : bar_result);
 		
 		bar_result = pci_header_read_bar1(bus, device, function);
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x3F6 : bar_result);
+		ATA_CONTROLLER(i)->channels[ATA_PRIMARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x3F6 : bar_result);
 		
 		bar_result = pci_header_read_bar2(bus, device, function);
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io = (((bar_result == 0) || (bar_result == 1)) ? 0x170 : bar_result);
+		ATA_CONTROLLER(i)->channels[ATA_SECONDARY].base_io = (((bar_result == 0) || (bar_result == 1)) ? 0x170 : bar_result);
 		
 		bar_result = pci_header_read_bar3(bus, device, function);
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x376 : bar_result);
+		ATA_CONTROLLER(i)->channels[ATA_SECONDARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x376 : bar_result);
 	}
 }
 
@@ -50,22 +50,22 @@ void device_init_ata(struct device* dev){
 	}
 	uint16_t i;
 	for (i = 0; i < NUM_CONTROLLERS; i++){
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].selected_device = ATA_DRIVE_SELECT_NONE;
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].selected_device = ATA_DRIVE_SELECT_NONE;
+		ATA_CONTROLLER(i)->channels[ATA_PRIMARY].selected_device = ATA_DRIVE_SELECT_NONE;
+		ATA_CONTROLLER(i)->channels[ATA_SECONDARY].selected_device = ATA_DRIVE_SELECT_NONE;
 	}
 
 	ata_detect_addresses();
 
 	for (i = 0; i < NUM_CONTROLLERS; i++){
-		kprintf("   Primary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io, ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io_ctrl);
-		kprintf("   Secondary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io, ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io_ctrl);
+		kprintf("   Primary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[ATA_PRIMARY].base_io, ATA_CONTROLLER(i)->channels[ATA_PRIMARY].base_io_ctrl);
+		kprintf("   Secondary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[ATA_SECONDARY].base_io, ATA_CONTROLLER(i)->channels[ATA_SECONDARY].base_io_ctrl);
 	}
 	
 	ata_setup_irq();
 	
 	for (i = 0; i < NUM_CONTROLLERS; i++){
-		ata_interrupt_enable(i, IDE_CHANNEL_PRIMARY, false);
-		ata_interrupt_enable(i, IDE_CHANNEL_SECONDARY, false);
+		ata_interrupt_enable(i, ATA_PRIMARY, false);
+		ata_interrupt_enable(i, ATA_SECONDARY, false);
 	}
 	
 	for (i = 0; i < NUM_CONTROLLERS; i++){
