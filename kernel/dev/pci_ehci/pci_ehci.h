@@ -5,11 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _USB_CONTROLLER_H
-#define _USB_CONTROLLER_H
+#ifndef _PCI_EHCI_H
+#define _PCI_EHCI_H
 
 #include <types.h>
 
-void usb_devicemgr_register_devices();
+void pci_ehci_devicemgr_register_devices();
 
 #endif

@@ -1,6 +1,6 @@
 include ../../../mk/build.mk
 
-ARCHIVE_FILE=usb.a
+ARCHIVE_FILE=pci_ehci.a
 
 include ../../../mk/archive.mk
 

@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <dev/ehcibus/ehcibus.h>
+#include <dev/pci_ehci/pci_ehci.h>
 #include <asm/asm.h>
 #include <devicemgr/devicemgr.h>
 #include <console/console.h>
@@ -13,30 +13,33 @@
 #include <interrupts/interrupt_router.h>
 #include <debug/assert.h>
 #include <dev/pci/pci.h>
+#include <dev/ehci/ehci.h>
 
-void ehcibus_handle_irq(stackFrame *frame) {
+// https://wiki.osdev.org/Enhanced_Host_Controller_Interface
+
+void pci_ehci_handle_irq(stackFrame *frame) {
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 }
 
 /*
 * perform device instance specific init here
 */
-void ehcibus_device_init(struct device* dev){
+void pci_ehci_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu\n",dev->description, dev->pci->irq);
-    interrupt_router_register_interrupt_handler(dev->pci->irq, &ehcibus_handle_irq);
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &pci_ehci_handle_irq);
 }
 
-void ehcibus_search_cb(struct pci_device* dev){
+void pci_ehci_search_cb(struct pci_device* dev){
     ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &ehcibus_device_init;
+    deviceinstance->init =  &pci_ehci_device_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = BRIDGE;
-    devicemgr_set_device_description(deviceinstance, "EHCI bus");
+    devicemgr_set_device_description(deviceinstance, "PCI EHCI Controller");
 	/*
 	* device data
 	*/
@@ -51,7 +54,7 @@ void ehcibus_search_cb(struct pci_device* dev){
 /**
 * find all bridge devices and register them
 */
-void ehcibus_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI, 0x1AF4,0x1001, &ehcibus_search_cb);
+void pci_ehci_devicemgr_register_devices() {
+    pci_devicemgr_search_device(PCI_CLASS_BASE_PERI,0x05, 0x1B36,0x07, &pci_ehci_search_cb);
 }
 

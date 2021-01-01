@@ -195,7 +195,7 @@ void devicemgr_register_devices() {
 	rtc_devicemgr_register_devices();
 	keyboard_devicemgr_register_devices();
 	display_devicemgr_register_devices();
-	usb_devicemgr_register_devices();
+	usb_ehci_devicemgr_register_devices();
 	network_devicemgr_register_devices();
 	bridge_devicemgr_register_devices();
 	ata_devicemgr_register_devices(); 
@@ -208,7 +208,7 @@ void devicemgr_register_devices() {
     cpu_devicemgr_register_devices();
     virtio_devicemgr_register_devices();
     ramdisk_devicemgr_register_devices();
-    ehcibus_devicemgr_register_devices();
+    pci_ehci_devicemgr_register_devices();
 }
 
 

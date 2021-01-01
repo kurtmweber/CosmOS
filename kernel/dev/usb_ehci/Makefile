@@ -1,6 +1,6 @@
 include ../../../mk/build.mk
 
-ARCHIVE_FILE=ehcibus.a
+ARCHIVE_FILE=usb_ehci.a
 
 include ../../../mk/archive.mk
 

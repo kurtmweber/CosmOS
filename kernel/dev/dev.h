@@ -14,7 +14,7 @@
 #include <dev/pic/pic.h>
 #include <dev/rtc/rtc.h>
 #include <dev/serial/serial.h>
-#include <dev/usb/usb_controller.h>
+#include <dev/usb_ehci/usb_ehci.h>
 #include <devicemgr/devicemgr.h>
 #include <dev/network/network.h>
 #include <dev/bridge/bridge.h>
@@ -31,6 +31,6 @@
 #include <dev/cpu/cpu.h>
 #include <dev/virtio/virtio.h>
 #include <dev/ramdisk/ramdisk.h>
-#include <dev/ehcibus/ehcibus.h>
+#include <dev/pci_ehci/pci_ehci.h>
 
 #endif
