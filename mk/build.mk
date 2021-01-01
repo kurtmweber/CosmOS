@@ -49,7 +49,10 @@ QEMUARGS=                                                 \
   -device usb-ehci                                        \
   -device sb16,audiodev=audio0                            \
   -nic user,model=virtio-net-pci                          \
-  -drive if=virtio,file=hda.img,format=raw
+  -drive if=virtio,file=hda.img,format=raw                \
+  -device sdhci-pci                                       \
+  -device sd-card                              
+
   
 # note that we're mounting the hda.img as a floppy image. good enough for now.
 # the first bytes are FA B4 00 B0 03 CD 10 88 16 7C 7C B8 01 24 CD 15

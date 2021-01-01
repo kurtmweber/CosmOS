@@ -31,5 +31,6 @@
 #include <dev/cpu/cpu.h>
 #include <dev/virtio/virtio.h>
 #include <dev/ramdisk/ramdisk.h>
+#include <dev/ehcibus/ehcibus.h>
 
 #endif

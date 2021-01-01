@@ -208,6 +208,7 @@ void devicemgr_register_devices() {
     cpu_devicemgr_register_devices();
     virtio_devicemgr_register_devices();
     ramdisk_devicemgr_register_devices();
+    ehcibus_devicemgr_register_devices();
 }
 
 
