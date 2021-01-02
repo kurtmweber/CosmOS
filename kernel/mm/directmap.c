@@ -276,7 +276,7 @@ void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
          */
         if (!pml4[idx]){
             // Clear the page table we're about to point to in PML4 and set up
-            memset((void *)CONV_PHYS_ADDR((uint64_t)cur_phys_loc), 0, PAGE_SIZE);
+            memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
 
             kprintf("New PDP at 0x%llX, ", (uint64_t)cur_phys_loc);
             pml4[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
@@ -296,7 +296,7 @@ void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
          */
 
         if (!pdp[idx]){
-            memset((void *)CONV_PHYS_ADDR((uint64_t)cur_phys_loc), 0, PAGE_SIZE);
+            memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
 
             kprintf("New PD at 0x%llX, ", (uint64_t)cur_phys_loc);
             pdp[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
@@ -312,7 +312,7 @@ void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
         //kprintf("CPL: %llX\n", (uint64_t)cur_phys_loc);
 
         if (!pd[idx]){
-            memset((void *)CONV_PHYS_ADDR((uint64_t)cur_phys_loc), 0, PAGE_SIZE);
+            memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
 
             kprintf("New PT at 0x%llX, ", (uint64_t)cur_phys_loc);
             pd[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
