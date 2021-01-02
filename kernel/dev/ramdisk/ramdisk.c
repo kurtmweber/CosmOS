@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/dev_platform/i386/ramdisk/ramdisk.h>
+#include <dev/ramdisk/ramdisk.h>
 #include <system/devicemgr/devicemgr.h>
 #include <system/console/console.h>
 #include <types.h>

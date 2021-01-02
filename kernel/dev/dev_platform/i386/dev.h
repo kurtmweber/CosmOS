@@ -30,7 +30,7 @@
 #include <dev/dev_platform/i386/isadma/isadma.h>
 #include <dev/dev_platform/i386/cpu/cpu.h>
 #include <dev/dev_platform/i386/virtio/virtio.h>
-#include <dev/dev_platform/i386/ramdisk/ramdisk.h>
+#include <dev/ramdisk/ramdisk.h>
 #include <dev/dev_platform/i386/pci_ehci/pci_ehci.h>
 
 #endif
