@@ -6,17 +6,17 @@
  *****************************************************************/
 
 #include <types.h>
-#include <console/console.h>
-#include <console/drivers/drivers.h>
-#include <interrupts/interrupt_router.h>
-#include <video/video.h>
-#include <video/vga/vga.h>
-#include <tests/tests.h>
-#include <mm/mm.h>
-#include <devicemgr/devicemgr.h>
+#include <system/console/console.h>
+#include <system/console/drivers/drivers.h>
+#include <system/platform/i386/interrupts/interrupt_router.h>
+#include <system/platform/i386/video/video.h>
+#include <system/platform/i386/video/vga/vga.h>
+#include <system/tests/tests.h>
+#include <system/platform/i386/mm/mm.h>
+#include <system/devicemgr/devicemgr.h>
 #include <asm/asm.h>
-#include <interrupts/idt.h>
-#include <tests/testvblock.h>
+#include <system/platform/i386/interrupts/idt.h>
+#include <system/tests/testvblock.h>
 
 void CosmOS(){
 	video_init();

@@ -8,7 +8,7 @@
 #ifndef _ASSERT_H
 #define _ASSERT_H
 
-#include <panic/panic.h>
+#include <system/panic/panic.h>
 
 // assertion macros to make life easier
 // in a RELEASE build these can just expand to nothing

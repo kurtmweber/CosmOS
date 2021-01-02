@@ -7,11 +7,11 @@
 
 # platform flag
 COMPILE_PLATFORM=COMPILE_PLATFORM_DARWIN
-TARGET_PLATFORM=ARM
+TARGET_PLATFORM=TARGET_PLATFORM_ARM
 
 # cc (GCC tool chain)
 CC=arm-none-eabi-gcc
-CFLAGS=-c -ffreestanding -fPIC -O0 -D$(COMPILE_PLATFORM) -D$(TARGET_PLATFORM)m
+CFLAGS=-c -ffreestanding -fPIC -O0 -D$(COMPILE_PLATFORM) -D$(TARGET_PLATFORM)
 
 # ld
 LD=arm-none-eabi-ld

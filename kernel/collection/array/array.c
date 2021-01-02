@@ -7,9 +7,9 @@
 
 #include <collection/array/array.h>
 
-#include <mm/mm.h>
+#include <system/platform/i386/mm/mm.h>
 #include <debug/assert.h>
-#include <console/console.h>
+#include <system/console/console.h>
 
 struct array* array_new(uint32_t size) {
     struct array*  ret = (struct array*) kmalloc(sizeof(struct array));

@@ -14,4 +14,4 @@ $(KERNEL_BIN): $(KERNEL_ELF)
 	$(OBJCOPY) $(OBJCOPYFLAGS) $(KERNEL_ELF) $(KERNEL_BIN)
 
 $(KERNEL_ELF): $(ARCHIVE_FILE)
-	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE) rawdata/rawdata.o
+	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE) system/rawdata/rawdata.o

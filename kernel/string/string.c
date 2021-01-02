@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
-#include <mm/mm.h>
+#include <system/platform/i386/mm/mm.h>
 #include <string/string.h>
 #include <debug/assert.h>
 
