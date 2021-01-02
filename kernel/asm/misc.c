@@ -35,6 +35,18 @@ pttentry asm_cr3_read(){
 	return cr3;
 }
 
+void asm_cr3_reload(){
+	asm volatile(
+		"mov %%cr3, %%rax\n"
+   		"mov %%rax, %%cr3"
+		:
+		:
+		: "%eax"
+		);
+
+	return;
+}
+
 void asm_sti(){
 	asm volatile(
 		"sti"

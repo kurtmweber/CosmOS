@@ -14,6 +14,8 @@ typedef uint64_t ptt_t;     // page translation table
 
 #define DIRECT_MAP_OFFSET           0xFFFFA00000000000
 
+#define MAX_ID_MAP                  0x100000
+
 // Set this to somewhere above the last page tables that are created by the bootloader
 #define EARLY_PAGE_TABLE_PHYS_BASE      0x30000
 
@@ -23,6 +25,8 @@ typedef uint64_t ptt_t;     // page translation table
 
 #define PTT_EXTRACT_BASE(x) (x & 0x000FFFFFFFFFF000)
 #define PTT_SET_BASE(ptt, base) (ptt |= base)
+#define PTT_ADJUST_BASE(x) ((x < MAX_ID_MAP) ? x : (x + DIRECT_MAP_OFFSET))
+#define CONV_PHYS_ADDR(x) PTT_ADJUST_BASE(x)
 
 // Flags to set (or not) in PTT entries
 #define PTT_FLAG_PRESENT    1       // present in physical memory
