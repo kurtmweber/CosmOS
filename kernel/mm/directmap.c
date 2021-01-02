@@ -175,7 +175,7 @@ void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
      * Now we loop through.  We start at the virtual address that will
      * correspond to the first address of the physical block we're using, and
      * map pages until we reach the end of the address space.  Then we do
-     * another loop to start at 1, and stop when we get up to where we started.
+     * another loop to start at 0, and stop when we get up to where we started.
      * Even though we're direct-mapping all the physical space, we'll start with
      * the block we found above so we can start putting stuff in it ASAP, before
      * we run out of room in the ID-mapped first megabyte      
@@ -256,6 +256,92 @@ void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
 
     
     for (i = (uint64_t)best_block.base / PAGE_SIZE; i < num_phys_pages; i++){
+        /*
+         * This loop performs a lot of unncessary checks of the higher levels
+         * of the page-table hierarchy.  We can optimize that later if it
+         * becomes an issue.
+         */
+
+        active_virt_loc = (void *)((i * PAGE_SIZE) + DIRECT_MAP_OFFSET);
+        kprintf("AVL: %llX\n", (uint64_t)active_virt_loc);
+
+        pml4 = (pttentry *)PTT_EXTRACT_BASE(cr3);
+        idx = vaddr_ptt_index(active_virt_loc, PML4);
+        //kprintf("PML4, idx = %llX, %u\n", (uint64_t)pml4, idx);
+
+        /*
+         * Bootloader clears PML4 area for us, so we can count on this being a
+         * reliable test as to whether there is already an entry there or not.  If
+         * there is, we follow it; if not, we write a new one.
+         */
+        if (!pml4[idx]){
+            // Clear the page table we're about to point to in PML4 and set up
+            memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
+
+            kprintf("New PDP at 0x%llX, ", (uint64_t)cur_phys_loc);
+            pml4[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
+            kprintf("with value %llX, ", (uint64_t)pml4[idx]);
+            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            kprintf("next at 0x%llX\n", (uint64_t)cur_phys_loc);
+        }
+
+        pdp = (pttentry *)PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pml4[idx]));
+        idx = vaddr_ptt_index(active_virt_loc, PDP);
+
+       //kprintf("PDP, idx = %llX, %u\n", (uint64_t)pdp, idx);
+
+        /*
+         * And, similarly, bootloader or kernel will clear newly-assigned page
+         * table areas at all levels.
+         */
+
+        if (!pdp[idx]){
+            memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
+
+            kprintf("New PD at 0x%llX, ", (uint64_t)cur_phys_loc);
+            pdp[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
+            kprintf("with value %llX, ", (uint64_t)pdp[idx]);
+            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            kprintf("next at 0x%llX\n", (uint64_t)cur_phys_loc);
+        }
+
+        pd = (pttentry *)PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pdp[idx]));
+        idx = vaddr_ptt_index(active_virt_loc, PD);
+
+        //kprintf("PD, idx = %llX, %u\n", (uint64_t)pd, idx);
+        //kprintf("CPL: %llX\n", (uint64_t)cur_phys_loc);
+
+        if (!pd[idx]){
+            memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
+
+            kprintf("New PT at 0x%llX, ", (uint64_t)cur_phys_loc);
+            pd[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
+            kprintf("with value %llX, ", (uint64_t)pd[idx]);
+            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            kprintf("next at 0x%llX\n", (uint64_t)cur_phys_loc);
+        }
+
+        //kprintf("Raw PT base: %llX\n", (uint64_t)pd[idx]);
+        //kprintf("Extracted PT base: %llX\n", (uint64_t)PTT_EXTRACT_BASE(pd[idx]));
+        //kprintf("Adjusted PT base: %llX\n", PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pd[idx])));
+
+        pt = (pttentry *)PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pd[idx]));
+        idx = vaddr_ptt_index(active_virt_loc, PT);
+
+        //kprintf("PT, idx = %llX, %u\n", (uint64_t)pt, idx);
+
+        if (!pt[idx]){
+            kprintf("New Page at 0x%llX for virt loc 0x%llX, PT base at 0x%llX\n", (uint64_t)i * PAGE_SIZE, (uint64_t)active_virt_loc, (uint64_t)pt);
+            pt[idx] = ptt_entry_create((void *)(i * PAGE_SIZE), true, true, false);
+            //kprintf("with value %llX, ", (uint64_t)pt[idx]);
+            //cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            //kprintf("next at 0x%llX\n", (uint64_t)cur_phys_loc);
+        }
+
+        asm_cr3_reload();
+    }
+
+    for (i = 0; i < (uint64_t)best_block.base / PAGE_SIZE; i++){
         /*
          * This loop performs a lot of unncessary checks of the higher levels
          * of the page-table hierarchy.  We can optimize that later if it
