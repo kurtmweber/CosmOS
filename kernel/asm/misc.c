@@ -8,6 +8,8 @@
 #include <types.h>
 #include <mm/mm.h>
 
+#ifdef TARGET_PLATFORM_I386
+
 void asm_hlt(){
 	asm volatile(
 		"hlt"
@@ -42,3 +44,5 @@ void asm_sti(){
 	
 	return;
 }
+
+#endif

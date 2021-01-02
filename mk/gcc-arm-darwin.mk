@@ -6,20 +6,21 @@
 # ****************************************************************
 
 # platform flag
-PLATFORM=COMPILE_PLATFORM_DARWIN
+COMPILE_PLATFORM=COMPILE_PLATFORM_DARWIN
+TARGET_PLATFORM=ARM
 
 # cc (GCC tool chain)
-CC=x86_64-elf-gcc
-CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(PLATFORM)
+CC=arm-none-eabi-gcc
+CFLAGS=-c -ffreestanding -fPIC -O0 -D$(COMPILE_PLATFORM) -D$(TARGET_PLATFORM)m
 
 # ld
-LD=x86_64-elf-ld 
+LD=arm-none-eabi-ld
 LDFLAGS=-m elf_x86_64 -T $(LINKER_SCRIPT) -Map $(MAPFILE) -nostdlib --no-relax
 
 # objcopy
-OBJCOPY=x86_64-elf-objcopy
+OBJCOPY=arm-none-eabi-objcopy
 OBJCOPYFLAGS=-O binary
 
 # ar
-AR=x86_64-elf-ar
+AR=arm-none-eabi-gcc-ar
 ARFLAGS=-crs

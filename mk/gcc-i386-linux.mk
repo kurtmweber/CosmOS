@@ -6,11 +6,12 @@
 # ****************************************************************
 
 # platform flag
-PLATFORM=COMPILE_PLATFORM_LINUX
+COMPILE_PLATFORM=COMPILE_PLATFORM_LINUX
+TARGET_PLATFORM=i386
 
 # cc (GCC tool chain)
 CC=gcc
-CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(PLATFORM)
+CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(COMPILE_PLATFORM) -D$(TARGET_PLATFORM)
 
 # ld
 LD=ld
