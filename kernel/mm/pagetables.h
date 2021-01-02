@@ -27,6 +27,7 @@ typedef uint64_t ptt_t;     // page translation table
 #define PTT_SET_BASE(ptt, base) (ptt |= base)
 #define PTT_ADJUST_BASE(x) (((uint64_t)x < MAX_ID_MAP) ? (void *)x : (void *)((uint64_t)x + DIRECT_MAP_OFFSET))
 #define CONV_PHYS_ADDR(x) PTT_ADJUST_BASE(x)
+#define CONV_DMAP_ADDR(x) ((void *)((uint64_t)x - DIRECT_MAP_OFFSET))
 
 // Flags to set (or not) in PTT entries
 #define PTT_FLAG_PRESENT    1       // present in physical memory
