@@ -7,7 +7,7 @@
 #include <system/console/drivers/drivers.h>
 #include <system/console/drivers/serial_console/serial_console.h>
 #include <system/devicemgr/deviceapi/deviceapi_serial.h>
-#include <dev/i386/serial/serial.h>
+#include <dev/dev_platform/i386/serial/serial.h>
 
 void serial_console_init(){	
 	return;

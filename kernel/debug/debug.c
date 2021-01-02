@@ -9,7 +9,7 @@
 
 // normally this is not encouraged and instead the devivemgr should be used
 // however, for debug, this might actually be a better approach
-#include <dev/i386/serial/com1.h>
+#include <dev/dev_platform/i386/serial/com1.h>
 
 #define DEBUG_LINE_WIDTH 8
 

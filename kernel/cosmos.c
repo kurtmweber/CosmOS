@@ -8,14 +8,14 @@
 #include <types.h>
 #include <system/console/console.h>
 #include <system/console/drivers/drivers.h>
-#include <system/platform/i386/interrupts/interrupt_router.h>
-#include <system/platform/i386/video/video.h>
-#include <system/platform/i386/video/vga/vga.h>
+#include <system/system_platform/i386/interrupts/interrupt_router.h>
+#include <system/system_platform/i386/video/video.h>
+#include <system/system_platform/i386/video/vga/vga.h>
 #include <system/tests/tests.h>
-#include <system/platform/i386/mm/mm.h>
+#include <system/system_platform/i386/mm/mm.h>
 #include <system/devicemgr/devicemgr.h>
 #include <asm/asm.h>
-#include <system/platform/i386/interrupts/idt.h>
+#include <system/system_platform/i386/interrupts/idt.h>
 #include <system/tests/testvblock.h>
 
 void CosmOS(){

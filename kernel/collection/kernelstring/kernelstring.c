@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <collection/kernelstring/kernelstring.h>
-#include <system/platform/i386/mm/mm.h>
+#include <system/system_platform/i386/mm/mm.h>
 #include <debug/assert.h>
 #include <system/console/console.h>
 

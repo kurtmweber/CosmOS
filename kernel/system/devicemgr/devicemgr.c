@@ -8,11 +8,11 @@
 #include <system/devicemgr/devicemgr.h>
 #include <system/console/console.h>
 #include <collection/list/list.h>
-#include <system/platform/i386/mm/mm.h>
+#include <system/system_platform/i386/mm/mm.h>
 #include <string/string.h>
 #include <debug/assert.h>
 #include <system/devicemgr/deviceregistry.h>
-#include <dev/i386/dev.h>
+#include <dev/dev_platform/i386/dev.h>
 
 #define MAX_DEVICE_NAME_LENGTH 64
 

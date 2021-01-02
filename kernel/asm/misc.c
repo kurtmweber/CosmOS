@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
-#include <system/platform/i386/mm/mm.h>
+#include <system/system_platform/i386/mm/mm.h>
 
 #ifdef TARGET_PLATFORM_I386
 
