@@ -115,23 +115,7 @@ int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *m
     return phys_map[best];
 }
 
-void *find_last_phys_addr(int_15_map *phys_map, uint8_t num_blocks){
-    uint8_t i;
-    void *last_addr = 0;
-
-    for (i = 0; i < num_blocks; i++){
-        // subtract one because the base address is part of the len
-        // so for example if the base is 0, and the len is 1, then the last address is 0
-        // if base is 5 and len is 8, then the last address is 12, etc.
-        if ((phys_map[i].base + phys_map[i].len - 1) > last_addr){
-            last_addr = (phys_map[i].base + phys_map[i].len - 1);
-        }
-    }
-
-    return last_addr;
-}
-
-void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
+void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
     ptt_t cr3;
     void *active_virt_loc;
     void *cur_phys_loc = (void *)EARLY_PAGE_TABLE_PHYS_BASE;
@@ -302,6 +286,6 @@ void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
         asm_cr3_reload();
     }
     
-
-    return;
+    // Return the first address after the direct-map page tables
+    return CONV_PHYS_ADDR(cur_phys_loc);
 }

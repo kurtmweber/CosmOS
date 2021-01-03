@@ -25,8 +25,15 @@ typedef uint64_t ptt_t;     // page translation table
 
 #define PTT_EXTRACT_BASE(x) (x & 0x000FFFFFFFFFF000)
 #define PTT_SET_BASE(ptt, base) (ptt |= base)
+
+/*
+ * Given a physical address, add the necessary offset to make a virtual address
+ * within the direct-map area.
+ */
 #define PTT_ADJUST_BASE(x) (((uint64_t)x < MAX_ID_MAP) ? (void *)x : (void *)((uint64_t)x + DIRECT_MAP_OFFSET))
 #define CONV_PHYS_ADDR(x) PTT_ADJUST_BASE(x)
+
+// And vice-versa
 #define CONV_DMAP_ADDR(x) ((void *)((uint64_t)x - DIRECT_MAP_OFFSET))
 
 // Flags to set (or not) in PTT entries
@@ -52,6 +59,6 @@ typedef struct page_directory_t{
 pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
 
 // directmap.c
-void setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
+void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
 
 #endif

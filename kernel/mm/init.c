@@ -16,6 +16,7 @@ void mmu_init(){
 	uint8_t num_blocks, lrg_block;
 	uint8_t i;
 	mem_block *b;
+	page_directory_t *page_directory_start;
 	
 	brk = &_end;
 
@@ -27,7 +28,8 @@ void mmu_init(){
 	
 	map = read_int_15_map(&num_blocks, &lrg_block);
 
-	setup_direct_map(map, num_blocks);
+	page_directory_start = (page_directory_t *)setup_direct_map(map, num_blocks);
+	kprintf("Page directory start: 0x%llX\n", page_directory_start);
 	
 	init_usable_phys_blocks(map[lrg_block]);
 	

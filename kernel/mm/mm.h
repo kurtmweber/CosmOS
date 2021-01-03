@@ -77,7 +77,10 @@ void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks);
 mem_block *find_containing_block(void *addr, mem_block *list);
 void init_usable_phys_blocks(int_15_map base);
 void sort_usable_phys_blocks();
+
+// mm.c
 void *find_aligned_after(void *address, uint64_t alignment);
+void *find_last_phys_addr(int_15_map *phys_map, uint8_t num_blocks);
 
 extern mem_block init_phys_block;
 extern mem_block *usable_phys_blocks;
@@ -100,7 +103,7 @@ int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block);
 mem_block *phys_alloc_slab(uint64_t size, uint64_t align);
 mem_block *phys_split_block(mem_block *src, void *base, uint64_t size);
 
-// mm.h
+// mm.c
 bool is_page_aligned(void *address);
 bool is_page_allocated(void *address);
 pttentry *extract_cr3_base_address(pttentry entry);
