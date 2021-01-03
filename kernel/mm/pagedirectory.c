@@ -48,15 +48,15 @@ uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_b
 }
 
 int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, uint8_t num_blocks){
-    uint8_t i;
+    uint16_t i;
 
     i = find_page_bios_block(page, phys_map, num_blocks);
 
-    if (page <= 511){
-        kprintf("Page %llu is in block %hu\n", page, i);
+    if (!i){
+        return HOLE;
+    } else {
+        return phys_map[i - 1].type;
     }
-
-    return 0;
 }
 
 void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){

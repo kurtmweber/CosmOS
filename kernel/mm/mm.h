@@ -43,7 +43,8 @@ typedef enum int_15_map_region_type{
 	RESERVED = 2,
 	ACPI_RECLAIM = 3,
 	ACPI_NVS = 4,
-	BAD = 5
+	BAD = 5,
+	HOLE	// Not an actual type returned by the int 15 map, but we use it in page-directory setup
 } int_15_map_region_type;
 
 typedef enum ptt_levels{
