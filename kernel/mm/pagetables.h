@@ -65,7 +65,7 @@ typedef struct page_directory_t{
     };
     page_directory_types type;
     uint64_t flags;
-} page_directory_t;
+} __attribute__((packed)) page_directory_t;
 
 // pagedirectory.c
 void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks);

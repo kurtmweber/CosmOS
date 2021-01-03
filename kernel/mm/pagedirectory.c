@@ -62,7 +62,10 @@ int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, u
 void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
     /*
      * This function creates blank page directory entries and fills them in with
-     * the information we can glean from the BIOS memory map created at boot.
+     * the information we can glean from the BIOS memory map created at
+     * boot--specifically the page types that the hardware tells us
+     * (SYSTEM_RESERVED is determined later, since the hardware/BIOS doesn't
+     * know about that)
      */
     uint64_t i;
     int_15_map_region_type bios_type;
@@ -84,7 +87,32 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
 
     for (i = 0; i < num_phys_pages; i++){
         bios_type = get_page_bios_type(i, phys_map, num_blocks);
+
+        page_directory[i].ref_count = 0;
+        page_directory[i].backing_addr = 0;
+        page_directory[i].flags = 0;
+
+        switch(bios_type){
+            case USABLE:
+                page_directory[i].type = PDT_PHYS_AVAIL;
+                break;
+            // fall-through is intended behavior here
+            case RESERVED:
+            case ACPI_RECLAIM:
+            case ACPI_NVS:
+                page_directory[i].type = PDT_HARDWARE_RESERVED;
+                break;
+            case BAD:
+                page_directory[i].type = PDT_BAD;
+                break;
+            case HOLE:
+                page_directory[i].type = PDT_HOLE;
+            default:
+                panic("Invalid BIOS block type!");
+        }
     }
+
+    return;
 }
 
 void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks){
@@ -93,6 +121,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
     kprintf("Setting up physical page directory...\n");
 
     page_directory = start;
+    kprintf("%llX\n", (uint64_t)page_directory);
 
     init_page_directory(phys_map, num_blocks);
 
