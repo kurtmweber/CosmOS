@@ -1,6 +1,6 @@
 /*****************************************************************
  * This file is part of CosmOS                                   *
- * Copyright (C) 2020 Kurt M. Weber                              *
+ * Copyright (C) 2020-2021 Kurt M. Weber                         *
  * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
@@ -48,14 +48,30 @@ typedef uint64_t ptt_t;     // page translation table
                                     // use 4-kb pages so it should always be 0
 #define PTT_FLAG_GLOBAL     256     // 1 for global page
 
+typedef enum page_directory_types{
+    PDT_PHYS_AVAIL,                         // Physical memory available for allocation
+    PDT_SYSTEM_RESERVED,                    // Reserved by operating system
+    PDT_HARDWARE_RESERVED,                  // Reserved by hardware or BIOS - NEVER ALLOCATE
+    PDT_HOLE,                               // Hole in memory map - NEVER ALLOCATE
+    PDT_BAD,                                // Flagged as bad by BIOS - NEVER ALLOCATE
+    PDT_MAX_PD_TYPE = 0xFFFFFFFFFFFFFFFF    // to force enum to 64 bits
+} page_directory_types;
+
 typedef struct page_directory_t{
     uint64_t ref_count;
-    uint64_t proc_count;
-    uint64_t type;
+    union {
+        uint64_t backing_handle;
+        void *backing_addr;
+    };
+    page_directory_types type;
     uint64_t flags;
 } page_directory_t;
 
+// pagedirectory.c
+void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks);
+
 // pagetables.c
+extern page_directory_t *page_directory;
 pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
 
 // directmap.c
