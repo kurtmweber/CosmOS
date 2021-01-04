@@ -10,3 +10,10 @@ Usage/mapping of physical memory at kernel load and jmp:
 Once MM is set up:
 Direct map starts at virtual address FFFFA00000000000, limit 32TB (this is the
 max physical memory CosmOS currently supports).
+
+The first part of the direct map, as much as can safely be put in the ID-mapped
+first megabyte without overwriting critical data, is known as the "lower direct
+map."  It is used to create enough of a page table to make it possible for us to
+start putting the rest of the direct map at the start of a block of contiguous
+physical memory sufficiently large to hold the rest of the direct map + the page
+directory.  This part is known as the "upper direct map."

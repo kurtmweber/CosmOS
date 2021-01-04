@@ -76,5 +76,7 @@ pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
 
 // directmap.c
 void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
+int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *min, uint64_t space);
+uint64_t size_pd(uint64_t space);
 
 #endif

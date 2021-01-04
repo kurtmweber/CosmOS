@@ -107,6 +107,7 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
                 break;
             case HOLE:
                 page_directory[i].type = PDT_HOLE;
+                break;
             default:
                 panic("Invalid BIOS block type!");
         }
@@ -116,14 +117,87 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
 }
 
 void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks){
+    int_15_map best_block;
+    void *dmap_start;
+    uint64_t dmap_start_page;
     uint64_t i;
+    void *last_phys_addr;
+    uint64_t size;
 
     kprintf("Setting up physical page directory...\n");
 
     page_directory = start;
-    kprintf("%llX\n", (uint64_t)page_directory);
 
     init_page_directory(phys_map, num_blocks);
+
+    /*
+     * And now we update the system-reserved pages, starting with the ID-mapped
+     * first megabyte.
+     */
+
+    for (i = 0; i < (1048576 / PAGE_SIZE); i++){
+        /*
+         * If a page is hardware-reserved, bad, or a hole, we don't mark it as
+         * system-reserved.
+         */
+        if (page_directory[i].type == PDT_PHYS_AVAIL){
+            page_directory[i].type = PDT_SYSTEM_RESERVED;
+        }
+
+        // But we increment its refcount regardless
+        page_directory[i].ref_count++;
+    }
+
+    // Now the kernel text, heap, and stack space
+    for (i = (1048576 / PAGE_SIZE); i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++){
+        if (page_directory[i].type == PDT_PHYS_AVAIL){
+            page_directory[i].type = PDT_SYSTEM_RESERVED;
+        }
+
+        page_directory[i].ref_count++;
+    }
+
+    // And, finally, the high direct map + page directory area
+    last_phys_addr = find_last_phys_addr(phys_map, num_blocks);
+    kprintf("Last physical address: %llX\n", (uint64_t)last_phys_addr);
+    
+    /*
+     * The procedure here is to find the base of the block we put our upper
+     * direct map at.  The page directory start immediately follows the direct
+     * map, so by substracting page dir start from the base of that block, we
+     * know the size of the upper direct map.  To that, we add the size of the
+     * page directory.  At this point, we have the size in bytes of the upper
+     * direct map + page directory.
+     */
+
+    /* 
+     * +1 because we need a 1-based size, not a 0-based address which is what
+     * last_phys_addr is
+     */
+    best_block = find_suitable_block(phys_map, num_blocks, (void *)BOOT_MAPPED_PHYS, (uint64_t)last_phys_addr + 1);
+    dmap_start = best_block.base;
+    size = (uint64_t)(CONV_DMAP_ADDR(start) - dmap_start);
+
+    size += size_pd((uint64_t)last_phys_addr + 1);     // +1 for same reason as above
+
+    /*
+     *Now size = size in bytes of upper direct map + page directory, so we need
+     * to know how many pages that encompasses.
+     */
+    if (size % PAGE_SIZE){
+        size = (size / PAGE_SIZE) + 1;
+    } else {
+        size = (size / PAGE_SIZE);
+    }
+
+    dmap_start_page = (uint64_t)dmap_start / PAGE_SIZE;
+    for (i = 0; i < size; i++){
+        // Add to i the offset equal to the page of the start of the direct map.
+        if (page_directory[i + dmap_start_page].type == PDT_PHYS_AVAIL){
+            page_directory[i + dmap_start_page].type = PDT_SYSTEM_RESERVED;
+        }
+        page_directory[i + dmap_start_page].ref_count++;
+    }
 
     return;
 }

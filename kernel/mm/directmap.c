@@ -12,6 +12,9 @@
 #include <panic/panic.h>
 #include <string/string.h>
 
+int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *min, uint64_t space);
+uint64_t size_pd(uint64_t space);
+
 void *adjust_cur_phys_loc(void *cur_phys_loc, void *safe_base){
     /*
      * If we're about to exceed the limit for the ID-mapped first megabyte page
@@ -40,13 +43,7 @@ int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *m
      * will encompass a whole number of pages, but I'm not sure there is
      */
 
-    // How many pages are there in the physical address space?
-    needed_size = (space / PAGE_SIZE);
-    if (space % PAGE_SIZE){
-        needed_size++;
-    }
-    // And then multiply by size of a page directory entry
-    needed_size *= sizeof(page_directory_t);
+    needed_size = size_pd(space);
     
     /* 
      * To that, we add the space needed for page tables for the entire physical space.
@@ -140,6 +137,14 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
     /*
      * last_phys_addr + 1 because the last address uses zero-bsed #ing, and we
      * need the size of the space
+     *
+     * If for whatever reason the method for choosing the physical block for the
+     * direct map changes, updates to setup_page_directory() in pagedirectory.c
+     * may become necessary too, particularly if those changes are outside of
+     * the find_suitable_block() function or change its signature (though those
+     * will trigger compiler errors so that should be an automatic reminder, at
+     * least).  This is because setup_page_directory() has to know what physical
+     * pages are system-reserved to set the type in the page directory properly.
      */
     best_block = find_suitable_block(phys_map, num_blocks, (void *)BOOT_MAPPED_PHYS, (uint64_t)last_phys_addr + 1);
 
@@ -288,4 +293,19 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
     
     // Return the first address after the direct-map page tables
     return CONV_PHYS_ADDR(cur_phys_loc);
+}
+
+uint64_t size_pd(uint64_t space){
+    uint64_t needed_size;
+
+    // How many pages are there in the physical address space?
+    needed_size = (space / PAGE_SIZE);
+    if (space % PAGE_SIZE){
+        needed_size++;
+    }
+
+    // And then multiply by size of a page directory entry
+    needed_size *= sizeof(page_directory_t);
+
+    return needed_size;
 }
