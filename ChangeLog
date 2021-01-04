@@ -1,3 +1,6 @@
+2021-01-04
+	* set up direct map and page directory (kmw)
+
 2020-10-03
 	* expand mapped heap space to 8 MB, begin work on slab allocator (kmw)
 
