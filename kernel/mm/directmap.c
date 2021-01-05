@@ -38,9 +38,9 @@ int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *m
     uint64_t pte, pde, pdpe, pml4;
 
     
-    for (i = 0; i < num_blocks; i++){
+    /*for (i = 0; i < num_blocks; i++){
         kprintf("Block %llu, base 0x%llX, len %llu, type %lu\n", i, (uint64_t)phys_map[i].base, phys_map[i].len, phys_map[i].type);
-    }
+    }*/
 
     /*
      * First, we need enough space for the page table directory--this is the easiest to calculate
@@ -84,7 +84,6 @@ int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *m
 
     // and then we adjust needed_size, keeping in mind that a page table entry is 8 bytes long
     needed_size += ((pte + pde + pdpe + pml4) * 8);
-    kprintf("Needed size: %llu\n", needed_size);
 
     for (i = 0; i < num_blocks; i++){
         /*
@@ -137,7 +136,6 @@ int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *m
                      */
                     if ((end_point - (void *)BOOT_MAPPED_PHYS) >= needed_size){
                         //good to go
-                        kprintf("Usable size in block %hu is %llu\n", i, (end_point - (void *)BOOT_MAPPED_PHYS));
                         return phys_map[i];
                     }
                 }
@@ -201,8 +199,6 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
          */
         dmap_start = (void *)BOOT_MAPPED_PHYS;
     }
-
-    kprintf("DMAP start: 0x%llX\n", (uint64_t)dmap_start);
 
     /*
      * At this point, all ptts are in the ID-mapped first megabyte, so we can
