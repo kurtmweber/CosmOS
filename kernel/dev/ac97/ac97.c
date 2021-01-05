@@ -13,7 +13,7 @@
 #include <interrupts/interrupt_router.h>
 #include <dev/pci/pci.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 // https://wiki.osdev.org/AC97
 

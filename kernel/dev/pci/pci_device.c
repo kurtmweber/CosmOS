@@ -8,7 +8,7 @@
 #include <dev/pci/pci_device.h>
 #include <types.h>
 #include <console/console.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 struct list *pci_devices;
 

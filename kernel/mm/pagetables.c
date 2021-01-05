@@ -12,6 +12,7 @@
 #include <mm/pagetables.h>
 #include <panic/panic.h>
 #include <string/string.h>
+#include <debug/assert.h>
 
 #ifdef COMPILE_PLATFORM_LINUX 
 pttentry *extract_cr3_base_address(pttentry cr3) __attribute__((alias("extract_pttentry_base_address")));
@@ -26,7 +27,7 @@ pttentry *extract_pttentry_base_address(pttentry entry){
 }
 
 bool is_page_aligned(void *address){
-	
+	ASSERT_NOT_NULL(address, "address must not be null");
 	// if modulus = 0, then it's page-aligned
 	if (!((uint64_t)address % PAGE_SIZE)){
 		return true;
@@ -36,6 +37,7 @@ bool is_page_aligned(void *address){
 }
 
 bool is_page_allocated(void *address){
+	ASSERT_NOT_NULL(address, "address must not be null");
 	pttentry cr3;
 	pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
 	uint16_t pml4_index, pdp_index, pd_index, pt_index;
@@ -105,6 +107,8 @@ pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user){
 }
 
 uint16_t vaddr_ptt_index(void *address, ptt_levels level){
+	ASSERT_NOT_NULL(address, "address must not be null");
+
 	uint64_t mask;
 	uint8_t shift;
 	switch (level){
@@ -132,6 +136,8 @@ uint16_t vaddr_ptt_index(void *address, ptt_levels level){
 }
 
 void *vaddr_to_physical(void *address, pttentry cr3){
+	ASSERT_NOT_NULL(address, "address must not be null");
+
 	pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
 	uint16_t idx;
 

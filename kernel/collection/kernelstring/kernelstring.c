@@ -7,7 +7,7 @@
 
 #include <collection/kernelstring/kernelstring.h>
 #include <mm/mm.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 #include <console/console.h>
 
 struct kernelstring* string_new() {

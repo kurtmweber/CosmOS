@@ -1,16 +1,7 @@
 include ../../mk/build.mk
 
-EXTRA_CFLAGS= -I..
-ARFLAGS=-crs
+ARCHIVE_FILE=ethernet.a
 
-all: ethernet.a
+include ../../mk/archive.mk
 
-ethernet.a: ethernet.o 
-	$(AR) $(ARFLAGS) $@ $^
-	
-ethernet.o: ethernet.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I..

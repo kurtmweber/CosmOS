@@ -1,0 +1,9 @@
+
+convert wav to raw pcm
+
+// PCM signed 16-bit little-endian
+ffmpeg -i tone.wav -f s16le -c:a pcm_s16le tone16.raw
+
+PCM unsigned 8-bit
+ffmpeg -i tone.wav -f s16le -c:a pcm_u8 tone8.raw
+

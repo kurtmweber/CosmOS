@@ -8,7 +8,7 @@
 #include <collection/array/array.h>
 
 #include <mm/mm.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 #include <console/console.h>
 
 struct array* array_new(uint32_t size) {

@@ -25,9 +25,12 @@ typedef struct rtc_time_t{
 } rtc_time_t;
 
 typedef rtc_time_t (*rtc_time_function)(struct device* dev);
+typedef void (*rtc_event)();
+typedef void (*rtc_subscribe_function)(rtc_event event);
 
 struct deviceapi_rtc {
     rtc_time_function rtc_time;
+	rtc_subscribe_function subscribe;
 };
 
 #endif

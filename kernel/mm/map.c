@@ -10,4 +10,5 @@
 #include <console/console.h>
 #include <mm/mm.h>
 #include <string/string.h>
+#include <debug/assert.h>
 

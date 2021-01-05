@@ -10,6 +10,6 @@
 
 #include <types.h>
 
-void bridge_register_82371();
+void i982371_bridge_register();
 
 #endif

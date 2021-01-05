@@ -9,7 +9,7 @@
 #include <dev/ata/ata.h>
 #include <console/console.h>
 #include <mm/mm.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 #include <string/string.h>
 #include <sleep/sleep.h>
 
@@ -78,7 +78,7 @@ void ata_detect_devices(uint8_t controller){
 			
 			CUR_ATA.bytes_per_sector = ata_detect_sector_size(identify_buf);
 			
-			kprintf("ata%hu.%hu: %s #%s, %s, %llu bytes\n", i, j, strtrim(CUR_ATA.model), strtrim(CUR_ATA.serial), CUR_ATA.removable ? "removable" : "fixed", CUR_ATA.size);
+			kprintf("   ata%hu.%hu: %s #%s, %s, %llu bytes\n", i, j, strtrim(CUR_ATA.model), strtrim(CUR_ATA.serial), CUR_ATA.removable ? "removable" : "fixed", CUR_ATA.size);
 		}
 	}
 	

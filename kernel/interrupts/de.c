@@ -6,8 +6,8 @@
  *****************************************************************/
 
 #include <types.h>
-#include <panic/panic.h>
-#include <interrupts/interrupts.h>
+#include <debug/assert.h>
+#include <interrupts/de.h>
 
 __attribute__ ((interrupt)) void isrDE(stackFrame *frame){
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");

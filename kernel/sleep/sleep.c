@@ -8,7 +8,7 @@
 #include <asm/asm.h>
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 volatile uint64_t sleep_countdown;
 

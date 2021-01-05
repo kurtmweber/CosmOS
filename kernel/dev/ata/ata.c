@@ -11,8 +11,8 @@
 #include <mm/mm.h>
 #include <dev/pci/pci.h>
 #include <devicemgr/devicemgr.h>
-#include <devicemgr/deviceapi/deviceapi_ata.h>
-#include <panic/panic.h>
+#include <devicemgr/deviceapi/deviceapi_block.h>
+#include <debug/assert.h>
 
 struct list *ide_controllers;
 
@@ -28,20 +28,20 @@ void ata_detect_addresses(){
 		uint8_t function = ATA_CONTROLLER(i)->pci->function;
 
 		bar_result = pci_header_read_bar0(bus, device, function);
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io = (((bar_result == 0) || (bar_result == 1)) ? 0x1F0 : bar_result);
+		ATA_CONTROLLER(i)->channels[ATA_PRIMARY].base_io = (((bar_result == 0) || (bar_result == 1)) ? 0x1F0 : bar_result);
 		
 		bar_result = pci_header_read_bar1(bus, device, function);
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x3F6 : bar_result);
+		ATA_CONTROLLER(i)->channels[ATA_PRIMARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x3F6 : bar_result);
 		
 		bar_result = pci_header_read_bar2(bus, device, function);
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io = (((bar_result == 0) || (bar_result == 1)) ? 0x170 : bar_result);
+		ATA_CONTROLLER(i)->channels[ATA_SECONDARY].base_io = (((bar_result == 0) || (bar_result == 1)) ? 0x170 : bar_result);
 		
 		bar_result = pci_header_read_bar3(bus, device, function);
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x376 : bar_result);
+		ATA_CONTROLLER(i)->channels[ATA_SECONDARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x376 : bar_result);
 	}
 }
 
-void deviceInitATA(struct device* dev){
+void device_init_ata(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 	if (0==NUM_CONTROLLERS){
@@ -50,22 +50,22 @@ void deviceInitATA(struct device* dev){
 	}
 	uint16_t i;
 	for (i = 0; i < NUM_CONTROLLERS; i++){
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].selected_device = ATA_DRIVE_SELECT_NONE;
-		ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].selected_device = ATA_DRIVE_SELECT_NONE;
+		ATA_CONTROLLER(i)->channels[ATA_PRIMARY].selected_device = ATA_DRIVE_SELECT_NONE;
+		ATA_CONTROLLER(i)->channels[ATA_SECONDARY].selected_device = ATA_DRIVE_SELECT_NONE;
 	}
 
 	ata_detect_addresses();
 
 	for (i = 0; i < NUM_CONTROLLERS; i++){
-		kprintf("Primary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io, ATA_CONTROLLER(i)->channels[IDE_CHANNEL_PRIMARY].base_io_ctrl);
-		kprintf("Secondary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io, ATA_CONTROLLER(i)->channels[IDE_CHANNEL_SECONDARY].base_io_ctrl);
+		kprintf("   Primary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[ATA_PRIMARY].base_io, ATA_CONTROLLER(i)->channels[ATA_PRIMARY].base_io_ctrl);
+		kprintf("   Secondary IDE I/O at %#X, control at %#X\n", ATA_CONTROLLER(i)->channels[ATA_SECONDARY].base_io, ATA_CONTROLLER(i)->channels[ATA_SECONDARY].base_io_ctrl);
 	}
 	
 	ata_setup_irq();
 	
 	for (i = 0; i < NUM_CONTROLLERS; i++){
-		ata_interrupt_enable(i, IDE_CHANNEL_PRIMARY, false);
-		ata_interrupt_enable(i, IDE_CHANNEL_SECONDARY, false);
+		ata_interrupt_enable(i, ATA_PRIMARY, false);
+		ata_interrupt_enable(i, ATA_SECONDARY, false);
 	}
 	
 	for (i = 0; i < NUM_CONTROLLERS; i++){
@@ -75,16 +75,29 @@ void deviceInitATA(struct device* dev){
 	return;
 }
 
-void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("ATA read not implemented yet");
 }
-void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint8_t* size) {
+void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("ATA write not implemented yet");
 }
 
-void ATASearchCB(struct pci_device* dev){
+uint16_t ata_sector_size(struct device* dev) {
+    panic("Not Implemented");
+    return 0;
+}
+uint32_t ata_total_sectors(struct device* dev){
+    panic("Not Implemented");
+    return 0;
+}
+
+void ata_search_cb(struct pci_device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	/*
 	* save in IDE list
@@ -97,16 +110,18 @@ void ATASearchCB(struct pci_device* dev){
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &deviceInitATA;
+    deviceinstance->init =  &device_init_ata;
     deviceinstance->pci = dev;
 	deviceinstance->devicetype=ATA;
 	devicemgr_set_device_description(deviceinstance, "ATA");
 	/*
     * the device api
     */
-    struct deviceapi_ata* api = (struct deviceapi_ata*) kmalloc(sizeof(struct deviceapi_ata));
+    struct deviceapi_block* api = (struct deviceapi_block*) kmalloc(sizeof(struct deviceapi_block));
     api->write = &ata_read;
     api->read = &ata_write;
+    api->sector_size = &ata_sector_size;
+    api->total_sectors = &ata_total_sectors;
     deviceinstance->api = api;
 	/*
 	* register
@@ -116,7 +131,7 @@ void ATASearchCB(struct pci_device* dev){
 
 void ata_devicemgr_register_devices() {
 	ide_controllers = list_new();
-	pci_devicemgr_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ATASearchCB);	
+	pci_devicemgr_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ata_search_cb);	
 }
 
 void ata_setup_irq(){

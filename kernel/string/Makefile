@@ -1,22 +1,7 @@
 include ../../mk/build.mk
 
-EXTRA_CFLAGS= -I..
-ARFLAGS=-crs
+ARCHIVE_FILE=string.a
 
-all: string.a
+include ../../mk/archive.mk
 
-string.a: itoa.o memops.o string.o
-	$(AR) $(ARFLAGS) $@ $^
-	
-itoa.o: itoa.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
-memops.o: memops.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-	
-string.o: string.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-	
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I..

@@ -8,7 +8,7 @@
 #include <devicemgr/deviceregistry.h>
 #include <collection/list/list.h>
 #include <devicemgr/devicetypes.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 #include <console/console.h>
 #include <string/string.h>
 

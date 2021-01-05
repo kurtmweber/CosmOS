@@ -10,18 +10,18 @@
 #include <collection/list/list.h>
 #include <mm/mm.h>
 #include <string/string.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 #include <devicemgr/deviceregistry.h>
 #include <dev/dev.h>
 
 #define MAX_DEVICE_NAME_LENGTH 64
 
 int8_t* DeviceTypeNames[] = {"None"
-	, "serial"
+	,"serial"
 	,"vga"
 	,"rtc"
 	,"keyboard"
-	,"ethernet"
+	,"nic"
 	,"bridge"
 	,"usb"
 	,"ata"
@@ -34,6 +34,9 @@ int8_t* DeviceTypeNames[] = {"None"
     ,"cmos"
     ,"dma"
     ,"cpu"
+    ,"rd"
+    ,"vnic"
+    ,"vblock"
     }; 
 
 void devicemgr_init() {
@@ -111,19 +114,25 @@ void devicemgr_init_devices(){
     */
     deviceregistry_iterate_type(DMA, deviceInitIterator);
     /*
+    * virtual devices
+    */ 
+    deviceregistry_iterate_type(VNIC, deviceInitIterator);
+    deviceregistry_iterate_type(VBLOCK, deviceInitIterator);
+    /*
     * everything else
     */
     deviceregistry_iterate_type(RTC, deviceInitIterator);
     deviceregistry_iterate_type(KEYBOARD, deviceInitIterator); 
     deviceregistry_iterate_type(VGA, deviceInitIterator);
     deviceregistry_iterate_type(USB, deviceInitIterator);
-    deviceregistry_iterate_type(ETHERNET, deviceInitIterator);
+    deviceregistry_iterate_type(NIC, deviceInitIterator);
     deviceregistry_iterate_type(BRIDGE, deviceInitIterator);
     deviceregistry_iterate_type(ATA, deviceInitIterator);
     deviceregistry_iterate_type(MOUSE, deviceInitIterator);
     deviceregistry_iterate_type(FLOPPY, deviceInitIterator);
     deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
     deviceregistry_iterate_type(DSP, deviceInitIterator);
+    deviceregistry_iterate_type(RAMDISK, deviceInitIterator);
 }
 
 struct device* devicemgr_new_device() {
@@ -186,18 +195,20 @@ void devicemgr_register_devices() {
 	rtc_devicemgr_register_devices();
 	keyboard_devicemgr_register_devices();
 	display_devicemgr_register_devices();
-	usb_devicemgr_register_devices();
+	usb_ehci_devicemgr_register_devices();
 	network_devicemgr_register_devices();
 	bridge_devicemgr_register_devices();
 	ata_devicemgr_register_devices(); 
     mouse_devicemgr_register_devices();
-    floppy_devicemgr_register_devices();
+   // floppy_devicemgr_register_devices();
     speaker_devicemgr_register_devices();
 	sb16_devicemgr_register_devices();
 //	ac97_devicemgr_register_devices();
 //	adlib_devicemgr_register_devices();
     cpu_devicemgr_register_devices();
     virtio_devicemgr_register_devices();
+    ramdisk_devicemgr_register_devices();
+    pci_ehci_devicemgr_register_devices();
 }
 
 

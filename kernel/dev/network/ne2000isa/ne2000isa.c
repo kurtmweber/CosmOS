@@ -17,7 +17,7 @@
 #include <asm/io.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_ethernet.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 #define NE2000ISA_BASE_ADDRESS 0x300
 #define NE2000ISA_IRQ 9
@@ -136,7 +136,7 @@ void ne2000isa_irq_handler(stackFrame *frame){
 /*
 * perform device instance specific init here
 */
-void NE200ISAInit(struct device* dev){
+void ne2000_isa_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     interrupt_router_register_interrupt_handler(NE2000ISA_IRQ, &ne2000isa_irq_handler);
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, NE2000ISA_IRQ, dev->name);
@@ -144,12 +144,16 @@ void NE200ISAInit(struct device* dev){
     ne2000isa_init();
 }
 
-void ne2000isa_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+void ne2000isa_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet read not implemented yet");
 }
-void ne2000isa_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+void ne2000isa_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet write not implemented yet");
 }
 
@@ -161,8 +165,8 @@ void ne2000isa_devicemgr_register_devices() {
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &NE200ISAInit;
-    deviceinstance->devicetype = ETHERNET;
+    deviceinstance->init =  &ne2000_isa_init;
+    deviceinstance->devicetype = NIC;
     devicemgr_set_device_description(deviceinstance, "NE2000 ISA");
     /*
     * the device api
@@ -200,7 +204,7 @@ void ne2000isa_init() {
 	net_mac_isa[4]=asm_in_b(PAR4);
 	net_mac_isa[5]=asm_in_b(PAR5);
 		
-	kprintf("MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac_isa[0],net_mac_isa[1],net_mac_isa[2],net_mac_isa[3],net_mac_isa[4],net_mac_isa[5]);
+	kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac_isa[0],net_mac_isa[1],net_mac_isa[2],net_mac_isa[3],net_mac_isa[4],net_mac_isa[5]);
 	
 	asm_out_b(CR, (CR_PAGE0|CR_NODMA|CR_STOP));
 	asm_out_b(DCR, DCR_FIFO8|DCR_NOLPBK|DCR_ARM);

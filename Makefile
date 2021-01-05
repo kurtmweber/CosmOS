@@ -17,7 +17,7 @@ boot-subsystem:
 	cd boot && $(MAKE)
 	
 kernel-subsystem:
-	cd kernel && $(MAKE)
+	cd kernel && $(MAKE) all
 	
 clean: boot-clean kernel-clean
 	$(RM) $(BOOTIMAGE)

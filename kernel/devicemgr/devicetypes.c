@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <devicemgr/devicetypes.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 #include <console/console.h>
 
 struct array* types;
@@ -26,7 +26,6 @@ struct list* devicetypes_get_devicelist(deviceType dt) {
     } else {
         panic("Invalid device type passed to devicetypes_get_devicelist");
     }
-
 }
 
 void devicetypes_set_devicelist(deviceType dt, struct list* lst) {
@@ -37,4 +36,3 @@ void devicetypes_set_devicelist(deviceType dt, struct list* lst) {
         panic("Invalid device type passed to devicetypes_set_devicelist");
     }
 }
-

@@ -8,6 +8,8 @@
 #include <types.h>
 #include <console/console.h>
 #include <dev/isadma/isadma.h>
+#include <dev/virtio/virtqueue.h>
+
 #include <mm/mm.h>
 #include <mm/pagetables.h>
 
@@ -20,9 +22,19 @@ void mmu_init(){
 	
 	brk = &_end;
 
-	kprintf("Reserving ISA DMA memory...\n");
+	/*
+	* ISA DMA buffers need to be in lower 64MB of RAM and page aligned
+	*/
 	isadma_buf = find_aligned_after(brk, ISA_DMA_ALIGNMENT);
+	kprintf("   Reserved ISA DMA memory of size %#hX at %#hX\n", ISA_DMA_BUFSIZ, isadma_buf);
 	brk = isadma_buf + ISA_DMA_BUFSIZ;
+
+	/*
+	* virtq buffers can be anywhere in RAM but do need to be page aligned
+	*/
+	virtqueue_buf = find_aligned_after(brk, VIRTQUEUE_ALIGNMENT);
+	kprintf("   Reserved Virtqueue memory of size %#hX at %#hX\n",VIRTQUEUE_BUFSIZ, virtqueue_buf);
+	brk = isadma_buf + VIRTQUEUE_BUFSIZ;
 	
 	kmalloc_init();
 	
