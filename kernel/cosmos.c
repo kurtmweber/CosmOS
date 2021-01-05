@@ -26,6 +26,10 @@
 #include <devicemgr/deviceapi/deviceapi_cpu.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
 
+// testing slab allocator
+#include <mm/pagetables.h>
+// end slab allocator test includes
+
 void stringtest();
 void BeethovensFifth();
 void chirp();
@@ -90,6 +94,8 @@ void CosmOS(){
 	* run various functions to show that things work....
 	*/
 	testFunctions();
+
+	
 
 	while (1){
 		asm_hlt();

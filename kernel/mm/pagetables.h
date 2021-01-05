@@ -54,6 +54,7 @@ typedef enum page_directory_types{
     PDT_HARDWARE_RESERVED,                  // Reserved by hardware or BIOS - NEVER ALLOCATE
     PDT_HOLE,                               // Hole in memory map - NEVER ALLOCATE
     PDT_BAD,                                // Flagged as bad by BIOS - NEVER ALLOCATE
+    PDT_INUSE,                              // generic in-use flag
     PDT_MAX_PD_TYPE = 0xFFFFFFFFFFFFFFFF    // to force enum to 64 bits
 } page_directory_types;
 
@@ -67,6 +68,11 @@ typedef struct page_directory_t{
     uint64_t flags;
 } __attribute__((packed)) page_directory_t;
 
+// directmap.c
+void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
+int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *min, uint64_t space);
+uint64_t size_pd(uint64_t space);
+
 // pagedirectory.c
 void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks);
 
@@ -74,9 +80,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
 extern page_directory_t *page_directory;
 pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
 
-// directmap.c
-void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
-int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *min, uint64_t space);
-uint64_t size_pd(uint64_t space);
+// slab.c
+uint64_t slab_allocate(uint64_t pages, page_directory_types purpose);
 
 #endif
