@@ -96,7 +96,7 @@ void CosmOS(){
 	/*
 	* run various functions to show that things work....
 	*/
-	testFunctions();
+	//testFunctions();
 
 	
 
