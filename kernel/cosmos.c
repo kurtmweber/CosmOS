@@ -17,6 +17,24 @@
 #include <asm/asm.h>
 #include <interrupts/idt.h>
 #include <tests/testvblock.h>
+#include <devicemgr/deviceapi/deviceapi_rtc.h>
+#include <devicemgr/deviceapi/deviceapi_speaker.h>
+#include <devicemgr/deviceapi/deviceapi_pit.h>
+#include <devicemgr/deviceapi/deviceapi_serial.h>
+#include <devicemgr/deviceapi/deviceapi_cpu.h>
+#include <devicemgr/deviceapi/deviceapi_dsp.h>
+
+// testing slab allocator
+#include <mm/pagetables.h>
+// end slab allocator test includes
+
+void stringtest();
+void BeethovensFifth();
+void chirp();
+void serialMessage(const uint8_t* message);
+void testFunctions();
+void show_cpu_data();
+void playsb16();
 
 void CosmOS(){
 	video_init();
@@ -70,6 +88,37 @@ void CosmOS(){
 	kprintf("** Device Initialization Complete **\n");
 	kprintf("************************************\n");
 	kprintf("\n");
+
+	asm_sti();
+
+	show_cpu_data();
+//	playsb16();
+	/*
+	* run various functions to show that things work....
+	*/
+	testFunctions();
+
+	
+
+	while (1){
+		asm_hlt();
+	}
+}
+
+void show_cpu_data() {
+	/*
+	* show CPU features
+	*/
+	// get the CPU
+	struct device* cpu = devicemgr_findDevice("cpu0");
+	struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
+
+	/*
+	* show all CPU features
+	*/
+	struct cpu_id id;
+	(*cpu_api->features)(&id);
+	kprintf("CPU Features %#X\n", id.edx);
 
 	/*
 	* enable interrupts

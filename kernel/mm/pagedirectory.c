@@ -18,7 +18,7 @@ int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, u
 void init_page_directory(int_15_map *phys_map, uint8_t num_blocks);
 
 uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_blocks){
-    uint8_t i;
+    uint16_t i;
 
     /*
      * !!!!!!!!BE CAREFUL WITH THE RETURN VALUE FROM THIS FUNCTION!!!!!!!!
@@ -74,11 +74,6 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
 
     last_phys_addr = find_last_phys_addr(phys_map, num_blocks);
 
-    /*
-    for (i = 0; i < num_blocks; i++){
-        kprintf("Block %llu, base 0x%llX, len %llu, type %lu\n", i, (uint64_t)phys_map[i].base, phys_map[i].len, phys_map[i].type);
-    }*/
-
     // How many pages does the physical address space encompass?
     num_phys_pages = ((uint64_t)last_phys_addr / PAGE_SIZE);
     if ((uint64_t)last_phys_addr % PAGE_SIZE){
@@ -127,7 +122,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
     kprintf("Setting up physical page directory...\n");
 
     page_directory = start;
-
+    
     init_page_directory(phys_map, num_blocks);
 
     /*
@@ -159,7 +154,6 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
 
     // And, finally, the high direct map + page directory area
     last_phys_addr = find_last_phys_addr(phys_map, num_blocks);
-    kprintf("Last physical address: %llX\n", (uint64_t)last_phys_addr);
     
     /*
      * The procedure here is to find the base of the block we put our upper

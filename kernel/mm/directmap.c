@@ -37,6 +37,11 @@ int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *m
     uint64_t needed_size;
     uint64_t pte, pde, pdpe, pml4;
 
+    
+    /*for (i = 0; i < num_blocks; i++){
+        kprintf("Block %llu, base 0x%llX, len %llu, type %lu\n", i, (uint64_t)phys_map[i].base, phys_map[i].len, phys_map[i].type);
+    }*/
+
     /*
      * First, we need enough space for the page table directory--this is the easiest to calculate
      * We can simplify this further if there is a guarantee that the physical address space
@@ -102,10 +107,42 @@ int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *m
      * also the largest block returned (extremely unlikely, but just to be safe)
      * then because best is initially set to 0, it will get returned as best
      * from the above loop, which is obviously not what we want.  It also means
-     * that no blocks of sufficient size were found, which is a good reason to refuse
-     * to continue
+     * that no blocks of sufficient size were found, which is a good reason to
+     * refuse to continue
+     *
+     * 2021-01-05: It turns out that this condition can also emerge when there
+     * is one physical block of sufficient size, but it starts below the end of
+     * the kernel text + heap + stack area mapped by the bootloader, as
+     * specified by BOOT_MAPPED_PHYS.  So before we panic, we first use an
+     * alternative strategy to allocate the start of the direct map and page
+     * directory, in that block, at the physical address immediately after what
+     * the bootloader maps.
      */
     if (phys_map[best].len < needed_size){
+        // first try an alternative strategy
+        best = 0;
+        for (i = 0; i < num_blocks; i++){
+            if ((int_15_map_region_type)phys_map[i].type == USABLE){            // self-explanatory
+                void *end_point = phys_map[i].base + phys_map[i].len - 1;    // -1 because len is 1-based while base is 0-based
+
+                /*
+                 * Now check to see if this physical blocks starts before and
+                 * ends after the end of the bootloader-mapped physical memory
+                 */
+                if ((phys_map[i].base < (void *)BOOT_MAPPED_PHYS) && (end_point > (void *)BOOT_MAPPED_PHYS)){
+                    /*
+                     * If so, then is there enough space after that for what we
+                     * need?
+                     */
+                    if ((end_point - (void *)BOOT_MAPPED_PHYS) >= needed_size){
+                        //good to go
+                        return phys_map[i];
+                    }
+                }
+            }
+        }
+
+        // If we get to this point, then kernel can't initialize and run
         panic("No physical blocks of sufficient size found for direct map and page database!");
     }
 
@@ -148,7 +185,20 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
      */
     best_block = find_suitable_block(phys_map, num_blocks, (void *)BOOT_MAPPED_PHYS, (uint64_t)last_phys_addr + 1);
 
-    dmap_start = best_block.base;
+    /*
+     * To account for the special case described in the comments in
+     * find_suitable_block
+     */
+    if (best_block.base >= (void *)BOOT_MAPPED_PHYS){
+        dmap_start = best_block.base;
+    } else {
+        /*
+         * This is safe because the logic in find_suitable_block will cause a
+         * panic if there's not enough room in the block after BOOT_MAPPED_PHYS
+         * to do what we need.
+         */
+        dmap_start = (void *)BOOT_MAPPED_PHYS;
+    }
 
     /*
      * At this point, all ptts are in the ID-mapped first megabyte, so we can
@@ -175,7 +225,7 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
      * is a 1-based count.
      */
      
-    for (i = (uint64_t)best_block.base / PAGE_SIZE; i < num_phys_pages; i++){
+    for (i = (uint64_t)dmap_start / PAGE_SIZE; i < num_phys_pages; i++){
         /*
          * This loop performs a lot of unncessary checks of the higher levels
          * of the page-table hierarchy.  We can optimize that later if it
@@ -196,7 +246,7 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
             // Clear the page table we're about to point to in PML4 and set up
             memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
             pml4[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
-            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, dmap_start);
         }
 
         pdp = (pttentry *)PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pml4[idx]));
@@ -210,7 +260,7 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
         if (!pdp[idx]){
             memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
             pdp[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
-            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, dmap_start);
         }
 
         pd = (pttentry *)PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pdp[idx]));
@@ -219,7 +269,7 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
         if (!pd[idx]){
             memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
             pd[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
-            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, dmap_start);
         }
 
         pt = (pttentry *)PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pd[idx]));
@@ -255,7 +305,7 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
             // Clear the page table we're about to point to in PML4 and set up
             memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
             pml4[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
-            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, dmap_start);
         }
 
         pdp = (pttentry *)PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pml4[idx]));
@@ -269,7 +319,7 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
         if (!pdp[idx]){
             memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
             pdp[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
-            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, dmap_start);
         }
 
         pd = (pttentry *)PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pdp[idx]));
@@ -278,7 +328,7 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks){
         if (!pd[idx]){
             memset(CONV_PHYS_ADDR(cur_phys_loc), 0, PAGE_SIZE);
             pd[idx] = ptt_entry_create(cur_phys_loc, true, true, false);
-            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, best_block.base);
+            cur_phys_loc = adjust_cur_phys_loc(cur_phys_loc, dmap_start);
         }
 
         pt = (pttentry *)PTT_ADJUST_BASE(PTT_EXTRACT_BASE(pd[idx]));
