@@ -31,6 +31,8 @@ typedef unsigned long int uint64_t;
 typedef uint64_t QWORD;
 typedef long int int64_t;
 
+typedef uint64_t size_t;
+
 typedef enum bool{
 	false = 0,
 	true = 1

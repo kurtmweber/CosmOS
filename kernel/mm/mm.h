@@ -1,6 +1,6 @@
 /*****************************************************************
  * This file is part of CosmOS                                   *
- * Copyright (C) 2019-2020 Kurt M. Weber                         *
+ * Copyright (C) 2019-2021 Kurt M. Weber                         *
  * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
@@ -9,6 +9,9 @@
 #define _MM_H
 
 #include <types.h>
+
+// How much physical address space the bootloader has mapped
+#define BOOT_MAPPED_PHYS	0x1100000
 
 #define PTTENTRY_BASE_MASK 0x000FFFFFFFFFF000
 #define INIT_UNMAPPED_PHYS_BASE	0xB00000
@@ -40,7 +43,8 @@ typedef enum int_15_map_region_type{
 	RESERVED = 2,
 	ACPI_RECLAIM = 3,
 	ACPI_NVS = 4,
-	BAD = 5
+	BAD = 5,
+	HOLE	// Not an actual type returned by the int 15 map, but we use it in page-directory setup
 } int_15_map_region_type;
 
 typedef enum ptt_levels{
@@ -74,7 +78,10 @@ void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks);
 mem_block *find_containing_block(void *addr, mem_block *list);
 void init_usable_phys_blocks(int_15_map base);
 void sort_usable_phys_blocks();
+
+// mm.c
 void *find_aligned_after(void *address, uint64_t alignment);
+void *find_last_phys_addr(int_15_map *phys_map, uint8_t num_blocks);
 
 extern mem_block init_phys_block;
 extern mem_block *usable_phys_blocks;
@@ -97,10 +104,12 @@ int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block);
 mem_block *phys_alloc_slab(uint64_t size, uint64_t align);
 mem_block *phys_split_block(mem_block *src, void *base, uint64_t size);
 
+// mm.c
 bool is_page_aligned(void *address);
 bool is_page_allocated(void *address);
 pttentry *extract_cr3_base_address(pttentry entry);
 pttentry *extract_pttentry_base_address(pttentry entry);
 uint16_t vaddr_ptt_index(void *address, ptt_levels level);
+void *vaddr_to_physical(void *address, pttentry cr3);
 
 #endif

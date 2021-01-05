@@ -1,3 +1,19 @@
 Base virtual address of higher-half kernel stack: FFFF FEFF FFFF FFF8 (it grows down)
 
 int 15h memory map is placed at 0x500
+
+Usage/mapping of physical memory at kernel load and jmp:
+0x00000000 - 0x000FFFFF: Identity-mapped, 1 megabyte
+0x00100000 - 0x008FFFFF: Kernel stack, eight megabytes
+0x00900000 - 0x010FFFFF: Kernel + heap, eight megabytes from 0xFFFF800000000000 - 0xFFFF8000007FFFFF   
+
+Once MM is set up:
+Direct map starts at virtual address FFFFA00000000000, limit 32TB (this is the
+max physical memory CosmOS currently supports).
+
+The first part of the direct map, as much as can safely be put in the ID-mapped
+first megabyte without overwriting critical data, is known as the "lower direct
+map."  It is used to create enough of a page table to make it possible for us to
+start putting the rest of the direct map at the start of a block of contiguous
+physical memory sufficiently large to hold the rest of the direct map + the page
+directory.  This part is known as the "upper direct map."

@@ -245,9 +245,18 @@ Realm64:
 	mov ecx, 4096
 	rep stosb
 
-	; kernel PDT entry
+	; kernel PDT entries - 4 of them
 	mov edi, [pdtKernelBase]
 	mov ebx, [pdtKernelEntry]
+	mov [edi], ebx
+	add edi, 8
+	add ebx, 0x1000
+	mov [edi], ebx
+	add edi, 8
+	add ebx, 0x1000
+	mov [edi], ebx
+	add edi, 8
+	add ebx, 0x1000
 	mov [edi], ebx
 
 	; clear PT area

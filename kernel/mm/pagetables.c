@@ -7,10 +7,12 @@
 
 #include <types.h>
 #include <asm/asm.h>
+#include <console/console.h>
 #include <mm/mm.h>
 #include <mm/pagetables.h>
-#include <debug/assert.h>
+#include <panic/panic.h>
 #include <string/string.h>
+#include <debug/assert.h>
 
 #ifdef COMPILE_PLATFORM_LINUX 
 pttentry *extract_cr3_base_address(pttentry cr3) __attribute__((alias("extract_pttentry_base_address")));
@@ -75,8 +77,38 @@ bool is_page_allocated(void *address){
 	return true;
 }
 
+pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user){
+	/*
+	 * Use this function to create PTT entries rather than setting address + flags directly,
+	 * unless there's a good reason not to.  This way, if the system default settings
+	 * ever need to change, we only have to do it in one place
+	 */
+	
+	// If you're setting up PTT entries manually and things break, well, I warned you
+
+	pttentry r;
+
+	// clear the bottom twelve bits
+	r = (((uint64_t)base_address >> 12) << 12);
+
+	if (present){
+		r |= PTT_FLAG_PRESENT;
+	}
+
+	if (rw){
+		r |= PTT_FLAG_RW;
+	}
+
+	if (user){
+		r |= PTT_FLAG_USER;
+	}
+
+	return r;
+}
+
 uint16_t vaddr_ptt_index(void *address, ptt_levels level){
 	ASSERT_NOT_NULL(address, "address must not be null");
+
 	uint64_t mask;
 	uint8_t shift;
 	switch (level){
@@ -105,8 +137,31 @@ uint16_t vaddr_ptt_index(void *address, ptt_levels level){
 
 void *vaddr_to_physical(void *address, pttentry cr3){
 	ASSERT_NOT_NULL(address, "address must not be null");
-	pttentry *pml4_base;
-	cr3 = asm_cr3_read();
 
-	pml4_base = extract_cr3_base_address(cr3);
+	pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
+	uint16_t idx;
+
+	// function does not work--need way to translate physical addresses in page tables to virtual addresses.
+
+	/*pml4_base = extract_cr3_base_address(cr3);
+	idx = vaddr_ptt_index(address, PML4);
+	kprintf("PML4 idx: %u\n", idx);
+	kprintf("PML4 entry: %llX\n", (uint64_t)pml4_base[idx]);
+
+	pdp_base = extract_pttentry_base_address(pml4_base[idx]);
+	idx = vaddr_ptt_index(address, PDP);
+	kprintf("PDP base: %llX\n", (uint64_t)pdp_base);
+	kprintf("PDP idx: %u\n", idx);
+	kprintf("PDP entry: %llX\n", (uint64_t)pdp_base[idx]);
+
+	pd_base = extract_pttentry_base_address(pdp_base[idx]);
+	idx = vaddr_ptt_index(address, PD);
+	kprintf("PD base: %llX\n", (uint64_t)pd_base);
+	kprintf("PD idx: %u\n", idx);
+	kprintf("PD entry: %llX\n", (uint64_t)pd_base[idx]);
+
+	pt_base = extract_pttentry_base_address(pd_base[idx]);
+	idx = vaddr_ptt_index(address, PT);*/
+
+	return (void *)((uint64_t)pt_base[idx] * 4096);
 }

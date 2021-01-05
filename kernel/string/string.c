@@ -46,10 +46,9 @@ char *strtrim(const char *s){
 	return tgt;
 }
 
-char * strcpy(char *dest, const char *src) {
+char *strcpy(char *dest, const char *src) {
 	ASSERT_NOT_NULL(dest, "dest must not be null");
 	ASSERT_NOT_NULL(src, "src must not be null");
-
 	uint32_t i;
 	for (i = 0; src[i] != '\0'; i++)
 		dest[i] = src[i];
@@ -77,7 +76,6 @@ char *strcat(char *dest, const char *src) {
 char strcmp(const char *str1, const char *str2) {
 	ASSERT_NOT_NULL(str1, "str1 must not be null");
 	ASSERT_NOT_NULL(str2, "str2 must not be null");
-
 	for (int i = 0; ; i++) {
         if (str1[i] != str2[i]){
             return str1[i] < str2[i] ? -1 : 1;
@@ -87,5 +85,6 @@ char strcmp(const char *str1, const char *str2) {
         }
     }
 }
+
 
 
