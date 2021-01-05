@@ -18,7 +18,7 @@ int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, u
 void init_page_directory(int_15_map *phys_map, uint8_t num_blocks);
 
 uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_blocks){
-    uint8_t i;
+    uint16_t i;
 
     /*
      * !!!!!!!!BE CAREFUL WITH THE RETURN VALUE FROM THIS FUNCTION!!!!!!!!
@@ -40,6 +40,7 @@ uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_b
          * 0-based, so base=0 and len=5 means that the end of the block is 4.
          */
         if (((uint64_t)phys_map[i].base <= (uint64_t)(page * PAGE_SIZE)) && ((uint64_t)(phys_map[i].base + phys_map[i].len - 1) >= (uint64_t)(page * PAGE_SIZE))){
+            //kprintf("Page %llu is in block %u\n", page, i);
             return i + 1;
         }
     }
@@ -53,6 +54,7 @@ int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, u
     i = find_page_bios_block(page, phys_map, num_blocks);
 
     if (!i){
+        //kprintf("Page %u is a hole!\n", page);
         return HOLE;
     } else {
         return phys_map[i - 1].type;
@@ -74,11 +76,6 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
 
     last_phys_addr = find_last_phys_addr(phys_map, num_blocks);
 
-    /*
-    for (i = 0; i < num_blocks; i++){
-        kprintf("Block %llu, base 0x%llX, len %llu, type %lu\n", i, (uint64_t)phys_map[i].base, phys_map[i].len, phys_map[i].type);
-    }*/
-
     // How many pages does the physical address space encompass?
     num_phys_pages = ((uint64_t)last_phys_addr / PAGE_SIZE);
     if ((uint64_t)last_phys_addr % PAGE_SIZE){
@@ -87,6 +84,7 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
 
     for (i = 0; i < num_phys_pages; i++){
         bios_type = get_page_bios_type(i, phys_map, num_blocks);
+        //kprintf("Page %llu has type %hu\n", i, (uint8_t)bios_type);
 
         page_directory[i].ref_count = 0;
         page_directory[i].backing_addr = 0;
@@ -107,6 +105,7 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
                 break;
             case HOLE:
                 page_directory[i].type = PDT_HOLE;
+                //kprintf("Page %llu has type %hu\n", i, (uint8_t)bios_type);
                 break;
             default:
                 panic("Invalid BIOS block type!");
@@ -127,6 +126,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
     kprintf("Setting up physical page directory...\n");
 
     page_directory = start;
+    kprintf("Start of page directory: 0x%llX virtual, 0x%llX physical", (uint64_t)page_directory, (uint64_t)CONV_DMAP_ADDR(page_directory));
 
     init_page_directory(phys_map, num_blocks);
 
