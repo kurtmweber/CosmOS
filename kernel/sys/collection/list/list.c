@@ -54,15 +54,20 @@ uint32_t list_add(struct list* lst, void* value) {
     // save the data
     array_set(lst->arr, lst->count, value);
     lst->count = lst->count+1;
+
+    // return the index for later use by list_set, list_get, etc
     return lst->count-1;
 }
 
+/*
+* set value at index
+*/
 void  list_set(struct list* lst, uint32_t position, void* value) {
 	ASSERT_NOT_NULL(lst, "list cannot be null");
     if (0==lst->arr){
         panic("why is the underlying array null?!");
     }
-    if ((position>=0) &&(position< lst->count) ){
+    if ((position>=0) && (position< lst->count)){
         lst->arr->data[position]=value;
     } else {
         panic("invalid list index passed to list_set\n");

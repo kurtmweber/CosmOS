@@ -44,8 +44,17 @@ uint32_t list_size(struct list* lst);
 * returns zero-based index of added item
 */
 uint32_t list_add(struct list* lst, void* value);
+/*
+* set value at index
+*/
 void  list_set(struct list* lst, uint32_t position, void* value);
+/*
+* get value at index
+*/
 void* list_get(struct list* lst, uint32_t position);
+/*
+* iterate
+*/
 void list_iterate(struct list* lst, listIterator iter);
 
 #endif
