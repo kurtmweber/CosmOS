@@ -11,7 +11,7 @@
 #include <sys/console/console.h>
 #include <sys/collection/list/list.h>
 #include <sys/interrupt_router/interrupt_router.h>
-#include <sys/devicemgr/deviceapi/deviceapi_dsp.h>
+#include <sys/deviceapi/deviceapi_dsp.h>
 #include <sys/debug/assert.h>
 
 void adlib_handle_irq(stackFrame *frame) {

@@ -7,7 +7,7 @@
 
 #include <tests/testrtc.h>
 #include <sys/debug/debug.h>
-#include <sys/devicemgr/deviceapi/deviceapi_rtc.h>
+#include <sys/deviceapi/deviceapi_rtc.h>
 #include <sys/console/console.h>
 
 void test_rtc() {

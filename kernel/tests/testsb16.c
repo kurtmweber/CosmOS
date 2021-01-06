@@ -7,7 +7,7 @@
 
 #include <tests/testsb16.h>
 #include <sys/sound/wav.h>
-#include <sys/devicemgr/deviceapi/deviceapi_dsp.h>
+#include <sys/deviceapi/deviceapi_dsp.h>
 #include <sys/sound/tone.h>
 #include <sys/console/console.h>
 

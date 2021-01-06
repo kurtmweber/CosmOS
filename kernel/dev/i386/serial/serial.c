@@ -9,7 +9,7 @@
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/asm/asm.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/devicemgr/deviceapi/deviceapi_serial.h>
+#include <sys/deviceapi/deviceapi_serial.h>
 #include <sys/debug/assert.h>
 #include <sys/console/console.h>
 #include <sys/collection/ringbuffer/ringbuffer.h>

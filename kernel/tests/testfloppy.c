@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <tests/testfloppy.h>
-#include <sys/devicemgr/deviceapi/deviceapi_floppy.h>
+#include <sys/deviceapi/deviceapi_floppy.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
 

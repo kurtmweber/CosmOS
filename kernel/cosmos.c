@@ -16,12 +16,12 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/asm/asm.h>
 #include <sys/i386/interrupts/idt.h>
-#include <sys/devicemgr/deviceapi/deviceapi_rtc.h>
-#include <sys/devicemgr/deviceapi/deviceapi_speaker.h>
-#include <sys/devicemgr/deviceapi/deviceapi_pit.h>
-#include <sys/devicemgr/deviceapi/deviceapi_serial.h>
-#include <sys/devicemgr/deviceapi/deviceapi_cpu.h>
-#include <sys/devicemgr/deviceapi/deviceapi_dsp.h>
+#include <sys/deviceapi/deviceapi_rtc.h>
+#include <sys/deviceapi/deviceapi_speaker.h>
+#include <sys/deviceapi/deviceapi_pit.h>
+#include <sys/deviceapi/deviceapi_serial.h>
+#include <sys/deviceapi/deviceapi_cpu.h>
+#include <sys/deviceapi/deviceapi_dsp.h>
 
 // testing slab allocator
 #include <sys/i386/mm/pagetables.h>

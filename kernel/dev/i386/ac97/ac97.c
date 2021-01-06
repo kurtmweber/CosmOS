@@ -12,7 +12,7 @@
 #include <sys/collection/list/list.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <dev/i386/pci/pci.h>
-#include <sys/devicemgr/deviceapi/deviceapi_dsp.h>
+#include <sys/deviceapi/deviceapi_dsp.h>
 #include <sys/debug/assert.h>
 
 // https://wiki.osdev.org/AC97

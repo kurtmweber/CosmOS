@@ -10,7 +10,7 @@
 #include <sys/console/console.h>
 #include <types.h>
 #include <sys/debug/assert.h>
-#include <sys/devicemgr/deviceapi/deviceapi_block.h>
+#include <sys/deviceapi/deviceapi_block.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/string/mem.h>
 

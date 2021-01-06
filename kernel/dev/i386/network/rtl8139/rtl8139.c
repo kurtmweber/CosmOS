@@ -11,7 +11,7 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/console/console.h>
 #include <dev/i386/pci/pci.h>
-#include <sys/devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <sys/deviceapi/deviceapi_ethernet.h>
 #include <sys/debug/assert.h>
 
 void rtl8139_irq_handler(stackFrame *frame){

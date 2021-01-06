@@ -10,7 +10,7 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/console/console.h>
 #include <sys/sleep/sleep.h>
-#include <sys/devicemgr/deviceapi/deviceapi_speaker.h>
+#include <sys/deviceapi/deviceapi_speaker.h>
 #include <sys/debug/assert.h>
 
 // https://wiki.osdev.org/PC_Speaker

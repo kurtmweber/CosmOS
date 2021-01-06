@@ -17,7 +17,7 @@
 #include <types.h>
 #include <sys/asm/io.h>
 #include <sys/sleep/sleep.h>
-#include <sys/devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <sys/deviceapi/deviceapi_ethernet.h>
 #include <sys/debug/assert.h>
 
 // REGISTERS

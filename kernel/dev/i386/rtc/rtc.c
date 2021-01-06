@@ -14,7 +14,7 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/collection/list/list.h>
 #include <sys/sleep/sleep.h>
-#include <sys/devicemgr/deviceapi/deviceapi_rtc.h>
+#include <sys/deviceapi/deviceapi_rtc.h>
 #include <sys/debug/assert.h>
 
 #define RTC_IRQ_NUMBER 		8

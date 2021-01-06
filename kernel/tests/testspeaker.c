@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <tests/testspeaker.h>
-#include <sys/devicemgr/deviceapi/deviceapi_speaker.h>
+#include <sys/deviceapi/deviceapi_speaker.h>
 #include <sys/sound/notes.h>
 #include <sys/sleep/sleep.h>
 #include <sys/console/console.h>

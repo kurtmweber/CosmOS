@@ -11,7 +11,7 @@
 #include <sys/i386/mm/mm.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/devicemgr/deviceapi/deviceapi_block.h>
+#include <sys/deviceapi/deviceapi_block.h>
 #include <sys/debug/assert.h>
 
 struct list *ide_controllers;

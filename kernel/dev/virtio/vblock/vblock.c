@@ -20,7 +20,7 @@
 #include <dev/virtio/virtio.h>
 #include <sys/debug/assert.h>
 #include <dev/virtio/virtqueue.h>
-#include <sys/devicemgr/deviceapi/deviceapi_block.h>
+#include <sys/deviceapi/deviceapi_block.h>
 
 // registers
 #define VIRTIO_BLOCK_TOTAL_SECTORS      0x14

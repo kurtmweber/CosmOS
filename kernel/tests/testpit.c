@@ -7,7 +7,7 @@
 
 #include <tests/testpit.h>
 #include <sys/debug/debug.h>
-#include <sys/devicemgr/deviceapi/deviceapi_pit.h>
+#include <sys/deviceapi/deviceapi_pit.h>
 #include <sys/console/console.h>
 #include <sys/sleep/sleep.h>
 

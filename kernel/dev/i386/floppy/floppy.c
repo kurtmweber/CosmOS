@@ -13,7 +13,7 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <dev/i386/cmos/cmos.h>
 #include <sys/sleep/sleep.h>
-#include <sys/devicemgr/deviceapi/deviceapi_floppy.h>
+#include <sys/deviceapi/deviceapi_floppy.h>
 #include <sys/debug/assert.h>
 
 #define FLOPPY_IRQ_NUMBER   6
