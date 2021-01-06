@@ -11,12 +11,11 @@
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/i386/video/video.h>
 #include <sys/i386/video/vga/vga.h>
-#include <sys/tests/tests.h>
+#include <tests/tests.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/asm/asm.h>
 #include <sys/i386/interrupts/idt.h>
-#include <sys/tests/testvblock.h>
 #include <sys/devicemgr/deviceapi/deviceapi_rtc.h>
 #include <sys/devicemgr/deviceapi/deviceapi_speaker.h>
 #include <sys/devicemgr/deviceapi/deviceapi_pit.h>

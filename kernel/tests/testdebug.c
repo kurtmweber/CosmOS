@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/tests/testdebug.h>
+#include <tests/testdebug.h>
 #include <sys/debug/debug.h>
 
 void test_debug() {

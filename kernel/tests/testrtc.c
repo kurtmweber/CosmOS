@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/tests/testrtc.h>
+#include <tests/testrtc.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/deviceapi/deviceapi_rtc.h>
 #include <sys/console/console.h>

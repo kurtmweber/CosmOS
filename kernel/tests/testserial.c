@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/tests/testserial.h>
+#include <tests/testserial.h>
 #include <sys/devicemgr/deviceapi/deviceapi_serial.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>

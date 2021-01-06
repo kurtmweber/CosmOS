@@ -9,18 +9,18 @@
 #define __TESTS_H
 
 #include <types.h>
-#include <sys/tests/testsb16.h>
-#include <sys/tests/testspeaker.h>
-#include <sys/tests/testfloppy.h>
-#include <sys/tests/testserial.h>
-#include <sys/tests/teststring.h>
-#include <sys/tests/testdebug.h>
-#include <sys/tests/testcpu.h>
-#include <sys/tests/testmm.h>
-#include <sys/tests/testrtc.h>
-#include <sys/tests/testpit.h>
-#include <sys/tests/testata.h>
-#include <sys/tests/testvblock.h>
-#include <sys/tests/testramdisk.h>
+#include <tests/testsb16.h>
+#include <tests/testspeaker.h>
+#include <tests/testfloppy.h>
+#include <tests/testserial.h>
+#include <tests/teststring.h>
+#include <tests/testdebug.h>
+#include <tests/testcpu.h>
+#include <tests/testmm.h>
+#include <tests/testrtc.h>
+#include <tests/testpit.h>
+#include <tests/testata.h>
+#include <tests/testvblock.h>
+#include <tests/testramdisk.h>
 
 #endif

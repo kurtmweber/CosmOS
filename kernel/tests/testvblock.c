@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/tests/testvblock.h>
+#include <tests/testvblock.h>
 #include <sys/devicemgr/deviceapi/deviceapi_block.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>

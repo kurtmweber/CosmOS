@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/tests/testpit.h>
+#include <tests/testpit.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/deviceapi/deviceapi_pit.h>
 #include <sys/console/console.h>

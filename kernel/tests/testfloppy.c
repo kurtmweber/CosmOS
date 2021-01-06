@@ -5,29 +5,22 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/tests/testata.h>
-#include <sys/devicemgr/deviceapi/deviceapi_block.h>
+#include <tests/testfloppy.h>
+#include <sys/devicemgr/deviceapi/deviceapi_floppy.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
-#include <sys/string/string.h>
-#include <sys/debug/assert.h>
-#include <sys/string/mem.h>
 
-void test_ata() {
-	// get virtual block device
-	uint8_t devicename[] ={"ata0"};
-
-	struct device* ata = devicemgr_findDevice(devicename);
-	if (0!=ata){
-		struct deviceapi_block* ata_api = (struct deviceapi_block*) ata->api;
+void floppyread() {
+	// get the floppy
+	struct device* floppy = devicemgr_findDevice("floppy0");
+	if (0!=floppy){
+		struct deviceapi_floppy* floppy_api = (struct deviceapi_floppy*) floppy->api;
 
 		uint8_t data[256];
-		memset(data, 0, 255);
-
-		(*ata_api->read)(ata, 0, data, 255);
+		(*floppy_api->read)(floppy, 0, data, 255);
 		debug_show_memblock(data, 32);
 	} else {
-		kprintf("Unable to find %s\n",devicename);
+		kprintf("Unable to find floppy0\n");
 	}
 }
 

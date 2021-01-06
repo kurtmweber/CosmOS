@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/tests/testspeaker.h>
+#include <tests/testspeaker.h>
 #include <sys/devicemgr/deviceapi/deviceapi_speaker.h>
 #include <sys/sound/notes.h>
 #include <sys/sleep/sleep.h>
