@@ -5,12 +5,12 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _ARM_SERIAL_H
-#define _ARM_SERIAL_H
+#ifndef _PL101_H
+#define _PL101_H
 
 #include <types.h>
 
-void serial_devicemgr_register_devices();
-void serial_write_string(const uint8_t* c);
+void pl101_devicemgr_register_devices();
+void pl101_write_string(const uint8_t* c);
 
 #endif

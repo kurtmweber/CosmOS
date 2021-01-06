@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/arm/serial/serial.h>
+#include <dev/arm/pl101/pl101.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/asm/asm.h>
 #include <sys/devicemgr/devicemgr.h>
@@ -50,7 +50,7 @@ void serial_register_device(uint8_t irq, uint64_t base) {
     deviceinstance->init =  &serial_device_init;
 //    deviceinstance->deviceData = deviceData;
     deviceinstance->devicetype = SERIAL;
-    devicemgr_set_device_description(deviceinstance, "Serial");
+    devicemgr_set_device_description(deviceinstance, "PL101");
     /*
     * the device api
     */

@@ -8,6 +8,8 @@
 #ifndef _DEV_H
 #define _DEV_H
 
+#ifdef TARGET_PLATFORM_i386
+
 #include <dev/i386/ata/ata.h>
 #include <dev/i386/keyboard/keyboard.h>
 #include <dev/i386/pci/pci.h>
@@ -31,5 +33,11 @@
 #include <dev/virtio/virtio.h>
 #include <dev/ramdisk/ramdisk.h>
 #include <dev/i386//pci_ehci/pci_ehci.h>
+
+#else
+
+#include <dev/arm//pl101/pl101.h>
+
+#endif
 
 #endif

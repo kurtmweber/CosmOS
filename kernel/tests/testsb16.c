@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <tests/testsb16.h>
-#include <sys/sound/wav.h>
+#include <sys/i386/sound/wav.h>
 #include <sys/deviceapi/deviceapi_dsp.h>
-#include <sys/sound/tone.h>
+#include <sys/i386/sound/tone.h>
 #include <sys/console/console.h>
 
 void playsb16() {	

@@ -6,9 +6,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/sound/tone.h>
-#include <sys/sound/wav.h>
-#include <sys/rawdata/rawdata.h>
+#include <sys/i386/sound/tone.h>
+#include <sys/i386/sound/wav.h>
+#include <sys/i386/rawdata/rawdata.h>
 #include <sys/debug/assert.h>
 #include <sys/console/console.h>
 

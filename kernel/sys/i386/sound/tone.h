@@ -9,7 +9,7 @@
 #define _TONE_H
 
 #include <types.h>
-#include <sys/sound/wav.h>
+#include <sys/i386/sound/wav.h>
 
 struct wav_header* sound_get_tone();
 

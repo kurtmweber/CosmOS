@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/sound/wav.h>
+#include <sys/i386/sound/wav.h>
 #include <sys/debug/assert.h>
 #include <sys/console/console.h>
 

@@ -35,7 +35,11 @@ $(KERNEL_BIN): $(KERNEL_ELF)
 	$(OBJCOPY) $(OBJCOPYFLAGS) $(KERNEL_ELF) $(KERNEL_BIN)
 
 $(KERNEL_ELF): $(ARCHIVE_FILE)
-	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE) sys/rawdata/rawdata.o
+ifeq ($(TARGET_PLATFORM),TARGET_PLATFORM_i386)
+	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE) sys/i386/rawdata/rawdata.o
+else
+	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE)
+endif
 
 $(ARCHIVE_FILE): $(ARCHIVES) $(OBJS)
 	$(AR) $(ARFLAGS) $@ $^

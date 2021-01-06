@@ -7,6 +7,8 @@
 
 #include <types.h>
 
+#ifdef TARGET_PLATFORM_i386
+
 uint8_t asm_in_b(uint16_t port){
 	uint8_t data;
 	
@@ -73,3 +75,5 @@ void asm_out_w(uint16_t port, uint16_t data){
 	
 	return;
 }
+
+#endif

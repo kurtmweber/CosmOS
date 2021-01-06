@@ -164,6 +164,7 @@ struct device* devicemgr_findDevice(const int8_t* name) {
     return deviceregistry_findDevice(name);
 }
 
+#ifdef TARGET_PLATFORM_i386
 void devicemgr_register_devices() {
 	/*
 	* scan the PCI bus first
@@ -210,6 +211,14 @@ void devicemgr_register_devices() {
     ramdisk_devicemgr_register_devices();
     pci_ehci_devicemgr_register_devices();
 }
+
+#else
+
+void devicemgr_register_devices() {
+    pl101_devicemgr_register_devices();
+}
+
+#endif
 
 
 
