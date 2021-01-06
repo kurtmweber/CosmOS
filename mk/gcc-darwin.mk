@@ -10,7 +10,7 @@ PLATFORM=COMPILE_PLATFORM_DARWIN
 
 # cc (GCC tool chain)
 CC=x86_64-elf-gcc
-CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(PLATFORM)
+CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(PLATFORM) -mgeneral-regs-only -DRTC_SLEEP
 
 # ld
 LD=x86_64-elf-ld 
