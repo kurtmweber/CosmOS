@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <dev/serial/serial.h>
-#include <sys/interrupts/interrupt_router.h>
+#include <sys/interrupt_router/interrupt_router.h>
 #include <sys/asm/asm.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/devicemgr/deviceapi/deviceapi_serial.h>

@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <sys/interrupts/interrupt_router.h>
+#include <sys/interrupt_router/interrupt_router.h>
 #include <sys/interrupts/irq.h>
 #include <dev/pic/pic.h>
 

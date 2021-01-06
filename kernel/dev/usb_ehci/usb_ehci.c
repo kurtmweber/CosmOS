@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/interrupts/interrupt_router.h>
+#include <sys/interrupt_router/interrupt_router.h>
 #include <sys/asm/asm.h>
 #include <dev/pci/pci.h>
 #include <sys/console/console.h>

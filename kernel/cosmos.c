@@ -8,7 +8,7 @@
 #include <types.h>
 #include <sys/console/console.h>
 #include <sys/console/drivers/drivers.h>
-#include <sys/interrupts/interrupt_router.h>
+#include <sys/interrupt_router/interrupt_router.h>
 #include <sys/video/video.h>
 #include <sys/video/vga/vga.h>
 #include <sys/tests/tests.h>

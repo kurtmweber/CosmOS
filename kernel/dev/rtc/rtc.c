@@ -10,7 +10,7 @@
 #include <sys/console/console.h>
 #include <dev/rtc/rtc.h>
 #include <dev/cmos/cmos.h>
-#include <sys/interrupts/interrupt_router.h>
+#include <sys/interrupt_router/interrupt_router.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/collection/list/list.h>
 #include <sys/sleep/sleep.h>

@@ -11,7 +11,7 @@
 #include <dev/keyboard/keyboard.h>
 #include <sys/console/console.h>
 #include <sys/interrupts/irq.h>
-#include <sys/interrupts/interrupt_router.h>
+#include <sys/interrupt_router/interrupt_router.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <dev/keyboard/abstract_keyboard.h>
 #include <sys/collection/ringbuffer/ringbuffer.h>

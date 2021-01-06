@@ -10,7 +10,7 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/console/console.h>
 #include <sys/collection/list/list.h>
-#include <sys/interrupts/interrupt_router.h>
+#include <sys/interrupt_router/interrupt_router.h>
 #include <sys/devicemgr/deviceapi/deviceapi_dsp.h>
 #include <sys/debug/assert.h>
 

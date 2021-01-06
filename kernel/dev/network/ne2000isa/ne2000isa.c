@@ -9,7 +9,7 @@
 */
 
 #include <dev/network/ne2000isa/ne2000isa.h>
-#include <sys/interrupts/interrupt_router.h>
+#include <sys/interrupt_router/interrupt_router.h>
 #include <sys/asm/asm.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/console/console.h>

@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <dev/display/display.h>
-#include <sys/interrupts/interrupt_router.h>
+#include <sys/interrupt_router/interrupt_router.h>
 #include <sys/asm/asm.h>
 #include <dev/pci/pci.h>
 #include <sys/console/console.h>
