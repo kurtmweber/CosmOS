@@ -23,12 +23,13 @@ SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 # detect build platform
 UNAME := $(shell uname)
 ifeq ($(UNAME),Darwin)
-include $(SELF_DIR)/gcc-darwin.mk
+include $(SELF_DIR)/gcc-i386-darwin.mk
+#include $(SELF_DIR)/gcc-arm-darwin.mk
 
 # not quite yet
-#include $(SELF_DIR)/clang-darwin.mk
+#include $(SELF_DIR)/clang-i386-darwin.mk
 else
-include $(SELF_DIR)/gcc-linux.mk
+include $(SELF_DIR)/gcc-i386-linux.mk
 endif
 
 # qemu
