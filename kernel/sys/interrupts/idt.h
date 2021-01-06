@@ -9,7 +9,7 @@
 #define _IDT_H
 
 #include <types.h>
-#include <dev/pic/pic.h>
+#include <dev/i386/pic/pic.h>
 
 
 typedef enum intVectors{

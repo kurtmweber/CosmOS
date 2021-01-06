@@ -7,7 +7,7 @@
 
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/interrupts/irq.h>
-#include <dev/pic/pic.h>
+#include <dev/i386/pic/pic.h>
 
 __attribute__ ((interrupt)) void irq0(stackFrame *frame){	
 	interrupt_router_route_interrupt(0, frame);

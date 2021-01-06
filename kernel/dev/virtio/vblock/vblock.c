@@ -15,7 +15,7 @@
 #include <types.h>
 #include <sys/asm/io.h>
 #include <sys/sleep/sleep.h>
-#include <dev/pci/pci.h>
+#include <dev/i386/pci/pci.h>
 #include <sys/mm/mm.h>
 #include <dev/virtio/virtio.h>
 #include <sys/debug/assert.h>

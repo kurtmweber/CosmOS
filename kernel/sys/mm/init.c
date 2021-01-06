@@ -7,7 +7,7 @@
 
 #include <types.h>
 #include <sys/console/console.h>
-#include <dev/isadma/isadma.h>
+#include <dev/i386/isadma/isadma.h>
 #include <dev/virtio/virtqueue.h>
 
 #include <sys/mm/mm.h>
