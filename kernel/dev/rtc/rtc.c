@@ -44,9 +44,7 @@ void rtc_handle_irq(stackFrame *frame) {
 		(*rtcEvent)();
 	}
 
-#ifdef RTC_SLEEP
 	sleep_update();
-#endif
 	// have to read status register C in order for irq to fire again
 	cmos_read_register(RTC_REGISTER_STATUS_C);
 	return;
