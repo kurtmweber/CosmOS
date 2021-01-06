@@ -6,13 +6,13 @@
 // ****************************************************************
 
 #include <dev/serial/serial.h>
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <devicemgr/deviceapi/deviceapi_serial.h>
-#include <debug/assert.h>
-#include <console/console.h>
-#include <collection/ringbuffer/ringbuffer.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/devicemgr/deviceapi/deviceapi_serial.h>
+#include <sys/debug/assert.h>
+#include <sys/console/console.h>
+#include <sys/collection/ringbuffer/ringbuffer.h>
 #include <dev/serial/ns16550.h>
 
 struct serial_devicedata {

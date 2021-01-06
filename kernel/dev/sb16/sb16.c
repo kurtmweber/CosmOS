@@ -6,17 +6,17 @@
  *****************************************************************/
 
 #include <dev/sb16/sb16.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
-#include <collection/list/list.h>
-#include <interrupts/interrupt_router.h>
-#include <devicemgr/deviceapi/deviceapi_dsp.h>
-#include <debug/assert.h>
-#include <debug/debug.h>
-#include <sleep/sleep.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
+#include <sys/collection/list/list.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/devicemgr/deviceapi/deviceapi_dsp.h>
+#include <sys/debug/assert.h>
+#include <sys/debug/debug.h>
+#include <sys/sleep/sleep.h>
 #include <dev/isadma/isadma.h>
-#include <string/mem.h>
+#include <sys/string/mem.h>
 
 // https://wiki.osdev.org/Sound_Blaster_16
 

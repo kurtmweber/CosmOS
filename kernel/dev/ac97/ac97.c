@@ -6,14 +6,14 @@
  *****************************************************************/
 
 #include <dev/ac97/ac97.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
-#include <collection/list/list.h>
-#include <interrupts/interrupt_router.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
+#include <sys/collection/list/list.h>
+#include <sys/interrupts/interrupt_router.h>
 #include <dev/pci/pci.h>
-#include <devicemgr/deviceapi/deviceapi_dsp.h>
-#include <debug/assert.h>
+#include <sys/devicemgr/deviceapi/deviceapi_dsp.h>
+#include <sys/debug/assert.h>
 
 // https://wiki.osdev.org/AC97
 

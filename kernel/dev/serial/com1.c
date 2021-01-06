@@ -7,8 +7,8 @@
 
 #include <dev/serial/com1.h>
 #include <dev/serial/ns16550.h>
-#include <debug/assert.h>
-#include <asm/asm.h>
+#include <sys/debug/assert.h>
+#include <sys/asm/asm.h>
 
 int com1_is_transmit_empty() {
     struct rs232_16550* comport = (struct rs232_16550*) COM1_ADDRESS;

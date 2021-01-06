@@ -6,15 +6,15 @@
 // ****************************************************************
 
 #include <dev/floppy/floppy.h>
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/asm/asm.h>
 #include <dev/pci/pci.h>
-#include <console/console.h>
-#include <devicemgr/devicemgr.h>
+#include <sys/console/console.h>
+#include <sys/devicemgr/devicemgr.h>
 #include <dev/cmos/cmos.h>
-#include <sleep/sleep.h>
-#include <devicemgr/deviceapi/deviceapi_floppy.h>
-#include <debug/assert.h>
+#include <sys/sleep/sleep.h>
+#include <sys/devicemgr/deviceapi/deviceapi_floppy.h>
+#include <sys/debug/assert.h>
 
 #define FLOPPY_IRQ_NUMBER   6
 #define FLOPPY_BASE         0x3F0

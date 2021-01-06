@@ -6,12 +6,12 @@
 // ****************************************************************
 
 #include <dev/bridge/intel82371ab/intel82371ab.h>
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
 #include <dev/pci/pci.h>
-#include <debug/assert.h>
+#include <sys/debug/assert.h>
 
 
 struct intel8237_deviceddata {

@@ -6,8 +6,8 @@
  *****************************************************************/
 
 #include <types.h>
-#include <console/console.h>
-#include <mm/mm.h>
+#include <sys/console/console.h>
+#include <sys/mm/mm.h>
 #include <dev/pci/pci.h>
 #include <dev/pci/devicetree.h>
 

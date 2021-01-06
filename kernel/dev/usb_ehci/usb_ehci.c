@@ -5,12 +5,12 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/asm/asm.h>
 #include <dev/pci/pci.h>
-#include <console/console.h>
-#include <devicemgr/devicemgr.h>
-#include <debug/assert.h>
+#include <sys/console/console.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/debug/assert.h>
 #include <dev/usb_ehci/usb_ehci.h>
 #include <dev/ehci/ehci.h>
 

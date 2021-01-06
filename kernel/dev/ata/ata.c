@@ -7,12 +7,12 @@
 
 #include <types.h>
 #include <dev/ata/ata.h>
-#include <console/console.h>
-#include <mm/mm.h>
+#include <sys/console/console.h>
+#include <sys/mm/mm.h>
 #include <dev/pci/pci.h>
-#include <devicemgr/devicemgr.h>
-#include <devicemgr/deviceapi/deviceapi_block.h>
-#include <debug/assert.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/devicemgr/deviceapi/deviceapi_block.h>
+#include <sys/debug/assert.h>
 
 struct list *ide_controllers;
 

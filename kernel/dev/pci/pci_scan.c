@@ -6,11 +6,11 @@
  *****************************************************************/
 
 #include <types.h>
-#include <asm/asm.h>
-#include <console/console.h>
+#include <sys/asm/asm.h>
+#include <sys/console/console.h>
 #include <dev/pci/pci.h>
 #include <dev/pci/devicetree.h>
-#include <debug/assert.h>
+#include <sys/debug/assert.h>
 
 #define PCI_MAX_BUSSES 256
 #define PCI_MAX_DEVICES_PER_BUS 32

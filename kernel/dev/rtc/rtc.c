@@ -6,16 +6,16 @@
  *****************************************************************/
 
 #include <types.h>
-#include <asm/asm.h>
-#include <console/console.h>
+#include <sys/asm/asm.h>
+#include <sys/console/console.h>
 #include <dev/rtc/rtc.h>
 #include <dev/cmos/cmos.h>
-#include <interrupts/interrupt_router.h>
-#include <devicemgr/devicemgr.h>
-#include <collection/list/list.h>
-#include <sleep/sleep.h>
-#include <devicemgr/deviceapi/deviceapi_rtc.h>
-#include <debug/assert.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/collection/list/list.h>
+#include <sys/sleep/sleep.h>
+#include <sys/devicemgr/deviceapi/deviceapi_rtc.h>
+#include <sys/debug/assert.h>
 
 #define RTC_IRQ_NUMBER 		8
 

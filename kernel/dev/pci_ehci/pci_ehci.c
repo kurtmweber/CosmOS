@@ -6,12 +6,12 @@
  *****************************************************************/
 
 #include <dev/pci_ehci/pci_ehci.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
-#include <collection/list/list.h>
-#include <interrupts/interrupt_router.h>
-#include <debug/assert.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
+#include <sys/collection/list/list.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/debug/assert.h>
 #include <dev/pci/pci.h>
 #include <dev/ehci/ehci.h>
 

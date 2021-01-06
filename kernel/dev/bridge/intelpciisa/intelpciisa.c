@@ -6,12 +6,12 @@
 // ****************************************************************
 
 #include <dev/bridge/intelpciisa/intelpciisa.h>
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
 #include <dev/pci/pci.h>
-#include <debug/assert.h>
+#include <sys/debug/assert.h>
 
 struct intelisapca_deviceddata {
     uint64_t base;

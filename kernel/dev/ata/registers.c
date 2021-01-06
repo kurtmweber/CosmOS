@@ -6,10 +6,10 @@
  *****************************************************************/
 
 #include <types.h>
-#include <asm/asm.h>
+#include <sys/asm/asm.h>
 #include <dev/ata/ata.h>
-#include <console/console.h>
-#include <debug/assert.h>
+#include <sys/console/console.h>
+#include <sys/debug/assert.h>
 
 uint16_t ata_register_port_number(uint8_t controller, uint8_t channel, ata_registers reg){
 		uint16_t port_prim_base = 0, port_prim_ctrl = 0, port_sec_base = 0, port_sec_ctrl = 0;

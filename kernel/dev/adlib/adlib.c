@@ -6,13 +6,13 @@
  *****************************************************************/
 
 #include <dev/adlib/adlib.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
-#include <collection/list/list.h>
-#include <interrupts/interrupt_router.h>
-#include <devicemgr/deviceapi/deviceapi_dsp.h>
-#include <debug/assert.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
+#include <sys/collection/list/list.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/devicemgr/deviceapi/deviceapi_dsp.h>
+#include <sys/debug/assert.h>
 
 void adlib_handle_irq(stackFrame *frame) {
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");

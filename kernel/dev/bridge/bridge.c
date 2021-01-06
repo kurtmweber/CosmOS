@@ -6,10 +6,10 @@
 // ****************************************************************
 
 #include <dev/bridge/bridge.h>
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
 #include <dev/bridge/inteli440fx/inteli440fx.h>
 #include <dev/bridge/intel82371ab/intel82371ab.h>
 #include <dev/bridge/intelpciisa/intelpciisa.h>

@@ -7,8 +7,8 @@
 
 #include <types.h>
 #include <dev/ata/ata.h>
-#include <console/console.h>
-#include <sleep/sleep.h>
+#include <sys/console/console.h>
+#include <sys/sleep/sleep.h>
 
 bool ata_channel_ready(uint8_t controller, uint8_t channel){
 	BYTE status;

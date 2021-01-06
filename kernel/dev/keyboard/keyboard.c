@@ -6,17 +6,17 @@
  *****************************************************************/
 
 #include <types.h>
-#include <asm/asm.h>
-#include <console/drivers/drivers.h>
+#include <sys/asm/asm.h>
+#include <sys/console/drivers/drivers.h>
 #include <dev/keyboard/keyboard.h>
-#include <console/console.h>
-#include <interrupts/irq.h>
-#include <interrupts/interrupt_router.h>
-#include <devicemgr/devicemgr.h>
+#include <sys/console/console.h>
+#include <sys/interrupts/irq.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/devicemgr/devicemgr.h>
 #include <dev/keyboard/abstract_keyboard.h>
-#include <collection/ringbuffer/ringbuffer.h>
-#include <devicemgr/deviceapi/deviceapi_keyboard.h>
-#include <debug/assert.h>
+#include <sys/collection/ringbuffer/ringbuffer.h>
+#include <sys/devicemgr/deviceapi/deviceapi_keyboard.h>
+#include <sys/debug/assert.h>
 
 #define KB_IRQ_NUMBER 1
 

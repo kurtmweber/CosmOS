@@ -8,19 +8,19 @@
 // https://wiki.osdev.org/Virtio
 
 #include <dev/virtio/vblock/vblock.h>
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
 #include <types.h>
-#include <asm/io.h>
-#include <sleep/sleep.h>
+#include <sys/asm/io.h>
+#include <sys/sleep/sleep.h>
 #include <dev/pci/pci.h>
-#include <mm/mm.h>
+#include <sys/mm/mm.h>
 #include <dev/virtio/virtio.h>
-#include <debug/assert.h>
+#include <sys/debug/assert.h>
 #include <dev/virtio/virtqueue.h>
-#include <devicemgr/deviceapi/deviceapi_block.h>
+#include <sys/devicemgr/deviceapi/deviceapi_block.h>
 
 // registers
 #define VIRTIO_BLOCK_TOTAL_SECTORS      0x14

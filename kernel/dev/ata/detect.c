@@ -7,11 +7,11 @@
 
 #include <types.h>
 #include <dev/ata/ata.h>
-#include <console/console.h>
-#include <mm/mm.h>
-#include <debug/assert.h>
-#include <string/string.h>
-#include <sleep/sleep.h>
+#include <sys/console/console.h>
+#include <sys/mm/mm.h>
+#include <sys/debug/assert.h>
+#include <sys/string/string.h>
+#include <sys/sleep/sleep.h>
 
 void ata_detect_atapi(uint8_t controller, uint8_t channel){
 	ata_register_write(controller, channel, ATA_REGISTER_COMMAND, ATA_COMMAND_IDENTIFY_PACKET);

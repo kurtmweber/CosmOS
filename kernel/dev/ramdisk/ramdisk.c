@@ -6,13 +6,13 @@
 // ****************************************************************
 
 #include <dev/ramdisk/ramdisk.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
 #include <types.h>
-#include <debug/assert.h>
-#include <devicemgr/deviceapi/deviceapi_block.h>
-#include <mm/mm.h>
-#include <string/mem.h>
+#include <sys/debug/assert.h>
+#include <sys/devicemgr/deviceapi/deviceapi_block.h>
+#include <sys/mm/mm.h>
+#include <sys/string/mem.h>
 
 #define RAMDISK_SECTOR_SIZE 512
 #define RAMDISK_TOTAL_SECTORS 1000

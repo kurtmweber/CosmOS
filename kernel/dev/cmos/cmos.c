@@ -6,10 +6,10 @@
 // ****************************************************************
 
 #include <dev/cmos/cmos.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
-#include <debug/assert.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
+#include <sys/debug/assert.h>
 
 void cmos_write_register(uint8_t reg, uint8_t val){
 	uint8_t pv;

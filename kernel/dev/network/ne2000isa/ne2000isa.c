@@ -9,15 +9,15 @@
 */
 
 #include <dev/network/ne2000isa/ne2000isa.h>
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
 #include <types.h>
-#include <asm/io.h>
-#include <sleep/sleep.h>
-#include <devicemgr/deviceapi/deviceapi_ethernet.h>
-#include <debug/assert.h>
+#include <sys/asm/io.h>
+#include <sys/sleep/sleep.h>
+#include <sys/devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <sys/debug/assert.h>
 
 #define NE2000ISA_BASE_ADDRESS 0x300
 #define NE2000ISA_IRQ 9

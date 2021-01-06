@@ -9,7 +9,7 @@
 #define _ATA_H
 
 #include <dev/pci/pci_device.h>
-#include <collection/list/list.h>
+#include <sys/collection/list/list.h>
 
 #define IDE_SERIAL_IRQ			14
 

@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <dev/virtio/virtqueue.h>
-#include <mm/mm.h>
-#include <debug/assert.h>
-#include <console/console.h>
+#include <sys/mm/mm.h>
+#include <sys/debug/assert.h>
+#include <sys/console/console.h>
 
 // https://docs.oasis-open.org/virtio/virtio/v1.1/virtio-v1.1.pdf
 

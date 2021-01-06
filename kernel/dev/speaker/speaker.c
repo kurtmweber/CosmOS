@@ -6,12 +6,12 @@
  *****************************************************************/
 
 #include <dev/speaker/speaker.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
-#include <sleep/sleep.h>
-#include <devicemgr/deviceapi/deviceapi_speaker.h>
-#include <debug/assert.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
+#include <sys/sleep/sleep.h>
+#include <sys/devicemgr/deviceapi/deviceapi_speaker.h>
+#include <sys/debug/assert.h>
 
 // https://wiki.osdev.org/PC_Speaker
 

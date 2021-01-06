@@ -6,26 +6,26 @@
  *****************************************************************/
 
 #include <types.h>
-#include <console/console.h>
-#include <console/drivers/drivers.h>
-#include <interrupts/interrupt_router.h>
-#include <video/video.h>
-#include <video/vga/vga.h>
-#include <tests/tests.h>
-#include <mm/mm.h>
-#include <devicemgr/devicemgr.h>
-#include <asm/asm.h>
-#include <interrupts/idt.h>
-#include <tests/testvblock.h>
-#include <devicemgr/deviceapi/deviceapi_rtc.h>
-#include <devicemgr/deviceapi/deviceapi_speaker.h>
-#include <devicemgr/deviceapi/deviceapi_pit.h>
-#include <devicemgr/deviceapi/deviceapi_serial.h>
-#include <devicemgr/deviceapi/deviceapi_cpu.h>
-#include <devicemgr/deviceapi/deviceapi_dsp.h>
+#include <sys/console/console.h>
+#include <sys/console/drivers/drivers.h>
+#include <sys/interrupts/interrupt_router.h>
+#include <sys/video/video.h>
+#include <sys/video/vga/vga.h>
+#include <sys/tests/tests.h>
+#include <sys/mm/mm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/asm/asm.h>
+#include <sys/interrupts/idt.h>
+#include <sys/tests/testvblock.h>
+#include <sys/devicemgr/deviceapi/deviceapi_rtc.h>
+#include <sys/devicemgr/deviceapi/deviceapi_speaker.h>
+#include <sys/devicemgr/deviceapi/deviceapi_pit.h>
+#include <sys/devicemgr/deviceapi/deviceapi_serial.h>
+#include <sys/devicemgr/deviceapi/deviceapi_cpu.h>
+#include <sys/devicemgr/deviceapi/deviceapi_dsp.h>
 
 // testing slab allocator
-#include <mm/pagetables.h>
+#include <sys/mm/pagetables.h>
 // end slab allocator test includes
 
 void stringtest();

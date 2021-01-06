@@ -15,7 +15,7 @@
 #include <dev/rtc/rtc.h>
 #include <dev/serial/serial.h>
 #include <dev/usb_ehci/usb_ehci.h>
-#include <devicemgr/devicemgr.h>
+#include <sys/devicemgr/devicemgr.h>
 #include <dev/network/network.h>
 #include <dev/bridge/bridge.h>
 #include <dev/display/display.h>

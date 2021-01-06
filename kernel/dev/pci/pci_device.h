@@ -10,7 +10,7 @@
 
 #include <types.h>
 #include <dev/pci/devicetree.h>
-#include <collection/list/list.h>
+#include <sys/collection/list/list.h>
 
 struct pci_device {
 	pci_class_codes pci_class;
