@@ -8,7 +8,7 @@
 #include <types.h>
 #include <asm/asm.h>
 #include <dev/pci/pci.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 uint32_t pci_header_read_bar0(uint8_t bus, uint8_t device, uint8_t function){
 	asm_out_d(PCI_CONFIG_ADDRESS_PORT, pci_config_address_build(bus, device, function, PCI_BAR0_OFFSET, 1));

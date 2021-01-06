@@ -15,7 +15,7 @@
 #include <collection/list/list.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_rtc.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 #define RTC_IRQ_NUMBER 		8
 
@@ -40,7 +40,7 @@ typedef enum rtc_registers{
 void rtc_handle_irq(stackFrame *frame) {	
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 	for (uint32_t i=0; i< list_count(rtcEvents);i++){
-		RTCEvent rtcEvent = (RTCEvent) list_get(rtcEvents,i);
+		rtc_event rtcEvent = (rtc_event) list_get(rtcEvents,i);
 		(*rtcEvent)();
 	}
 
@@ -55,7 +55,7 @@ void rtc_handle_irq(stackFrame *frame) {
 /*
 * perform device instance specific init here
 */
-void deviceInitRTC(struct device* dev){
+void rtc_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, RTC_IRQ_NUMBER, dev->name);
 	
@@ -120,9 +120,10 @@ rtc_time_t rtc_time(struct device* dev){
 	return b;	
 }
 
-void rtc_subscribe(RTCEvent rtcEvent) {
-	ASSERT_NOT_NULL(rtcEvent, "rtcEvent cannot be null");
-	list_add(rtcEvents, rtcEvent);
+void rtc_subscribe(rtc_event event) {
+	ASSERT_NOT_NULL(rtcEvents, "rtcEvents cannot be null. Has the PIT been initialized?");
+	ASSERT_NOT_NULL(event, "event cannot be null");
+	list_add(rtcEvents, event);
 }
 
 /*
@@ -135,12 +136,13 @@ void rtc_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	devicemgr_set_device_description(deviceinstance, "RTC");
 	deviceinstance->devicetype = RTC;
-	deviceinstance->init =  &deviceInitRTC;
+	deviceinstance->init =  &rtc_device_init;
 	/*
 	* device api
 	*/
 	struct deviceapi_rtc* api = (struct deviceapi_rtc*) kmalloc (sizeof(struct deviceapi_rtc));
 	api->rtc_time = &rtc_time;
+	api->subscribe = &rtc_subscribe;
 	deviceinstance->api = api;
 	/*
 	* register

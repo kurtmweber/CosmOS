@@ -10,7 +10,7 @@
 #include <console/console.h>
 #include <dev/pci/pci.h>
 #include <dev/pci/devicetree.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 #define PCI_MAX_BUSSES 256
 #define PCI_MAX_DEVICES_PER_BUS 32
@@ -56,7 +56,7 @@ void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
 	// add to list
 	list_add(pci_devices, dev);
 
-	kprintf("PCI device found at %#hX:%#hX:%#hX, class %#hX.%#hX, vendor %#hX, device %#hX, IRQ %hu\n", dev->bus, dev->device, dev->function, dev->pci_class, dev->pci_subclass, dev->vendor_id, dev->device_id, dev->irq);
+	kprintf("   PCI device found at %#hX:%#hX:%#hX, class %#hX.%#hX, vendor %#hX, device %#hX, IRQ %hu\n", dev->bus, dev->device, dev->function, dev->pci_class, dev->pci_subclass, dev->vendor_id, dev->device_id, dev->irq);
 	
 	if ((pci_header_read_type(bus, device, function) & 0x80) == 0x80){
 		for (i = 1; i < 8; i++){

@@ -18,8 +18,9 @@
 #include <dev/pci/pci.h>
 #include <mm/mm.h>
 #include <dev/virtio/virtio.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 #include <dev/virtio/virtqueue.h>
+#include <devicemgr/deviceapi/deviceapi_block.h>
 
 // registers
 #define VIRTIO_BLOCK_TOTAL_SECTORS      0x14
@@ -55,7 +56,8 @@
 struct vblock_devicedata {
     uint64_t base;
     uint32_t sectorLength;
-    struct virtq* vblock_queue;
+    uint32_t totalSectors;
+    struct virtq* request_queue;
 } __attribute__((packed));
 
 struct vblock_block_request {
@@ -84,7 +86,7 @@ void vblock_irq_handler(stackFrame *frame){
 /*
 * perform device instance specific init here
 */
-void VBLOCKInit(struct device* dev){
+void vblock_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
 
@@ -109,7 +111,7 @@ void VBLOCKInit(struct device* dev){
     // read features ok.  we good?
     uint32_t status = asm_in_b(deviceData->base+VIRTIO_DEVICE_STATUS);
     if (VIRTIO_STATUS_FEATURES_OK!=status) {
-      panic("virtio feature negotiation failed");
+        panic("virtio feature negotiation failed");
     }
 
     // cool
@@ -118,48 +120,43 @@ void VBLOCKInit(struct device* dev){
     /*
     * length*totalSectors should equal the byte size of the mounted file (currently hda.img)
     */
-    uint32_t totalSectors = asm_in_d(deviceData->base+VIRTIO_BLOCK_TOTAL_SECTORS);
+    deviceData->totalSectors = asm_in_d(deviceData->base+VIRTIO_BLOCK_TOTAL_SECTORS);
     deviceData->sectorLength = asm_in_d(deviceData->base+VIRTIO_BLOCK_LENGTH);
-    uint64_t totalBytes = totalSectors*(deviceData->sectorLength);
-    kprintf("Total byte size of mounted media: %llu\n",totalBytes);
+    uint64_t totalBytes = deviceData->totalSectors*(deviceData->sectorLength);
+    kprintf("   Total byte size of mounted media: %llu\n",totalBytes);
+
+    // select queue 0
+    asm_out_w(deviceData->base+VIRTIO_QUEUE_SELECT, 0);
+
+    // get the needed size
+    uint16_t queue_size_needed = asm_in_w(deviceData->base+VIRTIO_QUEUE_SIZE);
+    kprintf("   Queue size needed: %llu\n", queue_size_needed);
 
     // make the queue
-    deviceData->vblock_queue = virtq_new();
+    struct virtq*  q = virtq_new(queue_size_needed);
+    bool all = virtio_isAligned(((uint64_t)q),4096);
+    ASSERT(all, "q is not 4096 byte aligned");
+    deviceData->request_queue = q;
+
+    // divide by 4096
+    uint32_t q_shifted = (uint64_t)q >> 12;
 
     // set the queue.  The API takes a 32 bit pointer, but we have a 64 bit pointer, so ... some conversions  
-    kprintf("Queue Address: %#hX\n", (uint64_t) deviceData->vblock_queue);
-    asm_out_d(VIRTIO_QUEUE_ADDRESS, (uint32_t) (uint64_t) deviceData->vblock_queue);
-    asm_out_w(VIRTIO_QUEUE_SIZE, VIRTQUEUE_SIZE);
+    kprintf("   Queue Address: %#hX %#hX\n", q, q_shifted);
+    asm_out_d(deviceData->base+VIRTIO_QUEUE_ADDRESS, q_shifted);
 }
 
-void VBLOCKSearchCB(struct pci_device* dev){
+void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
-    /*
-    * register device
-    */
-    struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &VBLOCKInit;
-    deviceinstance->pci = dev;
-    deviceinstance->devicetype = ATA;
-    devicemgr_set_device_description(deviceinstance, "Virtio ATA");
-	/*
-	* device data
-	*/
-	struct vblock_devicedata* deviceData = (struct vblock_devicedata*) kmalloc(sizeof(struct vblock_devicedata));
-	deviceinstance->deviceData = deviceData;
-    devicemgr_register_device(deviceinstance);
-}
+	ASSERT_NOT_NULL(data, "data cannot be null");
 
-/**
-* find all virtio block devices and register them
-*/
-void vblock_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_BLOCK, &VBLOCKSearchCB);
-}
-
-void vblock_read(struct device* dev, uint32_t sector, uint8_t* target, uint32_t size) {
     ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
+
+    /*
+    * drop a message
+    */
+   kprintf("read sector %llu, size %llu\n", sector, size);
 
     /*
     * block request
@@ -167,16 +164,79 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* target, uint32_t 
     struct vblock_block_request* req = vblock_block_request_new();
     req->type = VIRTIO_BLK_T_IN;
     req->sector = sector;
-    req->data = kmalloc(deviceData->sectorLength);
+    req->data = data;
 
     /*
     * descriptor
     */
-    struct virtq_descriptor* desc = virtq_descriptor_new((uint8_t*)req, sizeof(struct vblock_block_request));
-    // 0 for read, 1 for write
-    desc->flags=0;
+    struct virtq_descriptor* desc = virtq_descriptor_new((uint8_t*)req, sizeof(struct vblock_block_request), true);
+    kprintf("desc addr %#hX\n",desc->addr);
+    kprintf("desc length %llu\n",desc->len);
+    kprintf("desc flags %llu\n",desc->flags);
+    kprintf("desc next %llu\n",desc->next);
 
     // enqueue
-    virtq_enqueue_descriptor(deviceData->vblock_queue, desc);
+    virtq_enqueue_descriptor(deviceData->request_queue, desc);
+
+    // there is an available buffer
+//    uint16_t avail_idx = virtq_get_available_idx(deviceData->vblock_queue);
+//    kprintf("avail_idx %llu\n",avail_idx);
+    asm_out_w(deviceData->base+VIRTIO_QUEUE_NOTIFY, 0);
 }
 
+void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+	panic("vblock write not implemented yet");
+}
+
+uint16_t vblock_sector_size(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+    struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
+    return deviceData->sectorLength;
+}
+
+uint32_t vblock_total_sectors(struct device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+    struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
+    return deviceData->totalSectors;
+}
+
+void vblock_search_cb(struct pci_device* dev){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+    /*
+    * register device
+    */
+    struct device* deviceinstance = devicemgr_new_device();
+    deviceinstance->init =  &vblock_init;
+    deviceinstance->pci = dev;
+    deviceinstance->devicetype = VBLOCK;
+    devicemgr_set_device_description(deviceinstance, "Virtio ATA");
+	/*
+	* device data
+	*/
+	struct vblock_devicedata* deviceData = (struct vblock_devicedata*) kmalloc(sizeof(struct vblock_devicedata));
+	deviceinstance->deviceData = deviceData;
+    /*
+    * the device api
+    */
+    struct deviceapi_block* api = (struct deviceapi_block*) kmalloc(sizeof(struct deviceapi_block));
+    api->write = &vblock_write;
+    api->read = &vblock_read;
+    api->sector_size = &vblock_sector_size;
+    api->total_sectors = &vblock_total_sectors;
+    deviceinstance->api = api;
+    /*
+    * register
+    */
+    devicemgr_register_device(deviceinstance);
+}
+
+/**
+* find all virtio block devices and register them
+*/
+void vblock_devicemgr_register_devices() {
+    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_SCSI,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_BLOCK, &vblock_search_cb);
+}

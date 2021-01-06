@@ -1,16 +1,7 @@
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I../..
-ARFLAGS=-crs
+ARCHIVE_FILE=isadma.a
 
-all: isadma.a
+include ../../../mk/archive.mk
 
-isadma.a: isadma.o 
-	$(AR) $(ARFLAGS) $@ $^
-	
-isadma.o: isadma.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(ISRCFLAGS) -o $@ $^
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I../..

@@ -1,16 +1,7 @@
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I../.. -DRTC_SLEEP
-ARFLAGS=-crs
+ARCHIVE_FILE=adlib.a
 
-all: adlib.a
+include ../../../mk/archive.mk
 
-adlib.a: adlib.o
-	$(AR) $(ARFLAGS) $@ $^
-	
-adlib.o: adlib.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-	
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I../..

@@ -18,7 +18,7 @@
 #include <asm/io.h>
 #include <sleep/sleep.h>
 #include <devicemgr/deviceapi/deviceapi_ethernet.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 // REGISTERS
 #define CR				0x00 // Command Register
@@ -138,7 +138,7 @@ void ne2000pci_irq_handler(stackFrame *frame){
 /*
 * perform device instance specific init here
 */
-void NE200PCIInit(struct device* dev){
+void ne2000_pci_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     struct ne2000pci_devicedata* deviceData = (struct ne2000pci_devicedata*) dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
@@ -148,23 +148,27 @@ void NE200PCIInit(struct device* dev){
     ne2000pci_init();
 }
 
-void ne2000pci_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+void ne2000pci_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet read not implemented yet");
 }
-void ne2000pci_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+void ne2000pci_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet write not implemented yet");
 }
 
-void NE2000PCISearchCB(struct pci_device* dev){
+void ne2000_pci_search_cb(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &NE200PCIInit;
+    deviceinstance->init =  &ne2000_pci_init;
     deviceinstance->pci = dev;
-    deviceinstance->devicetype = ETHERNET;
+    deviceinstance->devicetype = NIC;
     devicemgr_set_device_description(deviceinstance, "NE2000 PCI");
     /*
     * the device api
@@ -189,7 +193,7 @@ void NE2000PCISearchCB(struct pci_device* dev){
 * find all NE2000 devices and register them
 */
 void ne2000pci_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &NE2000PCISearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x10EC,0x8029, &ne2000_pci_search_cb);
 }
 
 void ne2000pci_init() {	
@@ -214,7 +218,7 @@ void ne2000pci_init() {
 	net_mac_pci[4]=54;
 	net_mac_pci[5]=32;
 		
-	kprintf("MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac_pci[0],net_mac_pci[1],net_mac_pci[2],net_mac_pci[3],net_mac_pci[4],net_mac_pci[5]);
+	kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",net_mac_pci[0],net_mac_pci[1],net_mac_pci[2],net_mac_pci[3],net_mac_pci[4],net_mac_pci[5]);
 
 	asm_out_b(CR, (CR_PAGE1|CR_NODMA|CR_STOP));
 	asm_out_b(PAR0,net_mac_pci[0]);

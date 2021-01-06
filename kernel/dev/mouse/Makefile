@@ -1,16 +1,7 @@
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I../..
-ARFLAGS=-crs
+ARCHIVE_FILE=mouse.a
 
-all: mouse.a
+include ../../../mk/archive.mk
 
-mouse.a: mouse.o 
-	$(AR) $(ARFLAGS) $@ $^
-	
-mouse.o: mouse.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I../..

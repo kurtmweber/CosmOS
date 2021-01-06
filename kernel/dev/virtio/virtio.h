@@ -44,4 +44,6 @@
 
 void virtio_devicemgr_register_devices();
 
+bool virtio_isAligned(uint64_t address, uint32_t alignment);
+
 #endif

@@ -1,16 +1,7 @@
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I../.. -DRTC_SLEEP
-ARFLAGS=-crs
+ARCHIVE_FILE=speaker.a
 
-all: speaker.a
+include ../../../mk/archive.mk
 
-speaker.a: speaker.o
-	$(AR) $(ARFLAGS) $@ $^
-	
-speaker.o: speaker.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I../..

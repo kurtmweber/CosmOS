@@ -5,8 +5,9 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <interrupts/interrupts.h>
 #include <interrupts/interrupt_router.h>
+#include <interrupts/irq.h>
+#include <dev/pic/pic.h>
 
 __attribute__ ((interrupt)) void irq0(stackFrame *frame){	
 	interrupt_router_route_interrupt(0, frame);

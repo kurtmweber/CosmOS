@@ -12,7 +12,7 @@
 #include <collection/list/list.h>
 #include <interrupts/interrupt_router.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 void adlib_handle_irq(stackFrame *frame) {
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
@@ -21,7 +21,7 @@ void adlib_handle_irq(stackFrame *frame) {
 /*
 * perform device instance specific init here
 */
-void deviceInitADLIB(struct device* dev){
+void adlib_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
  //   kprintf("Init %s at IRQ %llu\n",dev->description, SB16_IRQ);
  //   interrupt_router_register_interrupt_handler(SB16_IRQ, &adlib_handle_irq);
@@ -34,7 +34,7 @@ void adlib_devicemgr_register_devices(){
 	struct device* deviceinstance = devicemgr_new_device();
 	devicemgr_set_device_description(deviceinstance, "Yamaha YM3812 (OPL2)");
 	deviceinstance->devicetype = DSP;
-	deviceinstance->init =  &deviceInitADLIB;
+	deviceinstance->init =  &adlib_device_init;
 	/*
 	* device api
 	*/

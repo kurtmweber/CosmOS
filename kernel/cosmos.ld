@@ -7,9 +7,11 @@ SECTIONS
 		*(.rodata*)
 		. = ALIGN(4096);
 	}
-
 	.data :
 	{
+		_tone_s = .;
+		KEEP(*(.rawdata*))
+		_tone_e = .;
 		. = ALIGN(4096);
 	}
 	.bss :
@@ -19,6 +21,5 @@ SECTIONS
 		_ebss = .;
 		. = ALIGN(4096);
 	}
-
 	_end = .;
 }

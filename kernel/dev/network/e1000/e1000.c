@@ -12,7 +12,7 @@
 #include <console/console.h>
 #include <dev/pci/pci.h>
 #include <devicemgr/deviceapi/deviceapi_ethernet.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 void e1000_irq_handler(stackFrame *frame){
 	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
@@ -21,29 +21,33 @@ void e1000_irq_handler(stackFrame *frame){
 /*
 * perform device instance specific init here
 */
-void E1000Init(struct device* dev){
+void e1000_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &e1000_irq_handler);
 }
 
-void e1000_ethernet_read(struct device* dev, uint8_t* data, uint8_t* size) {
+void e1000_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet read not implemented yet");
 }
-void e1000_ethernet_write(struct device* dev, uint8_t* data, uint8_t* size) {
+void e1000_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(data, "data cannot be null");
+
 	panic("Ethernet write not implemented yet");
 }
 
-void E1000SearchCB(struct pci_device* dev){
+void e1000_search_cb(struct pci_device* dev){
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &E1000Init;
+    deviceinstance->init =  &e1000_init;
     deviceinstance->pci = dev;
-    deviceinstance->devicetype = ETHERNET;
+    deviceinstance->devicetype = NIC;
     devicemgr_set_device_description(deviceinstance, "E1000 NIC");
     /*
     * the device api
@@ -61,5 +65,5 @@ void E1000SearchCB(struct pci_device* dev){
 /**
 */
 void e1000_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x8086,0x100E, &E1000SearchCB);
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,0x8086,0x100E, &e1000_search_cb);
 }

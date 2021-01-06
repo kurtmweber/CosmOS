@@ -11,23 +11,23 @@
 #include <dev/pci/pci.h>
 #include <console/console.h>
 #include <devicemgr/devicemgr.h>
-#include <panic/panic.h>
+#include <debug/assert.h>
 
 /*
 * perform device instance specific init here
 */
-void deviceInitDisplay(struct device* dev){
+void display_device_init(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
 }
 
-void DisplaySearchCB(struct pci_device* dev){
+void display_search_cb(struct pci_device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     /*
     * register device
     */
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &deviceInitDisplay;
+    deviceinstance->init =  &display_device_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = VGA;
     devicemgr_set_device_description(deviceinstance, "QEMU/Bochs VBE Framebuffer");
@@ -38,5 +38,5 @@ void DisplaySearchCB(struct pci_device* dev){
 * find all Display devices and register them
 */
 void display_devicemgr_register_devices() {
-    pci_devicemgr_search_devicetype(PCI_CLASS_DISPLAY,PCI_DISPLAY_SUBCLASS_VGA, &DisplaySearchCB);
+    pci_devicemgr_search_devicetype(PCI_CLASS_DISPLAY,PCI_DISPLAY_SUBCLASS_VGA, &display_search_cb);
 }

@@ -1,16 +1,7 @@
 include ../../../mk/build.mk
 
-EXTRA_CFLAGS= -I../..
-ARFLAGS=-crs
+ARCHIVE_FILE=cpu.a
 
-all: cpu.a
+include ../../../mk/archive.mk
 
-cpu.a: cpu.o 
-	$(AR) $(ARFLAGS) $@ $^
-	
-cpu.o: cpu.c
-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -o $@ $^
-
-clean:
-	$(RM) *.o
-	$(RM) *.a
+EXTRA_CFLAGS+= -I../..

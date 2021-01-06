@@ -10,9 +10,6 @@
 
 #include <types.h>
 
-// memops.c
-void *memset(void *s, uint8_t c, size_t n);
-
 // itoa.c
 void uitoa3(uint64_t n, char *s, uint16_t len, uint8_t base);
 
