@@ -10,12 +10,13 @@
 # clang root
 CLANG_ROOT=/usr/local/opt/llvm/bin/
 
-# platform flag
-PLATFORM=COMPILE_PLATFORM_DARWIN
+# platform flags
+COMPILE_PLATFORM=COMPILE_PLATFORM_DARWIN
+TARGET_PLATFORM=TARGET_PLATFORM_i386
 
 # cc (GCC tool chain)
 CC=clang
-CFLAGS=-c -target x86_64-unknown-elf -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(PLATFORM)
+CFLAGS=-c -target x86_64-unknown-elf -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(COMPILE_PLATFORM) -D$(TARGET_PLATFORM)
 
 # ld
 LD=x86_64-elf-ld 
