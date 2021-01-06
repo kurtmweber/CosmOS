@@ -36,7 +36,7 @@ void  array_set(struct array* arr, uint32_t position, void* value);
 void* array_get(struct array* arr, uint32_t position);
 uint32_t array_size(struct array* arr);
 void array_resize(struct array* arr, uint32_t size);
-void array_incrementallyResize(struct array* arr, uint32_t increment);
+void array_grow(struct array* arr, uint32_t increment);
 void array_iterate(struct array* arr, arrayIterator iter);
 
 #endif

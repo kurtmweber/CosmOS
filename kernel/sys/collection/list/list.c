@@ -34,6 +34,9 @@ uint32_t list_count(struct list* lst) {
 
 uint32_t list_size(struct list* lst) {
 	ASSERT_NOT_NULL(lst, "list cannot be null");
+    if (0==lst->arr){
+        panic("why is the underlying array null?!");
+    }
     return lst->arr->size;
 }
 
@@ -49,7 +52,7 @@ uint32_t list_add(struct list* lst, void* value) {
 
     // expand the underlying array?
     if (lst->count+1 == array_size(lst->arr)){
-        array_incrementallyResize(lst->arr, EXPAND_SIZE);
+        array_grow(lst->arr, EXPAND_SIZE);
     }
     // save the data
     array_set(lst->arr, lst->count, value);
@@ -89,6 +92,9 @@ void* list_get(struct list* lst, uint32_t position) {
 void list_iterate(struct list* lst, listIterator iter) {
 	ASSERT_NOT_NULL(lst, "list cannot be null");
 	ASSERT_NOT_NULL(iter, "iter cannot be null");
+    if (0==lst->arr){
+        panic("why is the underlying array null?!");
+    }
     for (uint16_t i=0; i<lst->count;i++) {
         (*iter)(lst->arr->data[i]);
     }

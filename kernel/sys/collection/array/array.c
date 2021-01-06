@@ -14,7 +14,6 @@
 struct array* array_new(uint32_t size) {
     struct array*  ret = (struct array*) kmalloc(sizeof(struct array));
     ret->data = (void**) kmalloc(sizeof(void*)*size); 
-  //  kprintf("array data pointer: %llX\n", (uint64_t)ret->data);
     ret->size = size;
     for (uint32_t i=0; i<size;i++){
         ret->data[i]=0;
@@ -76,7 +75,7 @@ void array_resize(struct array* arr, uint32_t size) {
     }
 }
 
-void array_incrementallyResize(struct array* arr, uint32_t increment) {
+void array_grow(struct array* arr, uint32_t increment) {
 	ASSERT_NOT_NULL(arr, "arr cannot be null");
     array_resize(arr, increment+(arr->size));
 }
