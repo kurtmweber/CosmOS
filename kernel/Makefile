@@ -8,12 +8,18 @@ EXTRA_CFLAGS= -I.
 
 SRC_DIR=.
 
+ifeq ($(TARGET_PLATFORM),TARGET_PLATFORM_i386)
+IGNORE_DIRS=/arm/
+else
+IGNORE_DIRS=/i386/
+endif
+
 all: $(KERNEL_BIN)
 
 # sources
-SRCS_C=$(shell find $(SRC_DIR) -type f -iname '*.c' | sort)
-HEADERS_C=$(shell find $(SRC_DIR) -type f -iname '*.h' | sort)
-SRCS_ASM=$(shell find $(SRC_DIR) -type f -iname '*.asm' | sort)
+SRCS_C=$(shell find $(SRC_DIR) -type f -iname '*.c' | grep -v "$(IGNORE_DIRS)" | sort)
+HEADERS_C=$(shell find $(SRC_DIR) -type f -iname '*.h' | grep -v "$(IGNORE_DIRS)" | sort)
+SRCS_ASM=$(shell find $(SRC_DIR) -type f -iname '*.asm' | grep -v "$(IGNORE_DIRS)" | sort)
 
 # object files
 OBJS_C=$(subst $(SRC_DIR)/, , $(SRCS_C:.c=.o))
