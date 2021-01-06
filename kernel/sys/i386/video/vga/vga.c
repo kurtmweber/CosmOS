@@ -6,8 +6,8 @@
  *****************************************************************/
 
 #include <types.h>
-#include <sys/video/video.h>
-#include <sys/video/vga/vga.h>
+#include <sys/i386/video/video.h>
+#include <sys/i386/video/vga/vga.h>
 
 vga_mode_params_t vga_mode_params[VIDEO_MODE_MAX];
 

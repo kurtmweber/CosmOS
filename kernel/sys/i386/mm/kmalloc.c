@@ -8,7 +8,7 @@
 #include <types.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 
 kmalloc_block *kmalloc_block_list;
 kmalloc_block *kmalloc_block_list_end;

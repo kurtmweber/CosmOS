@@ -7,7 +7,7 @@
 
 #include <types.h>
 #include <sys/console/console.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <sys/debug/assert.h>
 
 void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks){

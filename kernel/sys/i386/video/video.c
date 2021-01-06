@@ -6,8 +6,8 @@
  *****************************************************************/
 
 #include <types.h>
-#include <sys/video/video.h>
-#include <sys/video/vga/vga.h>
+#include <sys/i386/video/video.h>
+#include <sys/i386/video/vga/vga.h>
 
 video_driver_interface_t video_interfaces[VIDEO_DRIVER_LAST];
 video_driver video_active_driver;

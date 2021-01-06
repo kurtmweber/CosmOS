@@ -8,7 +8,7 @@
 #include <types.h>
 #include <dev/i386/ata/ata.h>
 #include <sys/console/console.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/devicemgr/deviceapi/deviceapi_block.h>

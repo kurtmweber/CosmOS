@@ -10,8 +10,8 @@
 #include <dev/i386/isadma/isadma.h>
 #include <dev/virtio/virtqueue.h>
 
-#include <sys/mm/mm.h>
-#include <sys/mm/pagetables.h>
+#include <sys/i386/mm/mm.h>
+#include <sys/i386/mm/pagetables.h>
 
 void mmu_init(){
 	int_15_map *map;

@@ -8,7 +8,7 @@
 #include <types.h>
 #include <dev/i386/ata/ata.h>
 #include <sys/console/console.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <sys/debug/assert.h>
 #include <sys/string/string.h>
 #include <sys/sleep/sleep.h>

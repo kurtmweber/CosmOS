@@ -11,7 +11,7 @@
 #include <types.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/deviceapi/deviceapi_block.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <sys/string/mem.h>
 
 #define RAMDISK_SECTOR_SIZE 512

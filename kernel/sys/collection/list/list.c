@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <sys/collection/list/list.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <sys/debug/assert.h>
 
 #define EXPAND_SIZE 64

@@ -7,8 +7,8 @@
 
 #include <types.h>
 #include <sys/console/console.h>
-#include <sys/mm/mm.h>
-#include <sys/mm/pagetables.h>
+#include <sys/i386/mm/mm.h>
+#include <sys/i386/mm/pagetables.h>
 #include <sys/panic/panic.h>
 
 page_directory_t *page_directory;

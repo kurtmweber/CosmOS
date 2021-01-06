@@ -7,8 +7,8 @@
  
 #include <types.h>
 #include <sys/console/console.h>
-#include <sys/video/video.h>
-#include <sys/video/vga/vga.h>
+#include <sys/i386/video/video.h>
+#include <sys/i386/video/vga/vga.h>
 
 char *vga_text_mem_base = (char *)0xB8000;
 

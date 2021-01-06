@@ -11,7 +11,7 @@
 
 #include <types.h>
 #include <sys/debug/assert.h>
-#include <sys/interrupts/irq.h>
+#include <sys/i386/interrupts/irq.h>
 
 void isrDE(stackFrame *frame);
 

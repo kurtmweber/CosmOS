@@ -8,8 +8,8 @@
 #include <sys/console/drivers/drivers.h>
 #include <sys/console/console.h>
 #include <sys/console/drivers/vga_console/vga_console.h>
-#include <sys/video/video.h>
-#include <sys/video/vga/vga.h>
+#include <sys/i386//video/video.h>
+#include <sys/i386/video/vga/vga.h>
 
 uint16_t vga_console_x_width;
 uint16_t vga_console_y_height;

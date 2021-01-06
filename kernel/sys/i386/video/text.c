@@ -6,8 +6,8 @@
  *****************************************************************/
 
 #include <types.h>
-#include <sys/video/video.h>
-#include <sys/video/vga/vga.h>
+#include <sys/i386/video/video.h>
+#include <sys/i386/video/vga/vga.h>
 
 void video_scroll_text(void){
 	video_interfaces[video_active_driver].scroll_text();

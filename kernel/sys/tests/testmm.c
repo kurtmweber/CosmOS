@@ -7,7 +7,7 @@
 
 #include <sys/tests/testmm.h>
 #include <sys/debug/debug.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <sys/console/console.h>
 
 void test_mm() {

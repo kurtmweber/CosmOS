@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <dev/virtio/virtqueue.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <sys/debug/assert.h>
 #include <sys/console/console.h>
 

@@ -6,8 +6,8 @@
  *****************************************************************/
 
 #include <types.h>
-#include <sys/mm/mm.h>
-#include <sys/mm/pagetables.h>
+#include <sys/i386/mm/mm.h>
+#include <sys/i386/mm/pagetables.h>
 
 uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
     /*

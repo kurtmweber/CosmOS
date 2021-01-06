@@ -8,7 +8,7 @@
 #include <types.h>
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
-#include <sys/mm/pagetables.h>
+#include <sys/i386/mm/pagetables.h>
 #include <sys/panic/panic.h>
 #include <sys/string/mem.h>
 

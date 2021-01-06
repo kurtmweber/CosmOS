@@ -11,7 +11,7 @@
 #include <dev/i386/pci/pci.h>
 #include <sys/console/console.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <sys/devicemgr/deviceapi/deviceapi_mouse.h>
 #include <sys/debug/assert.h>
 

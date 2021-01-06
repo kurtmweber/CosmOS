@@ -6,8 +6,8 @@
  *****************************************************************/
 
 #include <types.h>
-#include <sys/video/video.h>
-#include <sys/video/vga/vga.h>
+#include <sys/i386/video/video.h>
+#include <sys/i386/video/vga/vga.h>
 
 uint8_t vga_set_mode(video_mode mode){
 	if (mode == VIDEO_MODE_TEXT){

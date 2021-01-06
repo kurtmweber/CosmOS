@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 
 mem_block init_phys_block;
 mem_block *usable_phys_blocks;

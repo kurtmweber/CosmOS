@@ -7,9 +7,9 @@
 
 #include <types.h>
 #include <sys/asm/asm.h>
-#include <sys/interrupts/irq.h>
-#include <sys/interrupts/de.h>
-#include <sys/interrupts/idt.h>
+#include <sys/i386/interrupts/irq.h>
+#include <sys/i386/interrupts/de.h>
+#include <sys/i386/interrupts/idt.h>
 
 #include <sys/debug/assert.h>
 

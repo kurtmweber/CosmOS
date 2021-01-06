@@ -16,7 +16,7 @@
 #include <sys/asm/io.h>
 #include <sys/sleep/sleep.h>
 #include <dev/i386/pci/pci.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <dev/virtio/virtio.h>
 #include <sys/debug/assert.h>
 #include <dev/virtio/virtqueue.h>

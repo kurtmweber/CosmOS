@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 
 void asm_hlt(){
 	asm volatile(

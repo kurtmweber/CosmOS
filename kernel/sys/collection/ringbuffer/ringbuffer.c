@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <sys/collection/ringbuffer/ringbuffer.h>
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 #include <sys/debug/assert.h>
 
 #define RINGBUFFER_SIZE 256

@@ -9,7 +9,7 @@
 #define _VGA_H
 
 #include <types.h>
-#include <sys/video/video.h>
+#include <sys/i386/video/video.h>
 
 #define VGA_DRIVER_ENABLED
 

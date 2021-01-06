@@ -2,7 +2,7 @@
 #ifndef _MISC_H
 #define _MISC_H
 
-#include <sys/mm/mm.h>
+#include <sys/i386/mm/mm.h>
 
 void asm_cli();
 void asm_hlt();
