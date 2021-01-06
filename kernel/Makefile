@@ -40,7 +40,7 @@ $(ARCHIVE_FILE): $(ARCHIVES) $(OBJS)
 
 # asm files	
 %.o: %.asm
-	$(NASM) $(NASMARGS) -f elf64 $< -o $@ 
+	$(NASM) $(NASMARGS) $< -o $@ 
 
 clean:
 	$(RM) $(OBJS)

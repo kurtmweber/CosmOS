@@ -6,7 +6,7 @@
 # ****************************************************************
 
 NASM=nasm
-NASMARGS=-O0
+NASMARGS=-O0 -f elf64
 
 RM=rm -f
 MAKE=make
