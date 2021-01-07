@@ -7,6 +7,7 @@
 
 #include <types.h>
 #include <dev/i386/ata/ata_controller.h>
+#include <dev/i386/ata/ata_identity.h>
 #include <dev/i386/ata/ata_util.h>
 #include <dev/i386/ata/ata_disk.h>
 #include <dev/i386/ata/ata.h>
@@ -110,7 +111,6 @@ void ata_devicemgr_register_devices() {
 void ata_detect_devices(struct device* device, struct ata_controller* controller) {
 	uint8_t i, j;
 	uint8_t status;
-	char *identify_buf;
 	struct ata_device_t *tmp;
 	
 	for (i = 0; i < 2; i++){
@@ -143,23 +143,23 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 				}
 			}
 			
-			identify_buf = ata_detect_read_identify(controller, i);
+			controller->identity = ata_detect_read_identify(controller, i);
 			
-			if (!(controller->channels[i].devices[j].serial = ata_detect_extract_string(identify_buf, 20, ATA_IDENTIFY_OFFSET_SERIAL))){
+			if (!(controller->channels[i].devices[j].serial = ata_detect_extract_string(controller->identity , 20, ATA_IDENTIFY_OFFSET_SERIAL))){
 				panic("Invalid length specified for ATA serial number field!");
 			}
 			
-			if (!(controller->channels[i].devices[j].model = ata_detect_extract_string(identify_buf, 40, ATA_IDENTIFY_OFFSET_MODEL))){
+			if (!(controller->channels[i].devices[j].model = ata_detect_extract_string(controller->identity , 40, ATA_IDENTIFY_OFFSET_MODEL))){
 				panic("Invalid length specified for ATA model field!");
 			}
 			
-			if (ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_COMMAND_SET_2) & (1 << 10)){
-				controller->channels[i].devices[j].size = ata_detect_extract_dword(identify_buf, ATA_IDENTIFY_OFFSET_LBA) * 512;
+			if (ata_detect_extract_word(controller->identity , ATA_IDENTIFY_OFFSET_COMMAND_SET_2) & (1 << 10)){
+				controller->channels[i].devices[j].size = ata_detect_extract_dword(controller->identity , ATA_IDENTIFY_OFFSET_LBA) * 512;
 			} else {
-				controller->channels[i].devices[j].size = ata_detect_extract_qword(identify_buf, ATA_IDENTIFY_OFFSET_LBA_EXT) * 512;
+				controller->channels[i].devices[j].size = ata_detect_extract_qword(controller->identity , ATA_IDENTIFY_OFFSET_LBA_EXT) * 512;
 			}
-			controller->channels[i].devices[j].removable = (ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_GENERAL) & (1 << 7)) >> 7;
-			controller->channels[i].devices[j].bytes_per_sector = ata_detect_sector_size(identify_buf);
+			controller->channels[i].devices[j].removable = (ata_detect_extract_word(controller->identity , ATA_IDENTIFY_OFFSET_GENERAL) & (1 << 7)) >> 7;
+			controller->channels[i].devices[j].bytes_per_sector = ata_detect_sector_size(controller->identity );
 			// register the device
 			ata_register_disk(device, i, j);
 		}
