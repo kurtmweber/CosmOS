@@ -28,5 +28,6 @@ char *ata_detect_read_identify(struct ata_controller* controller, uint8_t channe
 void ata_detect_atapi(struct ata_controller* controller, uint8_t channel);
 bool ata_channel_ready(struct ata_controller* controller, uint8_t channel);
 bool ata_select_device(struct ata_controller* controller, uint8_t channel, uint8_t device);
+void ata_interrupt_enable(struct ata_controller* controller, uint8_t channel, bool enabled);
 
 #endif

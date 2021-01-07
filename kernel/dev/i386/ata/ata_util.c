@@ -238,3 +238,14 @@ bool ata_select_device(struct ata_controller* controller, uint8_t channel, uint8
 	
 	return true;
 }
+
+void ata_interrupt_enable(struct ata_controller* controller, uint8_t channel, bool enabled){
+	/*
+    * to clarify, because this may look backwards: 
+    * yes, the correct thing to do is to clear bit 1 to enable IRQs, 
+    * and set it to disable
+    */
+   // bit 3 is specified as reserved and set to 1, so we have to make sure we don't zero it
+	ata_register_write(controller, channel, ATA_REGISTER_CONTROL, 0x08 | (enabled ? 0 : 2));		
+	return;
+}

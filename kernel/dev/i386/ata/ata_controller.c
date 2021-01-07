@@ -73,8 +73,9 @@ void device_init_ata(struct device* dev){
 	// if this doesn't set the IRQ then this is a parallel IDE, but we don't need to know that
 	pci_header_set_irq(dev->pci->bus, dev->pci->device, dev->pci->function, IDE_SERIAL_IRQ);
 	
-//	ata_interrupt_enable(i, ATA_PRIMARY, false);
-//	ata_interrupt_enable(i, ATA_SECONDARY, false);
+	// turn off interrupts
+	ata_interrupt_enable(controller, ATA_PRIMARY, false);
+	ata_interrupt_enable(controller, ATA_SECONDARY, false);
 	
 	ata_detect_devices(dev, controller);
 	
@@ -105,14 +106,6 @@ void ata_search_cb(struct pci_device* dev){
 void ata_devicemgr_register_devices() {
 	pci_devicemgr_search_devicetype(PCI_CLASS_MASS_STORAGE,PCI_MASS_STORAGE_SUBCLASS_IDE, &ata_search_cb);	
 }
-
-//void ata_interrupt_enable(uint8_t controller, uint8_t channel, bool enabled){
-	
-	// to clarify, because this may look backwards: yes, the correct thing to do is to clear bit 1 to enable IRQs, and set it to disable
-//	ata_register_write(controller, channel, ATA_REGISTER_CONTROL, 0x08 | (enabled ? 0 : 2));	// bit 3 is specified as reserved and set to 1, so we have to make sure we don't zero it
-	
-//	return;
-//}
 
 void ata_detect_devices(struct device* device, struct ata_controller* controller) {
 	uint8_t i, j;
