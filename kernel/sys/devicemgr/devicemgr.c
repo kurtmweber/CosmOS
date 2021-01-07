@@ -37,6 +37,7 @@ int8_t* DeviceTypeNames[] = {"None"
     ,"rd"
     ,"vnic"
     ,"vblock"
+    ,"disk"
     }; 
 
 void devicemgr_init() {
@@ -132,6 +133,7 @@ void devicemgr_init_devices(){
     deviceregistry_iterate_type(FLOPPY, deviceInitIterator);
     deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
     deviceregistry_iterate_type(DSP, deviceInitIterator);
+    deviceregistry_iterate_type(DISK, deviceInitIterator);
     deviceregistry_iterate_type(RAMDISK, deviceInitIterator);
 }
 

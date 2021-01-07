@@ -25,7 +25,7 @@ typedef enum deviceType {
 	NIC=		    0x05,   // uses NIC API
 	BRIDGE=			0x06,
 	USB=			0x07,
-	ATA=			0x08,   // uses Block API
+	ATA=			0x08,   // ATA controller
 	PIC=			0x09,
 	MOUSE=			0x0A,
 	FLOPPY=			0x0B,
@@ -37,7 +37,8 @@ typedef enum deviceType {
 	CPU=			0x11,
 	RAMDISK=		0x12,	// uses Block API
 	VNIC=			0x13,	// uses NIC API
-	VBLOCK=			0x14	// uses Block API
+	VBLOCK=			0x14,	// uses Block API
+	DISK=			0x15	// uses Block API
 } deviceType;
 
 /*

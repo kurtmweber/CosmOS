@@ -5,10 +5,13 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <types.h>
-#include <dev/i386/ata/ata.h>
 
-BYTE *ata_read(uint64_t start, uint64_t end, uint8_t controller, uint8_t channel, uint8_t device){
-	ata_select_device(controller, channel, device);
-	return 0;
-}
+#ifndef _ATA_DISK_H
+#define _ATA_DISK_H
+
+#include <types.h>
+#include <sys/devicemgr/devicemgr.h>
+
+void ata_register_disk(struct device* controller, uint8_t channel, uint8_t device);
+
+#endif

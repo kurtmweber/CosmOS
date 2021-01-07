@@ -10,7 +10,7 @@
 
 #ifdef TARGET_PLATFORM_i386
 
-#include <dev/i386/ata/ata.h>
+#include <dev/i386/ata/ata_controller.h>
 #include <dev/i386/keyboard/keyboard.h>
 #include <dev/i386/pci/pci.h>
 #include <dev/i386/pic/pic.h>
