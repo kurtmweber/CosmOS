@@ -10,6 +10,7 @@
 
 #include <types.h>
 #include <dev/i386/ata/ata.h>
+#include <sys/devicemgr/devicemgr.h>
 
 /*
 * device parameters for an ATA controller
@@ -35,5 +36,7 @@ struct ata_controller {
 } __attribute__((packed));
 
 void ata_devicemgr_register_devices();
+
+struct ata_device* ata_get_disk(struct device* controller, uint8_t channel, uint8_t disk);
 
 #endif

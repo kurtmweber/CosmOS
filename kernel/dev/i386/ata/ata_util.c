@@ -216,3 +216,25 @@ bool ata_channel_ready(struct ata_controller* controller, uint8_t channel){
 
 	return false;
 }
+
+bool ata_select_device(struct ata_controller* controller, uint8_t channel, ata_drive_selector device){
+	BYTE status;
+		
+	if (controller->channels[channel].selected_device == device){
+		return true;
+	}
+	
+	status = ata_register_read(controller, channel, ATA_REGISTER_STATUS);
+	// bit 7 of status register indicates busy--if it's set then nothing else matters, if not then we check bit 3
+	// which indicates ready for data, and we can't change the device on the channel if the already-selected device is waiting for data
+	if ((status & ATA_STATUS_BUSY) || (status & ATA_STATUS_DRQ)){
+		return false;
+	}
+	
+	controller->channels[channel].selected_device = device;
+	
+	ata_register_write(controller, channel, ATA_devicemgr_register_device_SELECT, 0xA0 | (device << 4));
+	sleep_wait(1);
+	
+	return true;
+}

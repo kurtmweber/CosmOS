@@ -13,6 +13,6 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <dev/i386/ata/ata_controller.h>
 
-void ata_register_disk(struct device* device, struct ata_controller* controller, struct ide_channel* channel, struct ata_device* disk);
+void ata_register_disk(struct device* dev, struct ata_controller* controller, uint8_t channel, uint8_t disk);
 
 #endif

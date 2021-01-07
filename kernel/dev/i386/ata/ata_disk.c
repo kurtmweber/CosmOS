@@ -16,8 +16,8 @@
 struct ata_disk_devicedata {
     struct device* device;
     struct ata_controller* controller;
-    struct ide_channel* channel;
-    struct ata_device* disk;
+    uint8_t channel;
+    uint8_t disk;
 } __attribute__((packed));
 
 void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
@@ -56,7 +56,7 @@ void device_init_ata_disk(struct device* dev){
 	kprintf("Init %s on controller %s (%s)\n", dev->description, disk->device->name, dev->name);
 }
 
-void ata_register_disk(struct device* device, struct ata_controller* controller, struct ide_channel* channel, struct ata_device* disk) {
+void ata_register_disk(struct device* dev, struct ata_controller* controller, uint8_t channel, uint8_t disk) {
     /*
     * register device
     */
@@ -70,7 +70,7 @@ void ata_register_disk(struct device* device, struct ata_controller* controller,
 	struct ata_disk_devicedata* deviceData = (struct ata_disk_devicedata*) kmalloc(sizeof(struct ata_disk_devicedata));
 	deviceData->controller = controller;
 	deviceData->channel = channel;
-	deviceData->device = device;
+	deviceData->device = dev;
 	deviceData->disk = disk;
 	deviceinstance->deviceData = deviceData;
 	/*

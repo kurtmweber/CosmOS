@@ -20,7 +20,6 @@
 #include <sys/asm/asm.h>
 
 void ata_detect_devices(struct device* device, struct ata_controller* controller);
-bool ata_select_device(struct ata_controller* controller, uint8_t channel, ata_drive_selector device);
 
 #define ATA_SECTORS(x) (x / 512)
 #define IDE_SERIAL_IRQ			14
@@ -174,30 +173,12 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 			controller->channels[i].devices[j].bytes_per_sector = ata_detect_sector_size(identify_buf);
 			
 			// register the device
-			ata_register_disk(device, controller, &(controller->channels[i]), &(controller->channels[i].devices[j]));
+			ata_register_disk(device, controller, i, j);
 		}
 	}
 	return;
 }
 
-bool ata_select_device( struct ata_controller* controller, uint8_t channel, ata_drive_selector device){
-	BYTE status;
-		
-	if (controller->channels[channel].selected_device == device){
-		return true;
-	}
-	
-	status = ata_register_read(controller, channel, ATA_REGISTER_STATUS);
-	// bit 7 of status register indicates busy--if it's set then nothing else matters, if not then we check bit 3
-	// which indicates ready for data, and we can't change the device on the channel if the already-selected device is waiting for data
-	if ((status & ATA_STATUS_BUSY) || (status & ATA_STATUS_DRQ)){
-		return false;
-	}
-	
-	controller->channels[channel].selected_device = device;
-	
-	ata_register_write(controller, channel, ATA_devicemgr_register_device_SELECT, 0xA0 | (device << 4));
-	sleep_wait(1);
-	
-	return true;
+struct ata_device* ata_get_disk(struct device* controller, uint8_t channel, uint8_t disk) {
+	return 0;
 }
