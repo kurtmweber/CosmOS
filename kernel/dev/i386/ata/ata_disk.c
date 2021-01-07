@@ -11,11 +11,13 @@
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/debug/assert.h>
+#include <sys/console/console.h>
 
 struct ata_disk_devicedata {
-    struct device* controller;
-    uint8_t channel;
-    uint8_t device;
+    struct device* device;
+    struct ata_controller* controller;
+    struct ide_channel* channel;
+    struct ata_device* disk;
 } __attribute__((packed));
 
 void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
@@ -47,10 +49,14 @@ uint32_t ata_total_sectors(struct device* dev) {
 }
 
 void device_init_ata_disk(struct device* dev){
-    // do init
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev->deviceData, "deviceData cannot be null");
+	struct ata_disk_devicedata* disk = (struct ata_disk_devicedata*) dev->deviceData;
+
+	kprintf("Init %s on controller %s (%s)\n", dev->description, disk->device->name, dev->name);
 }
 
-void ata_register_disk(struct device* controller, uint8_t channel, uint8_t device) {
+void ata_register_disk(struct device* device, struct ata_controller* controller, struct ide_channel* channel, struct ata_device* disk) {
     /*
     * register device
     */
@@ -65,6 +71,7 @@ void ata_register_disk(struct device* controller, uint8_t channel, uint8_t devic
 	deviceData->controller = controller;
 	deviceData->channel = channel;
 	deviceData->device = device;
+	deviceData->disk = disk;
 	deviceinstance->deviceData = deviceData;
 	/*
     * the device api

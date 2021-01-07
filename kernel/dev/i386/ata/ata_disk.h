@@ -11,7 +11,8 @@
 
 #include <types.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <dev/i386/ata/ata_controller.h>
 
-void ata_register_disk(struct device* controller, uint8_t channel, uint8_t device);
+void ata_register_disk(struct device* device, struct ata_controller* controller, struct ide_channel* channel, struct ata_device* disk);
 
 #endif

@@ -8,6 +8,7 @@
 #include <types.h>
 #include <dev/i386/ata/ata_controller.h>
 #include <dev/i386/ata/ata_util.h>
+#include <dev/i386/ata/ata_disk.h>
 #include <dev/i386/ata/ata.h>
 #include <sys/console/console.h>
 #include <sys/i386/mm/mm.h>
@@ -18,7 +19,7 @@
 #include <sys/string/string.h>
 #include <sys/asm/asm.h>
 
-void ata_detect_devices(struct ata_controller* controller);
+void ata_detect_devices(struct device* device, struct ata_controller* controller);
 bool ata_select_device(struct ata_controller* controller, uint8_t channel, ata_drive_selector device);
 
 #define ATA_SECTORS(x) (x / 512)
@@ -78,7 +79,7 @@ void device_init_ata(struct device* dev){
 //	ata_interrupt_enable(i, ATA_PRIMARY, false);
 //	ata_interrupt_enable(i, ATA_SECONDARY, false);
 	
-	ata_detect_devices(controller);
+	ata_detect_devices(dev, controller);
 	
 	return;
 }
@@ -116,7 +117,7 @@ void ata_devicemgr_register_devices() {
 //	return;
 //}
 
-void ata_detect_devices(struct ata_controller* controller) {
+void ata_detect_devices(struct device* device, struct ata_controller* controller) {
 	uint8_t i, j;
 	uint8_t status;
 	char *identify_buf;
@@ -162,7 +163,6 @@ void ata_detect_devices(struct ata_controller* controller) {
 				panic("Invalid length specified for ATA model field!");
 			}
 			
-			
 			if (ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_COMMAND_SET_2) & (1 << 10)){
 				controller->channels[i].devices[j].size = ata_detect_extract_dword(identify_buf, ATA_IDENTIFY_OFFSET_LBA) * 512;
 			} else {
@@ -173,13 +173,14 @@ void ata_detect_devices(struct ata_controller* controller) {
 			
 			controller->channels[i].devices[j].bytes_per_sector = ata_detect_sector_size(identify_buf);
 			
-			kprintf("   ata%hu.%hu: %s #%s, %s, %llu bytes\n", i, j, strtrim(controller->channels[i].devices[j].model), strtrim(controller->channels[i].devices[j].serial), controller->channels[i].devices[j].removable ? "removable" : "fixed", controller->channels[i].devices[j].size);
+			// register the device
+			ata_register_disk(device, controller, &(controller->channels[i]), &(controller->channels[i].devices[j]));
 		}
 	}
 	return;
 }
 
-bool ata_select_device(struct ata_controller* controller, uint8_t channel, ata_drive_selector device){
+bool ata_select_device( struct ata_controller* controller, uint8_t channel, ata_drive_selector device){
 	BYTE status;
 		
 	if (controller->channels[channel].selected_device == device){
