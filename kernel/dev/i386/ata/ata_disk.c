@@ -41,16 +41,17 @@ void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size
 uint16_t ata_sector_size(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
-
-    panic("Not Implemented");
-    return 0;
+	struct ata_device* disk = ata_get_disk(diskdata->device, diskdata->channel, diskdata->disk);
+	ASSERT_NOT_NULL(disk, "disk should not be null");
+	return disk->bytes_per_sector;
 }
+
 uint32_t ata_total_sectors(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
-
-    panic("Not Implemented");
-    return 0;
+	struct ata_device* disk = ata_get_disk(diskdata->device, diskdata->channel, diskdata->disk);
+	ASSERT_NOT_NULL(disk, "disk should not be null");
+	return disk->size / disk->bytes_per_sector;
 }
 
 void device_init_ata_disk(struct device* dev){

@@ -5,7 +5,9 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-
+/*
+* this is a disk device, such as an HD or a CDROM
+*/
 #ifndef _ATA_DISK_H
 #define _ATA_DISK_H
 
