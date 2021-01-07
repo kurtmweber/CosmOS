@@ -33,10 +33,12 @@ struct ide_channel{
 
 struct ata_controller {
 	struct ide_channel channels[2];
-} __attribute__((packed));
+};
 
+/*
+* basically an ATA controller has two functions. It can register the disks, and it can get a disk struct.
+*/
 void ata_devicemgr_register_devices();
-
-struct ata_device* ata_get_disk(struct device* controller, uint8_t channel, uint8_t disk);
+struct ata_device* ata_get_disk(struct device* dev, uint8_t channel, uint8_t disk);
 
 #endif

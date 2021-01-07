@@ -13,6 +13,9 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <dev/i386/ata/ata_controller.h>
 
+/*
+* a disk only needs one function; a registration called by the controller
+*/
 void ata_register_disk(struct device* controllerDevice, uint8_t channel, uint8_t disk);
 
 #endif

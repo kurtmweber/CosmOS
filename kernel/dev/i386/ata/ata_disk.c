@@ -23,27 +23,32 @@ struct ata_disk_devicedata {
 void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
+	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
+	ata_select_device(diskdata->controller, diskdata->channel, diskdata->disk);
 
 	panic("ATA read not implemented yet");
 }
 
-// BYTE *ata_read(uint64_t start, uint64_t end, uint8_t controller, uint8_t channel, uint8_t device){
-// 	ata_select_device(controller, channel, device);
-// 	return 0;
-// }
-
 void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
+	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
+	ata_select_device(diskdata->controller, diskdata->channel, diskdata->disk);
 
 	panic("ATA write not implemented yet");
 }
 
 uint16_t ata_sector_size(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
+
     panic("Not Implemented");
     return 0;
 }
 uint32_t ata_total_sectors(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
+
     panic("Not Implemented");
     return 0;
 }

@@ -27,6 +27,6 @@ uint32_t ata_detect_sector_size(char *identify_buf);
 char *ata_detect_read_identify(struct ata_controller* controller, uint8_t channel);
 void ata_detect_atapi(struct ata_controller* controller, uint8_t channel);
 bool ata_channel_ready(struct ata_controller* controller, uint8_t channel);
-bool ata_select_device(struct ata_controller* controller, uint8_t channel, ata_drive_selector device);
+bool ata_select_device(struct ata_controller* controller, uint8_t channel, uint8_t device);
 
 #endif

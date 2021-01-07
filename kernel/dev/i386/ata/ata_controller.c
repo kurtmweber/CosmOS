@@ -20,8 +20,6 @@
 #include <sys/asm/asm.h>
 
 void ata_detect_devices(struct device* device, struct ata_controller* controller);
-
-#define ATA_SECTORS(x) (x / 512)
 #define IDE_SERIAL_IRQ			14
 
 /* 
@@ -167,11 +165,8 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 			} else {
 				controller->channels[i].devices[j].size = ata_detect_extract_qword(identify_buf, ATA_IDENTIFY_OFFSET_LBA_EXT) * 512;
 			}
-			
 			controller->channels[i].devices[j].removable = (ata_detect_extract_word(identify_buf, ATA_IDENTIFY_OFFSET_GENERAL) & (1 << 7)) >> 7;
-			
 			controller->channels[i].devices[j].bytes_per_sector = ata_detect_sector_size(identify_buf);
-			
 			// register the device
 			ata_register_disk(device, i, j);
 		}
@@ -179,6 +174,11 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 	return;
 }
 
-struct ata_device* ata_get_disk(struct device* controller, uint8_t channel, uint8_t disk) {
-	return 0;
+struct ata_device* ata_get_disk(struct device* dev, uint8_t channel, uint8_t disk) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev->deviceData, "deviceData cannot be null");
+	ASSERT(((channel>=0) && (channel<=1)), "channel out of range");
+	ASSERT(((disk>=0) && (disk<=1)), "disk out of range");
+	struct ata_controller* controller = (struct ata_controller*) dev->deviceData;
+	return &(controller->channels[channel].devices[disk]);
 }

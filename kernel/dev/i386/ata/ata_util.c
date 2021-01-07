@@ -217,7 +217,7 @@ bool ata_channel_ready(struct ata_controller* controller, uint8_t channel){
 	return false;
 }
 
-bool ata_select_device(struct ata_controller* controller, uint8_t channel, ata_drive_selector device){
+bool ata_select_device(struct ata_controller* controller, uint8_t channel, uint8_t device){
 	BYTE status;
 		
 	if (controller->channels[channel].selected_device == device){
