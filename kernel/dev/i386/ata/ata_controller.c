@@ -173,7 +173,7 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 			controller->channels[i].devices[j].bytes_per_sector = ata_detect_sector_size(identify_buf);
 			
 			// register the device
-			ata_register_disk(device, controller, i, j);
+			ata_register_disk(device, i, j);
 		}
 	}
 	return;

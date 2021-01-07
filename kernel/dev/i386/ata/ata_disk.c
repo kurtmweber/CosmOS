@@ -56,7 +56,7 @@ void device_init_ata_disk(struct device* dev){
 	kprintf("Init %s on controller %s (%s)\n", dev->description, disk->device->name, dev->name);
 }
 
-void ata_register_disk(struct device* dev, struct ata_controller* controller, uint8_t channel, uint8_t disk) {
+void ata_register_disk(struct device* controllerDevice, uint8_t channel, uint8_t disk) {
     /*
     * register device
     */
@@ -68,9 +68,9 @@ void ata_register_disk(struct device* dev, struct ata_controller* controller, ui
 	* device data
 	*/
 	struct ata_disk_devicedata* deviceData = (struct ata_disk_devicedata*) kmalloc(sizeof(struct ata_disk_devicedata));
-	deviceData->controller = controller;
+	deviceData->controller = controllerDevice->deviceData;
 	deviceData->channel = channel;
-	deviceData->device = dev;
+	deviceData->device = controllerDevice;
 	deviceData->disk = disk;
 	deviceinstance->deviceData = deviceData;
 	/*
