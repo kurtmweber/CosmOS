@@ -188,5 +188,3 @@ void ata_register_disk(struct device* controllerDevice, uint8_t channel, uint8_t
 	*/
     devicemgr_register_device(deviceinstance);
 }
-
-
