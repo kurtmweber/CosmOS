@@ -6,14 +6,14 @@
 // ****************************************************************
 
 #include <tests/testfat.h>
-#include <fat/fat.h>
+#include <sys/fs/fat/fat.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/console/console.h>
 #include <sys/collection/list/list.h>
 
 void test_fat() {
-    const uint8_t device[] = {"disk1"};
+    const uint8_t device[] = {"disk2"};
 	struct device* disk = devicemgr_find_device(device);
     if (0!=disk){
         struct list* lst = list_new();

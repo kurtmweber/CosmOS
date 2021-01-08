@@ -5,10 +5,10 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <fat/fat.h>
+#include <sys/fs/fat/fat.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
-#include <sys/block/block_util.h>
+#include <sys/fs/block_util.h>
 #include <sys/console/console.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/debug/debug.h>

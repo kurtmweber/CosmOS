@@ -8,7 +8,7 @@
 #ifndef _BLOCK_UTIL_H
 #define _BLOCK_UTIL_H
 
-#include <sys/block/block_util.h>
+#include <sys/fs/block_util.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/debug/assert.h>

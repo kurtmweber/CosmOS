@@ -6,13 +6,13 @@
 // ****************************************************************
 
 #include <tests/testsfs.h>
-#include <sfs/sfs.h>
+#include <sys/fs/sfs/sfs.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/console/console.h>
 
 void test_sfs() {
-	struct device* disk = devicemgr_findDevice("disk0");
+	struct device* disk = devicemgr_find_device("disk0");
     if (0!=disk){
         sfs_format(disk);
     } else {

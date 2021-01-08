@@ -23,5 +23,6 @@
 #include <tests/testvblock.h>
 #include <tests/testramdisk.h>
 #include <tests/testfat.h>
+#include <tests/testsfs.h>
 
 #endif

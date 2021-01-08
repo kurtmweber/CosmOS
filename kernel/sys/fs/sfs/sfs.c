@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sfs/sfs.h>
+#include <sys/fs/sfs/sfs.h>
 #include <sys/console/console.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/debug/assert.h>
@@ -13,24 +13,9 @@
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/string/mem.h>
 
-deviceType CompatibleDeviceTypes[] = {ATA, RAMDISK, VBLOCK};
-
-bool sfs_check_device_compatibility(deviceType dt){
-    for (int i=0; i<3; i++){
-        if (CompatibleDeviceTypes[i]==dt){
-            return true;
-        }
-    }
-    return false;
-} 
-
 void sfs_format(struct device* dev) {
     ASSERT_NOT_NULL(dev, "dev cannot be null");
 
-    bool compatible_device = sfs_check_device_compatibility(dev->devicetype);
-    if (false == compatible_device){
-        panic("Incompatible device");
-    }
 
     struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
 
