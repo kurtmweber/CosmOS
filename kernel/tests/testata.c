@@ -34,7 +34,7 @@ void test_ata() {
 		memset(data, 0, buffersize);
 
 		(*ata_api->read)(ata, 0, data, 1); // 1 sector
-		debug_show_memblock(data, 64);
+		debug_show_memblock(data, sector_size);
 	} else {
 		kprintf("Unable to find %s\n",devicename);
 	}

@@ -101,7 +101,7 @@ void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count
 	for (int j =0;j<count;j++) {
 		ata_wait_busy(diskdata->controller, diskdata->channel);
 		ata_wait_drq(diskdata->controller, diskdata->channel);
-		for(int i=0;i<sector_size;i++) {
+		for(int i=0;i<sector_size/2;i++) {
 			buffer[idx++]=ata_register_read_word(diskdata->controller, diskdata->channel,ATA_REGISTER_DATA);
 		}
 	}
