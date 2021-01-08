@@ -6,23 +6,25 @@
  *****************************************************************/
 
 #include <types.h>
+#include <interrupts/idt.h>
+#include <asm/asm.h>
 #include <console/console.h>
 #include <console/drivers/drivers.h>
-#include <interrupts/interrupt_router.h>
-#include <video/video.h>
-#include <video/vga/vga.h>
-#include <tests/tests.h>
-#include <mm/mm.h>
 #include <devicemgr/devicemgr.h>
-#include <asm/asm.h>
-#include <interrupts/idt.h>
-#include <tests/testvblock.h>
 #include <devicemgr/deviceapi/deviceapi_rtc.h>
 #include <devicemgr/deviceapi/deviceapi_speaker.h>
 #include <devicemgr/deviceapi/deviceapi_pit.h>
 #include <devicemgr/deviceapi/deviceapi_serial.h>
 #include <devicemgr/deviceapi/deviceapi_cpu.h>
 #include <devicemgr/deviceapi/deviceapi_dsp.h>
+#include <interrupts/interrupt_router.h>
+#include <mm/mm.h>
+#include <sync/sync.h>
+#include <tests/tests.h>
+#include <tests/testvblock.h>
+#include <video/video.h>
+#include <video/vga/vga.h>
+
 
 // testing slab allocator
 #include <mm/pagetables.h>
@@ -71,6 +73,9 @@ void CosmOS(){
 	*/
 	kprintf("Initializing Device Registry...\n");
 	devicemgr_init();
+
+	kprintf("Initializing spinlocks...\n");
+	spinlocks_init();
 
 	/*
 	* Register all devices
