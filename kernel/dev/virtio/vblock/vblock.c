@@ -197,11 +197,11 @@ uint16_t vblock_sector_size(struct device* dev) {
     return deviceData->sectorLength;
 }
 
-uint32_t vblock_total_sectors(struct device* dev){
+uint32_t vblock_total_size(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
-    return deviceData->totalSectors;
+    return deviceData->totalSectors*deviceData->sectorLength;
 }
 
 void vblock_search_cb(struct pci_device* dev){
@@ -226,7 +226,7 @@ void vblock_search_cb(struct pci_device* dev){
     api->write = &vblock_write;
     api->read = &vblock_read;
     api->sector_size = &vblock_sector_size;
-    api->total_sectors = &vblock_total_sectors;
+    api->total_size = &vblock_total_size;
     deviceinstance->api = api;
     /*
     * register

@@ -67,8 +67,8 @@ void ramdisk_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t 
 uint16_t ramdisk_sector_size(struct device* dev) {
     return RAMDISK_SECTOR_SIZE;
 }
-uint32_t ramdisk_total_sectors(struct device* dev){
-    return RAMDISK_TOTAL_SECTORS;
+uint32_t ramdisk_total_size(struct device* dev){
+    return RAMDISK_TOTAL_SECTORS*RAMDISK_SECTOR_SIZE;
 }
 
 /**
@@ -97,7 +97,7 @@ void ramdisk_devicemgr_register_devices() {
     api->write = &ramdisk_write;
     api->read = &ramdisk_read;
     api->sector_size = &ramdisk_sector_size;
-    api->total_sectors = &ramdisk_total_sectors;
+    api->total_size = &ramdisk_total_size;
     deviceinstance->api = api;
     /*
     * register

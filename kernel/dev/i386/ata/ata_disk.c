@@ -12,6 +12,7 @@
 #include <sys/i386/mm/mm.h>
 #include <sys/debug/assert.h>
 #include <sys/console/console.h>
+#include <sys/sleep/sleep.h>
 
 struct ata_disk_devicedata {
     struct device* device;
@@ -20,16 +21,90 @@ struct ata_disk_devicedata {
     uint8_t disk;
 } __attribute__((packed));
 
-void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+// registers needs to be uint8_t[6]
+void calculate_ida_lba_register_values( uint32_t lba, uint8_t* registers) {
+	registers[0]=(lba & 0x000000FF) >> 0;
+	registers[1]=(lba & 0x0000FF00) >> 8;
+	registers[2]=(lba & 0x00FF0000) >> 16;
+	registers[3]=(lba & 0xFF000000) >> 24;
+	registers[4]=0;
+	registers[5]=0;
+}
+
+void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
-	ata_select_device(diskdata->controller, diskdata->channel, diskdata->disk);
+	struct ata_device* disk = ata_get_disk(diskdata->device, diskdata->channel, diskdata->disk);
 
-	panic("ATA read not implemented yet");
+	ata_select_device(diskdata->controller, diskdata->channel, diskdata->disk);
+	kprintf("channel %llu \n", diskdata->channel);
+	kprintf("disk %llu \n", diskdata->disk);
+
+	uint16_t sector_size = disk->bytes_per_sector;
+
+	// wait
+	ata_wait_busy(diskdata->controller, diskdata->channel);
+
+	// sector count
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_SECTOR_COUNT_1, 0);		
+
+	// lba
+	uint8_t regs[6];
+	calculate_ida_lba_register_values(sector, regs);
+	kprintf("sector %llu \n", sector);
+	kprintf("regs %llu %llu %llu %llu %llu %llu\n", regs[0],regs[1],regs[2],regs[3],regs[4],regs[5]);
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_LBA_3, regs[3]);		
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_LBA_4, regs[4]);		
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_LBA_5, regs[5]);		
+
+	// sector count
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_SECTOR_COUNT_0, count);		
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_LBA_0, regs[0]);		
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_LBA_1, regs[1]);		
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_LBA_2, regs[2]);		
+
+	// select master
+	/*
+	*	Bits 0 : 3: Head Number for CHS.
+	*	Bit 4: Slave Bit. (0: Selecting Master Drive, 1: Selecting Slave Drive).
+	*	Bit 5: Obsolete and isn't used, but should be set.
+	*	Bit 6: LBA (0: CHS, 1: LBA).
+	*	Bit 7: Obsolete and isn't used, but should be set.
+	*/
+	// E0 is bits 5,6,7 set.
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_HDDEVSEL,  0xE0);		
+
+	// send the read command
+	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_COMMAND, ATA_CMD_READ_PIO);		
+
+	// wait 1ms
+	sleep_wait(1);
+
+	while (ata_register_read(diskdata->controller, diskdata->channel, ATA_REGISTER_STATUS) & ATA_STATUS_BUSY) {
+	}
+		sleep_wait(1000);
+
+	uint8_t status = ata_register_read(diskdata->controller, diskdata->channel, ATA_REGISTER_STATUS);
+	kprintf("Status: %llu\n", status);
+	if (status & ATA_STATUS_ERROR){
+		kprintf("IDE Error\n");
+	} 
+	if (status & ATA_STATUS_BUSY){
+		kprintf("IDE Busy\n");
+	} 
+
+	uint32_t idx=0;
+	for (int j =0;j<count;j++) {
+		ata_wait_busy(diskdata->controller, diskdata->channel);
+		ata_wait_drq(diskdata->controller, diskdata->channel);
+		for(int i=0;i<sector_size;i++) {
+			data[idx++] = ata_register_read(diskdata->controller, diskdata->channel,ATA_REGISTER_DATA);
+		}
+	}
 }
 
-void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
@@ -46,12 +121,12 @@ uint16_t ata_sector_size(struct device* dev) {
 	return disk->bytes_per_sector;
 }
 
-uint32_t ata_total_sectors(struct device* dev) {
+uint32_t ata_total_size(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
 	struct ata_device* disk = ata_get_disk(diskdata->device, diskdata->channel, diskdata->disk);
 	ASSERT_NOT_NULL(disk, "disk should not be null");
-	return disk->size / disk->bytes_per_sector;
+	return disk->size;
 }
 
 void device_init_ata_disk(struct device* dev){
@@ -85,13 +160,15 @@ void ata_register_disk(struct device* controllerDevice, uint8_t channel, uint8_t
     * the device api
     */
     struct deviceapi_block* api = (struct deviceapi_block*) kmalloc(sizeof(struct deviceapi_block));
-    api->write = &ata_read;
-    api->read = &ata_write;
+    api->write = &ata_write;
+    api->read = &ata_read;
     api->sector_size = &ata_sector_size;
-    api->total_sectors = &ata_total_sectors;
+    api->total_size = &ata_total_size;
     deviceinstance->api = api;
 	/*
 	* register
 	*/
     devicemgr_register_device(deviceinstance);
 }
+
+

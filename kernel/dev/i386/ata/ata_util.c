@@ -10,10 +10,12 @@
 #include <sys/asm/asm.h>
 #include <sys/panic/panic.h>
 #include <sys/sleep/sleep.h>
+#include <sys/console/console.h>
 
 uint8_t ata_register_read(struct ata_controller* controller, uint8_t channel, ata_registers reg){
-	//kprintf("Preparing to write value %#X to port %#X\n", value, out_port_base + out_offset);	
-	return asm_in_b(ata_register_port_number(controller, channel, reg));
+	uint8_t ret = asm_in_b(ata_register_port_number(controller, channel, reg));
+	kprintf("ata_register_read %#X from %#X\n",ret, ata_register_port_number(controller, channel, reg));	
+	return ret;
 }
 
 uint32_t ata_register_read_dword(struct ata_controller* controller, uint8_t channel, ata_registers reg){
@@ -25,7 +27,7 @@ uint16_t ata_register_read_word(struct ata_controller* controller, uint8_t chann
 }
 
 void ata_register_write(struct ata_controller* controller, uint8_t channel, ata_registers reg, uint8_t value){
-	//kprintf("Preparing to write value %#X to port %#X\n", value, out_port_base + out_offset);	
+	kprintf("ata_register_write %#X to %#X\n", value, ata_register_port_number(controller, channel, reg));	
 	asm_out_b(ata_register_port_number(controller, channel, reg), value);
 	return;
 }
@@ -55,14 +57,14 @@ uint16_t ata_register_port_number(struct ata_controller* controller, uint8_t cha
 		// fallthrough is desired behavior
 		case ATA_REGISTER_DATA:
 		case ATA_REGISTER_ERROR:
-		case ATA_REGISTER_FEATURES:
+	//	case ATA_REGISTER_FEATURES:
 		case ATA_REGISTER_SECTOR_COUNT_0:
 		case ATA_REGISTER_LBA_0:
 		case ATA_REGISTER_LBA_1:
 		case ATA_REGISTER_LBA_2:
-		case ATA_devicemgr_register_device_SELECT:
+		case ATA_REGISTER_HDDEVSEL:
 		case ATA_REGISTER_COMMAND:
-		case ATA_REGISTER_STATUS:
+	//	case ATA_REGISTER_STATUS:
 		case ATA_REGISTER_SECTOR_COUNT_1:
 		case ATA_REGISTER_LBA_3:
 		case ATA_REGISTER_LBA_4:
@@ -70,8 +72,8 @@ uint16_t ata_register_port_number(struct ata_controller* controller, uint8_t cha
 			out_port_base = port_base;
 			break;
 		case ATA_REGISTER_CONTROL:
-		case ATA_REGISTER_ALT_STATUS:
-		case ATA_devicemgr_register_device_ADDRESS:
+	//	case ATA_REGISTER_ALT_STATUS:
+		case ATA_REGISTER_DEVADDRESS:
 			out_port_base = port_ctrl;
 			break;
 		default:
@@ -85,7 +87,7 @@ uint16_t ata_register_port_number(struct ata_controller* controller, uint8_t cha
 			out_offset = 0;
 			break;
 		case ATA_REGISTER_ERROR:
-		case ATA_REGISTER_FEATURES:
+	//	case ATA_REGISTER_FEATURES:
 			out_offset = 1;
 			break;
 		case ATA_REGISTER_SECTOR_COUNT_0:
@@ -104,18 +106,18 @@ uint16_t ata_register_port_number(struct ata_controller* controller, uint8_t cha
 		case ATA_REGISTER_LBA_5:
 			out_offset = 5;
 			break;
-		case ATA_devicemgr_register_device_SELECT:
+		case ATA_REGISTER_HDDEVSEL:
 			out_offset = 6;
 			break;
 		case ATA_REGISTER_COMMAND:
-		case ATA_REGISTER_STATUS:
+	//	case ATA_REGISTER_STATUS:
 			out_offset = 7;
 			break;
 		case ATA_REGISTER_CONTROL:
-		case ATA_REGISTER_ALT_STATUS:
+	//	case ATA_REGISTER_ALT_STATUS:
 			out_offset = 0;
 			break;
-		case ATA_devicemgr_register_device_ADDRESS:
+		case ATA_REGISTER_DEVADDRESS:
 			out_offset = 1;
 			break;
 		default:
@@ -167,7 +169,7 @@ bool ata_select_device(struct ata_controller* controller, uint8_t channel, uint8
 	
 	controller->channels[channel].selected_device = device;
 	
-	ata_register_write(controller, channel, ATA_devicemgr_register_device_SELECT, 0xA0 | (device << 4));
+	ata_register_write(controller, channel, ATA_REGISTER_HDDEVSEL, 0xA0 | (device << 4));
 	sleep_wait(1);
 	
 	return true;
@@ -182,4 +184,13 @@ void ata_interrupt_enable(struct ata_controller* controller, uint8_t channel, bo
    // bit 3 is specified as reserved and set to 1, so we have to make sure we don't zero it
 	ata_register_write(controller, channel, ATA_REGISTER_CONTROL, 0x08 | (enabled ? 0 : 2));		
 	return;
+}
+
+void ata_wait_busy(struct ata_controller* controller, uint8_t channel) {
+	while(ata_register_read(controller, channel, ATA_REGISTER_STATUS)& ATA_STATUS_BUSY)
+	{};
+}
+void ata_wait_drq(struct ata_controller* controller, uint8_t channel) {
+	while(!ata_register_read(controller, channel, ATA_REGISTER_STATUS)& ATA_STATUS_DRQ)
+	{};
 }

@@ -97,7 +97,6 @@ void CosmOS(){
 	*/
 	//testFunctions();
 
-	
 
 	while (1){
 		asm_hlt();
@@ -131,7 +130,8 @@ void show_cpu_data() {
 //	floppyread();	
 
 //	test_ata();
-	test_vblock();
+//	test_vblock();
+	test_ata();
 
 	while (1){
 		asm_hlt();
