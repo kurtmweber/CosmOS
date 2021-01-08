@@ -24,7 +24,7 @@ void test_ramdisk() {
 	// get virtual block device
 	uint8_t devicename[] ={"rd0"};
 
-	struct device* ata = devicemgr_findDevice(devicename);
+	struct device* ata = devicemgr_find_device(devicename);
 	if (0!=ata){
 		struct deviceapi_block* ata_api = (struct deviceapi_block*) ata->api;
 

@@ -22,5 +22,6 @@
 #include <tests/testata.h>
 #include <tests/testvblock.h>
 #include <tests/testramdisk.h>
+#include <tests/testfat.h>
 
 #endif

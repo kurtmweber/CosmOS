@@ -79,7 +79,7 @@ It is not generally encouraged to include header files in the subdirectory /kern
 
 ```java
 	// query the device manager for the device serial0
-	struct device* serial0 = devicemgr_findDevice("serial0");
+	struct device* serial0 = devicemgr_find_device("serial0");
 	// get the serial device api for the device
 	struct deviceapi_serial* serial_api = (struct deviceapi_serial*) serial0->api;
 	// get the "write" function from the api

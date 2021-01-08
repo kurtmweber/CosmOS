@@ -12,7 +12,7 @@
 
 void floppyread() {
 	// get the floppy
-	struct device* floppy = devicemgr_findDevice("floppy0");
+	struct device* floppy = devicemgr_find_device("floppy0");
 	if (0!=floppy){
 		struct deviceapi_floppy* floppy_api = (struct deviceapi_floppy*) floppy->api;
 

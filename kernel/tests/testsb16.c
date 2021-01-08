@@ -13,7 +13,7 @@
 
 void playsb16() {	
 	// get the sb
-	struct device* dsp = devicemgr_findDevice("dsp0");
+	struct device* dsp = devicemgr_find_device("dsp0");
 	if (0!=dsp) {
 		struct wav_header* wav = sound_get_tone();
 

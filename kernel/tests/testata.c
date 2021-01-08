@@ -18,7 +18,7 @@ void test_ata1() {
 	// get virtual block device
 	uint8_t devicename[] ={"disk0"};
 
-	struct device* ata = devicemgr_findDevice(devicename);
+	struct device* ata = devicemgr_find_device(devicename);
 	if (0!=ata){
 		struct deviceapi_block* ata_api = (struct deviceapi_block*) ata->api;
 
@@ -44,7 +44,7 @@ void test_ata2() {
 	// get virtual block device
 	uint8_t devicename[] ={"disk0"};
 
-	struct device* ata = devicemgr_findDevice(devicename);
+	struct device* ata = devicemgr_find_device(devicename);
 	if (0!=ata){
 		struct deviceapi_block* ata_api = (struct deviceapi_block*) ata->api;
 

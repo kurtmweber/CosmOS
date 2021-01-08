@@ -11,7 +11,7 @@
 
 void show_cpu_data() {
 	// get the CPU
-	struct device* cpu = devicemgr_findDevice("cpu0");
+	struct device* cpu = devicemgr_find_device("cpu0");
     if (0!=cpu){
         struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
         /*

@@ -161,7 +161,7 @@ void devicemgr_set_device_description(struct device* dev, int8_t* description) {
     strcpy(dev->description, description);
 }
 
-struct device* devicemgr_findDevice(const int8_t* name) {
+struct device* devicemgr_find_device(const int8_t* name) {
     ASSERT_NOT_NULL(name, "name cannot be null");
     return deviceregistry_findDevice(name);
 }

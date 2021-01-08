@@ -112,7 +112,7 @@ void show_cpu_data() {
 	* show CPU features
 	*/
 	// get the CPU
-	struct device* cpu = devicemgr_findDevice("cpu0");
+	struct device* cpu = devicemgr_find_device("cpu0");
 	struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
 
 	/*
@@ -137,7 +137,7 @@ void show_cpu_data() {
 //	test_vblock();
 	test_ata();
 //	test_ramdisk();
-
+test_fat();
 	while (1){
 		asm_hlt();
 	}

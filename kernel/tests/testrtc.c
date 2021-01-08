@@ -12,7 +12,7 @@
 
 void test_rtc() {
     // get the time, b/c we can
-	struct device* rtc = devicemgr_findDevice("rtc0");
+	struct device* rtc = devicemgr_find_device("rtc0");
     if (0!=rtc){
         struct deviceapi_rtc* rtc_api = (struct deviceapi_rtc*) rtc->api;
         rtc_time_function time_func = rtc_api->rtc_time;
