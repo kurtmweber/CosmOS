@@ -22,6 +22,7 @@
 #include <sys/deviceapi/deviceapi_serial.h>
 #include <sys/deviceapi/deviceapi_cpu.h>
 #include <sys/deviceapi/deviceapi_dsp.h>
+#include <sys/sync/sync.h>
 
 // testing slab allocator
 #include <sys/i386/mm/pagetables.h>

@@ -6,8 +6,7 @@
  *****************************************************************/
 
 #include <types.h>
-#include <console/console.h>
-#include <sync/sync.h>
+#include <sys/sync/sync.h>
 
 kernel_spinlock mem_lock;
 
