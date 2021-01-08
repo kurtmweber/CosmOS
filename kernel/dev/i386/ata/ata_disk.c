@@ -15,6 +15,8 @@
 #include <sys/sleep/sleep.h>
 #include <sys/asm/byte.h>
 
+// https://wiki.osdev.org/PCI_IDE_Controller
+
 struct ata_disk_devicedata {
     struct device* device;
     struct ata_controller* controller;
@@ -80,7 +82,7 @@ void ata_rw(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count, 
 	} else {
 		// slave
 		ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_HDDEVSEL,  0xE0 | 0x08);
-	}		
+	}
 
 	if (read==true) { 
 		// send the read command
