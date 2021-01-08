@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <tests/testmm.h>
-#include <debug/debug.h>
-#include <mm/mm.h>
-#include <console/console.h>
+#include <sys/debug/debug.h>
+#include <sys/i386/mm/mm.h>
+#include <sys/console/console.h>
 
 void test_mm() {
     mem_block *tmp;

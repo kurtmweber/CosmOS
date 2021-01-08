@@ -6,10 +6,10 @@
 // ****************************************************************
 
 #include <tests/testspeaker.h>
-#include <devicemgr/deviceapi/deviceapi_speaker.h>
-#include <sound/notes.h>
-#include <sleep/sleep.h>
-#include <console/console.h>
+#include <sys/deviceapi/deviceapi_speaker.h>
+#include <sys/i386/sound/notes.h>
+#include <sys/sleep/sleep.h>
+#include <sys/console/console.h>
 
 void BeethovensFifth() {
 	// get the speaker

@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <tests/testfloppy.h>
-#include <devicemgr/deviceapi/deviceapi_floppy.h>
-#include <console/console.h>
-#include <debug/debug.h>
+#include <sys/deviceapi/deviceapi_floppy.h>
+#include <sys/console/console.h>
+#include <sys/debug/debug.h>
 
 void floppyread() {
 	// get the floppy

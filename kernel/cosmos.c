@@ -6,28 +6,25 @@
  *****************************************************************/
 
 #include <types.h>
-#include <interrupts/idt.h>
-#include <asm/asm.h>
-#include <console/console.h>
-#include <console/drivers/drivers.h>
-#include <devicemgr/devicemgr.h>
-#include <devicemgr/deviceapi/deviceapi_rtc.h>
-#include <devicemgr/deviceapi/deviceapi_speaker.h>
-#include <devicemgr/deviceapi/deviceapi_pit.h>
-#include <devicemgr/deviceapi/deviceapi_serial.h>
-#include <devicemgr/deviceapi/deviceapi_cpu.h>
-#include <devicemgr/deviceapi/deviceapi_dsp.h>
-#include <interrupts/interrupt_router.h>
-#include <mm/mm.h>
-#include <sync/sync.h>
+#include <sys/console/console.h>
+#include <sys/console/drivers/drivers.h>
+#include <sys/interrupt_router/interrupt_router.h>
+#include <sys/i386/video/video.h>
+#include <sys/i386/video/vga/vga.h>
 #include <tests/tests.h>
-#include <tests/testvblock.h>
-#include <video/video.h>
-#include <video/vga/vga.h>
-
+#include <sys/i386/mm/mm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/asm/asm.h>
+#include <sys/i386/interrupts/idt.h>
+#include <sys/deviceapi/deviceapi_rtc.h>
+#include <sys/deviceapi/deviceapi_speaker.h>
+#include <sys/deviceapi/deviceapi_pit.h>
+#include <sys/deviceapi/deviceapi_serial.h>
+#include <sys/deviceapi/deviceapi_cpu.h>
+#include <sys/deviceapi/deviceapi_dsp.h>
 
 // testing slab allocator
-#include <mm/pagetables.h>
+#include <sys/i386/mm/pagetables.h>
 // end slab allocator test includes
 
 void stringtest();
@@ -103,7 +100,6 @@ void CosmOS(){
 	*/
 	//testFunctions();
 
-	
 
 	while (1){
 		asm_hlt();
@@ -137,7 +133,9 @@ void show_cpu_data() {
 //	floppyread();	
 
 //	test_ata();
-	test_vblock();
+//	test_vblock();
+	test_ata();
+//	test_ramdisk();
 
 	while (1){
 		asm_hlt();

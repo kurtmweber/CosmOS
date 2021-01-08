@@ -8,17 +8,17 @@
 // https://wiki.osdev.org/Virtio
 
 #include <dev/virtio/vnic/vnic.h>
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
+#include <sys/interrupt_router/interrupt_router.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
 #include <types.h>
-#include <asm/io.h>
-#include <sleep/sleep.h>
-#include <dev/pci/pci.h>
-#include <debug/assert.h>
+#include <sys/asm/io.h>
+#include <sys/sleep/sleep.h>
+#include <dev/i386/pci/pci.h>
+#include <sys/debug/assert.h>
 #include <dev/virtio/virtio.h>
-#include <devicemgr/deviceapi/deviceapi_ethernet.h>
+#include <sys/deviceapi/deviceapi_ethernet.h>
 #include <dev/virtio/virtqueue.h>
 
 #define VNIC_QUEUE_SIZE 255
