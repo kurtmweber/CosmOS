@@ -39,9 +39,9 @@ void test_ramdisk() {
 		(*ata_api->read)(ata, 7, readdata, 512);
 
 
-//		debug_show_memblock((uint8_t*)readdata, 32);
-//		ASSERT(readdata[0]=='W', "oops");
-//		ASSERT(strlen(readdata)==strlen(testdata), "oops!");
+		debug_show_memblock((uint8_t*)readdata, 32);
+		ASSERT(((uint8_t*)readdata)[0]=='W', "oops");
+		ASSERT(strlen(((uint8_t*)readdata))==strlen(testdata), "oops!");
 	} else {
 		kprintf("Unable to find %s\n",devicename);
 	}
