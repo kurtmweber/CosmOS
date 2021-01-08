@@ -64,7 +64,7 @@ struct vblock_block_request {
   uint32_t type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
   uint32_t reserved;
   uint64_t sector;
-  uint8_t* data;             // Data's size must be a multiple of 512
+  uint16_t* data;             // Data's size must be a multiple of 512
   uint8_t  status;             // 0: OK; 1: Error; 2: Unsupported
 };
 
@@ -146,7 +146,7 @@ void vblock_init(struct device* dev){
     asm_out_d(deviceData->base+VIRTIO_QUEUE_ADDRESS, q_shifted);
 }
 
-void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+void vblock_read(struct device* dev, uint32_t sector, uint16_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 
@@ -156,7 +156,7 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t si
     /*
     * drop a message
     */
-   kprintf("read sector %llu, size %llu\n", sector, size);
+    kprintf("read sector %llu, size %llu\n", sector, count);
 
     /*
     * block request
@@ -184,7 +184,7 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t si
     asm_out_w(deviceData->base+VIRTIO_QUEUE_NOTIFY, 0);
 }
 
-void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+void vblock_write(struct device* dev, uint32_t sector, uint16_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 	panic("vblock write not implemented yet");

@@ -40,28 +40,28 @@ uint64_t ramdisk_calc_address(uint64_t data, uint32_t sector){
     return data+(sector*RAMDISK_SECTOR_SIZE);
 }
 
-void ramdisk_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+void ramdisk_read(struct device* dev, uint32_t sector, uint16_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
     ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
-    ASSERT(size <= RAMDISK_SECTOR_SIZE, "data too large for sector");
+    ASSERT(count <= RAMDISK_SECTOR_SIZE, "data too large for sector");
     struct ramdisk_devicedata* deviceData = (struct ramdisk_devicedata*) dev->deviceData;
     ASSERT(sector < RAMDISK_TOTAL_SECTORS, "invalid sector");
     uint64_t block = ramdisk_calc_address((uint64_t)deviceData->data, sector);
     kprintf("block %#hX\n", block);
-    memcpy(data, (uint8_t*)block, size);
+    memcpy((uint8_t*)data, (uint8_t*)block, count*sizeof(uint16_t));
 }
 
-void ramdisk_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+void ramdisk_write(struct device* dev, uint32_t sector, uint16_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
     ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
-    ASSERT(size <= RAMDISK_SECTOR_SIZE, "data too large for sector");
+    ASSERT(count <= RAMDISK_SECTOR_SIZE, "data too large for sector");
     struct ramdisk_devicedata* deviceData = (struct ramdisk_devicedata*) dev->deviceData;
     ASSERT(sector < RAMDISK_TOTAL_SECTORS, "invalid sector");
     uint64_t block = ramdisk_calc_address((uint64_t)deviceData->data, sector);
     kprintf("block %#hX\n", block);
-    memcpy((uint8_t*)block, data, size);  
+    memcpy((uint8_t*)block, (uint8_t*)data, count*sizeof(uint16_t));  
 }
 
 uint16_t ramdisk_sector_size(struct device* dev) {

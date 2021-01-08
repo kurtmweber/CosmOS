@@ -13,6 +13,7 @@
 #include <sys/debug/assert.h>
 #include <sys/console/console.h>
 #include <sys/sleep/sleep.h>
+#include <sys/asm/byte.h>
 
 struct ata_disk_devicedata {
     struct device* device;
@@ -31,15 +32,16 @@ void calculate_ida_lba_register_values( uint32_t lba, uint8_t* registers) {
 	registers[5]=0;
 }
 
-void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
+void ata_read(struct device* dev, uint32_t sector, uint16_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
 	struct ata_device* disk = ata_get_disk(diskdata->device, diskdata->channel, diskdata->disk);
 
 	ata_select_device(diskdata->controller, diskdata->channel, diskdata->disk);
-	kprintf("channel %llu \n", diskdata->channel);
-	kprintf("disk %llu \n", diskdata->disk);
+//	kprintf("channel %llu \n", diskdata->channel);
+//	kprintf("disk %llu \n", diskdata->disk);
+
 
 	uint16_t sector_size = disk->bytes_per_sector;
 
@@ -52,8 +54,8 @@ void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count
 	// lba
 	uint8_t regs[6];
 	calculate_ida_lba_register_values(sector, regs);
-	kprintf("sector %llu \n", sector);
-	kprintf("regs %llu %llu %llu %llu %llu %llu\n", regs[0],regs[1],regs[2],regs[3],regs[4],regs[5]);
+//	kprintf("sector %llu \n", sector);
+//	kprintf("regs %llu %llu %llu %llu %llu %llu\n", regs[0],regs[1],regs[2],regs[3],regs[4],regs[5]);
 	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_LBA_3, regs[3]);		
 	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_LBA_4, regs[4]);		
 	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_LBA_5, regs[5]);		
@@ -78,15 +80,14 @@ void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count
 	// send the read command
 	ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_COMMAND, ATA_CMD_READ_PIO);		
 
-	// wait 1ms
-	sleep_wait(1);
-
-	while (ata_register_read(diskdata->controller, diskdata->channel, ATA_REGISTER_STATUS) & ATA_STATUS_BUSY) {
+	while(ata_register_read(diskdata->controller, diskdata->channel, ATA_REGISTER_STATUS)& ATA_STATUS_BUSY) {
+		sleep_wait(1);
 	}
-		sleep_wait(1000);
+
+//	kprintf("fff %llu\n",ata_register_read(diskdata->controller, diskdata->channel, ATA_REGISTER_STATUS) & ATA_STATUS_BUSY);
 
 	uint8_t status = ata_register_read(diskdata->controller, diskdata->channel, ATA_REGISTER_STATUS);
-	kprintf("Status: %llu\n", status);
+//	kprintf("Status: %llu\n", status);
 	if (status & ATA_STATUS_ERROR){
 		kprintf("IDE Error\n");
 	} 
@@ -99,12 +100,12 @@ void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count
 		ata_wait_busy(diskdata->controller, diskdata->channel);
 		ata_wait_drq(diskdata->controller, diskdata->channel);
 		for(int i=0;i<sector_size;i++) {
-			data[idx++] = ata_register_read(diskdata->controller, diskdata->channel,ATA_REGISTER_DATA);
+			data[idx++]=ata_register_read_word(diskdata->controller, diskdata->channel,ATA_REGISTER_DATA);
 		}
 	}
 }
 
-void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
+void ata_write(struct device* dev, uint32_t sector, uint16_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
