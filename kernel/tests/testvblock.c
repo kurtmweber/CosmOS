@@ -21,10 +21,10 @@ void test_vblock() {
 	if (0!=ata){
 		struct deviceapi_block* ata_api = (struct deviceapi_block*) ata->api;
 
-		uint16_t data[256];
-        memset((uint8_t*)data, 0, 255*sizeof(uint16_t));
+		uint8_t data[256];
+        memset((uint8_t*)data, 0, 255*sizeof(uint8_t));
 		(*ata_api->read)(ata, 0, data, 255);
-		debug_show_memblock((uint8_t*)data, 32);
+		debug_show_memblock(data, 32);
 	} else {
 		kprintf("Unable to find %s\n",devicename);
 	}

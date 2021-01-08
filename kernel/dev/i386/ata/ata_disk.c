@@ -32,7 +32,7 @@ void calculate_ida_lba_register_values( uint32_t lba, uint8_t* registers) {
 	registers[5]=0;
 }
 
-void ata_read(struct device* dev, uint32_t sector, uint16_t* data, uint32_t count) {
+void ata_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
@@ -95,17 +95,19 @@ void ata_read(struct device* dev, uint32_t sector, uint16_t* data, uint32_t coun
 		kprintf("IDE Busy\n");
 	} 
 
+	uint16_t* buffer = (uint16_t*) data;
+
 	uint32_t idx=0;
 	for (int j =0;j<count;j++) {
 		ata_wait_busy(diskdata->controller, diskdata->channel);
 		ata_wait_drq(diskdata->controller, diskdata->channel);
 		for(int i=0;i<sector_size;i++) {
-			data[idx++]=ata_register_read_word(diskdata->controller, diskdata->channel,ATA_REGISTER_DATA);
+			buffer[idx++]=ata_register_read_word(diskdata->controller, diskdata->channel,ATA_REGISTER_DATA);
 		}
 	}
 }
 
-void ata_write(struct device* dev, uint32_t sector, uint16_t* data, uint32_t count) {
+void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;

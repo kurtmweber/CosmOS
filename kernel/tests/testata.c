@@ -28,13 +28,13 @@ void test_ata() {
 		uint32_t total_size = (*ata_api->total_size)(ata);
 		kprintf("Total size %llu\n",total_size);
 
-		uint32_t buffersize = sizeof(uint16_t)*sector_size;
+		uint32_t buffersize = sizeof(uint8_t)*sector_size;
 
-		uint16_t* data = kmalloc(buffersize);
-		memset((uint8_t*)data, 0, buffersize);
+		uint8_t* data = kmalloc(buffersize);
+		memset(data, 0, buffersize);
 
 		(*ata_api->read)(ata, 0, data, 1); // 1 sector
-		debug_show_memblock((uint8_t*)data, 64);
+		debug_show_memblock(data, 64);
 	} else {
 		kprintf("Unable to find %s\n",devicename);
 	}

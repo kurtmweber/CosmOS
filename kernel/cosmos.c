@@ -132,7 +132,7 @@ void show_cpu_data() {
 //	test_ata();
 //	test_vblock();
 	test_ata();
-	test_ramdisk();
+//	test_ramdisk();
 
 	while (1){
 		asm_hlt();
