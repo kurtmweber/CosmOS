@@ -34,6 +34,11 @@ void ata_register_write(struct ata_controller* controller, uint8_t channel, ata_
 	return;
 }
 
+void ata_register_write_word(struct ata_controller* controller, uint8_t channel, ata_registers reg, uint16_t value){
+//	kprintf("ata_register_write %#X to %#X\n", value, ata_register_port_number(controller, channel, reg));	
+	asm_out_w(ata_register_port_number(controller, channel, reg), value);
+	return;
+}
 /*
 * calculate port offste
 */

@@ -18,6 +18,7 @@ uint8_t ata_register_read(struct ata_controller* controller, uint8_t channel, at
 uint32_t ata_register_read_dword(struct ata_controller* controller, uint8_t channel, ata_registers reg);
 uint16_t ata_register_read_word(struct ata_controller* controller, uint8_t channel, ata_registers reg);
 void ata_register_write(struct ata_controller* controller, uint8_t channel, ata_registers reg, uint8_t value);
+void ata_register_write_word(struct ata_controller* controller, uint8_t channel, ata_registers reg, uint16_t value);
 uint16_t ata_register_port_number(struct ata_controller* controller, uint8_t channel, ata_registers reg);
 void ata_detect_atapi(struct ata_controller* controller, uint8_t channel);
 bool ata_channel_ready(struct ata_controller* controller, uint8_t channel);
