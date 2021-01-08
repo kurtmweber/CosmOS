@@ -6,10 +6,10 @@
 // ****************************************************************
 
 #include <tests/testsb16.h>
-#include <sound/wav.h>
-#include <devicemgr/deviceapi/deviceapi_dsp.h>
-#include <sound/tone.h>
-#include <console/console.h>
+#include <sys/i386/sound/wav.h>
+#include <sys/deviceapi/deviceapi_dsp.h>
+#include <sys/i386/sound/tone.h>
+#include <sys/console/console.h>
 
 void playsb16() {	
 	// get the sb

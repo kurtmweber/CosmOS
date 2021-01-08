@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <tests/testrtc.h>
-#include <debug/debug.h>
-#include <devicemgr/deviceapi/deviceapi_rtc.h>
-#include <console/console.h>
+#include <sys/debug/debug.h>
+#include <sys/deviceapi/deviceapi_rtc.h>
+#include <sys/console/console.h>
 
 void test_rtc() {
     // get the time, b/c we can

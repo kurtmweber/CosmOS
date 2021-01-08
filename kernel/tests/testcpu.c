@@ -6,8 +6,8 @@
 // ****************************************************************
 
 #include <tests/testcpu.h>
-#include <devicemgr/deviceapi/deviceapi_cpu.h>
-#include <console/console.h>
+#include <sys/deviceapi/deviceapi_cpu.h>
+#include <sys/console/console.h>
 
 void show_cpu_data() {
 	// get the CPU

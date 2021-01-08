@@ -8,29 +8,36 @@
 #ifndef _DEV_H
 #define _DEV_H
 
-#include <dev/ata/ata.h>
-#include <dev/keyboard/keyboard.h>
-#include <dev/pci/pci.h>
-#include <dev/pic/pic.h>
-#include <dev/rtc/rtc.h>
-#include <dev/serial/serial.h>
-#include <dev/usb_ehci/usb_ehci.h>
-#include <devicemgr/devicemgr.h>
-#include <dev/network/network.h>
-#include <dev/bridge/bridge.h>
-#include <dev/display/display.h>
-#include <dev/mouse/mouse.h>
-#include <dev/floppy/floppy.h>
-#include <dev/speaker/speaker.h>
-#include <dev/pit/pit.h>
-#include <dev/sb16/sb16.h>
-#include <dev/ac97/ac97.h>
-#include <dev/adlib/adlib.h>
-#include <dev/cmos/cmos.h>
-#include <dev/isadma/isadma.h>
-#include <dev/cpu/cpu.h>
+#ifdef TARGET_PLATFORM_i386
+
+#include <dev/i386/ata/ata_controller.h>
+#include <dev/i386/keyboard/keyboard.h>
+#include <dev/i386/pci/pci.h>
+#include <dev/i386/pic/pic.h>
+#include <dev/i386/rtc/rtc.h>
+#include <dev/i386/serial/serial.h>
+#include <dev/i386//usb_ehci/usb_ehci.h>
+#include <dev/i386/network/network.h>
+#include <dev/i386/bridge/bridge.h>
+#include <dev/i386/display/display.h>
+#include <dev/i386/mouse/mouse.h>
+#include <dev/i386/floppy/floppy.h>
+#include <dev/i386/speaker/speaker.h>
+#include <dev/i386/pit/pit.h>
+#include <dev/i386/sb16/sb16.h>
+#include <dev/i386/ac97/ac97.h>
+#include <dev/i386/adlib/adlib.h>
+#include <dev/i386/cmos/cmos.h>
+#include <dev/i386/isadma/isadma.h>
+#include <dev/i386/cpu/cpu.h>
 #include <dev/virtio/virtio.h>
 #include <dev/ramdisk/ramdisk.h>
-#include <dev/pci_ehci/pci_ehci.h>
+#include <dev/i386//pci_ehci/pci_ehci.h>
+
+#else
+
+#include <dev/arm//pl101/pl101.h>
+
+#endif
 
 #endif

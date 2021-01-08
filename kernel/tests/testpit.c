@@ -6,10 +6,10 @@
 // ****************************************************************
 
 #include <tests/testpit.h>
-#include <debug/debug.h>
-#include <devicemgr/deviceapi/deviceapi_pit.h>
-#include <console/console.h>
-#include <sleep/sleep.h>
+#include <sys/debug/debug.h>
+#include <sys/deviceapi/deviceapi_pit.h>
+#include <sys/console/console.h>
+#include <sys/sleep/sleep.h>
 
 void test_pit() {
 	// get the PIT

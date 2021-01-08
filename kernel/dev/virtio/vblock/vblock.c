@@ -8,19 +8,19 @@
 // https://wiki.osdev.org/Virtio
 
 #include <dev/virtio/vblock/vblock.h>
-#include <interrupts/interrupt_router.h>
-#include <asm/asm.h>
-#include <devicemgr/devicemgr.h>
-#include <console/console.h>
+#include <sys/interrupt_router/interrupt_router.h>
+#include <sys/asm/asm.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/console/console.h>
 #include <types.h>
-#include <asm/io.h>
-#include <sleep/sleep.h>
-#include <dev/pci/pci.h>
-#include <mm/mm.h>
+#include <sys/asm/io.h>
+#include <sys/sleep/sleep.h>
+#include <dev/i386/pci/pci.h>
+#include <sys/i386/mm/mm.h>
 #include <dev/virtio/virtio.h>
-#include <debug/assert.h>
+#include <sys/debug/assert.h>
 #include <dev/virtio/virtqueue.h>
-#include <devicemgr/deviceapi/deviceapi_block.h>
+#include <sys/deviceapi/deviceapi_block.h>
 
 // registers
 #define VIRTIO_BLOCK_TOTAL_SECTORS      0x14
@@ -64,7 +64,7 @@ struct vblock_block_request {
   uint32_t type;              // 0: Read; 1: Write; 4: Flush; 11: Discard; 13: Write zeroes
   uint32_t reserved;
   uint64_t sector;
-  uint8_t* data;             // Data's size must be a multiple of 512
+  uint8_t* data;               // Data's size must be a multiple of 512
   uint8_t  status;             // 0: OK; 1: Error; 2: Unsupported
 };
 
@@ -146,7 +146,7 @@ void vblock_init(struct device* dev){
     asm_out_d(deviceData->base+VIRTIO_QUEUE_ADDRESS, q_shifted);
 }
 
-void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 
@@ -156,7 +156,7 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t si
     /*
     * drop a message
     */
-   kprintf("read sector %llu, size %llu\n", sector, size);
+    kprintf("read sector %llu, size %llu\n", sector, count);
 
     /*
     * block request
@@ -184,7 +184,7 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t si
     asm_out_w(deviceData->base+VIRTIO_QUEUE_NOTIFY, 0);
 }
 
-void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t size) {
+void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
 	ASSERT_NOT_NULL(data, "data cannot be null");
 	panic("vblock write not implemented yet");
@@ -197,11 +197,11 @@ uint16_t vblock_sector_size(struct device* dev) {
     return deviceData->sectorLength;
 }
 
-uint32_t vblock_total_sectors(struct device* dev){
+uint32_t vblock_total_size(struct device* dev){
 	ASSERT_NOT_NULL(dev, "dev cannot be null");
     ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
-    return deviceData->totalSectors;
+    return deviceData->totalSectors*deviceData->sectorLength;
 }
 
 void vblock_search_cb(struct pci_device* dev){
@@ -226,7 +226,7 @@ void vblock_search_cb(struct pci_device* dev){
     api->write = &vblock_write;
     api->read = &vblock_read;
     api->sector_size = &vblock_sector_size;
-    api->total_sectors = &vblock_total_sectors;
+    api->total_size = &vblock_total_size;
     deviceinstance->api = api;
     /*
     * register

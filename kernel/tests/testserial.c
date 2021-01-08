@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <tests/testserial.h>
-#include <devicemgr/deviceapi/deviceapi_serial.h>
-#include <console/console.h>
-#include <debug/debug.h>
+#include <sys/deviceapi/deviceapi_serial.h>
+#include <sys/console/console.h>
+#include <sys/debug/debug.h>
 
 /*
 * write a message via the uniform serial api
