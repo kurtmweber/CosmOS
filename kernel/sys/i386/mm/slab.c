@@ -20,7 +20,7 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
      */
 
     uint64_t consecutive_pages = 0;
-    uint64_t i;
+    uint64_t i, j;
     uint64_t start_page = 0;
     
     spinlock_acquire(&mem_lock);
@@ -43,8 +43,12 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
             }
             consecutive_pages++;
 
-            // Return if we've got what we need
+            // Mark pages as used and return if we've got what we need
             if (consecutive_pages == pages){
+                for (j = start_page; j < consecutive_pages + start_page; j++){
+                    page_directory[i].ref_count++;
+                    page_directory[i].type = purpose;
+                }
                 spinlock_release(&mem_lock);
                 return start_page;
             }
