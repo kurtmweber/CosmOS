@@ -44,14 +44,6 @@ void mmu_init(){
 	
 	setup_page_directory(page_directory_start, map, num_blocks);
 	
-	init_usable_phys_blocks(map[lrg_block]);
-	
-	enum_usable_phys_blocks(map, num_blocks);
-	
-	sort_usable_phys_blocks();
-
-	reset_brk_after_malloc();
-
 	// split off the first three blocks of physical memory we've allocated:
 	// 0x0000000000000000 - 0x00000000000FFFFF: ID-mapped first megabyte
 	// 0x0000000000100000 - 0x00000000008FFFFF: Kernel stack

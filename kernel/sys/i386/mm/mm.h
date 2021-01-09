@@ -79,11 +79,8 @@ typedef struct mem_block{
 typedef mem_block kmalloc_block;
 
 // blockmgmt.c
-void enum_usable_phys_blocks(int_15_map *map, uint8_t num_blocks);
 mem_block *find_containing_block(void *addr, mem_block *list);
-void init_usable_phys_blocks(int_15_map base);
 int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block);
-void sort_usable_phys_blocks();
 
 // mm.c
 void *find_aligned_after(void *address, uint64_t alignment);
@@ -98,7 +95,6 @@ void *kmalloc(uint64_t size);
 void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment);
 void kmalloc_init();
 void *krealloc(void *ptr, uint64_t size);
-void reset_brk_after_malloc();
 
 extern void *brk;
 kmalloc_block *find_avail_kmalloc_block_list(uint64_t size);
