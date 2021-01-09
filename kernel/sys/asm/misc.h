@@ -7,6 +7,7 @@
 void asm_cli();
 void asm_hlt();
 void asm_sti();
+void *asm_cr2_read();
 pttentry asm_cr3_read();
 void asm_cr3_reload();
 

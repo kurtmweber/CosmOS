@@ -26,6 +26,17 @@ void asm_cli(){
 	return;
 }
 
+void *asm_cr2_read(){
+	void *ret;
+
+	asm volatile(
+		"mov %cr2, %0"
+		: "=r" (ret)
+	);
+
+	return ret;
+}
+
 pttentry asm_cr3_read(){
 	pttentry cr3;
 	
