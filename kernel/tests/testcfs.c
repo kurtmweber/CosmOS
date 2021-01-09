@@ -16,8 +16,9 @@ void test_cfs() {
 
 	struct device* dsk = devicemgr_find_device(devicename);
 	if (0!=dsk){
-        struct list* lst = list_new();
-        cfs_list_dir(dsk, lst);
+        cfs_format(dsk);
+//        struct list* lst = list_new();
+ //       cfs_list_dir(dsk, lst);
 	} else {
 		kprintf("Unable to find %s\n",devicename);
 	}

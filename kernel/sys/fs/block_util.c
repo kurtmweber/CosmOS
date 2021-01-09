@@ -13,6 +13,10 @@
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/debug/assert.h>
 
+uint16_t block_get_sector_count(struct device* dev){
+    return block_get_total_size(dev) / block_get_sector_size(dev);
+}
+
 uint16_t block_get_sector_size(struct device* dev){
     ASSERT_NOT_NULL(dev, "dev cannot be null");    
 	struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;

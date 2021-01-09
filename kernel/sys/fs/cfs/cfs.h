@@ -13,5 +13,5 @@
 #include <sys/collection/list/list.h>
 
 void cfs_list_dir(struct device* dev, struct list* lst);
-
+void cfs_format(struct device* dev);
 #endif
