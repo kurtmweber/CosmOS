@@ -33,7 +33,7 @@ struct fat_boot_block_parameters {
     uint8_t large_sector_count[4];
 } __attribute__((packed));
 
-struct fat_extended_boot_record {
+struct fat_extended_boot_record_fat12_fat16 {
     uint8_t drive_number;
     uint8_t flags;
     uint8_t reserved; // 0x28 or 0x29
@@ -45,7 +45,7 @@ struct fat_extended_boot_record {
 
 } __attribute__((packed));
 
-void fat_dump_febr(struct fat_extended_boot_record* febr) {
+void fat_dump_febr(struct fat_extended_boot_record_fat12_fat16* febr) {
     kprintf("drive_number %llu\n", febr->drive_number);
     kprintf("flags %llu\n", febr->flags);
     kprintf("volume_id %s\n", febr->volume_id);
@@ -53,7 +53,7 @@ void fat_dump_febr(struct fat_extended_boot_record* febr) {
     kprintf("sys_id %s\n", febr->sys_id);
     kprintf("signature %llu %llu\n", febr->signature[0], febr->signature[1]);
 
-    debug_show_memblock((uint8_t*)febr, sizeof(struct fat_extended_boot_record));
+    debug_show_memblock((uint8_t*)febr, sizeof(struct fat_extended_boot_record_fat12_fat16));
 }
 
 void fat_list_dir(struct device* dev, struct list* lst) {
@@ -73,7 +73,7 @@ void fat_list_dir(struct device* dev, struct list* lst) {
 	debug_show_memblock(buffer, sector_size);
 
     struct fat_boot_block_parameters* fbbp = (struct fat_boot_block_parameters*) buffer;
-    struct fat_extended_boot_record* febr = (struct fat_extended_boot_record*) &(buffer[sizeof(struct fat_boot_block_parameters)]);
+    struct fat_extended_boot_record_fat12_fat16* febr = (struct fat_extended_boot_record_fat12_fat16*) &(buffer[sizeof(struct fat_boot_block_parameters)]);
  //   fat_dump_febr(febr);
 }
 
