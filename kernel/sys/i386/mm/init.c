@@ -7,6 +7,7 @@
 
 #include <types.h>
 #include <sys/console/console.h>
+#include <sys/asm/misc.h>
 #include <dev/i386/isadma/isadma.h>
 #include <dev/virtio/virtqueue.h>
 
@@ -23,6 +24,8 @@ void mmu_init(){
 	page_directory_t *page_directory_start;
 	
 	brk = &_end;
+
+	system_cr3 = asm_cr3_read();
 
 	/*
 	* ISA DMA buffers need to be in lower 64MB of RAM and page aligned

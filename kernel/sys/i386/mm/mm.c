@@ -10,6 +10,8 @@
 mem_block init_phys_block;
 mem_block *usable_phys_blocks;
 
+pttentry system_cr3;
+
 void *find_aligned_after(void *address, uint64_t alignment){
     // given an address, returns the next *alignment*-aligned address after it
     void *retval;

@@ -100,6 +100,7 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size);
 extern void *brk;
 extern mem_block init_phys_block;
 extern mem_block *usable_phys_blocks;
+extern pttentry system_cr3;
 void *find_aligned_after(void *address, uint64_t alignment);
 void *find_last_phys_addr(int_15_map *phys_map, uint8_t num_blocks);
 
