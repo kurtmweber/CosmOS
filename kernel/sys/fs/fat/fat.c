@@ -75,6 +75,8 @@ enum fat_type {
 * calculated parameters of this file system
 */
 struct fat_fs_parameters {
+	uint16_t sector_size;
+	uint32_t total_size;
 	uint32_t total_sectors;
 	uint32_t fat_size;
 	uint32_t root_dir_sectors;
@@ -86,6 +88,8 @@ struct fat_fs_parameters {
 	uint32_t root_cluster_32;
 	enum fat_type type;
 };
+
+const uint8_t FAT_NAME[] = {"fat"};
 
 void fat_dump_fat_extBS_16(struct fat_extBS_16* ebs) {
     kprintf("drive_number %llu\n", ebs->bios_drive_num);
@@ -100,14 +104,14 @@ void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param)
 	ASSERT_NOT_NULL(dev, "dev cannot be null");    
     ASSERT_NOT_NULL(param, "param cannot be null");    
 
-    uint16_t sector_size = block_get_sector_size(dev);
-    kprintf("sector size: %llu\n", sector_size);
+    param->sector_size = block_get_sector_size(dev);
+    kprintf("sector size: %llu\n", param->sector_size);
 
-    uint32_t total_size = block_get_total_size(dev);
-    kprintf("total size: %llu\n", total_size);
+    param->total_size = block_get_total_size(dev);
+    kprintf("total size: %llu\n", param->total_size);
 
-    uint8_t* buffer = kmalloc(sector_size);
-	memset(buffer, 0, sector_size);
+    uint8_t* buffer = kmalloc(param->sector_size);
+	memset(buffer, 0, param->sector_size);
 
     block_read(dev, 0, buffer,1);
 //	debug_show_memblock(buffer, sector_size);
@@ -153,10 +157,9 @@ void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param)
     }
 
     kprintf("type: %llu\n", param->type);
+
+	kfree(buffer);
 }
-
-
-const uint8_t FAT_NAME[] = {"fat"};
 
 const uint8_t* fat_name() {
     return FAT_NAME;
@@ -172,6 +175,20 @@ void fat_list_dir(struct device* dev, struct list* lst) {
 
 	struct fat_fs_parameters fs_parameters;
 	fat_read_fs_parameters(dev, &fs_parameters);
+
+	if ((fs_parameters.type==FAT12) || (fs_parameters.type==FAT16)){
+
+	    uint8_t* buffer = kmalloc(fs_parameters.sector_size);
+		memset(buffer, 0, fs_parameters.sector_size);
+
+    	block_read(dev, 0, buffer,1);
+
+		// read the first dir entry
+
+		kfree(buffer);
+	} else {
+		panic("Unsupported FAT type");
+	}
 }
 
 void fat_register() {
