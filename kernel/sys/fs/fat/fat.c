@@ -64,6 +64,21 @@ struct fat_BS {
 	uint8_t		extended_section[54];
 }__attribute__((packed));
 
+struct fat_dir {
+	uint8_t name[11];
+	uint8_t attributes;
+	uint8_t reserved;
+	uint8_t creation_time;
+	uint16_t time;
+	uint16_t date;
+	uint16_t last_accessed;
+	uint16_t cluster_high;
+	uint16_t last_mod_time;
+	uint16_t last_mod_date;
+	uint16_t cluster_low;
+	uint32_t size;
+}__attribute__((packed));
+
 enum fat_type {
 	FAT12 = 0x01,
 	FAT16 = 0x02,
@@ -75,8 +90,15 @@ enum fat_type {
 * calculated parameters of this file system
 */
 struct fat_fs_parameters {
+	// from fs_BS
+	uint8_t sectors_per_cluster;
+	// from device
 	uint16_t sector_size;
+	// from device
 	uint32_t total_size;
+	/*
+	* rest of these are calculated
+	*/ 
 	uint32_t total_sectors;
 	uint32_t fat_size;
 	uint32_t root_dir_sectors;
@@ -120,6 +142,8 @@ void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param)
     struct fat_extBS_16* fat_boot_ext_16 = (struct fat_extBS_16*) &(fat_boot->extended_section);
     struct fat_extBS_32* fat_boot_ext_32 = (struct fat_extBS_32*) &(fat_boot->extended_section);
 //    fat_dump_fat_extBS_16(ebs);
+
+	param->sectors_per_cluster = fat_boot->sectors_per_cluster;
 
     param->total_sectors = (fat_boot->total_sectors_16 == 0)? fat_boot->total_sectors_32 : fat_boot->total_sectors_16;
 	kprintf("total_sectors %llu\n",param->total_sectors);
@@ -169,6 +193,13 @@ void fat_format(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");    
 }
 
+/*
+* find first sector of cluster
+*/
+uint64_t first_sector_of_cluster(uint32_t cluster, struct fat_fs_parameters* fs_parameters) {
+	return ((cluster - 2) * fs_parameters->sectors_per_cluster) + fs_parameters->first_data_sector;
+}
+
 void fat_list_dir(struct device* dev, struct list* lst) {
     ASSERT_NOT_NULL(dev, "dev cannot be null");    
     ASSERT_NOT_NULL(lst, "lst cannot be null");
@@ -177,13 +208,32 @@ void fat_list_dir(struct device* dev, struct list* lst) {
 	fat_read_fs_parameters(dev, &fs_parameters);
 
 	if ((fs_parameters.type==FAT12) || (fs_parameters.type==FAT16)){
-
 	    uint8_t* buffer = kmalloc(fs_parameters.sector_size);
 		memset(buffer, 0, fs_parameters.sector_size);
 
-    	block_read(dev, 0, buffer,1);
+		// read first sector of root dir
+    	block_read(dev, fs_parameters.first_root_dir_sector, buffer,1);
 
-		// read the first dir entry
+		// loop entries
+		for (uint16_t i=0; i<fs_parameters.sector_size; i=i+sizeof(struct fat_dir)){
+			struct fat_dir* entry = (struct fat_dir*) &(buffer[i]);
+			// entry ok
+			if (entry->name[0]!=0){
+				// entry is used
+				if (entry->name[0]!=0xe5) {
+					// not a long file name
+					if (entry->name[10]!=0xFF){
+						kprintf("%s\n",entry->name);
+					}
+				}
+			} else {
+				// we done!
+				break;
+			}
+		}
+
+//		debug_show_memblock(buffer, fs_parameters.sector_size);
+
 
 		kfree(buffer);
 	} else {
