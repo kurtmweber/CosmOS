@@ -9,6 +9,8 @@
 #include <dev/i386/ata/ata_util.h>
 #include <sys/asm/asm.h>
 #include <sys/i386/mm/mm.h>
+#include <sys/debug/debug.h>
+#include <sys/console/console.h>
 
 uint32_t ata_detect_extract_dword(const char *identify_buf, ata_identify_offsets offset){
 	return *((uint32_t *)(&identify_buf[offset]));
@@ -78,6 +80,7 @@ char *ata_detect_read_identify(struct ata_controller* controller, uint8_t channe
 }
 
 void ata_extract_identity(const char* identity, struct ata_device* dev) {
+//	debug_show_memblock(identity, 512);
 	if (ata_detect_extract_word(identity, ATA_IDENTIFY_OFFSET_COMMAND_SET_2) & (1 << 10)){
 		dev->size = ata_detect_extract_dword(identity, ATA_IDENTIFY_OFFSET_LBA) * 512;
 	} else {
@@ -87,5 +90,11 @@ void ata_extract_identity(const char* identity, struct ata_device* dev) {
 	dev->bytes_per_sector = ata_detect_sector_size(identity );
 	dev->model=ata_detect_extract_string(identity , 40, ATA_IDENTIFY_OFFSET_MODEL);
 	dev->serial=ata_detect_extract_string(identity , 20, ATA_IDENTIFY_OFFSET_SERIAL);
+
+//	kprintf("Size: %llu\n", dev->size);
+//	kprintf("Removable: %llu\n", dev->removable);
+//	kprintf("Bytes_per_sector: %llu\n", dev->bytes_per_sector);
+//	kprintf("Model: %s\n", dev->model);
+//	kprintf("Serial: %s\n", dev->serial);
 }
 

@@ -13,7 +13,7 @@
 #include <sys/collection/list/list.h>
 
 void test_fat() {
-    const uint8_t device[] = {"disk2"};
+    const uint8_t device[] = {"disk1"};
 	struct device* disk = devicemgr_find_device(device);
     if (0!=disk){
         struct list* lst = list_new();
