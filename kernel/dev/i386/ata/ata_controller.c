@@ -68,8 +68,8 @@ void device_init_ata(struct device* dev){
 	// detect addresses
 	ata_detect_addresses(dev);
 
-	kprintf("   Primary IDE I/O at %#X, control at %#X\n", controller->channels[ATA_PRIMARY].base_io, controller->channels[ATA_PRIMARY].base_io_ctrl);
-	kprintf("   Secondary IDE I/O at %#X, control at %#X\n", controller->channels[ATA_SECONDARY].base_io, controller->channels[ATA_SECONDARY].base_io_ctrl);
+	kprintf("    Primary IDE I/O at %#X, control at %#X\n", controller->channels[ATA_PRIMARY].base_io, controller->channels[ATA_PRIMARY].base_io_ctrl);
+	kprintf("    Secondary IDE I/O at %#X, control at %#X\n", controller->channels[ATA_SECONDARY].base_io, controller->channels[ATA_SECONDARY].base_io_ctrl);
 	
 	// if this doesn't set the IRQ then this is a parallel IDE, but we don't need to know that
 	pci_header_set_irq(dev->pci->bus, dev->pci->device, dev->pci->function, IDE_SERIAL_IRQ);
@@ -161,6 +161,7 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 			controller->channels[i].devices[j].removable = (ata_detect_extract_word(controller->identity , ATA_IDENTIFY_OFFSET_GENERAL) & (1 << 7)) >> 7;
 			controller->channels[i].devices[j].bytes_per_sector = ata_detect_sector_size(controller->identity );
 			// register the device
+			kprintf("    Found disk at channel %llu, device %llu\n",i,j);
 			ata_register_disk(device, i, j);
 		}
 	}

@@ -12,9 +12,13 @@
 #include <sys/sleep/sleep.h>
 #include <sys/console/console.h>
 
+//#define ATA_UTIL_DEBUG
+
 uint8_t ata_register_read(struct ata_controller* controller, uint8_t channel, ata_registers reg){
 	uint8_t ret = asm_in_b(ata_register_port_number(controller, channel, reg));
-//	kprintf("ata_register_read %#X from %#X\n",ret, ata_register_port_number(controller, channel, reg));	
+#ifdef ATA_UTIL_DEBUG
+	kprintf("ata_register_read %#X from %#X\n",ret, ata_register_port_number(controller, channel, reg));	
+#endif
 	return ret;
 }
 
@@ -24,18 +28,24 @@ uint32_t ata_register_read_dword(struct ata_controller* controller, uint8_t chan
 
 uint16_t ata_register_read_word(struct ata_controller* controller, uint8_t channel, ata_registers reg){
 	uint16_t ret =  asm_in_w(ata_register_port_number(controller, channel, reg));
-//	kprintf("ata_register_read %#X from %#X\n",ret, ata_register_port_number(controller, channel, reg));	
+#ifdef ATA_UTIL_DEBUG
+	kprintf("ata_register_read %#X from %#X\n",ret, ata_register_port_number(controller, channel, reg));	
+#endif
 	return ret;
 }
 
 void ata_register_write(struct ata_controller* controller, uint8_t channel, ata_registers reg, uint8_t value){
-//	kprintf("ata_register_write %#X to %#X\n", value, ata_register_port_number(controller, channel, reg));	
+#ifdef ATA_UTIL_DEBUG
+	kprintf("ata_register_write %#X to %#X\n", value, ata_register_port_number(controller, channel, reg));	
+#endif
 	asm_out_b(ata_register_port_number(controller, channel, reg), value);
 	return;
 }
 
 void ata_register_write_word(struct ata_controller* controller, uint8_t channel, ata_registers reg, uint16_t value){
-//	kprintf("ata_register_write %#X to %#X\n", value, ata_register_port_number(controller, channel, reg));	
+#ifdef ATA_UTIL_DEBUG
+	kprintf("ata_register_write %#X to %#X\n", value, ata_register_port_number(controller, channel, reg));	
+#endif
 	asm_out_w(ata_register_port_number(controller, channel, reg), value);
 	return;
 }

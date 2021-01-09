@@ -154,7 +154,7 @@ void device_init_ata_disk(struct device* dev){
 	struct ata_device* dsk = ata_get_disk(disk->device, disk->channel, disk->disk);
 	ASSERT_NOT_NULL(dsk, "dsk should not be null");
 
-	kprintf("Init %s serial '%s' on controller %s (%s)\n", dev->description,  dsk->serial, disk->device->name, dev->name);
+	kprintf("Init %s serial '%s' on controller %s of size %llu (%s)\n", dev->description,  dsk->serial, disk->device->name, dsk->size, dev->name);
 }
 
 void ata_register_disk(struct device* controllerDevice, uint8_t channel, uint8_t disk) {
