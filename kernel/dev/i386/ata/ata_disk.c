@@ -39,12 +39,11 @@ void ata_rw(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count, 
 	ASSERT_NOT_NULL(data, "data cannot be null");
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
 	struct ata_device* disk = ata_get_disk(diskdata->device, diskdata->channel, diskdata->disk);
-
-	ata_select_device(diskdata->controller, diskdata->channel, diskdata->disk);
-//	kprintf("channel %llu \n", diskdata->channel);
-//	kprintf("disk %llu \n", diskdata->disk);]
-
 	uint16_t sector_size = disk->bytes_per_sector;
+
+//	kprintf("channel %llu \n", diskdata->channel);
+//	kprintf("disk %llu \n", diskdata->disk);
+	ata_select_device(diskdata->controller, diskdata->channel, diskdata->disk);
 
 	// wait
 	ata_wait_busy(diskdata->controller, diskdata->channel);
@@ -76,12 +75,12 @@ void ata_rw(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count, 
 	*	Bit 7: Obsolete and isn't used, but should be set.
 	*/
 	// E0 is bits 5,6,7 set.
-	if (diskdata->channel==0) {
+	if (diskdata->disk==0) {
 		// master
 		ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_HDDEVSEL,  0xE0);
 	} else {
 		// slave
-		ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_HDDEVSEL,  0xE0 | 0x08);
+		ata_register_write(diskdata->controller, diskdata->channel,ATA_REGISTER_HDDEVSEL,  0xE0 | 0x10);
 	}
 
 	if (read==true) { 
