@@ -82,6 +82,9 @@ struct fat_fs_parameters {
 	uint32_t first_fat_sector;
 	uint32_t data_sectors;
 	uint32_t total_clusters;
+	uint32_t first_root_dir_sector;
+	uint32_t root_cluster_32;
+	enum fat_type type;
 };
 
 void fat_dump_fat_extBS_16(struct fat_extBS_16* ebs) {
@@ -132,20 +135,26 @@ void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param)
     param->total_clusters = param->data_sectors / fat_boot->sectors_per_cluster;
   	kprintf("total_clusters %llu\n",param->total_clusters);
 
-   // kprintf("total_clusters: %llu\n", param->total_clusters);
+    param->first_root_dir_sector = param->first_data_sector - param->root_dir_sectors;
+  	kprintf("first_root_dir_sector %llu\n",param->first_root_dir_sector);
+
+    param->root_cluster_32 =fat_boot_ext_32->root_cluster;
+  	kprintf("root_cluster_32 %llu\n",param->root_cluster_32);
+
+	// fat type
+    if(param->total_clusters < 4085) {
+        param->type= FAT12;
+    } else if(param->total_clusters < 65525){
+        param->type= FAT16;
+    } else if (param->total_clusters < 268435445) {
+        param->type= FAT32;
+    } else { 
+        param->type= ExFAT;
+    }
+
+    kprintf("type: %llu\n", param->type);
 }
 
-enum fat_type fat_fat_type(uint32_t total_clusters){
-    if(total_clusters < 4085) {
-        return  FAT12;
-    } else if(total_clusters < 65525){
-        return FAT16;
-    } else if (total_clusters < 268435445) {
-        return FAT32;
-    } else { 
-        return ExFAT;
-    }
-}
 
 const uint8_t FAT_NAME[] = {"fat"};
 
