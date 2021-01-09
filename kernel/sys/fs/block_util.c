@@ -46,5 +46,4 @@ void block_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t cou
     (*block_api->read)(dev, sector, data, count);
 }
 
-
 #endif
