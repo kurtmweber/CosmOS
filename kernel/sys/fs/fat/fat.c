@@ -63,6 +63,13 @@ struct fat_BS {
 	uint8_t		extended_section[54];
 }__attribute__((packed));
 
+enum fat_type {
+	FAT12 = 0x01,
+	FAT16 = 0x02,
+	FAT32 = 0x03,
+	ExFAT = 0x04
+};
+
 void fat_dump_fat_extBS_16(struct fat_extBS_16* ebs) {
     kprintf("drive_number %llu\n", ebs->bios_drive_num);
   //  kprintf("volume_id %llu\n", ebs->volume_id);
@@ -86,11 +93,32 @@ void fat_list_dir(struct device* dev, struct list* lst) {
 	memset(buffer, 0, sector_size);
 
     block_read(dev, 0, buffer,1);
-	debug_show_memblock(buffer, sector_size);
+//	debug_show_memblock(buffer, sector_size);
 
-    struct fat_BS* bs = (struct fat_BS*) buffer;
-    struct fat_extBS_16* ebs = (struct fat_extBS_16*) &(bs->extended_section);
+    struct fat_BS* fat_boot = (struct fat_BS*) buffer;
+    struct fat_extBS_16* fat_boot_ext_16 = (struct fat_extBS_16*) &(fat_boot->extended_section);
+    struct fat_extBS_32* fat_boot_ext_32 = (struct fat_extBS_32*) &(fat_boot->extended_section);
 //    fat_dump_fat_extBS_16(ebs);
+
+    uint32_t total_sectors = (fat_boot->total_sectors_16 == 0)? fat_boot->total_sectors_32 : fat_boot->total_sectors_16;
+    uint32_t fat_size = (fat_boot->table_size_16 == 0)? fat_boot_ext_32->table_size_32 : fat_boot->table_size_16;
+    uint32_t root_dir_sectors = ((fat_boot->root_entry_count * 32) + (fat_boot->bytes_per_sector - 1)) / fat_boot->bytes_per_sector;
+    uint32_t first_data_sector = fat_boot->reserved_sector_count + (fat_boot->table_count * fat_size) + root_dir_sectors;
+    uint32_t first_fat_sector = fat_boot->reserved_sector_count;
+    uint32_t data_sectors = fat_boot->total_sectors_16 - (fat_boot->reserved_sector_count + (fat_boot->table_count * fat_size) + root_dir_sectors);
+    uint32_t total_clusters = data_sectors / fat_boot->sectors_per_cluster;
+
+    kprintf("total_clusters: %llu\n", total_clusters);
 }
 
-
+enum fat_type fat_fat_type(uint32_t total_clusters){
+    if(total_clusters < 4085) {
+        return  FAT12;
+    } else if(total_clusters < 65525){
+        return FAT16;
+    } else if (total_clusters < 268435445) {
+        return FAT32;
+    } else { 
+        return ExFAT;
+    }
+}
