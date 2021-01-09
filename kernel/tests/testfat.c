@@ -6,23 +6,29 @@
 // ****************************************************************
 
 #include <tests/testfat.h>
-#include <sys/fs/fat/fat.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/console/console.h>
 #include <sys/collection/list/list.h>
+#include <sys/fs/fs.h>
 
 void test_fat() {
-    const uint8_t device[] = {"disk1"};
-	struct device* disk = devicemgr_find_device(device);
-    if (0!=disk){
-        struct list* lst = list_new();
+	// get virtual block device
+	uint8_t devicename[] ={"disk1"};
+	uint8_t fsname[] ={"fat"};
 
-        fat_list_dir(disk, lst);
-        
+	struct device* dsk = devicemgr_find_device(devicename);
+	if (0!=dsk){
 
-//        sfs_format(disk);
-    } else {
-        kprintf("Unable to find %s\n",device);
-    }
+		struct filesystem* fs = fs_find(fsname);
+		if (0!=fs){
+            struct list* lst = list_new();
+
+			(*fs->list_dir)(dsk, lst);
+		} else {
+			kprintf("Unable to find %s\n",fsname);
+		}
+	} else {
+		kprintf("Unable to find %s\n",devicename);
+	}
 }

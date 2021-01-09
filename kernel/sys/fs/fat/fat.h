@@ -9,9 +9,7 @@
 #define _FAT_H
 
 #include <types.h>
-#include <sys/devicemgr/devicemgr.h>
-#include <sys/collection/list/list.h>
 
-void fat_list_dir(struct device* dev, struct list* lst);
+void fat_register();
 
 #endif

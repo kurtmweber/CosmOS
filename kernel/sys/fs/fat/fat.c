@@ -13,6 +13,7 @@
 #include <sys/i386/mm/mm.h>
 #include <sys/debug/debug.h>
 #include <sys/string/mem.h>
+#include <sys/fs/fs.h>
 
 // https://wiki.osdev.org/FAT
 
@@ -121,4 +122,22 @@ enum fat_type fat_fat_type(uint32_t total_clusters){
     } else { 
         return ExFAT;
     }
+}
+
+const uint8_t FAT_NAME[] = {"fat"};
+
+const uint8_t* fat_name() {
+    return FAT_NAME;
+}
+
+void fat_format(struct device* dev) {
+	ASSERT_NOT_NULL(dev, "dev cannot be null");    
+}
+
+void fat_register() {
+    struct filesystem* fs = (struct filesystem*) kmalloc(sizeof(struct filesystem));
+    fs->format = &fat_format;
+    fs->list_dir= &fat_list_dir;
+    fs->name = &fat_name;
+    fs_register(fs);
 }

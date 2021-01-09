@@ -13,6 +13,7 @@
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/string/mem.h>
 #include <sys/fs/block_util.h>
+#include <sys/fs/fs.h>
 
 #define SFS_VOLUME_IDENTIFIER           0x01
 #define SFS_STARTING_MARKER             0x02
@@ -144,4 +145,23 @@ void sfs_format(struct device* dev) {
 
     // write superblock
     block_write(dev, 0, (uint8_t*)&superblock,1);
+}
+
+void sfs_list_dir(struct device* dev, struct list* lst) {
+    ASSERT_NOT_NULL(dev, "dev cannot be null");    
+    ASSERT_NOT_NULL(lst, "lst cannot be null");    
+}
+
+const uint8_t SFS_NAME[] = {"sfs"};
+
+const uint8_t* sfs_name() {
+    return SFS_NAME;
+}
+
+void sfs_register() {
+    struct filesystem* fs = (struct filesystem*) kmalloc(sizeof(struct filesystem));
+    fs->format = &sfs_format;
+    fs->list_dir= &sfs_list_dir;
+    fs->name = &sfs_name;
+    fs_register(fs);
 }

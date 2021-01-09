@@ -23,6 +23,7 @@
 #include <sys/deviceapi/deviceapi_cpu.h>
 #include <sys/deviceapi/deviceapi_dsp.h>
 #include <sys/sync/sync.h>
+#include <sys/fs/fs.h>
 
 // testing slab allocator
 #include <sys/i386/mm/pagetables.h>
@@ -94,6 +95,12 @@ void CosmOS(){
 
 	asm_sti();
 
+	/*
+	* register file systems
+	*/
+	fs_init();
+
+
 	show_cpu_data();
 //	playsb16();
 	/*
@@ -144,5 +151,3 @@ void show_cpu_data() {
 		asm_hlt();
 	}
 }
-
-

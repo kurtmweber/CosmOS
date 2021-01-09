@@ -9,8 +9,7 @@
 #define _SFS_H
 
 #include <types.h>
-#include <sys/devicemgr/devicemgr.h>
 
-void sfs_format(struct device* dev);
+void sfs_register();
 
 #endif

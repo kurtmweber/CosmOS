@@ -13,6 +13,7 @@
 #include <sys/i386/mm/mm.h>
 #include <sys/debug/debug.h>
 #include <sys/string/mem.h>
+#include <sys/fs/fs.h>
 
 /*
 * every 512 byte sector contains 512 bytes of sector map
@@ -158,4 +159,18 @@ void cfs_format(struct device* dev) {
         memset((uint8_t*)&blockmap,0,sizeof(struct cfs_superblock));
         cfs_write_blockmap(dev, &blockmap, 1+i);
    }
+}
+
+const uint8_t CFS_NAME[] = {"cfs"};
+
+const uint8_t* cfs_name() {
+    return CFS_NAME;
+}
+
+void cfs_register() {
+    struct filesystem* fs = (struct filesystem*) kmalloc(sizeof(struct filesystem));
+    fs->format = &cfs_format;
+    fs->list_dir= &cfs_list_dir;
+    fs->name = &cfs_name;
+    fs_register(fs);
 }
