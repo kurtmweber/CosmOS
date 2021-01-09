@@ -1,7 +1,7 @@
 include mk/build.mk
 
 BOOTIMAGE=hda.img
-
+BLANK_DISK=blank.img
 all: subsystems
 
 bootimage: subsystems
@@ -11,8 +11,11 @@ bootimage: subsystems
 	$(DD) if=boot/x86-64/boot3.bin of=$(BOOTIMAGE) conv=notrunc bs=512 count=1 seek=3
 	$(DD) if=kernel/cosmos.bin of=$(BOOTIMAGE) conv=notrunc bs=512 count=2048 seek=4
 
-subsystems: boot-subsystem kernel-subsystem
+subsystems: boot-subsystem kernel-subsystem blank-disk
 	
+blank-disk:
+	$(DD) if=/dev/zero of=$(BLANK_DISK) bs=1024 count=10240
+
 boot-subsystem:
 	cd boot/x86-64 && $(MAKE)
 	

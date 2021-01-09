@@ -15,7 +15,9 @@ QEMUARGS=                                                 \
   -device sb16,audiodev=audio0                            \
   -nic user,model=virtio-net-pci                          \
   -drive if=virtio,file=hda.img,format=raw                \
-  -drive file=Dos622-1.img,index=1,format=raw
+  -drive file=Dos622-1.img,index=1,format=raw           \
+  -drive file=blank.img,index=2,format=raw
+
  #  -device usb-ehci                                        \
 
   
