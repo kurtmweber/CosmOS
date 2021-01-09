@@ -12,6 +12,7 @@
 #include <sys/i386/mm/mm.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/string/mem.h>
+#include <sys/fs/block_util.h>
 
 #define SFS_VOLUME_IDENTIFIER           0x01
 #define SFS_STARTING_MARKER             0x02
@@ -103,29 +104,44 @@ struct sfs_continuation_entry {
     uint8_t name[64];
 } __attribute__((packed));
 
+/*
+* check if valid superblock
+*/
+bool sfs_is_valid_superblock(struct sfs_superblock* superblock){
+    ASSERT_NOT_NULL(superblock, "superblock cannot be null");
+    if ((superblock->magic[0]==0x53) && (superblock->magic[1]==0x46) && (superblock->magic[2]==0x53)){
+        return true;
+    }
+    return false;
+}
+
+void sfs_read_superblock(struct device* dev, struct sfs_superblock* superblock ){
+    ASSERT_NOT_NULL(dev, "dev cannot be null");
+    block_read(dev, 0, (uint8_t*)superblock,1);
+}
+
 void sfs_format(struct device* dev) {
     ASSERT_NOT_NULL(dev, "dev cannot be null");
-    struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
 
     // device parameters
-    uint64_t total_size = (*block_api->total_size)(dev);
-    uint32_t sector_size = (*block_api->sector_size)(dev);
-    uint32_t total_sectors = total_size / sector_size;
+    uint64_t total_size = block_get_total_size(dev);
+    uint32_t sector_size = block_get_sector_size(dev);
+    uint32_t total_sectors = block_get_sector_count(dev);
 
-    // allocate a superblock struct
-    struct sfs_superblock* superblock = kmalloc(sizeof(struct sfs_superblock));
-    memset((uint8_t*)superblock,0,sizeof(struct sfs_superblock));
-    superblock->timestamp=0; // later
-    superblock->dataarea_size_blocks = total_sectors-2; // 1 for superblock and 1 for index
-    superblock->indexarea_size_bytes = sector_size; // 1 sector
-    superblock->reserved_blocks=1; // 1, for the superblock
-    superblock->total_blocks=total_sectors;
-    superblock->version=0x10;  // 1.0
-    superblock->magic[0]=0x53;
-    superblock->magic[1]=0x46;
-    superblock->magic[2]=0x53;
-    superblock->block_size = (sector_size/512)+1;
+    // create a superblock struct
+    struct sfs_superblock superblock;
+    memset((uint8_t*)&superblock,0,sizeof(struct sfs_superblock));
+    superblock.timestamp=0; // later
+    superblock.dataarea_size_blocks = total_sectors-2; // 1 for superblock and 1 for index
+    superblock.indexarea_size_bytes = sector_size; // 1 sector
+    superblock.reserved_blocks=1; // 1, for the superblock
+    superblock.total_blocks=total_sectors;
+    superblock.version=0x10;  // 1.0
+    superblock.magic[0]=0x53;
+    superblock.magic[1]=0x46;
+    superblock.magic[2]=0x53;
+    superblock.block_size = (sector_size/512)+1;
 
     // write superblock
-    (*block_api->write)(dev, 0,(uint8_t*)superblock, sizeof(struct sfs_superblock));
+    block_write(dev, 0, (uint8_t*)&superblock,1);
 }
