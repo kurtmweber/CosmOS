@@ -79,10 +79,14 @@ void slab_free(uint64_t start, uint64_t len){
 
     uint64_t i;
 
+    spinlock_acquire(&mem_lock);
+
     for (i = start; i < len; i++){
         page_directory[i].ref_count = 0;
         page_directory[i].type = PDT_PHYS_AVAIL;
     }
+
+    spinlock_release(&mem_lock);
 
     return;
 }
