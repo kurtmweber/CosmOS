@@ -12,10 +12,8 @@
 #include <sys/fs/fs.h>
 
 void test_sfs() {
-	// get virtual block device
 	uint8_t devicename[] ={"disk2"};
 	uint8_t fsname[] ={"sfs"};
-
 	struct device* dsk = devicemgr_find_device(devicename);
 	if (0!=dsk){
 		struct filesystem* fs = fs_find(fsname);

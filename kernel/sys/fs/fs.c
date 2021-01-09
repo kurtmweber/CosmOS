@@ -16,7 +16,7 @@
 struct list* fs_list;
 
 void fs_init() {
-    kprintf("Initializing filesystems\n");
+    kprintf("Registering filesystems\n");
     fs_list = list_new();
     sfs_register();
     cfs_register();
@@ -28,7 +28,7 @@ void fs_register(struct filesystem* fs) {
     ASSERT_NOT_NULL(fs->format, "format cannot be null");
     ASSERT_NOT_NULL(fs->list_dir, "list_dir cannot be null");
     ASSERT_NOT_NULL(fs->name, "name cannot be null");
-    kprintf("Registering filesystem %s\n",(*fs->name)());
+ //   kprintf("Registering filesystem %s\n",(*fs->name)());
     list_add(fs_list, fs);
 }
 

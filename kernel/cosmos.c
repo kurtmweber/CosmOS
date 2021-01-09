@@ -100,6 +100,11 @@ void CosmOS(){
 	*/
 	fs_init();
 
+	kprintf("\n");
+	kprintf("************************************\n");
+	kprintf("** Kernel Initialization Complete **\n");
+	kprintf("************************************\n");
+	kprintf("\n");
 
 	show_cpu_data();
 //	playsb16();
