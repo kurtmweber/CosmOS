@@ -67,3 +67,22 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
     // If we get here, we never found a block of sufficient size, return 0
     return 0;
 }
+
+void slab_free(uint64_t start, uint64_t len){
+    /*
+     * Frees len pages, starting at page start
+     *
+     * Note that this frees pages COMPLETELY--that is, it sets ref_count to 0,
+     * rather than merely decrementing it.  It also resets the type to
+     * PDT_PHYS_AVAIL.
+     */
+
+    uint64_t i;
+
+    for (i = start; i < len; i++){
+        page_directory[i].ref_count = 0;
+        page_directory[i].type = PDT_PHYS_AVAIL;
+    }
+
+    return;
+}
