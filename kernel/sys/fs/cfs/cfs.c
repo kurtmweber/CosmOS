@@ -70,3 +70,11 @@ void cfs_write_superblock(struct device* dev, struct cfs_superblock* superblock)
 
     block_write(dev, 0, (uint8_t*) superblock,1);
 }
+
+/*
+* format.  I just guessed here. I wrote 1x superblock and 
+*/
+void cfs_format(struct device* dev, struct cfs_superblock* superblock) {
+
+}
+
