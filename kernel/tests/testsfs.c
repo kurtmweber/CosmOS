@@ -12,10 +12,13 @@
 #include <sys/console/console.h>
 
 void test_sfs() {
-	struct device* disk = devicemgr_find_device("disk0");
+    uint8_t devicename[] ={"disk2"};
+
+	struct device* disk = devicemgr_find_device(devicename);
     if (0!=disk){
+        kprintf("formatting %s\n",devicename);
         sfs_format(disk);
     } else {
-        kprintf("Unable to find disk0\n");
+        kprintf("Unable to find %s\n",devicename);
     }
 }
