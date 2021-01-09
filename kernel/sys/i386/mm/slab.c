@@ -31,7 +31,7 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
      */
 
     for (i = 0; i < page_directory_size; i++){
-        if (page_directory[i].ref_count == 0){
+        if ((page_directory[i].ref_count == 0) && (page_directory[i].type == PDT_PHYS_AVAIL)){
             /*
              * If this is the first free block, or the last free block was of
              * insufficient size, then we mark this page as the start of the
