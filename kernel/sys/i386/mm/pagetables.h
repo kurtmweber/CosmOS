@@ -69,6 +69,16 @@ typedef struct page_directory_t{
     uint64_t flags;
 } __attribute__((packed)) page_directory_t;
 
+/*
+ * Use this struct to reserve in advance pages for one more table at each level,
+ * to prevent running out
+ */
+typedef struct pagetable_expansion_reserved_t{
+    uint64_t pdpt;
+    uint64_t pdt;
+    uint64_t pt;
+} pagetable_expansion_reserved_t;
+
 // directmap.c
 void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
 int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *min, uint64_t space);
@@ -81,5 +91,6 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
 
 // pagetables.c
 pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
+void reserve_next_ptt(ptt_levels level, pagetable_expansion_reserved_t *expansion);
 
 #endif

@@ -106,6 +106,31 @@ pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user){
 	return r;
 }
 
+void reserve_next_ptt(ptt_levels level, pagetable_expansion_reserved_t *expansion){
+	/*
+	 * This function does not handle the situation where a page cannot be
+	 * reserved, because how to handle it may vary based on circumstances.
+	 * Caller must therefore ensure that a page was reserved as requested, and
+	 * act accordingly if it was not.
+	*/
+
+	ASSERT((level == PDP) || (level == PD) || (level == PT), "Invalid PTT level for expansion reservation!");
+
+	switch(level){
+		case PDP:
+			expansion->pdpt = slab_allocate(1, PDT_SYSTEM_RESERVED);
+			break;
+		case PD:
+			expansion->pdt = slab_allocate(1, PDT_SYSTEM_RESERVED);
+			break;
+		case PT:
+			expansion->pt = slab_allocate(1, PDT_SYSTEM_RESERVED);
+			break;
+		default:	// should never happen
+			panic("Invalid PTT level requested for expansion reservation!");
+	}
+}
+
 uint16_t vaddr_ptt_index(void *address, ptt_levels level){
 	ASSERT_NOT_NULL(address, "address must not be null");
 
