@@ -30,7 +30,7 @@ void *asm_cr2_read(){
 	void *ret;
 
 	asm volatile(
-		"mov %cr2, %0"
+		"mov %%cr2, %0"
 		: "=r" (ret)
 	);
 
