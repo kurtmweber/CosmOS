@@ -143,23 +143,9 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 				}
 			}
 			
-			controller->identity = ata_detect_read_identify(controller, i);
-			
-			if (!(controller->channels[i].devices[j].serial = ata_detect_extract_string(controller->identity , 20, ATA_IDENTIFY_OFFSET_SERIAL))){
-				panic("Invalid length specified for ATA serial number field!");
-			}
-			
-			if (!(controller->channels[i].devices[j].model = ata_detect_extract_string(controller->identity , 40, ATA_IDENTIFY_OFFSET_MODEL))){
-				panic("Invalid length specified for ATA model field!");
-			}
-			
-			if (ata_detect_extract_word(controller->identity , ATA_IDENTIFY_OFFSET_COMMAND_SET_2) & (1 << 10)){
-				controller->channels[i].devices[j].size = ata_detect_extract_dword(controller->identity , ATA_IDENTIFY_OFFSET_LBA) * 512;
-			} else {
-				controller->channels[i].devices[j].size = ata_detect_extract_qword(controller->identity , ATA_IDENTIFY_OFFSET_LBA_EXT) * 512;
-			}
-			controller->channels[i].devices[j].removable = (ata_detect_extract_word(controller->identity , ATA_IDENTIFY_OFFSET_GENERAL) & (1 << 7)) >> 7;
-			controller->channels[i].devices[j].bytes_per_sector = ata_detect_sector_size(controller->identity );
+			controller->channels[i].devices[j].identity = ata_detect_read_identify(controller, i);
+			ata_extract_identity(controller->channels[i].devices[j].identity,&(controller->channels[i].devices[j]));
+
 			// register the device
 			kprintf("    Found disk at channel %llu, device %llu\n",i,j);
 			ata_register_disk(device, i, j);

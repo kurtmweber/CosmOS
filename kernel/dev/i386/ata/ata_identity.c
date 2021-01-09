@@ -76,3 +76,16 @@ char *ata_detect_read_identify(struct ata_controller* controller, uint8_t channe
 	}
 	return (char *)buf;
 }
+
+void ata_extract_identity(const char* identity, struct ata_device* dev) {
+	if (ata_detect_extract_word(identity, ATA_IDENTIFY_OFFSET_COMMAND_SET_2) & (1 << 10)){
+		dev->size = ata_detect_extract_dword(identity, ATA_IDENTIFY_OFFSET_LBA) * 512;
+	} else {
+		dev->size = ata_detect_extract_qword(identity, ATA_IDENTIFY_OFFSET_LBA_EXT) * 512;
+	}
+	dev->removable = (ata_detect_extract_word(identity , ATA_IDENTIFY_OFFSET_GENERAL) & (1 << 7)) >> 7;
+	dev->bytes_per_sector = ata_detect_sector_size(identity );
+	dev->model=ata_detect_extract_string(identity , 40, ATA_IDENTIFY_OFFSET_MODEL);
+	dev->serial=ata_detect_extract_string(identity , 20, ATA_IDENTIFY_OFFSET_SERIAL);
+}
+

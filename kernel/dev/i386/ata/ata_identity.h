@@ -11,6 +11,7 @@
 
 #include <types.h>
 #include <dev/i386/ata/ata.h>
+#include <dev/i386/ata/ata_controller.h>
 
 struct ata_controller;
 
@@ -21,5 +22,6 @@ char *ata_detect_extract_string(const char *identify_buf, uint8_t len, ata_ident
 uint32_t ata_detect_sector_size(const char *identify_buf);
 char *ata_detect_read_identify(struct ata_controller* controller, uint8_t channel);
 
+void ata_extract_identity(const char* identity, struct ata_device* dev);
 
 #endif

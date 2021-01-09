@@ -22,6 +22,7 @@ struct ata_device {
 	const char *serial;
 	uint64_t size;
 	uint32_t bytes_per_sector;
+	const char* identity;
 };
 
 struct ide_channel{
@@ -33,7 +34,6 @@ struct ide_channel{
 
 struct ata_controller {
 	struct ide_channel channels[2];
-	const char* identity;
 };
 
 /*
