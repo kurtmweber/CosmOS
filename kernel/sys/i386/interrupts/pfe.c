@@ -1,18 +1,15 @@
 /*****************************************************************
  * This file is part of CosmOS                                   *
- * Copyright (C) 2019-2020 Kurt M. Weber                         *
+ * Copyright (C) 2021 Kurt M. Weber                              *
  * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _DE_H
-#define _DE_H
-
-
 #include <types.h>
 #include <sys/debug/assert.h>
-#include <sys/i386/interrupts/irq.h>
+#include <sys/i386/interrupts/exceptions.h>
 
-void isrDE(stackFrame *frame);
-
-#endif
+__attribute__ ((interrupt)) void isrPFE(stackFrame *frame, uint64_t error){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	panic("Page fault error!");
+}
