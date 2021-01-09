@@ -24,5 +24,6 @@
 #include <tests/testramdisk.h>
 #include <tests/testfat.h>
 #include <tests/testsfs.h>
+#include <tests/testcfs.h>
 
 #endif

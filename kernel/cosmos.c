@@ -137,7 +137,8 @@ void show_cpu_data() {
 //	test_vblock();
 //	test_ata();
 //	test_ramdisk();
-test_fat();
+	test_cfs();
+//test_fat();
 	while (1){
 		asm_hlt();
 	}
