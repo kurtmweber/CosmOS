@@ -13,6 +13,8 @@
 #include <sys/i386/mm/mm.h>
 #include <sys/i386/mm/pagetables.h>
 
+pagetable_expansion_reserved_t future_pt_expansion;
+
 void mmu_init(){
 	int_15_map *map;
 	uint8_t num_blocks, lrg_block;
@@ -44,14 +46,9 @@ void mmu_init(){
 	
 	setup_page_directory(page_directory_start, map, num_blocks);
 	
-	// split off the first three blocks of physical memory we've allocated:
-	// 0x0000000000000000 - 0x00000000000FFFFF: ID-mapped first megabyte
-	// 0x0000000000100000 - 0x00000000008FFFFF: Kernel stack
-	// 0x0000000000900000 - 0x0000000000AFFFFF: Kernel + kernel heap
-	/*b = find_containing_block(0x0000000000000000, usable_phys_blocks);
-	kprintf("Base: %llX\tLength: %llX\n", b->base, b->len);*/
-
-	
+	reserve_next_ptt(PDP, &future_pt_expansion);
+	reserve_next_ptt(PD, &future_pt_expansion);
+	reserve_next_ptt(PT, &future_pt_expansion);
 	
 	return;
 }

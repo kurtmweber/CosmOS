@@ -9,6 +9,7 @@
 #define _MM_H
 
 #include <types.h>
+#include <sys/i386/mm/pagetables.h>
 
 // How much physical address space the bootloader has mapped
 #define BOOT_MAPPED_PHYS	0x1100000
@@ -82,25 +83,27 @@ typedef mem_block kmalloc_block;
 mem_block *find_containing_block(void *addr, mem_block *list);
 int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block);
 
-// mm.c
-void *find_aligned_after(void *address, uint64_t alignment);
-void *find_last_phys_addr(int_15_map *phys_map, uint8_t num_blocks);
-
-extern mem_block init_phys_block;
-extern mem_block *usable_phys_blocks;
-
+// init.c
+extern pagetable_expansion_reserved_t future_pt_expansion;
 void mmu_init();
+
+// kmalloc.c
+kmalloc_block *find_avail_kmalloc_block_list(uint64_t size);
 void kfree(void *p);
 void *kmalloc(uint64_t size);
 void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment);
 void kmalloc_init();
 void *krealloc(void *ptr, uint64_t size);
-
-extern void *brk;
-kmalloc_block *find_avail_kmalloc_block_list(uint64_t size);
 kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size);
 
 // mm.c
+extern void *brk;
+extern mem_block init_phys_block;
+extern mem_block *usable_phys_blocks;
+void *find_aligned_after(void *address, uint64_t alignment);
+void *find_last_phys_addr(int_15_map *phys_map, uint8_t num_blocks);
+
+// pagetables.c
 bool is_page_aligned(void *address);
 bool is_page_allocated(void *address);
 pttentry *extract_cr3_base_address(pttentry entry);

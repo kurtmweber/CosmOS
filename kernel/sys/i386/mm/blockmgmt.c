@@ -29,8 +29,6 @@ mem_block *find_containing_block(void *addr, mem_block *list){
 }
 
 const uint16_t map_base_addr = 0x500;
-const uint8_t map_increment = 24;
-const uint16_t page_size = 4096;
 
 int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block){
 	int_15_map *map;
