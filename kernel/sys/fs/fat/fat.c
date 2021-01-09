@@ -16,44 +16,60 @@
 
 // https://wiki.osdev.org/FAT
 
-struct fat_boot_block_parameters {
-    uint8_t jmp[3]; // 0xeb 0x3c 0x90
-    uint8_t oem[8];
-    uint8_t bytes_per_sector[2];
-    uint8_t clusters_per_sector;
-    uint8_t reserved_sectors[2];
-    uint8_t number_fat;
-    uint8_t number_directory_enties[2];
-    uint8_t total_sectors[2];
-    uint8_t media_descriptor_type;
-    uint8_t sectors_per_fat[2];
-    uint8_t sectors_per_track[2];
-    uint8_t heads[2];
-    uint8_t number_hidden_sectors[4];
-    uint8_t large_sector_count[4];
-} __attribute__((packed));
+// Extended fat32 stuff=
+struct fat_extBS_32 {
+	uint32_t	table_size_32;
+	uint16_t	extended_flags;
+	uint16_t	fat_version;
+	uint32_t	root_cluster;
+	uint16_t	fat_info;
+	uint16_t	backup_BS_sector;
+	uint8_t 	reserved_0[12];
+	uint8_t		drive_number;
+	uint8_t 	reserved_1;
+	uint8_t		boot_signature;
+	uint32_t 	volume_id;
+	uint8_t		volume_label[11];
+	uint8_t		fat_type_label[8];
+}__attribute__((packed));
+ 
+// Extended fat12 and fat16 stuff
+struct fat_extBS_16 {
+	uint8_t		bios_drive_num;
+	uint8_t		reserved1;
+	uint8_t		boot_signature;
+	uint32_t	volume_id;
+	uint8_t		volume_label[11];
+	uint8_t		fat_type_label[8];
+}__attribute__((packed));
+ 
+struct fat_BS {
+	uint8_t 	bootjmp[3];
+	uint8_t 	oem_name[8];
+	uint16_t 	bytes_per_sector;
+	uint8_t		sectors_per_cluster;
+	uint16_t	reserved_sector_count;
+	uint8_t		table_count;
+	uint16_t	root_entry_count;
+	uint16_t	total_sectors_16;
+	uint8_t		media_type;
+	uint16_t	table_size_16;
+	uint16_t	sectors_per_track;
+	uint16_t	head_side_count;
+	uint32_t 	hidden_sector_count;
+	uint32_t 	total_sectors_32;
+ 
+	//this will be cast to it's specific type once the driver actually knows what type of FAT this is.
+	uint8_t		extended_section[54];
+}__attribute__((packed));
 
-struct fat_extended_boot_record_fat12_fat16 {
-    uint8_t drive_number;
-    uint8_t flags;
-    uint8_t reserved; // 0x28 or 0x29
-    uint8_t volume_id[4];
-    uint8_t volume_label[11];
-    uint8_t sys_id[8];
-    uint8_t boot_code[448];
-    uint8_t signature[2]; // 0xaa 0x55
+void fat_dump_fat_extBS_16(struct fat_extBS_16* ebs) {
+    kprintf("drive_number %llu\n", ebs->bios_drive_num);
+  //  kprintf("volume_id %llu\n", ebs->volume_id);
+    kprintf("volume_label %s\n", ebs->volume_label);
+  //  kprintf("fat_type_label %s \n", ebs->fat_type_label);
 
-} __attribute__((packed));
-
-void fat_dump_febr(struct fat_extended_boot_record_fat12_fat16* febr) {
-    kprintf("drive_number %llu\n", febr->drive_number);
-    kprintf("flags %llu\n", febr->flags);
-    kprintf("volume_id %s\n", febr->volume_id);
-    kprintf("volume_label %s\n", febr->volume_label);
-    kprintf("sys_id %s\n", febr->sys_id);
-    kprintf("signature %llu %llu\n", febr->signature[0], febr->signature[1]);
-
-    debug_show_memblock((uint8_t*)febr, sizeof(struct fat_extended_boot_record_fat12_fat16));
+ //   debug_show_memblock((uint8_t*)ebs, sizeof(struct fat_extBS_16));
 }
 
 void fat_list_dir(struct device* dev, struct list* lst) {
@@ -72,9 +88,9 @@ void fat_list_dir(struct device* dev, struct list* lst) {
     block_read(dev, 0, buffer,1);
 	debug_show_memblock(buffer, sector_size);
 
-    struct fat_boot_block_parameters* fbbp = (struct fat_boot_block_parameters*) buffer;
-    struct fat_extended_boot_record_fat12_fat16* febr = (struct fat_extended_boot_record_fat12_fat16*) &(buffer[sizeof(struct fat_boot_block_parameters)]);
- //   fat_dump_febr(febr);
+    struct fat_BS* bs = (struct fat_BS*) buffer;
+    struct fat_extBS_16* ebs = (struct fat_extBS_16*) &(bs->extended_section);
+//    fat_dump_fat_extBS_16(ebs);
 }
 
 
