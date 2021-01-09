@@ -104,6 +104,9 @@ extern pttentry system_cr3;
 void *find_aligned_after(void *address, uint64_t alignment);
 void *find_last_phys_addr(int_15_map *phys_map, uint8_t num_blocks);
 
+// pagefault.c
+void page_fault_handler(uint64_t error, void *cr2, pttentry cr3);
+
 // pagetables.c
 bool is_page_aligned(void *address);
 bool is_page_allocated(void *address);

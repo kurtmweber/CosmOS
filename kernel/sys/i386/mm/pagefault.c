@@ -6,16 +6,8 @@
  *****************************************************************/
 
 #include <types.h>
-#include <sys/asm/misc.h>
-#include <sys/console/console.h>
-#include <sys/debug/assert.h>
-#include <sys/i386/interrupts/exceptions.h>
 #include <sys/i386/mm/mm.h>
 
-__attribute__ ((interrupt)) void isrPFE(stackFrame *frame, uint64_t error){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+void page_fault_handler(uint64_t error, void *cr2, pttentry cr3){
 
-    page_fault_handler(error, asm_cr2_read(), asm_cr3_read());
-
-	panic("Page fault error!");
 }
