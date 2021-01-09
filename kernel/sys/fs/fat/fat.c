@@ -71,6 +71,19 @@ enum fat_type {
 	ExFAT = 0x04
 };
 
+/*
+* calculated parameters of this file system
+*/
+struct fat_fs_parameters {
+	uint32_t total_sectors;
+	uint32_t fat_size;
+	uint32_t root_dir_sectors;
+	uint32_t first_data_sector;
+	uint32_t first_fat_sector;
+	uint32_t data_sectors;
+	uint32_t total_clusters;
+};
+
 void fat_dump_fat_extBS_16(struct fat_extBS_16* ebs) {
     kprintf("drive_number %llu\n", ebs->bios_drive_num);
   //  kprintf("volume_id %llu\n", ebs->volume_id);
@@ -80,9 +93,9 @@ void fat_dump_fat_extBS_16(struct fat_extBS_16* ebs) {
  //   debug_show_memblock((uint8_t*)ebs, sizeof(struct fat_extBS_16));
 }
 
-void fat_list_dir(struct device* dev, struct list* lst) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");    
-    ASSERT_NOT_NULL(lst, "lst cannot be null");
+void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param){
+	ASSERT_NOT_NULL(dev, "dev cannot be null");    
+    ASSERT_NOT_NULL(param, "param cannot be null");    
 
     uint16_t sector_size = block_get_sector_size(dev);
     kprintf("sector size: %llu\n", sector_size);
@@ -101,15 +114,25 @@ void fat_list_dir(struct device* dev, struct list* lst) {
     struct fat_extBS_32* fat_boot_ext_32 = (struct fat_extBS_32*) &(fat_boot->extended_section);
 //    fat_dump_fat_extBS_16(ebs);
 
-    uint32_t total_sectors = (fat_boot->total_sectors_16 == 0)? fat_boot->total_sectors_32 : fat_boot->total_sectors_16;
-    uint32_t fat_size = (fat_boot->table_size_16 == 0)? fat_boot_ext_32->table_size_32 : fat_boot->table_size_16;
-    uint32_t root_dir_sectors = ((fat_boot->root_entry_count * 32) + (fat_boot->bytes_per_sector - 1)) / fat_boot->bytes_per_sector;
-    uint32_t first_data_sector = fat_boot->reserved_sector_count + (fat_boot->table_count * fat_size) + root_dir_sectors;
-    uint32_t first_fat_sector = fat_boot->reserved_sector_count;
-    uint32_t data_sectors = fat_boot->total_sectors_16 - (fat_boot->reserved_sector_count + (fat_boot->table_count * fat_size) + root_dir_sectors);
-    uint32_t total_clusters = data_sectors / fat_boot->sectors_per_cluster;
+    param->total_sectors = (fat_boot->total_sectors_16 == 0)? fat_boot->total_sectors_32 : fat_boot->total_sectors_16;
+	kprintf("total_sectors %llu\n",param->total_sectors);
+    param->fat_size = (fat_boot->table_size_16 == 0)? fat_boot_ext_32->table_size_32 : fat_boot->table_size_16;
+ 	kprintf("fat_size %llu\n",param->fat_size);
+    param->root_dir_sectors = ((fat_boot->root_entry_count * 32) + (fat_boot->bytes_per_sector - 1)) / fat_boot->bytes_per_sector;
+ 	kprintf("root_dir_sectors %llu\n",param->root_dir_sectors);
+    param->first_data_sector = fat_boot->reserved_sector_count + (fat_boot->table_count * param->fat_size) + param->root_dir_sectors;
+ 	kprintf("first_data_sector %llu\n",param->first_data_sector);
 
-    kprintf("total_clusters: %llu\n", total_clusters);
+    param->first_fat_sector = fat_boot->reserved_sector_count;
+ 	kprintf("first_fat_sector %llu\n",param->first_fat_sector);
+
+    param->data_sectors = fat_boot->total_sectors_16 - (fat_boot->reserved_sector_count + (fat_boot->table_count * param->fat_size) + param->root_dir_sectors);
+  	kprintf("data_sectors %llu\n",param->data_sectors);
+
+    param->total_clusters = param->data_sectors / fat_boot->sectors_per_cluster;
+  	kprintf("total_clusters %llu\n",param->total_clusters);
+
+   // kprintf("total_clusters: %llu\n", param->total_clusters);
 }
 
 enum fat_type fat_fat_type(uint32_t total_clusters){
@@ -132,6 +155,14 @@ const uint8_t* fat_name() {
 
 void fat_format(struct device* dev) {
 	ASSERT_NOT_NULL(dev, "dev cannot be null");    
+}
+
+void fat_list_dir(struct device* dev, struct list* lst) {
+    ASSERT_NOT_NULL(dev, "dev cannot be null");    
+    ASSERT_NOT_NULL(lst, "lst cannot be null");
+
+	struct fat_fs_parameters fs_parameters;
+	fat_read_fs_parameters(dev, &fs_parameters);
 }
 
 void fat_register() {
