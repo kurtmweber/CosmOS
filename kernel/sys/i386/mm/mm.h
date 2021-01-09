@@ -114,5 +114,6 @@ void *vaddr_to_physical(void *address, pttentry cr3);
 
 // slab.c
 uint64_t slab_allocate(uint64_t pages, page_directory_types purpose);
+void slab_free(uint64_t start, uint64_t len);
 
 #endif
