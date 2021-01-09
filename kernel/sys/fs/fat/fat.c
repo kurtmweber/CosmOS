@@ -45,6 +45,17 @@ struct fat_extended_boot_record {
 
 } __attribute__((packed));
 
+void fat_dump_febr(struct fat_extended_boot_record* febr) {
+    kprintf("drive_number %llu\n", febr->drive_number);
+    kprintf("flags %llu\n", febr->flags);
+    kprintf("volume_id %s\n", febr->volume_id);
+    kprintf("volume_label %s\n", febr->volume_label);
+    kprintf("sys_id %s\n", febr->sys_id);
+    kprintf("signature %llu %llu\n", febr->signature[0], febr->signature[1]);
+
+    debug_show_memblock((uint8_t*)febr, sizeof(struct fat_extended_boot_record));
+}
+
 void fat_list_dir(struct device* dev, struct list* lst) {
     ASSERT_NOT_NULL(dev, "dev cannot be null");    
     ASSERT_NOT_NULL(lst, "lst cannot be null");
@@ -62,6 +73,8 @@ void fat_list_dir(struct device* dev, struct list* lst) {
 	debug_show_memblock(buffer, sector_size);
 
     struct fat_boot_block_parameters* fbbp = (struct fat_boot_block_parameters*) buffer;
-    kprintf("OEM %s\n", fbbp->oem);
+    struct fat_extended_boot_record* febr = (struct fat_extended_boot_record*) &(buffer[sizeof(struct fat_boot_block_parameters)]);
+ //   fat_dump_febr(febr);
 }
+
 

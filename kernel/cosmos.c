@@ -135,7 +135,7 @@ void show_cpu_data() {
 
 //	test_ata();
 //	test_vblock();
-	test_ata();
+//	test_ata();
 //	test_ramdisk();
 test_fat();
 	while (1){
