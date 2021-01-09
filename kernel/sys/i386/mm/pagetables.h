@@ -9,6 +9,7 @@
 #define _PAGETABLES_H
 
 #include <types.h>
+#include <sys/i386/mm/mm.h>
 
 typedef uint64_t ptt_t;     // page translation table
 
@@ -74,13 +75,11 @@ int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *m
 uint64_t size_pd(uint64_t space);
 
 // pagedirectory.c
+extern page_directory_t *page_directory;
+extern uint64_t page_directory_size;    // number of ENTRIES, not number of bytes
 void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks);
 
 // pagetables.c
-extern page_directory_t *page_directory;
 pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
-
-// slab.c
-uint64_t slab_allocate(uint64_t pages, page_directory_types purpose);
 
 #endif

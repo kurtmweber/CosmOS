@@ -38,6 +38,10 @@ typedef uint64_t pttentry;
 
 // enums
 
+// forward declarations needed to avoid compilation errors
+enum page_directory_types;
+typedef enum page_directory_types page_directory_types;
+
 typedef enum int_15_map_region_type{
 	USABLE = 1,
 	RESERVED = 2,
@@ -107,5 +111,8 @@ pttentry *extract_cr3_base_address(pttentry entry);
 pttentry *extract_pttentry_base_address(pttentry entry);
 uint16_t vaddr_ptt_index(void *address, ptt_levels level);
 void *vaddr_to_physical(void *address, pttentry cr3);
+
+// slab.c
+uint64_t slab_allocate(uint64_t pages, page_directory_types purpose);
 
 #endif

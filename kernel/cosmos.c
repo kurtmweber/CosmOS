@@ -25,7 +25,7 @@
 #include <sys/sync/sync.h>
 
 // testing slab allocator
-#include <sys/i386/mm/pagetables.h>
+//#include <sys/i386/mm/pagetables.h>
 // end slab allocator test includes
 
 void stringtest();
