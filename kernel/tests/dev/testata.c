@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <tests/testata.h>
+#include <tests/dev/testata.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>

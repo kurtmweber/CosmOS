@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <tests/testsb16.h>
+#include <tests/dev/testsb16.h>
 #include <sys/i386/sound/wav.h>
 #include <sys/deviceapi/deviceapi_dsp.h>
 #include <sys/i386/sound/tone.h>

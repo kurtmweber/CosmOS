@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <tests/testcpu.h>
+#include <tests/dev/testcpu.h>
 #include <sys/deviceapi/deviceapi_cpu.h>
 #include <sys/console/console.h>
 

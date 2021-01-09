@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <tests/teststring.h>
+#include <tests/sys/teststring.h>
 #include <sys/string/string.h>
 #include <sys/console/console.h>
 #include <sys/collection/kernelstring/kernelstring.h>

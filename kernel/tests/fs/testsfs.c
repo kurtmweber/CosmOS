@@ -5,26 +5,24 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <tests/testfat.h>
+#include <tests/fs/testsfs.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/console/console.h>
-#include <sys/collection/list/list.h>
 #include <sys/fs/fs.h>
 
-void test_fat() {
+void test_sfs() {
 	// get virtual block device
-	uint8_t devicename[] ={"disk1"};
-	uint8_t fsname[] ={"fat"};
+	uint8_t devicename[] ={"disk2"};
+	uint8_t fsname[] ={"sfs"};
 
 	struct device* dsk = devicemgr_find_device(devicename);
 	if (0!=dsk){
-
 		struct filesystem* fs = fs_find(fsname);
 		if (0!=fs){
-            struct list* lst = list_new();
-
-			(*fs->list_dir)(dsk, lst);
+			kprintf("Formatting %s to %s\n",devicename, fsname);
+			(*fs->format)(dsk);
+			kprintf("Done\n");
 		} else {
 			kprintf("Unable to find %s\n",fsname);
 		}
