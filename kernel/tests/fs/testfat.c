@@ -18,11 +18,9 @@ void test_fat() {
 
 	struct device* dsk = devicemgr_find_device(devicename);
 	if (0!=dsk){
-		struct filesystem* fs = fs_find(fsname);
+		struct fs_filesystem* fs = fs_find(fsname);
 		if (0!=fs){
-            struct list* lst = list_new();
-
-			(*fs->list_dir)(dsk, lst);
+			struct fs_directory_listing* listing=(*fs->list_dir)(dsk);
 		} else {
 			kprintf("Unable to find %s\n",fsname);
 		}

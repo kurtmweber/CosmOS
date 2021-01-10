@@ -82,9 +82,8 @@ uint32_t cfs_total_sectormap_sectors(struct device* dev) {
     }
 }
 
-void cfs_list_dir(struct device* dev, struct list* lst) {
+struct fs_directory_listing* cfs_list_dir(struct device* dev) {
     ASSERT_NOT_NULL(dev, "dev cannot be null");    
-    ASSERT_NOT_NULL(lst, "lst cannot be null");
 
     uint16_t sector_size = block_get_sector_size(dev);
     kprintf("sector size: %llu\n", sector_size);
@@ -168,7 +167,7 @@ const uint8_t* cfs_name() {
 }
 
 void cfs_register() {
-    struct filesystem* fs = (struct filesystem*) kmalloc(sizeof(struct filesystem));
+    struct fs_filesystem* fs = (struct fs_filesystem*) kmalloc(sizeof(struct fs_filesystem));
     fs->format = &cfs_format;
     fs->list_dir= &cfs_list_dir;
     fs->name = &cfs_name;

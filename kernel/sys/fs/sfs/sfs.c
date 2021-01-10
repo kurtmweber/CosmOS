@@ -147,9 +147,8 @@ void sfs_format(struct device* dev) {
     block_write(dev, 0, (uint8_t*)&superblock,1);
 }
 
-void sfs_list_dir(struct device* dev, struct list* lst) {
+struct fs_directory_listing* sfs_list_dir(struct device* dev) {
     ASSERT_NOT_NULL(dev, "dev cannot be null");    
-    ASSERT_NOT_NULL(lst, "lst cannot be null");    
 }
 
 const uint8_t SFS_NAME[] = {"sfs"};
@@ -159,7 +158,7 @@ const uint8_t* sfs_name() {
 }
 
 void sfs_register() {
-    struct filesystem* fs = (struct filesystem*) kmalloc(sizeof(struct filesystem));
+    struct fs_filesystem* fs = (struct fs_filesystem*) kmalloc(sizeof(struct fs_filesystem));
     fs->format = &sfs_format;
     fs->list_dir= &sfs_list_dir;
     fs->name = &sfs_name;

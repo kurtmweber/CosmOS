@@ -12,6 +12,7 @@
 #include <sys/debug/assert.h>
 #include <sys/console/console.h>
 #include <sys/string/string.h>
+#include <sys/i386/mm/mm.h>
 
 struct list* fs_list;
 
@@ -23,7 +24,7 @@ void fs_init() {
     fat_register();
 }
 
-void fs_register(struct filesystem* fs) {
+void fs_register(struct fs_filesystem* fs) {
     ASSERT_NOT_NULL(fs, "fs cannot be null");
     ASSERT_NOT_NULL(fs->format, "format cannot be null");
     ASSERT_NOT_NULL(fs->list_dir, "list_dir cannot be null");
@@ -32,13 +33,41 @@ void fs_register(struct filesystem* fs) {
     list_add(fs_list, fs);
 }
 
-struct filesystem* fs_find(uint8_t* name) {
+struct fs_filesystem* fs_find(uint8_t* name) {
     ASSERT_NOT_NULL(name, "name cannot be null");
     for (uint8_t i=0; i< list_count(fs_list);i++){
-        struct filesystem* fs = (struct filesystem*) list_get(fs_list,i);
+        struct fs_filesystem* fs = (struct fs_filesystem*) list_get(fs_list,i);
         if (strcmp(name, (*fs->name)())==0){
             return fs;
         }
     }
     return 0;
+}
+
+/*
+* make a new directory listing
+*/
+struct fs_directory_listing* fs_directory_listing_new() {
+    struct fs_directory_listing* ret = (struct fs_directory_listing*) kmalloc(sizeof(struct fs_directory_listing));
+    ret->lst = list_new();
+    return ret;
+}
+
+/*
+* ugh
+*/
+void fs_directory_listing_delete(struct fs_directory_listing* listing) {
+    ASSERT_NOT_NULL(listing, "listing cannot be null");
+    ASSERT_NOT_NULL(listing->lst, "lst cannot be null");
+
+    for (uint32_t i; i< list_count(listing->lst);i++){
+        struct fs_directory* dir = (struct fs_directory *) list_get(listing->lst, i);
+        if (0!=dir){
+            if (0!=dir->name){
+                kfree(dir->name);
+            }
+            kfree(dir);
+        }
+    }
+    kfree(listing);
 }

@@ -16,7 +16,7 @@ void test_cfs() {
 
 	struct device* dsk = devicemgr_find_device(devicename);
 	if (0!=dsk){
-		struct filesystem* fs = fs_find(fsname);
+		struct fs_filesystem* fs = fs_find(fsname);
 		if (0!=fs){
 			(*fs->format)(dsk);
 		} else {

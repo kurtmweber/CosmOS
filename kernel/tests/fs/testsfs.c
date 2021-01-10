@@ -16,7 +16,7 @@ void test_sfs() {
 	uint8_t fsname[] ={"sfs"};
 	struct device* dsk = devicemgr_find_device(devicename);
 	if (0!=dsk){
-		struct filesystem* fs = fs_find(fsname);
+		struct fs_filesystem* fs = fs_find(fsname);
 		if (0!=fs){
 			kprintf("Formatting %s to %s\n",devicename, fsname);
 			(*fs->format)(dsk);
