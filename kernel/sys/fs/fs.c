@@ -63,9 +63,6 @@ void fs_directory_listing_delete(struct fs_directory_listing* listing) {
     for (uint32_t i; i< list_count(listing->lst);i++){
         struct fs_directory* dir = (struct fs_directory *) list_get(listing->lst, i);
         if (0!=dir){
-            if (0!=dir->name){
-                kfree(dir->name);
-            }
             kfree(dir);
         }
     }

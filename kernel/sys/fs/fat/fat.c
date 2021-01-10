@@ -14,6 +14,7 @@
 #include <sys/debug/debug.h>
 #include <sys/string/mem.h>
 #include <sys/fs/fs.h>
+#include <sys/string/string.h>
 
 // https://wiki.osdev.org/FAT
 
@@ -232,6 +233,8 @@ uint32_t fat_fat16_next_cluster(struct device* dev, uint32_t current_cluster, st
 struct fs_directory_listing* fat_list_dir(struct device* dev) {
     ASSERT_NOT_NULL(dev, "dev cannot be null");    
 
+	struct fs_directory_listing* ret = fs_directory_listing_new();
+
 	struct fat_fs_parameters fs_parameters;
 	fat_read_fs_parameters(dev, &fs_parameters);
 
@@ -257,6 +260,17 @@ struct fs_directory_listing* fat_list_dir(struct device* dev) {
 						// not a long file name
 						if (entry->name[10]!=0xFF){
 							kprintf("%s\n",entry->name);
+					//		struct fs_directory* dir = (struct fs_directory*) kmalloc(sizeof(struct fs_directory));
+					//		dir->flags=entry->attributes;
+					//		memcpy(dir->name, entry->name,11);
+				//			dir->name[12]=0;
+
+						//dir->name = name;
+
+					//		dir->size = entry->size;
+					//		list_add(ret->lst,dir);
+					//		kprintf("FF%s\n",dir->name);
+
 						}
 					}
 				} else {
@@ -271,6 +285,7 @@ struct fs_directory_listing* fat_list_dir(struct device* dev) {
 	} else {
 		panic("Unsupported FAT type");
 	}
+	return ret;
 }
 
 			// if (fs_parameters.type==FAT12){

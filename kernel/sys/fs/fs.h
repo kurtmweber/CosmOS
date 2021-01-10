@@ -36,7 +36,7 @@ struct fs_directory_listing {
 };
 
 struct fs_directory {
-    uint8_t* name;
+    uint8_t name[255];
     uint64_t size;
     uint32_t flags;
 };

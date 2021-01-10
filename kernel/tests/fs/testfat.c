@@ -21,6 +21,13 @@ void test_fat() {
 		struct fs_filesystem* fs = fs_find(fsname);
 		if (0!=fs){
 			struct fs_directory_listing* listing=(*fs->list_dir)(dsk);
+			kprintf("size %llu\n", list_count(listing->lst));
+
+			for (uint32_t i=0;i<list_count(listing->lst);i++){
+				struct fs_directory* dir = (struct fs_directory*) list_get(listing->lst, i);
+				kprintf("%llu %s %llu\n", i, dir->name, dir->size);
+			}
+			fs_directory_listing_delete(listing);
 		} else {
 			kprintf("Unable to find %s\n",fsname);
 		}
