@@ -15,6 +15,7 @@
 #include <sys/debug/debug.h>
 #include <sys/string/mem.h>
 #include <sys/fs/fs.h>
+#include <sys/string/string.h>
 
 const uint8_t DFS_NAME[] = {"dfs"};
 
@@ -27,6 +28,10 @@ const uint8_t* dfs_name() {
 */
 void dfs_format(struct device* dev) {
     /*
+    * figure out how many map blocks we need
+    */
+    uint32_t number_map_blocks = (block_get_sector_count(dev) / DFS_SECTORS_PER_MAP_BLOCK)+1;
+    /*
     * create superblock
     */
     struct dfs_superblock_block superblock;
@@ -34,11 +39,25 @@ void dfs_format(struct device* dev) {
     superblock.magic = DFS_MAGIC_SUPERBLOCK;
     superblock.blocks_size = (uint64_t) block_get_sector_size(dev);
     superblock.blocks_count = (uint64_t) block_get_sector_count(dev);
-    superblock.root_dir=1; // sector one, since sector zero is the super-block
+    superblock.number_map_blocks = number_map_blocks;
+    superblock.root_dir=number_map_blocks+1; // sector one, since sector zero is the super-block
+    kprintf("blocks_count %llu\n", superblock.blocks_count);
+    kprintf("number_map_blocks %llu\n", superblock.number_map_blocks);
+    kprintf("root_dir %llu\n", superblock.root_dir);
     /*
     * write superblock
     */
     dfs_write_superblock(dev,&superblock);
+
+    /*
+    * create & write map blocks
+    */
+    for (uint32_t i=0; i<number_map_blocks;i++){
+        struct dfs_map_block map_block;
+        memset((uint8_t*)&map_block,0,sizeof(struct dfs_map_block));
+        dfs_write_map_block(dev, &map_block, i+1);
+        kprintf("map block: %llu\n",i+1);
+    }
     /*
     * root dir block
     */
@@ -48,7 +67,8 @@ void dfs_format(struct device* dev) {
     /*
     * write root dir
     */
-    dfs_write_dir_block(dev,&root_dir_block, superblock.blocks_count);
+    dfs_write_dir_block(dev,&root_dir_block, superblock.root_dir);
+    kprintf("dir block: %llu\n",superblock.root_dir);
 }
 
 struct fs_directory_listing* dfs_list_dir(struct device* dev) {
@@ -80,16 +100,45 @@ struct fs_directory_listing* dfs_list_dir(struct device* dev) {
     }
 }
 
+void dfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size){
+    ASSERT_NOT_NULL(dev, "dev cannot be null"); 
+    ASSERT_NOT_NULL(name, "name cannot be null"); 
+    ASSERT_NOT_NULL(data, "data cannot be null"); 
+    ASSERT(strlen(name)<DFS_FILENAME_SIZE,"filename too long");
+}
+
+void dfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size) {
+    ASSERT_NOT_NULL(dev, "dev cannot be null"); 
+    ASSERT_NOT_NULL(name, "name cannot be null"); 
+    ASSERT_NOT_NULL(data, "data cannot be null"); 
+    ASSERT(strlen(name)<DFS_FILENAME_SIZE,"filename too long");
+
+    kprintf("write file: %s of length %llu\n", name, size);
+    /*
+    * find an empty spot in the root dir
+    */
+
+    /*
+    * write to the dir
+    */
+
+    /*
+    * make an allocation block
+    */
+}
+
 void dfs_register() {
     ASSERT(sizeof(struct dfs_superblock_block)==DFS_BLOCK_SIZE, "dfs_superblock_block must be 512 bytes");
     ASSERT(sizeof(struct dfs_dir_block)==DFS_BLOCK_SIZE, "dfs_dir_block must be 512 bytes");
     ASSERT(sizeof(struct dfs_file_block)==DFS_BLOCK_SIZE, "dfs_file_block must be 512 bytes");
-    ASSERT(sizeof(struct dfs_filemap_block)==DFS_BLOCK_SIZE, "dfs_filemap_block must be 512 bytes");
+    ASSERT(sizeof(struct dfs_file_allocation_block)==DFS_BLOCK_SIZE, "dfs_allocation_block must be 512 bytes");
+    ASSERT(sizeof(struct dfs_map_block)==DFS_BLOCK_SIZE, "dfs_map_block must be 512 bytes");
 
     struct fs_filesystem* fs = (struct fs_filesystem*) kmalloc(sizeof(struct fs_filesystem));
     fs->format = &dfs_format;
     fs->list_dir= &dfs_list_dir;
     fs->name = &dfs_name;
+    fs->read = &dfs_read;
+    fs->write = &dfs_write;
     fs_register(fs);
 }
-

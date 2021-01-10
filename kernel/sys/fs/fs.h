@@ -15,20 +15,30 @@
 /*
 * format a file system
 */
-typedef void (*fs_format)(struct device* dev);
+typedef void (*fs_format_function)(struct device* dev);
 /*
 * returns a list of fs_file structs. remember to delete these!
 */
-typedef struct fs_directory_listing* (*fs_list_dir)(struct device* dev);
+typedef struct fs_directory_listing* (*fs_list_dir_function)(struct device* dev);
 /*
 * name of type (fat, sfs, cfs, etc)
 */
-typedef const uint8_t* (*fs_name)();
+typedef const uint8_t* (*fs_name_function)();
+/*
+* read file
+*/
+typedef void (*fs_read_function)(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size);
+/*
+* write file
+*/
+typedef void (*fs_write_function)(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size);
 
 struct fs_filesystem {
-    fs_format format;
-    fs_list_dir list_dir;
-    fs_name name;
+    fs_format_function format;
+    fs_list_dir_function list_dir;
+    fs_name_function name;
+    fs_read_function read;
+    fs_write_function write;
 };
 
 struct fs_directory_listing {

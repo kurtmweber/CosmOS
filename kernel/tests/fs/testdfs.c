@@ -9,6 +9,10 @@
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/console/console.h>
 #include <sys/fs/fs.h>
+#include <sys/string/string.h>
+
+uint8_t FILE1_CONTENT[] = {"This is the file i am i am, this is the file i am"};
+uint8_t FILE1_NAME[] = {"Dave"};
 
 void test_dfs() {
 	uint8_t devicename[] ={"disk2"};
@@ -19,7 +23,8 @@ void test_dfs() {
 		struct fs_filesystem* fs = fs_find(fsname);
 		if (0!=fs){
 			(*fs->format)(dsk);
-			(*fs->list_dir)(dsk);
+//			(*fs->list_dir)(dsk);
+			(*fs->write)(dsk, FILE1_NAME, FILE1_CONTENT, strlen(FILE1_CONTENT)+1);
 		} else {
 			kprintf("Unable to find %s\n",fsname);
 		}

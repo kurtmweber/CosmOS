@@ -51,3 +51,14 @@ void dfs_read_dir_block(struct device* dev, struct dfs_dir_block* dir_block, uin
     block_read(dev, lba, (uint8_t*) dir_block,1);
 }
 
+void dfs_write_map_block(struct device* dev, struct dfs_map_block* map_block, uint64_t lba) {
+    ASSERT_NOT_NULL(dev, "dev cannot be null");    
+    ASSERT_NOT_NULL(map_block, "map_block cannot be null");    
+    block_write(dev, lba, (uint8_t*) map_block,1);
+}
+
+void dfs_read_map_block(struct device* dev, struct dfs_map_block* map_block, uint64_t lba) {
+    ASSERT_NOT_NULL(dev, "dev cannot be null");    
+    ASSERT_NOT_NULL(map_block, "map_block cannot be null");    
+    block_read(dev, lba, (uint8_t*) map_block,1);
+}
