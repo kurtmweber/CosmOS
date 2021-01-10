@@ -24,8 +24,8 @@ void test_fat() {
 			kprintf("size %llu\n", list_count(listing->lst));
 
 			for (uint32_t i=0;i<list_count(listing->lst);i++){
-				struct fs_directory* dir = (struct fs_directory*) list_get(listing->lst, i);
-				kprintf("%llu %s %llu\n", i, dir->name, dir->size);
+				struct fs_file* file = (struct fs_file*) list_get(listing->lst, i);
+				kprintf("%llu %s %llu\n", i, file->name, file->size);
 			}
 			fs_directory_listing_delete(listing);
 		} else {

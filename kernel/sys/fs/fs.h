@@ -17,7 +17,7 @@
 */
 typedef void (*fs_format)(struct device* dev);
 /*
-* returns a list of fs_directory structs. remember to delete these!
+* returns a list of fs_file structs. remember to delete these!
 */
 typedef struct fs_directory_listing* (*fs_list_dir)(struct device* dev);
 /*
@@ -35,7 +35,7 @@ struct fs_directory_listing {
     struct list* lst;
 };
 
-struct fs_directory {
+struct fs_file {
     uint8_t name[255];
     uint64_t size;
     uint32_t flags;
