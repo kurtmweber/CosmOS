@@ -31,6 +31,13 @@
 
 #define PAGE_SIZE 4096
 
+// PFE error flags
+#define PFE_ERROR_PRESENT	1
+#define PFE_ERROR_WRITE		2
+#define PFE_ERROR_USER		4
+#define PFE_ERROR_WRITE_R	8
+#define PFE_ERROR_FETCH_INS	16
+
 extern uint64_t _end;
 
 // straight typedefs
@@ -53,7 +60,7 @@ typedef enum int_15_map_region_type{
 } int_15_map_region_type;
 
 typedef enum ptt_levels{
-	PML4,
+	PML4 = 0,
 	PDP,
 	PD,
 	PT
@@ -84,7 +91,7 @@ mem_block *find_containing_block(void *addr, mem_block *list);
 int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block);
 
 // init.c
-extern pagetable_expansion_reserved_t future_pt_expansion;
+extern uint64_t future_pt_expansion[3];
 void mmu_init();
 
 // kmalloc.c

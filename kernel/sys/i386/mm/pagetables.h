@@ -66,6 +66,10 @@ typedef struct int_15_map int_15_map;
 enum ptt_levels;
 typedef enum ptt_levels ptt_levels;
 
+// use these as memos of what we're doing and when we need to convert
+typedef void * phys_addr;
+typedef void * virt_addr;
+
 typedef uint64_t pttentry;
 
 typedef struct page_directory_t{
@@ -78,16 +82,6 @@ typedef struct page_directory_t{
     uint64_t flags;
 } __attribute__((packed)) page_directory_t;
 
-/*
- * Use this struct to reserve in advance pages for one more table at each level,
- * to prevent running out
- */
-typedef struct pagetable_expansion_reserved_t{
-    uint64_t pdpt;
-    uint64_t pdt;
-    uint64_t pt;
-} pagetable_expansion_reserved_t;
-
 // directmap.c
 void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
 int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *min, uint64_t space);
@@ -99,7 +93,9 @@ extern uint64_t page_directory_size;    // number of ENTRIES, not number of byte
 void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks);
 
 // pagetables.c
+void map_page_at(uint64_t page, void *vaddr, pttentry pml4_entry);
+pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels level);
 pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
-void reserve_next_ptt(ptt_levels level, pagetable_expansion_reserved_t *expansion);
+void reserve_next_ptt(ptt_levels level, uint64_t *expansion);
 
 #endif

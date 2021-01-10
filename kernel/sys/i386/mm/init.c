@@ -14,7 +14,7 @@
 #include <sys/i386/mm/mm.h>
 #include <sys/i386/mm/pagetables.h>
 
-pagetable_expansion_reserved_t future_pt_expansion;
+uint64_t future_pt_expansion[3];
 
 void mmu_init(){
 	int_15_map *map;
@@ -49,9 +49,9 @@ void mmu_init(){
 	
 	setup_page_directory(page_directory_start, map, num_blocks);
 	
-	reserve_next_ptt(PDP, &future_pt_expansion);
-	reserve_next_ptt(PD, &future_pt_expansion);
-	reserve_next_ptt(PT, &future_pt_expansion);
+	reserve_next_ptt(PDP, future_pt_expansion);
+	reserve_next_ptt(PD, future_pt_expansion);
+	reserve_next_ptt(PT, future_pt_expansion);
 	
 	return;
 }
