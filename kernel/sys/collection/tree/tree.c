@@ -43,7 +43,7 @@ void tree_insert(struct tree* t, uint32_t key, void* value) {
     } else {
         if (0!=t->right){
             tree_insert(t->right, key,value);
-        }else {
+        } else {
             t->right = tree_new();
             t->right->key=key;
             t->right->value=value;
