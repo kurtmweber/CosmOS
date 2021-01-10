@@ -7,6 +7,7 @@
 
 #include <sys/fs/dfs/dfs.h>
 #include <sys/fs/dfs/dfs_block.h>
+#include <sys/fs/dfs/dfs_map.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/fs/block_util.h>
@@ -30,7 +31,7 @@ void dfs_format(struct device* dev) {
     /*
     * figure out how many map blocks we need
     */
-    uint32_t number_map_blocks = (block_get_sector_count(dev) / DFS_SECTORS_PER_MAP_BLOCK)+1;
+    uint32_t number_map_blocks = dfs_map_block_count(dev);
     /*
     * create superblock
     */
@@ -48,7 +49,6 @@ void dfs_format(struct device* dev) {
     * write superblock
     */
     dfs_write_superblock(dev,&superblock);
-
     /*
     * create & write map blocks
     */
