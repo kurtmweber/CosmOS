@@ -151,7 +151,8 @@ void show_cpu_data() {
 //	test_ramdisk();
 //	test_cfs();
 //	test_sfs();
-test_fat();
+	test_dfs();
+//	test_fat();
 	while (1){
 		asm_hlt();
 	}
