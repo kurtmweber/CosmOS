@@ -57,5 +57,7 @@ void dfs_write_dir_block(struct device* dev, struct dfs_dir_block* dir_block, ui
 void dfs_read_dir_block(struct device* dev, struct dfs_dir_block* dir_block, uint64_t lba);
 void dfs_write_map_block(struct device* dev, struct dfs_map_block* map_block, uint64_t lba);
 void dfs_read_map_block(struct device* dev, struct dfs_map_block* map_block, uint64_t lba);
+void dfs_write_file_block(struct device* dev, struct dfs_file_block* file_block, uint64_t lba);
+void dfs_read_file_block(struct device* dev, struct dfs_file_block* file_block, uint64_t lba);
 
 #endif

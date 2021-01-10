@@ -8,6 +8,7 @@
 #include <sys/fs/dfs/dfs.h>
 #include <sys/fs/dfs/dfs_block.h>
 #include <sys/fs/dfs/dfs_map.h>
+#include <sys/fs/dfs/dfs_dir.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/fs/block_util.h>
@@ -71,33 +72,15 @@ void dfs_format(struct device* dev) {
     kprintf("dir block: %llu\n",superblock.root_dir);
 }
 
+bool dfs_dir_list_iterator(struct dfs_file_block* file_block) {
+    ASSERT_NOT_NULL(file_block, "file_block cannot be null"); 
+    kprintf("dfs file at block %s\n",file_block->name);
+    return true;
+}
+
 struct fs_directory_listing* dfs_list_dir(struct device* dev) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null"); 
-    /*
-    * get the superblock
-    */
-    struct dfs_superblock_block superblock;
-    dfs_read_superblock(dev, &superblock);
-    ASSERT(superblock.magic==0x00444653,"Invalid superblock");
-    kprintf("Superblock blocks_size %llu blocks_count %llu\n", superblock.blocks_size, superblock.blocks_count);
-    /*
-    * iterate directory blocks
-    */
-    bool more=true;
-    uint64_t block=superblock.root_dir;
-    while (more) {
-        /*
-        * get the root dir
-        */
-        struct dfs_dir_block root_dir;
-        dfs_read_dir_block(dev, &root_dir, superblock.root_dir);
-        for (uint32_t i=0; i<DFS_FILES_PER_DIR_BLOCK;i++) {
-            uint64_t file_block =  root_dir.files[i];
-            if (0!=file_block){
-                kprintf("dfs file at block %llu\n",i);
-            }  
-        }        
-    }
+    ASSERT_NOT_NULL(dev, "dev cannot be null");  
+    dfs_dir_iterate_files(dev, &dfs_dir_list_iterator);
 }
 
 void dfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size){
