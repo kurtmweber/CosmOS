@@ -49,6 +49,10 @@ void ata_detect_addresses(struct device* dev){
 	
 	bar_result = pci_header_read_bar3(bus, device, function);
 	controller->channels[ATA_SECONDARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x376 : bar_result);
+
+	bar_result = pci_header_read_bar4(bus, device, function);
+
+	kprintf("BusMaster base: 0x%llX\n", (uint64_t)controller->dma_addr);
 }
 
 /*

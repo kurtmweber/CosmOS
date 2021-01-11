@@ -41,7 +41,7 @@ void mmu_init(){
 	virtqueue_buf = find_aligned_after(brk, VIRTQUEUE_ALIGNMENT);
 	kprintf("   Reserved Virtqueue memory of size %#hX at %#hX\n",VIRTQUEUE_BUFSIZ, virtqueue_buf);
 	brk = virtqueue_buf + VIRTQUEUE_BUFSIZ;
-	
+		
 	kmalloc_init();
 	
 	map = read_int_15_map(&num_blocks, &lrg_block);

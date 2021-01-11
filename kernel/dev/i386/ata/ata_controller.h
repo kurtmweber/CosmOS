@@ -34,6 +34,7 @@ struct ide_channel{
 struct ata_controller {
 	struct ide_channel channels[2];
 	const char* identity;
+	uint32_t dma_addr;
 };
 
 /*
