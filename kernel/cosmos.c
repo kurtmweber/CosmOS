@@ -74,10 +74,6 @@ void CosmOS(){
 	*/
 	kprintf("Initializing Device Registry...\n");
 	devicemgr_init();
-
-	uint64_t *test = (void *)0xFFFF900000000017;
-	*test = 69;
-	kprintf("test, value: 0x%llX, %llu\n", (uint64_t)test, *test);
 	
 	/*
 	* Register all devices
