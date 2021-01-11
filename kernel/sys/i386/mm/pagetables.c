@@ -120,20 +120,16 @@ pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels le
 	ASSERT((level < PT), "Invalid level for obtain_ptt_entry()");
 
 	base = CONV_PHYS_ADDR(PTT_EXTRACT_BASE(parent_entry));
-	kprintf("Base: 0x%llX\n", (uint64_t)base);
-
+	
 	index = vaddr_ptt_index(vaddr, level);
 
 	if (!base[index]){	// if the entry is empty
 		// this needs some explanation
 		new_ptt_page = future_pt_expansion[level];
-		kprintf("New PTT page %llu\n", new_ptt_page);
 		reserve_next_ptt(level + 1, future_pt_expansion);
 		memset((void *)CONV_PHYS_ADDR((new_ptt_page * PAGE_SIZE)), 0, PAGE_SIZE);
 		base[index] = ptt_entry_create((void *)(new_ptt_page * PAGE_SIZE), true, true, user);
 	}
-
-	kprintf("base[index]: 0x%llX\n", (uint64_t)base[index]);
 
 	return base[index];
 }
