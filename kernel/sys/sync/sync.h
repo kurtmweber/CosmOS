@@ -11,7 +11,8 @@ typedef volatile bool kernel_spinlock;    // 64 bytes to take up a full cache li
 
 
 // spinlock.c
-extern kernel_spinlock mem_lock;
+extern kernel_spinlock page_dir_lock;
+extern kernel_spinlock page_table_lock;
 
 void spinlocks_init();
 void spinlock_acquire(kernel_spinlock *lock);

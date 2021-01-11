@@ -23,7 +23,7 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
     uint64_t i, j;
     uint64_t start_page = 0;
     
-    spinlock_acquire(&mem_lock);
+    spinlock_acquire(&page_dir_lock);
 
     /*
      * Eventually, make this faster by implementing a linked list of blocks of
@@ -49,7 +49,7 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
                     page_directory[i].ref_count++;
                     page_directory[i].type = purpose;
                 }
-                spinlock_release(&mem_lock);
+                spinlock_release(&page_dir_lock);
                 return start_page;
             }
         } else {
@@ -62,7 +62,7 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
         }
     }
 
-    spinlock_release(&mem_lock);
+    spinlock_release(&page_dir_lock);
 
     // If we get here, we never found a block of sufficient size, return 0
     return 0;
@@ -79,14 +79,14 @@ void slab_free(uint64_t start, uint64_t len){
 
     uint64_t i;
 
-    spinlock_acquire(&mem_lock);
+    spinlock_acquire(&page_dir_lock);
 
     for (i = start; i < (start + len); i++){
         page_directory[i].ref_count = 0;
         page_directory[i].type = PDT_PHYS_AVAIL;
     }
 
-    spinlock_release(&mem_lock);
+    spinlock_release(&page_dir_lock);
 
     return;
 }

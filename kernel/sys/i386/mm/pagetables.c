@@ -14,6 +14,7 @@
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
 #include <sys/debug/assert.h>
+#include <sys/sync/sync.h>
 
 #ifdef COMPILE_PLATFORM_LINUX 
 pttentry *extract_cr3_base_address(pttentry cr3) __attribute__((alias("extract_pttentry_base_address")));
@@ -94,6 +95,8 @@ void map_page_at(uint64_t page, void *vaddr, pttentry pml4_entry, bool user){
 	void *vaddr_page_base;
 	pttentry pdp_entry, pd_entry, pt_entry;
 
+	spinlock_acquire(&page_table_lock);
+
 	vaddr_page_base = (void *)(((uint64_t)vaddr / PAGE_SIZE) * PAGE_SIZE);
 
 	pdp_entry = obtain_ptt_entry(vaddr_page_base, pml4_entry, PML4, user);
@@ -103,6 +106,8 @@ void map_page_at(uint64_t page, void *vaddr, pttentry pml4_entry, bool user){
 	add_pt_page(vaddr_page_base, page, pt_entry, user);
 
 	asm_cr3_reload();
+
+	spinlock_release(&page_table_lock);
 
 	return;
 }
