@@ -17,5 +17,5 @@ __attribute__ ((interrupt)) void isrPFE(stackFrame *frame, uint64_t error){
 
     page_fault_handler(error, asm_cr2_read(), asm_cr3_read());
 
-	panic("Page fault error!");
+    return;
 }

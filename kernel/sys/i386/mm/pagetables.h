@@ -93,8 +93,9 @@ extern uint64_t page_directory_size;    // number of ENTRIES, not number of byte
 void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks);
 
 // pagetables.c
-void map_page_at(uint64_t page, void *vaddr, pttentry pml4_entry);
-pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels level);
+void add_pt_page(virt_addr *vaddr, uint64_t page, pttentry parent_entry, bool user);
+void map_page_at(uint64_t page, void *vaddr, pttentry pml4_entry, bool user);
+pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels level, bool user);
 pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
 void reserve_next_ptt(ptt_levels level, uint64_t *expansion);
 

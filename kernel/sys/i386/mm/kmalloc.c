@@ -32,15 +32,16 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
 	if (!kmalloc_block_list){
 		panic("Uninitialized kmalloc block list!");
 	}
-	
+
 	cur_block = kmalloc_block_list;
-	
+
 	do {
 			
 		last = cur_block;	// We need to save this in case we have to add a new block.
 					// If we do, then without this we'd have to walk the list again from the beginning
 					// to find the existing last block and update its next pointer to the block we
 					// just added.
+		//kprintf("about to go last: 0x%llX\n", (uint64_t)last);
 					
 		if (cur_block->used != false){
 			continue;
@@ -96,11 +97,11 @@ void kfree(void *p){
 
 void *kmalloc(uint64_t size){
 	kmalloc_block *cur_block;
-	
+
 	if (size % KMALLOC_ALIGN_BYTES){
 		size += (KMALLOC_ALIGN_BYTES - (size % KMALLOC_ALIGN_BYTES));
 	}
-	
+
 	if (!kmalloc_block_list){
 		if ((uint64_t)brk % KMALLOC_ALIGN_BYTES){
 			cur_block = (kmalloc_block *)(brk + (KMALLOC_ALIGN_BYTES - ((uint64_t)brk % KMALLOC_ALIGN_BYTES)));
@@ -125,7 +126,7 @@ void *kmalloc(uint64_t size){
 void kmalloc_init(){
 	kmalloc_block_list = 0;
 	kmalloc_block_list_end = 0;
-	
+
 	return;
 }
 

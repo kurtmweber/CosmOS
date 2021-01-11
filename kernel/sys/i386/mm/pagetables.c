@@ -23,7 +23,17 @@ pttentry *extract_cr3_base_address(pttentry entry){
 }
 #endif
 
-pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels level);
+void add_pt_page(virt_addr *vaddr, uint64_t page, pttentry parent_entry, bool user){
+	pttentry *base;
+	uint16_t index;
+
+	base = CONV_PHYS_ADDR(PTT_EXTRACT_BASE(parent_entry));
+	index = vaddr_ptt_index(vaddr, PT);
+
+	if (!base[index]){
+		base[index] = ptt_entry_create((void *)(page * PAGE_SIZE), true, true, user);
+	}
+}
 
 pttentry *extract_pttentry_base_address(pttentry entry){
 	return (pttentry *)(entry & PTTENTRY_BASE_MASK);
@@ -80,17 +90,24 @@ bool is_page_allocated(void *address){
 	return true;
 }
 
-void map_page_at(uint64_t page, void *vaddr, pttentry pml4_entry){
+void map_page_at(uint64_t page, void *vaddr, pttentry pml4_entry, bool user){
 	void *vaddr_page_base;
-	pttentry pdp_entry;
-	uint16_t pml4_index;
+	pttentry pdp_entry, pd_entry, pt_entry;
 
 	vaddr_page_base = (void *)(((uint64_t)vaddr / PAGE_SIZE) * PAGE_SIZE);
 
-	pdp_entry = obtain_ptt_entry(vaddr_page_base, pml4_entry, PML4);
+	pdp_entry = obtain_ptt_entry(vaddr_page_base, pml4_entry, PML4, user);
+	pd_entry = obtain_ptt_entry(vaddr_page_base, pdp_entry, PDP, user);
+	pt_entry = obtain_ptt_entry(vaddr_page_base, pd_entry, PD, user);
+
+	add_pt_page(vaddr_page_base, page, pt_entry, user);
+
+	asm_cr3_reload();
+
+	return;
 }
 
-pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels level){
+pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels level, bool user){
 	uint16_t index;
 	pttentry *base;
 	uint64_t new_ptt_page;
@@ -98,16 +115,22 @@ pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels le
 	ASSERT((level < PT), "Invalid level for obtain_ptt_entry()");
 
 	base = CONV_PHYS_ADDR(PTT_EXTRACT_BASE(parent_entry));
+	kprintf("Base: 0x%llX\n", (uint64_t)base);
 
 	index = vaddr_ptt_index(vaddr, level);
 
 	if (!base[index]){	// if the entry is empty
-		if (level < PT){
-
-		} else {
-			reserve_next_ptt(level + 1, future_pt_expansion);
-		}
+		// this needs some explanation
+		new_ptt_page = future_pt_expansion[level];
+		kprintf("New PTT page %llu\n", new_ptt_page);
+		reserve_next_ptt(level + 1, future_pt_expansion);
+		memset((void *)CONV_PHYS_ADDR((new_ptt_page * PAGE_SIZE)), 0, PAGE_SIZE);
+		base[index] = ptt_entry_create((void *)(new_ptt_page * PAGE_SIZE), true, true, user);
 	}
+
+	kprintf("base[index]: 0x%llX\n", (uint64_t)base[index]);
+
+	return base[index];
 }
 
 pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user){
@@ -149,7 +172,8 @@ void reserve_next_ptt(ptt_levels level, uint64_t *expansion){
 
 	ASSERT((level == PDP) || (level == PD) || (level == PT), "Invalid PTT level for expansion reservation!");
 
-	expansion[level] = slab_allocate(1, PDT_SYSTEM_RESERVED);
+	// PDP = 1 because PML4 = 0, so we subtract 1 to get the proper array index
+	expansion[level - 1] = slab_allocate(1, PDT_SYSTEM_RESERVED);
 }
 
 uint16_t vaddr_ptt_index(void *address, ptt_levels level){
