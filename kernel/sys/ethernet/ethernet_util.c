@@ -16,7 +16,7 @@ void ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
 
 }
 
-void ethernet__write(struct device* dev, uint8_t* data, uint32_t size) {
+void ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
     ASSERT_NOT_NULL(dev, "dev must not be null");
     ASSERT_NOT_NULL(data, "data must not be null");
     struct deviceapi_ethernet* rtc_api = (struct deviceapi_ethernet*) dev->api;

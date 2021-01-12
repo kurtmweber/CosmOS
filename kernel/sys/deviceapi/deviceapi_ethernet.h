@@ -14,11 +14,11 @@
 #include <sys/devicemgr/devicemgr.h>
 
 typedef void (*ethernet_read_function)(struct device* dev, uint8_t* data, uint32_t size);
-typedef void (*ethernet__write_function)(struct device* dev, uint8_t* data, uint32_t size);
+typedef void (*ethernet_write_function)(struct device* dev, uint8_t* data, uint32_t size);
 
 struct deviceapi_ethernet {
     ethernet_read_function read;
-    ethernet__write_function write;
+    ethernet_write_function write;
 };
 
 #endif

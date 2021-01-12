@@ -12,7 +12,7 @@
 #include <sys/devicemgr/devicemgr.h>
 
 void ethernet_read(struct device* dev, uint8_t* data, uint32_t size);
-void ethernet__write(struct device* dev, uint8_t* data, uint32_t size);
+void ethernet_write(struct device* dev, uint8_t* data, uint32_t size);
 
 #endif
 
