@@ -34,7 +34,7 @@ uint32_t dfs_map_find_free_block(struct device* dev) {
     for (uint64_t block=1; block <= dfs_map_block_count(dev);block++){
         struct dfs_map_block mapblock;
         dfs_read_map_block(dev, &mapblock, block);
-        for (int i=0; i<DFS_BLOCK_SIZE;i++){
+        for (uint64_t i=0; i<DFS_BLOCK_SIZE;i++){
             if (mapblock.map[i]==DFS_MAP_BLOCK_FREE){
                 mapblock.map[i]=DFS_MAP_BLOCK_USED;
                 return i; 
