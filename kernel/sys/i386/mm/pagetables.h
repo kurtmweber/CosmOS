@@ -9,6 +9,7 @@
 #define _PAGETABLES_H
 
 #include <types.h>
+#include <sys/i386/mm/mm.h>
 
 typedef uint64_t ptt_t;     // page translation table
 
@@ -58,6 +59,19 @@ typedef enum page_directory_types{
     PDT_MAX_PD_TYPE = 0xFFFFFFFFFFFFFFFF    // to force enum to 64 bits
 } page_directory_types;
 
+// forward type declarations to avoid compilation errors
+struct int_15_map;
+typedef struct int_15_map int_15_map;
+
+enum ptt_levels;
+typedef enum ptt_levels ptt_levels;
+
+// use these as memos of what we're doing and when we need to convert
+typedef void * phys_addr;
+typedef void * virt_addr;
+
+typedef uint64_t pttentry;
+
 typedef struct page_directory_t{
     uint64_t ref_count;
     union {
@@ -74,13 +88,15 @@ int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *m
 uint64_t size_pd(uint64_t space);
 
 // pagedirectory.c
+extern page_directory_t *page_directory;
+extern uint64_t page_directory_size;    // number of ENTRIES, not number of bytes
 void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks);
 
 // pagetables.c
-extern page_directory_t *page_directory;
+void add_pt_page(virt_addr *vaddr, uint64_t page, pttentry parent_entry, bool user);
+void map_page_at(uint64_t page, void *vaddr, pttentry pml4_entry, bool user);
+pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels level, bool user);
 pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
-
-// slab.c
-uint64_t slab_allocate(uint64_t pages, page_directory_types purpose);
+void reserve_next_ptt(ptt_levels level, uint64_t *expansion);
 
 #endif

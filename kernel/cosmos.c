@@ -60,6 +60,9 @@ void CosmOS(){
 	
 	kprintf("Initializing IDT...\n");
 	idt_init();
+
+	kprintf("Initializing spinlocks...\n");
+	spinlocks_init();
 	
 	kprintf("Initializing MMU...\n");
 	mmu_init();
@@ -72,10 +75,7 @@ void CosmOS(){
 	*/
 	kprintf("Initializing Device Registry...\n");
 	devicemgr_init();
-
-	kprintf("Initializing spinlocks...\n");
-	spinlocks_init();
-
+	
 	/*
 	* Register all devices
 	*/

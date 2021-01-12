@@ -14,6 +14,7 @@
 
 typedef enum intVectors{
 	DE = 0,
+	PFE = 0xE,
 	IRQ0 = PIC_PRIMARY_VECTOR_OFFSET,
 	IRQ1,
 	IRQ2,

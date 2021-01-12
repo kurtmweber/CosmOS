@@ -7,11 +7,14 @@
 
 #include <types.h>
 #include <sys/console/console.h>
+#include <sys/asm/misc.h>
 #include <dev/i386/isadma/isadma.h>
 #include <dev/virtio/virtqueue.h>
 
 #include <sys/i386/mm/mm.h>
 #include <sys/i386/mm/pagetables.h>
+
+uint64_t future_pt_expansion[3];
 
 void mmu_init(){
 	int_15_map *map;
@@ -22,10 +25,13 @@ void mmu_init(){
 	
 	brk = &_end;
 
+	system_cr3 = asm_cr3_read();
+
 	/*
 	* ISA DMA buffers need to be in lower 64MB of RAM and page aligned
 	*/
 	isadma_buf = find_aligned_after(brk, ISA_DMA_ALIGNMENT);
+	kprintf("ISADMA buf: 0x%llX", (uint64_t)isadma_buf);
 	kprintf("   Reserved ISA DMA memory of size %#hX at %#hX\n", ISA_DMA_BUFSIZ, isadma_buf);
 	brk = isadma_buf + ISA_DMA_BUFSIZ;
 
@@ -34,32 +40,19 @@ void mmu_init(){
 	*/
 	virtqueue_buf = find_aligned_after(brk, VIRTQUEUE_ALIGNMENT);
 	kprintf("   Reserved Virtqueue memory of size %#hX at %#hX\n",VIRTQUEUE_BUFSIZ, virtqueue_buf);
-	brk = isadma_buf + VIRTQUEUE_BUFSIZ;
+	brk = virtqueue_buf + VIRTQUEUE_BUFSIZ;
 	
 	kmalloc_init();
 	
 	map = read_int_15_map(&num_blocks, &lrg_block);
 
 	page_directory_start = (page_directory_t *)setup_direct_map(map, num_blocks);
-	
+
 	setup_page_directory(page_directory_start, map, num_blocks);
-	
-	init_usable_phys_blocks(map[lrg_block]);
-	
-	enum_usable_phys_blocks(map, num_blocks);
-	
-	sort_usable_phys_blocks();
 
-	reset_brk_after_malloc();
+	reserve_next_ptt(PDP, future_pt_expansion);
+	reserve_next_ptt(PD, future_pt_expansion);
+	reserve_next_ptt(PT, future_pt_expansion);
 
-	// split off the first three blocks of physical memory we've allocated:
-	// 0x0000000000000000 - 0x00000000000FFFFF: ID-mapped first megabyte
-	// 0x0000000000100000 - 0x00000000008FFFFF: Kernel stack
-	// 0x0000000000900000 - 0x0000000000AFFFFF: Kernel + kernel heap
-	/*b = find_containing_block(0x0000000000000000, usable_phys_blocks);
-	kprintf("Base: %llX\tLength: %llX\n", b->base, b->len);*/
-
-	
-	
 	return;
 }

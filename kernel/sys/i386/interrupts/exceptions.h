@@ -14,5 +14,6 @@
 #include <sys/i386/interrupts/irq.h>
 
 void isrDE(stackFrame *frame);
+void isrPFE(stackFrame *frame, uint64_t error);
 
 #endif

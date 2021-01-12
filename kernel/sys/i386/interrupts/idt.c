@@ -8,7 +8,7 @@
 #include <types.h>
 #include <sys/asm/asm.h>
 #include <sys/i386/interrupts/irq.h>
-#include <sys/i386/interrupts/de.h>
+#include <sys/i386/interrupts/exceptions.h>
 #include <sys/i386/interrupts/idt.h>
 
 #include <sys/debug/assert.h>
@@ -20,6 +20,7 @@ idtEntry idt[IDT_SIZE];
 void idt_init(){
 	idtr idtr;
 	idt_add_ISR(isrDE, DE);
+	idt_add_ISR(isrPFE, PFE);
 	
 	// IRQs
 	idt_add_ISR(irq0, IRQ0);
