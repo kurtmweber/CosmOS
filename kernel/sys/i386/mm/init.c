@@ -31,8 +31,8 @@ void mmu_init(){
 	* ISA DMA buffers need to be in lower 64MB of RAM and page aligned
 	*/
 	isadma_buf = find_aligned_after(brk, ISA_DMA_ALIGNMENT);
-	kprintf("ISADMA buf: 0x%llX", (uint64_t)isadma_buf);
-	kprintf("   Reserved ISA DMA memory of size %#hX at %#hX\n", ISA_DMA_BUFSIZ, isadma_buf);
+	kprintf("   ISADMA buf: 0x%llX", (uint64_t)isadma_buf);
+	kprintf(" Reserved ISA DMA memory of size %#hX at %#hX\n", ISA_DMA_BUFSIZ, isadma_buf);
 	brk = isadma_buf + ISA_DMA_BUFSIZ;
 
 	/*

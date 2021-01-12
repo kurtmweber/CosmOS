@@ -51,7 +51,7 @@ uint32_t list_add(struct list* lst, void* value) {
     }
 
     // expand the underlying array?
-    if (lst->count+1 == array_size(lst->arr)){
+    if (lst->count+1 == array_size(lst->arr)) {
         array_grow(lst->arr, EXPAND_SIZE);
     }
     // save the data
@@ -65,7 +65,7 @@ uint32_t list_add(struct list* lst, void* value) {
 /*
 * set value at index
 */
-void  list_set(struct list* lst, uint32_t position, void* value) {
+void list_set(struct list* lst, uint32_t position, void* value) {
 	ASSERT_NOT_NULL(lst, "list cannot be null");
     if (0==lst->arr){
         panic("why is the underlying array null?!");
@@ -81,7 +81,7 @@ void* list_get(struct list* lst, uint32_t position) {
 	ASSERT_NOT_NULL(lst, "list cannot be null");
     if (0==lst->arr){
         panic("why is the underlying array null?!");
-        }
+    }
     if ((position>=0) &&(position< lst->count) ){
         return lst->arr->data[position];
     } else {
@@ -99,4 +99,25 @@ void list_iterate(struct list* lst, listIterator iter) {
         (*iter)(lst->arr->data[i]);
     }
 }
+
+/*
+* remove element at index
+*/
+void list_remove(struct list* lst, uint32_t position) {
+    ASSERT_NOT_NULL(lst, "list cannot be null");
+    if (0==lst->arr){
+        panic("why is the underlying array null?!");
+    }
+    if ((position>=0) && (position< lst->count)) {
+        if (position!=lst->count-1) {
+            for(uint32_t i=position; i<lst->count-1;i++) {
+                lst->arr->data[i]=lst->arr->data[i+1];
+            }
+        }
+        lst->count = lst->count-1;
+    } else {
+        panic("invalid list index passed to list_remove\n");
+    }
+}
+
 
