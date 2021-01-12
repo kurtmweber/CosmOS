@@ -8,18 +8,19 @@ QEMUARGS=                                                 \
   -no-reboot                                              \
   -drive format=raw,file=hda.img                          \
   -smp 1                                                  \
-  -nic user,ipv6=off,model=ne2k_pci,mac=52:54:98:76:54:32 \
+  -nic user,ipv6=off,model=rtl8139,mac=52:54:98:76:54:32 \
   -serial stdio                                           \
   -audiodev coreaudio,id=audio0                           \
   -monitor telnet::45454,server,nowait                    \
-  -device sb16,audiodev=audio0                            \
-  -nic user,model=virtio-net-pci                          \
-  -drive if=virtio,file=hda.img,format=raw                \
   -drive file=Dos622-1.img,index=1,format=raw           \
   -drive file=blank.img,index=2,format=raw
 
  #  -device usb-ehci                                        \
 
+#  -drive if=virtio,file=hda.img,format=raw                \
+#  -device sb16,audiodev=audio0                            \
+# -nic user,model=virtio-net-pci                          \
+ 
   
 # note that we're mounting the hda.img as a floppy image. good enough for now.
 # the first bytes are FA B4 00 B0 03 CD 10 88 16 7C 7C B8 01 24 CD 15
