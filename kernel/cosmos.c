@@ -151,7 +151,7 @@ void show_cpu_data() {
 //	test_cfs();
 //	test_sfs();
 //test_fat();
-	test_list();
+//	test_list();
 	while (1){
 		asm_hlt();
 	}
