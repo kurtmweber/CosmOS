@@ -1,18 +1,18 @@
 //*****************************************************************
 // This file is part of CosmOS                                    *
-// Copyright (C) 2020 Tom Everett                                 *
+// Copyright (C) 2021 Tom Everett                                 *
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _ETHERNET_H
-#define _ETHERNET_H
+#ifndef _ETHERNET_UTIL_H
+#define _ETHERNET_UTIL_H
 
 #include <types.h>
+#include <sys/devicemgr/devicemgr.h>
 
-
-void send(uint8_t* destinationMAC, uint8_t* packet);
-uint8_t* receive();
+void ethernet_read(struct device* dev, uint8_t* data, uint32_t size);
+void ethernet__write(struct device* dev, uint8_t* data, uint32_t size);
 
 #endif
 
