@@ -107,7 +107,6 @@ void CosmOS(){
 	kprintf("\n");
 
 	show_cpu_data();
-//	playsb16();
 	/*
 	* run various functions to show that things work....
 	*/
@@ -151,7 +150,8 @@ void show_cpu_data() {
 //	test_ramdisk();
 //	test_cfs();
 //	test_sfs();
-test_fat();
+//test_fat();
+	test_list();
 	while (1){
 		asm_hlt();
 	}

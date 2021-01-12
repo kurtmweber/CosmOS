@@ -25,5 +25,6 @@
 #include <tests/fs/testfat.h>
 #include <tests/fs/testsfs.h>
 #include <tests/fs/testcfs.h>
+#include <tests/sys/testlist.h>
 
 #endif

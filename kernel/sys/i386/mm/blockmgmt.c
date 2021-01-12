@@ -31,6 +31,9 @@ mem_block *find_containing_block(void *addr, mem_block *list){
 const uint16_t map_base_addr = 0x500;
 
 int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block){
+	ASSERT_NOT_NULL(num_blocks, "num_blocks must not be null");
+	ASSERT_NOT_NULL(lrg_block, "lrg_block must not be null");
+
 	int_15_map *map;
 	uint8_t i = 0;
 	
