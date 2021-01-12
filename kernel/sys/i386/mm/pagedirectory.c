@@ -11,6 +11,7 @@
 #include <sys/i386/mm/pagetables.h>
 #include <sys/panic/panic.h>
 
+uint64_t page_directory_size;
 page_directory_t *page_directory;
 
 uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_blocks);
@@ -79,6 +80,8 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
     if ((uint64_t)last_phys_addr % PAGE_SIZE){
         num_phys_pages++;
     }
+
+    page_directory_size = num_phys_pages;
 
     for (i = 0; i < num_phys_pages; i++){
         bios_type = get_page_bios_type(i, phys_map, num_blocks);

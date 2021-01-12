@@ -32,15 +32,16 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
 	if (!kmalloc_block_list){
 		panic("Uninitialized kmalloc block list!");
 	}
-	
+
 	cur_block = kmalloc_block_list;
-	
+
 	do {
 			
 		last = cur_block;	// We need to save this in case we have to add a new block.
 					// If we do, then without this we'd have to walk the list again from the beginning
 					// to find the existing last block and update its next pointer to the block we
 					// just added.
+		//kprintf("about to go last: 0x%llX\n", (uint64_t)last);
 					
 		if (cur_block->used != false){
 			continue;
@@ -96,11 +97,11 @@ void kfree(void *p){
 
 void *kmalloc(uint64_t size){
 	kmalloc_block *cur_block;
-	
+
 	if (size % KMALLOC_ALIGN_BYTES){
 		size += (KMALLOC_ALIGN_BYTES - (size % KMALLOC_ALIGN_BYTES));
 	}
-	
+
 	if (!kmalloc_block_list){
 		if ((uint64_t)brk % KMALLOC_ALIGN_BYTES){
 			cur_block = (kmalloc_block *)(brk + (KMALLOC_ALIGN_BYTES - ((uint64_t)brk % KMALLOC_ALIGN_BYTES)));
@@ -122,56 +123,17 @@ void *kmalloc(uint64_t size){
 	}
 }
 
-void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment){
-	ASSERT_NOT_NULL(block, "block must not be null");
-
-	// Expands block->len by 0 or more bytes, so that
-	// e.g. if block->base is 14, and alignment is 8, then block->len
-	// will be set to 2; this way the block ends at address 15
-
-	// If the block is already sized so that it ends at an appropriate address,
-	// then block->len remains unchanged
-
-	// This is used primarily to expand the last block in a page
-	// in preparation for setting aside succeeding pages for reserved uses
-	// such as DMA areas, page tables, etc. that need to be withheld from
-	// the heap space available to kmalloc(), but it conceivably might
-	// have other uses as well.
-
-	// returns the first address SUBSEQUENT to the end of the block, so e.g.
-	// in the above example it returns 16
-
-	void *end_addr;
-	uint64_t diff;
-
-	end_addr = block->base + block->len;
-	diff = (uint64_t)end_addr % alignment;
-	if (!diff){
-		return end_addr;
-	}
-
-	// EXAMPLE:
-	// alignment = 8, block->base = 2, block->len = 9
-	// so end_addr = 11, therefore diff = 3
-	// alignment - diff = 5, so we need to add 5 to block->len
-	// block->len is now 14, and block->base + block->len = 16, which 
-	// is the beginning of a new 8-byte-aligned block
-
-	block->len += (alignment - diff);
-	end_addr = block->base + block->len;
-	return end_addr;
-}
-
 void kmalloc_init(){
 	kmalloc_block_list = 0;
 	kmalloc_block_list_end = 0;
-	
+
 	return;
 }
-/*
-* last can be null here
-*/
+
 kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size){
+	/*
+ 	 * last can be null here
+ 	 */
 	kmalloc_block *new;
 	
 	if ((UINT64_T_MAX - (sizeof(kmalloc_block) + size - 1)) < (uint64_t)brk){		// out of address space
@@ -244,10 +206,4 @@ void *krealloc(void *ptr, uint64_t size){
 	
 	kfree(ptr);
 	return new_block;
-}
-
-void reset_brk_after_malloc(){
-	brk = kmalloc_align_block_end(kmalloc_block_list_end, 4096);
-
-	return;
 }

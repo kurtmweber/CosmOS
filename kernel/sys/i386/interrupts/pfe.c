@@ -6,14 +6,16 @@
  *****************************************************************/
 
 #include <types.h>
+#include <sys/asm/misc.h>
+#include <sys/console/console.h>
+#include <sys/debug/assert.h>
+#include <sys/i386/interrupts/exceptions.h>
+#include <sys/i386/mm/mm.h>
 
-typedef volatile bool kernel_spinlock;    // 64 bytes to take up a full cache line, which improves performance on atomic operations
+__attribute__ ((interrupt)) void isrPFE(stackFrame *frame, uint64_t error){
+	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
 
+    page_fault_handler(error, asm_cr2_read(), asm_cr3_read());
 
-// spinlock.c
-extern kernel_spinlock page_dir_lock;
-extern kernel_spinlock page_table_lock;
-
-void spinlocks_init();
-void spinlock_acquire(kernel_spinlock *lock);
-void spinlock_release(kernel_spinlock *lock);
+    return;
+}
