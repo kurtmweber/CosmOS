@@ -57,7 +57,7 @@ void dfs_format(struct device* dev) {
         struct dfs_map_block map_block;
         memset((uint8_t*)&map_block,0,sizeof(struct dfs_map_block));
         dfs_write_map_block(dev, &map_block, i+1);
-        kprintf("map block: %llu\n",i+1);
+    //    kprintf("map block: %llu\n",i+1);
     }
     /*
     * root dir block

@@ -150,7 +150,7 @@ void show_cpu_data() {
 //	test_ramdisk();
 //	test_cfs();
 //	test_sfs();
-	test_dfs();
+//	test_dfs();
 //	test_fat();
 //test_fat();
 //	test_list();
