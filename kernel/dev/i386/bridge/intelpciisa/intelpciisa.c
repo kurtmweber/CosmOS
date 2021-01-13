@@ -51,4 +51,6 @@ void pciisa_search_cb(struct pci_device* dev) {
 /**
  * find all bridge devices and register them
  */
-void pciisa_bridge_register() { pci_devicemgr_search_devicetype(PCI_CLASS_BRIDGE, PCI_BRIDGE_SUBCLASS_ISA, &pciisa_search_cb); }
+void pciisa_bridge_register() {
+    pci_devicemgr_search_devicetype(PCI_CLASS_BRIDGE, PCI_BRIDGE_SUBCLASS_ISA, &pciisa_search_cb);
+}

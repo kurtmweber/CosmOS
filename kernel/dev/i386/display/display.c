@@ -37,4 +37,6 @@ void display_search_cb(struct pci_device* dev) {
 /**
  * find all Display devices and register them
  */
-void display_devicemgr_register_devices() { pci_devicemgr_search_devicetype(PCI_CLASS_DISPLAY, PCI_DISPLAY_SUBCLASS_VGA, &display_search_cb); }
+void display_devicemgr_register_devices() {
+    pci_devicemgr_search_devicetype(PCI_CLASS_DISPLAY, PCI_DISPLAY_SUBCLASS_VGA, &display_search_cb);
+}

@@ -51,4 +51,6 @@ void i982371_search_cb(struct pci_device* dev) {
 /**
  * find all bridge devices and register them
  */
-void i982371_bridge_register() { pci_devicemgr_search_devicetype(PCI_CLASS_BRIDGE, PCI_BRIDGE_SUBCLASS_OTHER, &i982371_search_cb); }
+void i982371_bridge_register() {
+    pci_devicemgr_search_devicetype(PCI_CLASS_BRIDGE, PCI_BRIDGE_SUBCLASS_OTHER, &i982371_search_cb);
+}
