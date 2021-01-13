@@ -180,8 +180,8 @@ void isadma_initialize_floppy_DMA() {
 */
 // http://www.osdever.net/documents/dmaprogramming.pdf
 void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parameters){
-	ASSERT(channel>=0, "channel must be greater than or equal to 0");
-	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
+	ASSERT(channel>=0);
+	ASSERT(channel<ISA_DMA_NUM_BUFFERS);
 	ASSERT_NOT_NULL(parameters);
 
 	parameters->channel=channel;
@@ -320,10 +320,10 @@ void isadma_set_transfer_mode(struct isa_dma_channel_parameters* channel_paramet
 * this function shared by read and write
 */
 void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
-	ASSERT(channel>=0, "channel must be greater than or equal to 0");
-	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
-	ASSERT(channel!=0, "DMA channel 0 is unusable (RAM refresh channel)");
-	ASSERT(channel!=4, "DMA channel 4 is unusable (cascade channel)");
+	ASSERT(channel>=0);
+	ASSERT(channel<ISA_DMA_NUM_BUFFERS);
+	ASSERT(channel!=0);
+	ASSERT(channel!=4);
 
 	kprintf("DMA init for channel %#X with len %#X\n", channel, len);
 
@@ -365,8 +365,8 @@ void isadma_init_dma_write(uint8_t channel, uint32_t len) {
 * get the DMA address for a channel
 */
 uint64_t isadma_get_dma_block(uint8_t channel, uint32_t len) {
-	ASSERT(channel>=0, "channel must be greater than or equal to 0");
-	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
+	ASSERT(channel>=0);
+	ASSERT(channel<ISA_DMA_NUM_BUFFERS);
 	if (len > ISA_DMA_BUFFER_SIZE){
 		panic("buffer too large for DMA");
 	}
@@ -392,7 +392,7 @@ void isadma_device_init(struct device* dev){
 	* show DMA mem
 	*/
 	uint64_t end_dma_area = (uint64_t)isadma_buf+ISA_DMA_BUFSIZ;
-	ASSERT((end_dma_area>=ISA_DMA_64M), "DMA area too high in mem");
+	ASSERT((end_dma_area>=ISA_DMA_64M));
 	kprintf("   DMA area is %#X-%#X\n",  isadma_buf, end_dma_area-1);
 	/*
 	* show DMA parameters

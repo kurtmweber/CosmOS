@@ -82,13 +82,13 @@ void VNICInit(struct device* dev){
     // make the recieve queue
     struct virtq* recieve_q = virtq_new(VNIC_QUEUE_SIZE);
     bool recieve_q_aligned = virtio_isAligned(((uint64_t)recieve_q),4096);
-    ASSERT(recieve_q_aligned, "recieve_q is not 4096 byte aligned");
+    ASSERT(recieve_q_aligned);
     deviceData->recieve_queue = recieve_q;
     
     // make the send queue
     struct virtq* send_q = virtq_new(VNIC_QUEUE_SIZE);
     bool send_q_aligned = virtio_isAligned(((uint64_t)send_q),4096);
-    ASSERT(send_q_aligned, "send_q is not 4096 byte aligned");
+    ASSERT(send_q_aligned);
     deviceData->send_queue = send_q;
 
     uint8_t virtio_mac[6];

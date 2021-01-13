@@ -10,7 +10,7 @@
 
 void uitoa3(uint64_t n, char *s, uint16_t len, uint8_t base){
 	ASSERT_NOT_NULL(s);
-	ASSERT(((base>0)&& (base <=16)), "illegal base");
+	ASSERT(((base>0)&& (base <=16)));
 
 	uint16_t i = 0;
 	char *rev = s;

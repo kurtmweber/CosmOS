@@ -87,14 +87,14 @@ void dfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint
     ASSERT_NOT_NULL(dev); 
     ASSERT_NOT_NULL(name); 
     ASSERT_NOT_NULL(data); 
-    ASSERT(strlen(name)<DFS_FILENAME_SIZE,"filename too long");
+    ASSERT(strlen(name)<DFS_FILENAME_SIZE);
 }
 
 void dfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size) {
     ASSERT_NOT_NULL(dev); 
     ASSERT_NOT_NULL(name); 
     ASSERT_NOT_NULL(data); 
-    ASSERT(strlen(name)<DFS_FILENAME_SIZE,"filename too long");
+    ASSERT(strlen(name)<DFS_FILENAME_SIZE);
 
     kprintf("write file: %s of length %llu\n", name, size);
     /*
@@ -111,11 +111,11 @@ void dfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uin
 }
 
 void dfs_register() {
-    ASSERT(sizeof(struct dfs_superblock_block)==DFS_BLOCK_SIZE, "dfs_superblock_block must be 512 bytes");
-    ASSERT(sizeof(struct dfs_dir_block)==DFS_BLOCK_SIZE, "dfs_dir_block must be 512 bytes");
-    ASSERT(sizeof(struct dfs_file_block)==DFS_BLOCK_SIZE, "dfs_file_block must be 512 bytes");
-    ASSERT(sizeof(struct dfs_file_allocation_block)==DFS_BLOCK_SIZE, "dfs_allocation_block must be 512 bytes");
-    ASSERT(sizeof(struct dfs_map_block)==DFS_BLOCK_SIZE, "dfs_map_block must be 512 bytes");
+    ASSERT(sizeof(struct dfs_superblock_block)==DFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct dfs_dir_block)==DFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct dfs_file_block)==DFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct dfs_file_allocation_block)==DFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct dfs_map_block)==DFS_BLOCK_SIZE);
 
     struct fs_filesystem* fs = (struct fs_filesystem*) kmalloc(sizeof(struct fs_filesystem));
     fs->format = &dfs_format;

@@ -117,7 +117,7 @@ pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels le
 	pttentry *base;
 	uint64_t new_ptt_page;
 
-	ASSERT((level < PT), "Invalid level for obtain_ptt_entry()");
+	ASSERT((level < PT));
 
 	base = CONV_PHYS_ADDR(PTT_EXTRACT_BASE(parent_entry));
 	
@@ -171,7 +171,7 @@ void reserve_next_ptt(ptt_levels level, uint64_t *expansion){
 	 * act accordingly if it was not.
 	*/
 
-	ASSERT((level == PDP) || (level == PD) || (level == PT), "Invalid PTT level for expansion reservation!");
+	ASSERT((level == PDP) || (level == PD) || (level == PT));
 
 	// PDP = 1 because PML4 = 0, so we subtract 1 to get the proper array index
 	expansion[level - 1] = slab_allocate(1, PDT_SYSTEM_RESERVED);

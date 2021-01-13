@@ -157,8 +157,8 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 struct ata_device* ata_get_disk(struct device* dev, uint8_t channel, uint8_t disk) {
 	ASSERT_NOT_NULL(dev);
 	ASSERT_NOT_NULL(dev->deviceData);
-	ASSERT(((channel>=0) && (channel<=1)), "channel out of range");
-	ASSERT(((disk>=0) && (disk<=1)), "disk out of range");
+	ASSERT(((channel>=0) && (channel<=1)));
+	ASSERT(((disk>=0) && (disk<=1)));
 	struct ata_controller* controller = (struct ata_controller*) dev->deviceData;
 	return &(controller->channels[channel].devices[disk]);
 }

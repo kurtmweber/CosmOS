@@ -18,7 +18,7 @@
 uint64_t dfs_dir_find_file(struct device* dev, uint8_t* filename) {
     ASSERT_NOT_NULL(dev); 
     ASSERT_NOT_NULL(filename); 
-    ASSERT(strlen(filename)<DFS_FILENAME_SIZE,"filename too long");
+    ASSERT(strlen(filename)<DFS_FILENAME_SIZE);
 }
 
 /*
@@ -26,7 +26,7 @@ uint64_t dfs_dir_find_file(struct device* dev, uint8_t* filename) {
 */
 uint64_t dfs_dir_add_file(struct device* dev, uint8_t* filename) {
     ASSERT_NOT_NULL(dev); 
-    ASSERT(strlen(filename)<DFS_FILENAME_SIZE,"filename too long");
+    ASSERT(strlen(filename)<DFS_FILENAME_SIZE);
     ASSERT_NOT_NULL(filename); 
 
 }
@@ -39,7 +39,7 @@ void dfs_dir_iterate_files(struct device* dev, dfs_file_iterator file_iterator) 
     */
     struct dfs_superblock_block superblock;
     dfs_read_superblock(dev, &superblock);
-    ASSERT(superblock.magic==0x00444653,"Invalid superblock");
+    ASSERT(superblock.magic==0x00444653);
     kprintf("Superblock blocks_size %llu blocks_count %llu\n", superblock.blocks_size, superblock.blocks_count);
     /*
     * iterate directory blocks

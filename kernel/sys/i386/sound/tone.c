@@ -22,10 +22,10 @@ struct wav_header* sound_get_tone() {
 
     struct wav_header* ret =  (struct wav_header*) (uint64_t)&_tone_s;
 
-    ASSERT(ret->riff_header[0]=='R',"Invalid wav file");
-    ASSERT(ret->riff_header[1]=='I',"Invalid wav file");
-    ASSERT(ret->riff_header[2]=='F',"Invalid wav file");
-    ASSERT(ret->riff_header[3]=='F',"Invalid wav file");
+    ASSERT(ret->riff_header[0]=='R');
+    ASSERT(ret->riff_header[1]=='I');
+    ASSERT(ret->riff_header[2]=='F');
+    ASSERT(ret->riff_header[3]=='F');
 
     return ret;
 }

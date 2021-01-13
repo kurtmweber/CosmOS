@@ -135,7 +135,7 @@ void vblock_init(struct device* dev){
     // make the queue
     struct virtq*  q = virtq_new(queue_size_needed);
     bool all = virtio_isAligned(((uint64_t)q),4096);
-    ASSERT(all, "q is not 4096 byte aligned");
+    ASSERT(all);
     deviceData->request_queue = q;
 
     // divide by 4096
