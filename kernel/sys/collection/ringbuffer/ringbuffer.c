@@ -12,7 +12,7 @@
 #define RINGBUFFER_SIZE 256
 
 void ringbuffer_add(struct ringbuffer* buffer, void* add) {
-	ASSERT_NOT_NULL(buffer, "ringbuffer cannot be null");
+	ASSERT_NOT_NULL(buffer);
     buffer->data[buffer->end] = add;
 
     if (buffer->end == RINGBUFFER_SIZE){
@@ -31,7 +31,7 @@ void ringbuffer_add(struct ringbuffer* buffer, void* add) {
 }
 
 void* ringbuffer_consume(struct ringbuffer* buffer) {
-	ASSERT_NOT_NULL(buffer, "ringbuffer cannot be null");
+	ASSERT_NOT_NULL(buffer);
 
     uint16_t i;
     

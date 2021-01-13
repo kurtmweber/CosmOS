@@ -27,16 +27,16 @@ void fs_init() {
 }
 
 void fs_register(struct fs_filesystem* fs) {
-    ASSERT_NOT_NULL(fs, "fs cannot be null");
-    ASSERT_NOT_NULL(fs->format, "format cannot be null");
-    ASSERT_NOT_NULL(fs->list_dir, "list_dir cannot be null");
-    ASSERT_NOT_NULL(fs->name, "name cannot be null");
+    ASSERT_NOT_NULL(fs);
+    ASSERT_NOT_NULL(fs->format);
+    ASSERT_NOT_NULL(fs->list_dir);
+    ASSERT_NOT_NULL(fs->name);
  //   kprintf("Registering filesystem %s\n",(*fs->name)());
     list_add(fs_list, fs);
 }
 
 struct fs_filesystem* fs_find(uint8_t* name) {
-    ASSERT_NOT_NULL(name, "name cannot be null");
+    ASSERT_NOT_NULL(name);
     for (uint8_t i=0; i< list_count(fs_list);i++){
         struct fs_filesystem* fs = (struct fs_filesystem*) list_get(fs_list,i);
         if (strcmp(name, (*fs->name)())==0){
@@ -59,8 +59,8 @@ struct fs_directory_listing* fs_directory_listing_new() {
 * ugh
 */
 void fs_directory_listing_delete(struct fs_directory_listing* listing) {
-    ASSERT_NOT_NULL(listing, "listing cannot be null");
-    ASSERT_NOT_NULL(listing->lst, "lst cannot be null");
+    ASSERT_NOT_NULL(listing);
+    ASSERT_NOT_NULL(listing->lst);
 
     for (uint32_t i; i< list_count(listing->lst);i++){
         struct fs_directory* dir = (struct fs_directory *) list_get(listing->lst, i);

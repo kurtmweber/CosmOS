@@ -71,7 +71,7 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size){
 }
 
 void kfree(void *p){
-	ASSERT_NOT_NULL(p, "p must not be null");
+	ASSERT_NOT_NULL(p);
 	kmalloc_block *b;
 	
 	// The following is arithmetic on a void pointer, which is not permitted per C standard.
@@ -167,7 +167,7 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size){
 }
 
 void *krealloc(void *ptr, uint64_t size){
-	ASSERT_NOT_NULL(ptr, "ptr must not be null");
+	ASSERT_NOT_NULL(ptr);
 
 	kmalloc_block *b;
 	void *new_block;

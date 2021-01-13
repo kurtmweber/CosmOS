@@ -45,8 +45,8 @@
 struct mouse_status* current_mouse_status;
 
 void mouse_irq_read(stackFrame *frame) {
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
-	ASSERT_NOT_NULL(current_mouse_status, "current_mouse_status cannot be null.  Has the mouse been initialized?");
+	ASSERT_NOT_NULL(frame);
+	ASSERT_NOT_NULL(current_mouse_status);
 
     kprintf("$");
     switch(current_mouse_status->mouse_cycle) {
@@ -107,7 +107,7 @@ uint8_t mouse_read() {
 * perform device instance specific init here
 */
 void mouse_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, MOUSE_IRQ_NUMBER, dev->name);
     interrupt_router_register_interrupt_handler(MOUSE_IRQ_NUMBER, &mouse_irq_read);
 
@@ -139,8 +139,8 @@ void mouse_device_init(struct device* dev){
 }
 
 struct mouse_status* ps2mouse_status(struct device* dev) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(current_mouse_status, "current_mouse_status cannot be null.  Has the mouse been initialized?");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(current_mouse_status);
     return current_mouse_status;
 }
 

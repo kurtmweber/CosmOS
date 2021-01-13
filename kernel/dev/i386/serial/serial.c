@@ -36,7 +36,7 @@ void serial_write_char(const uint8_t c){
 }
 
 void serial_irq_handler(stackFrame *frame){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
     struct rs232_16550* comport = (struct rs232_16550*) COM1_ADDRESS;
     uint8_t data = asm_in_b((uint64_t)&(comport->data));
 
@@ -76,7 +76,7 @@ void serial_init_port(uint64_t portAddress) {
 * perform device instance specific init here
 */
 void serial_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     struct serial_devicedata* deviceData = (struct serial_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu Base %#hX (%s)\n",dev->description, deviceData->irq, deviceData->address, dev->name);
     interrupt_router_register_interrupt_handler(deviceData->irq, &serial_irq_handler);
@@ -84,7 +84,7 @@ void serial_device_init(struct device* dev){
 }
 
 void serial_write(struct device* dev, const int8_t* c) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
    serial_write_string(c);
 }
 

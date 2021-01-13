@@ -51,7 +51,7 @@ void idt_init(){
 }
 
 void idt_add_ISR(void *func, intVectors vector){
-	ASSERT_NOT_NULL(func, "func cannot be null");
+	ASSERT_NOT_NULL(func);
 	idt[vector].offsetWordLow = (uint16_t)((uint64_t)func & 0xFFFF);
 	idt[vector].selector = 8;
 	idt[vector].ist = 0;

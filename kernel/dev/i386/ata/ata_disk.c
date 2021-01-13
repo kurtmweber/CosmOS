@@ -35,8 +35,8 @@ void calculate_ida_lba_register_values( uint32_t lba, uint8_t* registers) {
 }
 
 void ata_rw(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count, bool read) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
 	struct ata_device* disk = ata_get_disk(diskdata->device, diskdata->channel, diskdata->disk);
 	uint16_t sector_size = disk->bytes_per_sector;
@@ -131,27 +131,27 @@ void ata_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t coun
 }
 
 uint16_t ata_sector_size(struct device* dev) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
 	struct ata_device* disk = ata_get_disk(diskdata->device, diskdata->channel, diskdata->disk);
-	ASSERT_NOT_NULL(disk, "disk should not be null");
+	ASSERT_NOT_NULL(disk);
 	return disk->bytes_per_sector;
 }
 
 uint32_t ata_total_size(struct device* dev) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
 	struct ata_disk_devicedata* diskdata = (struct ata_disk_devicedata*) dev->deviceData;
 	struct ata_device* disk = ata_get_disk(diskdata->device, diskdata->channel, diskdata->disk);
-	ASSERT_NOT_NULL(disk, "disk should not be null");
+	ASSERT_NOT_NULL(disk);
 	return disk->size;
 }
 
 void device_init_ata_disk(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(dev->deviceData, "deviceData cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(dev->deviceData);
 	struct ata_disk_devicedata* disk = (struct ata_disk_devicedata*) dev->deviceData;
 	struct ata_device* dsk = ata_get_disk(disk->device, disk->channel, disk->disk);
-	ASSERT_NOT_NULL(dsk, "dsk should not be null");
+	ASSERT_NOT_NULL(dsk);
 
 	kprintf("Init %s serial '%s' on controller %s of size %llu (%s)\n", dev->description,  dsk->serial, disk->device->name, dsk->size, dev->name);
 }

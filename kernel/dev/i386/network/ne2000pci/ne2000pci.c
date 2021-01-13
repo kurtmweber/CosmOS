@@ -132,14 +132,14 @@ struct ne2000pci_devicedata {
 void ne2000pci_init(void);
 
 void ne2000pci_irq_handler(stackFrame *frame){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 	kprintf("%");
 }
 /*
 * perform device instance specific init here
 */
 void ne2000_pci_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     struct ne2000pci_devicedata* deviceData = (struct ne2000pci_devicedata*) dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
@@ -149,14 +149,14 @@ void ne2000_pci_init(struct device* dev){
 }
 
 void ne2000pci_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 
 	panic("Ethernet read not implemented yet");
 }
 void ne2000pci_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 
 	panic("Ethernet write not implemented yet");
 }

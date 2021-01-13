@@ -31,8 +31,8 @@ void interrupt_router_init() {
 * register an interrupt handler callback
 */
 void interrupt_router_register_interrupt_handler(int interruptNumber, interruptHandler func){
-	ASSERT_NOT_NULL(func, "func cannot be null");
-	ASSERT_NOT_NULL(interruptHandlers, "interruptHandlers cannot be null.  Has interrupt_router been initialized?");
+	ASSERT_NOT_NULL(func);
+	ASSERT_NOT_NULL(interruptHandlers);
 
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
         struct list* lst = array_get(interruptHandlers,interruptNumber);
@@ -49,8 +49,8 @@ void interrupt_router_register_interrupt_handler(int interruptNumber, interruptH
 * route an interrupt
 */
 void interrupt_router_route_interrupt(int interruptNumber, stackFrame *frame){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
-	ASSERT_NOT_NULL(interruptHandlers, "interruptHandlers cannot be null.  Has interrupt_router been initialized?");
+	ASSERT_NOT_NULL(frame);
+	ASSERT_NOT_NULL(interruptHandlers);
 
     if ((interruptNumber>=0) && (interruptNumber<NUMBER_INTERRUPTS)){
         struct list* lst = array_get(interruptHandlers,interruptNumber);

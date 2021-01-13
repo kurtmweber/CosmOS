@@ -105,7 +105,7 @@ struct floppy_devicedata {
 volatile uint64_t irq_count=0;
 
 void floppy_irq_read(stackFrame *frame) {
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 	irq_count = irq_count+1;
     kprintf("^");
 }
@@ -169,7 +169,7 @@ void command(uint8_t commandByte) {
 * perform device instance specific init here
 */
 void floppy_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
 	struct floppy_devicedata* deviceData = (struct floppy_devicedata*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, FLOPPY_IRQ_NUMBER, dev->name);
 //	printDriveType(deviceData->type);
@@ -200,22 +200,22 @@ void lba_2_chs(uint32_t lba, uint16_t* cyl, uint16_t* head, uint16_t* sector) {
 
 // api
 void floppy_read(struct device* dev, uint32_t lba, uint8_t* data, uint16_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 
 //	panic("Floppy read not implemented yet");
 }
 
 // api
 void floppy_write(struct device* dev, uint32_t lba, uint8_t* data, uint16_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 //	panic("Floppy write not implemented yet");
 }
 
 // api
 void floppy_reset(struct device* dev) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
 	panic("Floppy reset not implemented yet");
 }
 

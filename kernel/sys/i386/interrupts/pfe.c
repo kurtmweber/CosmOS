@@ -13,7 +13,7 @@
 #include <sys/i386/mm/mm.h>
 
 __attribute__ ((interrupt)) void isrPFE(stackFrame *frame, uint64_t error){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 
     page_fault_handler(error, asm_cr2_read(), asm_cr3_read());
 

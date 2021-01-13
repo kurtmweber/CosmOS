@@ -95,7 +95,7 @@ void pci_header_set_irq(uint8_t bus, uint8_t device, uint8_t function, uint8_t i
 
 // https://wiki.osdev.org/PCI
 uint64_t pci_calcbar( struct pci_device* pci_dev){
-   ASSERT_NOT_NULL(pci_dev, "pci_dev cannot be null");
+   ASSERT_NOT_NULL(pci_dev);
    uint64_t bar0 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
    uint64_t bar1 = pci_header_read_bar0(pci_dev->bus, pci_dev->device,pci_dev->function);
 

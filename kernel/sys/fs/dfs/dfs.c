@@ -73,27 +73,27 @@ void dfs_format(struct device* dev) {
 }
 
 bool dfs_dir_list_iterator(struct dfs_file_block* file_block) {
-    ASSERT_NOT_NULL(file_block, "file_block cannot be null"); 
+    ASSERT_NOT_NULL(file_block); 
     kprintf("dfs file at block %s\n",file_block->name);
     return true;
 }
 
 struct fs_directory_listing* dfs_list_dir(struct device* dev) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");  
+    ASSERT_NOT_NULL(dev);  
     dfs_dir_iterate_files(dev, &dfs_dir_list_iterator);
 }
 
 void dfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size){
-    ASSERT_NOT_NULL(dev, "dev cannot be null"); 
-    ASSERT_NOT_NULL(name, "name cannot be null"); 
-    ASSERT_NOT_NULL(data, "data cannot be null"); 
+    ASSERT_NOT_NULL(dev); 
+    ASSERT_NOT_NULL(name); 
+    ASSERT_NOT_NULL(data); 
     ASSERT(strlen(name)<DFS_FILENAME_SIZE,"filename too long");
 }
 
 void dfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null"); 
-    ASSERT_NOT_NULL(name, "name cannot be null"); 
-    ASSERT_NOT_NULL(data, "data cannot be null"); 
+    ASSERT_NOT_NULL(dev); 
+    ASSERT_NOT_NULL(name); 
+    ASSERT_NOT_NULL(data); 
     ASSERT(strlen(name)<DFS_FILENAME_SIZE,"filename too long");
 
     kprintf("write file: %s of length %llu\n", name, size);

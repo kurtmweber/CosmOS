@@ -27,9 +27,9 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 * detect all the addresses on a ATA controller
 */ 
 void ata_detect_addresses(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(dev->deviceData, "deviceData cannot be null");
-	ASSERT_NOT_NULL(dev->pci, "pci cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(dev->deviceData);
+	ASSERT_NOT_NULL(dev->pci);
 
 	struct ata_controller* controller = (struct ata_controller*) dev->deviceData;
 	uint8_t bus =dev->pci->bus;
@@ -55,8 +55,8 @@ void ata_detect_addresses(struct device* dev){
 * init ATA controller
 */
 void device_init_ata(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(dev->deviceData, "deviceData cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(dev->deviceData);
 	struct ata_controller* controller = (struct ata_controller*) dev->deviceData;
 
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
@@ -84,7 +84,7 @@ void device_init_ata(struct device* dev){
 }
 
 void ata_search_cb(struct pci_device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     /*
     * register device
     */
@@ -155,8 +155,8 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 }
 
 struct ata_device* ata_get_disk(struct device* dev, uint8_t channel, uint8_t disk) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(dev->deviceData, "deviceData cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(dev->deviceData);
 	ASSERT(((channel>=0) && (channel<=1)), "channel out of range");
 	ASSERT(((disk>=0) && (disk<=1)), "disk out of range");
 	struct ata_controller* controller = (struct ata_controller*) dev->deviceData;

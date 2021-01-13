@@ -37,8 +37,8 @@ void keyboard_add_command_queue(uint8_t command){
 }
 
 void keyboard_irq_read(stackFrame *frame){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
-	ASSERT_NOT_NULL(keyboard_ringbuffer, "keyboard_ringbuffer cannot be null.  Has the keyboard been initialized?");
+	ASSERT_NOT_NULL(frame);
+	ASSERT_NOT_NULL(keyboard_ringbuffer);
 
 	kprintf(".");
 	uint8_t read_byte;
@@ -173,14 +173,14 @@ void keyboard_send_command_queue(){
 * perform device instance specific init here
 */
 void keyboard_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
 	struct pci_device* pci_dev = (struct pci_device*) dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, KB_IRQ_NUMBER, dev->name);
 	interrupt_router_register_interrupt_handler(KB_IRQ_NUMBER, &keyboard_irq_read);
 }
 
 key_action_t keyboard_read(struct device* dev) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
 	panic("Keyboard read not implemented yet");
 }
 

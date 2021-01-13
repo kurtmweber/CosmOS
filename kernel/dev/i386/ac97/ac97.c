@@ -42,14 +42,14 @@ struct ac97_devicedata {
 } __attribute__((packed));
 
 void ac97_handle_irq(stackFrame *frame) {
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 }
 
 /*
 * perform device instance specific init here
 */
 void deviceInitAC97(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     struct ac97_devicedata* deviceData = (struct ac97_devicedata*) dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
@@ -57,7 +57,7 @@ void deviceInitAC97(struct device* dev){
 }
 
 void AC97PCISearchCB(struct pci_device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     /*
     * register device
     */

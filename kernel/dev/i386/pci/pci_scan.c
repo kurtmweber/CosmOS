@@ -16,8 +16,8 @@
 #define PCI_MAX_DEVICES_PER_BUS 32
 
 void fill_pci_device(struct pci_device* dev, uint8_t bus, uint8_t device, uint8_t function){
-	ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
-	ASSERT_NOT_NULL(dev, "dev must not be null");
+	ASSERT_NOT_NULL(pci_devices);
+	ASSERT_NOT_NULL(dev);
 	dev->bus = bus;
 	dev->device = device;
 	dev->function = function;
@@ -44,7 +44,7 @@ bool pci_device_exists(uint8_t bus, uint8_t device, uint8_t function){
 }
 
 void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
-	ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
+	ASSERT_NOT_NULL(pci_devices);
 	uint8_t i;
 	
 	// new device
@@ -70,7 +70,7 @@ void pci_found_device(uint8_t bus, uint8_t device, uint8_t function){
 }
 
 void pci_scan(){
-    ASSERT_NOT_NULL(pci_devices, "pci_devices must not be null.  Did you init PCI?");
+    ASSERT_NOT_NULL(pci_devices);
 	uint16_t bus = 0, device = 0, function = 0;
 	uint32_t register_dword;
 	uint16_t device_id, vendor_id;

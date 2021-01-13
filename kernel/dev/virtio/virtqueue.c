@@ -72,7 +72,7 @@ struct virtq* virtq_new(uint16_t size) {
 * delete virtq
 */
 void virtq_delete(struct virtq* queue) {
-	ASSERT_NOT_NULL(queue, "queue cannot be null");
+	ASSERT_NOT_NULL(queue);
     /*
     *  descriptor array
     */
@@ -92,7 +92,7 @@ void virtq_delete(struct virtq* queue) {
  * find empty slot in descriptor array
  */
 uint16_t find_first_empty_slot(struct virtq* queue) {
-	ASSERT_NOT_NULL(queue, "queue cannot be null");
+	ASSERT_NOT_NULL(queue);
     for (uint16_t i=0;i<queue->size;i++){
         if (queue->descriptors[i]==0){
                 return i;
@@ -105,8 +105,8 @@ uint16_t find_first_empty_slot(struct virtq* queue) {
 * enqueue descriptor
 */
 uint32_t virtq_enqueue_descriptor(struct virtq* queue, struct virtq_descriptor* descriptor) {
-	ASSERT_NOT_NULL(queue, "queue cannot be null");
-	ASSERT_NOT_NULL(descriptor, "descriptor cannot be null");
+	ASSERT_NOT_NULL(queue);
+	ASSERT_NOT_NULL(descriptor);
 
     // find a slot in the descriptor table
     uint16_t slot = find_first_empty_slot(queue);
@@ -131,7 +131,7 @@ uint32_t virtq_enqueue_descriptor(struct virtq* queue, struct virtq_descriptor* 
 * new descriptor
 */
 struct virtq_descriptor* virtq_descriptor_new(uint8_t* buffer, uint32_t len, bool writable) {
-	ASSERT_NOT_NULL(buffer, "buffer cannot be null");
+	ASSERT_NOT_NULL(buffer);
     struct virtq_descriptor* ret = kmalloc(sizeof(struct virtq_descriptor));
     ret->addr=buffer;
     if (writable){
@@ -148,7 +148,7 @@ struct virtq_descriptor* virtq_descriptor_new(uint8_t* buffer, uint32_t len, boo
 * delete descriptor
 */
 void virtq_descriptor_delete(struct virtq_descriptor* descriptor) {
-	ASSERT_NOT_NULL(descriptor, "descriptor cannot be null");
+	ASSERT_NOT_NULL(descriptor);
     if (0!=descriptor->addr){
         kfree(descriptor->addr);
     } else {
@@ -161,7 +161,7 @@ void virtq_descriptor_delete(struct virtq_descriptor* descriptor) {
 * available idx
 */ 
 uint16_t virtq_get_available_idx(struct virtq* queue) {
-    ASSERT_NOT_NULL(queue, "queue cannot be null");
+    ASSERT_NOT_NULL(queue);
     return queue->avail.idx;
 }
 
@@ -169,6 +169,6 @@ uint16_t virtq_get_available_idx(struct virtq* queue) {
 * used idx
 */ 
 uint16_t virtq_get_used_idx(struct virtq* queue) {
-	ASSERT_NOT_NULL(queue, "queue cannot be null");
+	ASSERT_NOT_NULL(queue);
     return queue->used.idx;
 }

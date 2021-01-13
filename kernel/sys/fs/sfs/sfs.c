@@ -109,7 +109,7 @@ struct sfs_continuation_entry {
 * check if valid superblock
 */
 bool sfs_is_valid_superblock(struct sfs_superblock* superblock){
-    ASSERT_NOT_NULL(superblock, "superblock cannot be null");
+    ASSERT_NOT_NULL(superblock);
     if ((superblock->magic[0]==0x53) && (superblock->magic[1]==0x46) && (superblock->magic[2]==0x53)){
         return true;
     }
@@ -117,12 +117,12 @@ bool sfs_is_valid_superblock(struct sfs_superblock* superblock){
 }
 
 void sfs_read_superblock(struct device* dev, struct sfs_superblock* superblock ){
-    ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev);
     block_read(dev, 0, (uint8_t*)superblock,1);
 }
 
 void sfs_format(struct device* dev) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev);
 
     // device parameters
     uint64_t total_size = block_get_total_size(dev);
@@ -148,7 +148,7 @@ void sfs_format(struct device* dev) {
 }
 
 struct fs_directory_listing* sfs_list_dir(struct device* dev) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");    
+    ASSERT_NOT_NULL(dev);    
 }
 
 const uint8_t SFS_NAME[] = {"sfs"};

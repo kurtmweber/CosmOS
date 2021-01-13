@@ -24,7 +24,7 @@ void com1_serial_write_char(const uint8_t c){
 }
 
 void com1_serial_write(const uint8_t* c){
-    ASSERT_NOT_NULL(c, "c cannot be null");
+    ASSERT_NOT_NULL(c);
     uint16_t i =0;
     while(c[i]!=0){
         com1_serial_write_char(c[i++]);

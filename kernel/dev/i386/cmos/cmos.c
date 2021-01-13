@@ -42,7 +42,7 @@ uint8_t cmos_read_register(uint8_t reg){
 */
 
 void cmos_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     kprintf("Init %s (%s)\n",dev->description, dev->name);
 }
 

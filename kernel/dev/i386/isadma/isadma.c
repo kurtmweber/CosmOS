@@ -182,7 +182,7 @@ void isadma_initialize_floppy_DMA() {
 void getDMAParameters(uint8_t channel, struct isa_dma_channel_parameters* parameters){
 	ASSERT(channel>=0, "channel must be greater than or equal to 0");
 	ASSERT(channel<ISA_DMA_NUM_BUFFERS, "channel must be less than or equal to 7");
-	ASSERT_NOT_NULL(parameters, "parameters must not be null");
+	ASSERT_NOT_NULL(parameters);
 
 	parameters->channel=channel;
 	switch(channel){
@@ -384,8 +384,8 @@ uint64_t isadma_get_dma_block(uint8_t channel, uint32_t len) {
 * perform device instance specific init here
 */
 void isadma_device_init(struct device* dev){
-	ASSERT_NOT_NULL(isadma_buf, "isadma_buf cannot be null.  Has the MM been initialized?");
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(isadma_buf);
+	ASSERT_NOT_NULL(dev);
 
     kprintf("Init %s (%s)\n",dev->description, dev->name);
 	/*

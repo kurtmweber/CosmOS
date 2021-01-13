@@ -19,7 +19,7 @@ struct list* list_new() {
 }
 
 void list_delete(struct list* lst) {
-	ASSERT_NOT_NULL(lst, "list cannot be null");
+	ASSERT_NOT_NULL(lst);
     if (0==lst->arr){
         panic("why is the underlying array null?!");
     }
@@ -28,12 +28,12 @@ void list_delete(struct list* lst) {
 }
 
 uint32_t list_count(struct list* lst) {
-	ASSERT_NOT_NULL(lst, "list cannot be null");
+	ASSERT_NOT_NULL(lst);
     return lst->count;
 }
 
 uint32_t list_size(struct list* lst) {
-	ASSERT_NOT_NULL(lst, "list cannot be null");
+	ASSERT_NOT_NULL(lst);
     if (0==lst->arr){
         panic("why is the underlying array null?!");
     }
@@ -41,7 +41,7 @@ uint32_t list_size(struct list* lst) {
 }
 
 uint32_t list_add(struct list* lst, void* value) {
-	ASSERT_NOT_NULL(lst, "list cannot be null");
+	ASSERT_NOT_NULL(lst);
     // sanity check
     if (0==lst->arr){
         panic("why is the underlying array null?!");
@@ -66,7 +66,7 @@ uint32_t list_add(struct list* lst, void* value) {
 * set value at index
 */
 void list_set(struct list* lst, uint32_t position, void* value) {
-	ASSERT_NOT_NULL(lst, "list cannot be null");
+	ASSERT_NOT_NULL(lst);
     if (0==lst->arr){
         panic("why is the underlying array null?!");
     }
@@ -78,7 +78,7 @@ void list_set(struct list* lst, uint32_t position, void* value) {
 }
 
 void* list_get(struct list* lst, uint32_t position) {
-	ASSERT_NOT_NULL(lst, "list cannot be null");
+	ASSERT_NOT_NULL(lst);
     if (0==lst->arr){
         panic("why is the underlying array null?!");
     }
@@ -90,8 +90,8 @@ void* list_get(struct list* lst, uint32_t position) {
 }
 
 void list_iterate(struct list* lst, listIterator iter) {
-	ASSERT_NOT_NULL(lst, "list cannot be null");
-	ASSERT_NOT_NULL(iter, "iter cannot be null");
+	ASSERT_NOT_NULL(lst);
+	ASSERT_NOT_NULL(iter);
     if (0==lst->arr){
         panic("why is the underlying array null?!");
     }
@@ -104,7 +104,7 @@ void list_iterate(struct list* lst, listIterator iter) {
 * remove element at index
 */
 void list_remove(struct list* lst, uint32_t position) {
-    ASSERT_NOT_NULL(lst, "list cannot be null");
+    ASSERT_NOT_NULL(lst);
     if (0==lst->arr){
         panic("why is the underlying array null?!");
     }

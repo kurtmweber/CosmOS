@@ -13,6 +13,6 @@
 // assertion macros to make life easier
 // in a RELEASE build these can just expand to nothing
 #define ASSERT(condition, message) if (false==(condition)) {panic (message);}
-#define ASSERT_NOT_NULL(term, message) if (0==(term)) {panic (message);}
+#define ASSERT_NOT_NULL(term) if (0==(term)) {panic ("Illegal null");}
 
 #endif

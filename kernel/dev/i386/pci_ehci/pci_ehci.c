@@ -18,20 +18,20 @@
 // https://wiki.osdev.org/Enhanced_Host_Controller_Interface
 
 void pci_ehci_handle_irq(stackFrame *frame) {
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 }
 
 /*
 * perform device instance specific init here
 */
 void pci_ehci_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu\n",dev->description, dev->pci->irq);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &pci_ehci_handle_irq);
 }
 
 void pci_ehci_search_cb(struct pci_device* dev){
-    ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev);
     /*
     * register device
     */

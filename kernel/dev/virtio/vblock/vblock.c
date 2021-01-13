@@ -79,7 +79,7 @@ struct vblock_block_request* vblock_block_request_new() {
 }
 
 void vblock_irq_handler(stackFrame *frame){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 	kprintf("#");
 }
 
@@ -87,8 +87,8 @@ void vblock_irq_handler(stackFrame *frame){
 * perform device instance specific init here
 */
 void vblock_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(dev->deviceData);
 
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vblock_irq_handler);
@@ -147,10 +147,10 @@ void vblock_init(struct device* dev){
 }
 
 void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 
-    ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+    ASSERT_NOT_NULL(dev->deviceData);
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
 
     /*
@@ -185,27 +185,27 @@ void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t co
 }
 
 void vblock_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 	panic("vblock write not implemented yet");
 }
 
 uint16_t vblock_sector_size(struct device* dev) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-    ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+	ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
     return deviceData->sectorLength;
 }
 
 uint32_t vblock_total_size(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-    ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+	ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
     struct vblock_devicedata* deviceData = (struct vblock_devicedata*) dev->deviceData;
     return deviceData->totalSectors*deviceData->sectorLength;
 }
 
 void vblock_search_cb(struct pci_device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     /*
     * register device
     */

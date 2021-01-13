@@ -19,7 +19,7 @@ struct ntree* ntree_new() {
 }
 
 void ntree_delete(struct ntree* nt) {
-    ASSERT_NOT_NULL(nt, "nt must not be null");
+    ASSERT_NOT_NULL(nt);
 
     if (nt->childcount>0){
         for (uint32_t i=0;i<nt->childcount;i++){
@@ -30,20 +30,20 @@ void ntree_delete(struct ntree* nt) {
 }
 
 uint32_t ntree_childcount(struct ntree* nt){
-    ASSERT_NOT_NULL(nt, "nt must not be null");
+    ASSERT_NOT_NULL(nt);
     return nt->childcount;
 }
 
 struct ntree* ntree_child(struct ntree* nt, uint32_t idx) {
-    ASSERT_NOT_NULL(nt, "nt must not be null");
+    ASSERT_NOT_NULL(nt);
     ASSERT(idx >0,"idx must be greater than zero");
     ASSERT(idx < nt->childcount,"idx must be less than child count");
     return nt->childen[idx];
 }
 
 void ntree_add_child(struct ntree* nt, struct ntree* child) {
-    ASSERT_NOT_NULL(nt, "nt must not be null");
-    ASSERT_NOT_NULL(child, "child must not be null");
+    ASSERT_NOT_NULL(nt);
+    ASSERT_NOT_NULL(child);
     
 }
 

@@ -15,14 +15,14 @@
 #include <sys/debug/assert.h>
 
 void adlib_handle_irq(stackFrame *frame) {
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 }
 
 /*
 * perform device instance specific init here
 */
 void adlib_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
  //   kprintf("Init %s at IRQ %llu\n",dev->description, SB16_IRQ);
  //   interrupt_router_register_interrupt_handler(SB16_IRQ, &adlib_handle_irq);
 }

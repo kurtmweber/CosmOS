@@ -15,27 +15,27 @@
 #include <sys/debug/assert.h>
 
 void e1000_irq_handler(stackFrame *frame){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 }
 
 /*
 * perform device instance specific init here
 */
 void e1000_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &e1000_irq_handler);
 }
 
 void e1000_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 
 	panic("Ethernet read not implemented yet");
 }
 void e1000_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 
 	panic("Ethernet write not implemented yet");
 }

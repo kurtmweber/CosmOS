@@ -16,8 +16,8 @@
 * returns file block, or zero
 */
 uint64_t dfs_dir_find_file(struct device* dev, uint8_t* filename) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null"); 
-    ASSERT_NOT_NULL(filename, "filename cannot be null"); 
+    ASSERT_NOT_NULL(dev); 
+    ASSERT_NOT_NULL(filename); 
     ASSERT(strlen(filename)<DFS_FILENAME_SIZE,"filename too long");
 }
 
@@ -25,15 +25,15 @@ uint64_t dfs_dir_find_file(struct device* dev, uint8_t* filename) {
 * returns file block, or zero
 */
 uint64_t dfs_dir_add_file(struct device* dev, uint8_t* filename) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null"); 
+    ASSERT_NOT_NULL(dev); 
     ASSERT(strlen(filename)<DFS_FILENAME_SIZE,"filename too long");
-    ASSERT_NOT_NULL(filename, "filename cannot be null"); 
+    ASSERT_NOT_NULL(filename); 
 
 }
 
 void dfs_dir_iterate_files(struct device* dev, dfs_file_iterator file_iterator) {
-    ASSERT_NOT_NULL(file_iterator, "file_iterator cannot be null"); 
-    ASSERT_NOT_NULL(dev, "dev cannot be null"); 
+    ASSERT_NOT_NULL(file_iterator); 
+    ASSERT_NOT_NULL(dev); 
     /*
     * get the superblock
     */

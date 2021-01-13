@@ -22,7 +22,7 @@ struct array* array_new(uint32_t size) {
 }
 
 void array_delete(struct array* arr){
-	ASSERT_NOT_NULL(arr, "arr cannot be null");
+	ASSERT_NOT_NULL(arr);
     if (0!=arr->data){
         kfree(arr->data);
     }
@@ -30,12 +30,13 @@ void array_delete(struct array* arr){
 }
 
 uint32_t array_size(struct array* arr){
-	ASSERT_NOT_NULL(arr, "arr cannot be null");
+	ASSERT_NOT_NULL(arr);
     return arr->size;
 }
 
 void  array_set(struct array* arr, uint32_t position, void* value){
-	ASSERT_NOT_NULL(arr, "arr cannot be null");
+    arr=0;
+	ASSERT_NOT_NULL(arr);
     if ((position>=0) &&(position< arr->size) ){
         arr->data[position]=value;
     } else {
@@ -46,7 +47,7 @@ void  array_set(struct array* arr, uint32_t position, void* value){
 }
 
 void* array_get(struct array* arr,  uint32_t position){
-	ASSERT_NOT_NULL(arr, "arr cannot be null");
+	ASSERT_NOT_NULL(arr);
     if ((position>=0) &&(position< arr->size) ){
         return arr->data[position];
     } else {
@@ -56,7 +57,7 @@ void* array_get(struct array* arr,  uint32_t position){
 }
 
 void array_resize(struct array* arr, uint32_t size) {
-	ASSERT_NOT_NULL(arr, "arr cannot be null");
+	ASSERT_NOT_NULL(arr);
     if (size >= arr->size){
         /*
         * TODO.  Should use krealloc here, but I think there is a bug in krealloc
@@ -76,13 +77,13 @@ void array_resize(struct array* arr, uint32_t size) {
 }
 
 void array_grow(struct array* arr, uint32_t increment) {
-	ASSERT_NOT_NULL(arr, "arr cannot be null");
+	ASSERT_NOT_NULL(arr);
     array_resize(arr, increment+(arr->size));
 }
 
 void array_iterate(struct array* arr, arrayIterator iter) {
-	ASSERT_NOT_NULL(arr, "arr cannot be null");
-	ASSERT_NOT_NULL(iter, "iter cannot be null");
+	ASSERT_NOT_NULL(arr);
+	ASSERT_NOT_NULL(iter);
 
     for (uint32_t i=0; i<arr->size;i++) {
         (*iter)(arr->data[i]);

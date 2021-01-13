@@ -130,14 +130,14 @@ uint8_t net_mac_isa[6];
 void ne2000isa_init(void);
 
 void ne2000isa_irq_handler(stackFrame *frame){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 	kprintf("%");
 }
 /*
 * perform device instance specific init here
 */
 void ne2000_isa_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     interrupt_router_register_interrupt_handler(NE2000ISA_IRQ, &ne2000isa_irq_handler);
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, NE2000ISA_IRQ, dev->name);
     // do the init
@@ -145,14 +145,14 @@ void ne2000_isa_init(struct device* dev){
 }
 
 void ne2000isa_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 
 	panic("Ethernet read not implemented yet");
 }
 void ne2000isa_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(data);
 
 	panic("Ethernet write not implemented yet");
 }

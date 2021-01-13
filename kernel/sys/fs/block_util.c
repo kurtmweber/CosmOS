@@ -18,35 +18,35 @@ uint16_t block_get_sector_count(struct device* dev){
 }
 
 uint16_t block_get_sector_size(struct device* dev){
-    ASSERT_NOT_NULL(dev, "dev cannot be null");    
+    ASSERT_NOT_NULL(dev);    
 	struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
-    ASSERT_NOT_NULL(block_api, "block_api cannot be null");    
+    ASSERT_NOT_NULL(block_api);    
 
     return (*block_api->sector_size)(dev);
 }
 
 uint32_t block_get_total_size(struct device* dev) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");    
+    ASSERT_NOT_NULL(dev);    
 	struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
-    ASSERT_NOT_NULL(block_api, "block_api cannot be null");    
+    ASSERT_NOT_NULL(block_api);    
 
     return (*block_api->total_size)(dev);
 }
 
 void block_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");    
-    ASSERT_NOT_NULL(data, "data cannot be null");    
+    ASSERT_NOT_NULL(dev);    
+    ASSERT_NOT_NULL(data);    
 	struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
-    ASSERT_NOT_NULL(block_api, "block_api cannot be null");    
+    ASSERT_NOT_NULL(block_api);    
 
     (*block_api->write)(dev, sector, data, count);
 }
 
 void block_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");    
-    ASSERT_NOT_NULL(data, "data cannot be null");    
+    ASSERT_NOT_NULL(dev);    
+    ASSERT_NOT_NULL(data);    
 	struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
-    ASSERT_NOT_NULL(block_api, "block_api cannot be null");    
+    ASSERT_NOT_NULL(block_api);    
     (*block_api->read)(dev, sector, data, count);
 }
 

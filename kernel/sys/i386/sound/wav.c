@@ -10,7 +10,7 @@
 #include <sys/console/console.h>
 
 uint8_t* wav_pcm_start(struct wav_header* header) {
-    ASSERT_NOT_NULL(header, "header must not be null");
+    ASSERT_NOT_NULL(header);
 	uint8_t* ret =(uint8_t*) ((uint64_t) header)+sizeof(struct wav_header);
 	kprintf("PCM start %#X\n", (uint64_t) ret);
     return ret;

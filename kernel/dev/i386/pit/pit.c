@@ -32,8 +32,8 @@ uint64_t tickcount=0;;
 
 // This is the perfect place to handle context switches.  Just saying.
 void pit_handle_irq(stackFrame *frame) {
-	ASSERT_NOT_NULL(pitEvents, "pitEvents cannot be null. Has the PIT been initialized?");
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(pitEvents);
+	ASSERT_NOT_NULL(frame);
   //  kprintf("@");	
   tickcount=tickcount+1;
 }
@@ -49,19 +49,19 @@ void pit_handle_irq(stackFrame *frame) {
 *  18.2065 Hz (or an IRQ every 54.9254 ms)"
 */
 void pit_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, PIT_IRQ, dev->name);
     interrupt_router_register_interrupt_handler(PIT_IRQ, &pit_handle_irq);
 }
 
 uint64_t pit_tickcount(struct device* dev) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     return tickcount;
 }
 
 void pit_subscribe(pit_event event) {
-	ASSERT_NOT_NULL(pitEvents, "pitEvents cannot be null. Has the PIT been initialized?");
-	ASSERT_NOT_NULL(event, "event cannot be null");
+	ASSERT_NOT_NULL(pitEvents);
+	ASSERT_NOT_NULL(event);
 	list_add(pitEvents, event);
 }
 

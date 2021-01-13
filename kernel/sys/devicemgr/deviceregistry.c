@@ -18,8 +18,8 @@ void deviceregistry_init() {
 }
 
 void deviceregistry_registerdevice(struct device* dev) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");
-    ASSERT_NOT_NULL(dev->devicetype, "devicetype cannot be null");
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->devicetype);
 
     struct list* lst = devicetypes_get_devicelist(dev->devicetype);
     if (0==lst){
@@ -87,7 +87,7 @@ void deviceregistry_iterate(DeviceIterator deviceIterator) {
 }
 
 void deviceregistry_iterate_type(deviceType dt, DeviceIterator deviceIterator) {
-    ASSERT_NOT_NULL(deviceIterator, "deviceIterator cannot be null");
+    ASSERT_NOT_NULL(deviceIterator);
     if ((dt>=0) && (dt<MAX_DEVICE_TYPES)){
         struct list* lst = devicetypes_get_devicelist(dt);
         if (0!=lst){
@@ -109,7 +109,7 @@ void deviceregistry_iterate_type(deviceType dt, DeviceIterator deviceIterator) {
 * find device by name.  return zero if there is no such device
 */
 struct device* deviceregistry_findDevice(const int8_t* name) {
-    ASSERT_NOT_NULL(name, "name cannot be null");
+    ASSERT_NOT_NULL(name);
     for (uint16_t i=0; i<MAX_DEVICE_TYPES;i++) {
             struct list* lst = devicetypes_get_devicelist(i);
             if (0!=lst){

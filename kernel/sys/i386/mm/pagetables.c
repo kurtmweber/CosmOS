@@ -41,7 +41,7 @@ pttentry *extract_pttentry_base_address(pttentry entry){
 }
 
 bool is_page_aligned(void *address){
-	ASSERT_NOT_NULL(address, "address must not be null");
+	ASSERT_NOT_NULL(address);
 	// if modulus = 0, then it's page-aligned
 	if (!((uint64_t)address % PAGE_SIZE)){
 		return true;
@@ -51,7 +51,7 @@ bool is_page_aligned(void *address){
 }
 
 bool is_page_allocated(void *address){
-	ASSERT_NOT_NULL(address, "address must not be null");
+	ASSERT_NOT_NULL(address);
 	pttentry cr3;
 	pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
 	uint16_t pml4_index, pdp_index, pd_index, pt_index;
@@ -178,7 +178,7 @@ void reserve_next_ptt(ptt_levels level, uint64_t *expansion){
 }
 
 uint16_t vaddr_ptt_index(void *address, ptt_levels level){
-	ASSERT_NOT_NULL(address, "address must not be null");
+	ASSERT_NOT_NULL(address);
 
 	uint64_t mask;
 	uint8_t shift;
@@ -207,7 +207,7 @@ uint16_t vaddr_ptt_index(void *address, ptt_levels level){
 }
 
 void *vaddr_to_physical(void *address, pttentry cr3){
-	ASSERT_NOT_NULL(address, "address must not be null");
+	ASSERT_NOT_NULL(address);
 
 	pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
 	uint16_t idx;

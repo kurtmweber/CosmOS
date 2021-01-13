@@ -38,7 +38,7 @@ typedef enum rtc_registers{
 } rtc_registers;
 
 void rtc_handle_irq(stackFrame *frame) {	
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
+	ASSERT_NOT_NULL(frame);
 	for (uint32_t i=0; i< list_count(rtcEvents);i++){
 		rtc_event rtcEvent = (rtc_event) list_get(rtcEvents,i);
 		(*rtcEvent)();
@@ -54,7 +54,7 @@ void rtc_handle_irq(stackFrame *frame) {
 * perform device instance specific init here
 */
 void rtc_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu (%s)\n",dev->description, RTC_IRQ_NUMBER, dev->name);
 	
 	rtcEvents = list_new();
@@ -71,7 +71,7 @@ void rtc_device_init(struct device* dev){
 }
 
 rtc_time_t rtc_time(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
 	rtc_time_t a, b;
 	
 	a.second = cmos_read_register(RTC_REGISTER_SECOND);
@@ -119,8 +119,8 @@ rtc_time_t rtc_time(struct device* dev){
 }
 
 void rtc_subscribe(rtc_event event) {
-	ASSERT_NOT_NULL(rtcEvents, "rtcEvents cannot be null. Has the PIT been initialized?");
-	ASSERT_NOT_NULL(event, "event cannot be null");
+	ASSERT_NOT_NULL(rtcEvents);
+	ASSERT_NOT_NULL(event);
 	list_add(rtcEvents, event);
 }
 

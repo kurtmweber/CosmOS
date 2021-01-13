@@ -45,7 +45,7 @@ void devicemgr_init() {
 }
 
 int8_t* createDeviceName(struct device* dev) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");
+    ASSERT_NOT_NULL(dev);
     int8_t nn[32];
     int8_t* ret = kmalloc(MAX_DEVICE_NAME_LENGTH);
     strcpy(ret, DeviceTypeNames[dev->devicetype]);
@@ -55,10 +55,10 @@ int8_t* createDeviceName(struct device* dev) {
 }
 
 void devicemgr_register_device(struct device* dev) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");
-    ASSERT_NOT_NULL(dev->description, "description cannot be null");
-    ASSERT_NOT_NULL(dev->devicetype, "devicetype cannot be null");
-    ASSERT_NOT_NULL(dev->init, "init cannot be null");
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->description);
+    ASSERT_NOT_NULL(dev->devicetype);
+    ASSERT_NOT_NULL(dev->init);
     /*
     * set index
     */
@@ -151,8 +151,8 @@ struct device* devicemgr_new_device() {
 }
 
 void devicemgr_set_device_description(struct device* dev, int8_t* description) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");
-    ASSERT_NOT_NULL(description, "description cannot be null");
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(description);
     uint32_t size = strlen(description);
     if (0!=dev->description){
         kfree(dev->description);
@@ -162,7 +162,7 @@ void devicemgr_set_device_description(struct device* dev, int8_t* description) {
 }
 
 struct device* devicemgr_find_device(const int8_t* name) {
-    ASSERT_NOT_NULL(name, "name cannot be null");
+    ASSERT_NOT_NULL(name);
     return deviceregistry_findDevice(name);
 }
 

@@ -28,7 +28,7 @@
 * perform device instance specific init here
 */
 void pic_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     kprintf("Init %s (%s)\n" ,dev->description, dev->name);
 
 	// send init command to prim/sec PICs

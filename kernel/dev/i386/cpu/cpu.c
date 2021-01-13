@@ -18,7 +18,7 @@ void cpu_manufacturer_id(uint8_t* cpuid);
 * perform device instance specific init here
 */
 void cpu_device_init(struct device* dev){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
+	ASSERT_NOT_NULL(dev);
     kprintf("Init %s (%s)\n",dev->description, dev->name);
 }
 
@@ -35,7 +35,7 @@ void invokeCPUID(unsigned int  function, unsigned int  subfunction, unsigned int
 }
 
 void cpu_get_features(struct cpu_id* id) {    
-	ASSERT_NOT_NULL(id, "cpuid cannot be null");
+	ASSERT_NOT_NULL(id);
     invokeCPUID(1,0, &(id->eax),&(id->ebx),&(id->ecx),&(id->edx));
 }
 
@@ -49,7 +49,7 @@ bool cpu_has_apic() {
 }
 
 void cpu_manufacturer_id(uint8_t* cpuid) {
-	ASSERT_NOT_NULL(cpuid, "cpuid cannot be null");
+	ASSERT_NOT_NULL(cpuid);
     struct cpu_id id;
     invokeCPUID(0,0, &(id.eax),&(id.ebx),&(id.ecx),&(id.edx));
 

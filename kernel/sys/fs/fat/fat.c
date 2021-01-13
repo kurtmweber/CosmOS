@@ -141,8 +141,8 @@ void fat_dump_fat_extBS_16(struct fat_extBS_16* ebs) {
 }
 
 void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param){
-	ASSERT_NOT_NULL(dev, "dev cannot be null");    
-    ASSERT_NOT_NULL(param, "param cannot be null");    
+	ASSERT_NOT_NULL(dev);    
+    ASSERT_NOT_NULL(param);    
 
     param->sector_size = block_get_sector_size(dev);
     param->total_size = block_get_total_size(dev);
@@ -185,7 +185,7 @@ const uint8_t* fat_name() {
 }
 
 void fat_format(struct device* dev) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");    
+	ASSERT_NOT_NULL(dev);    
 }
 
 /*
@@ -231,7 +231,7 @@ uint32_t fat_fat16_next_cluster(struct device* dev, uint32_t current_cluster, st
 } 
 
 struct fs_directory_listing* fat_list_dir(struct device* dev) {
-    ASSERT_NOT_NULL(dev, "dev cannot be null");    
+    ASSERT_NOT_NULL(dev);    
 
 	struct fs_directory_listing* ret = fs_directory_listing_new();
 
