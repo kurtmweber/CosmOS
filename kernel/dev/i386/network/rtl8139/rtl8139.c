@@ -29,6 +29,7 @@
 #define RTL8139_RX_BUFFERSIZE       (16+(1024*8)+1500)
 
 struct rtl8139_devicedata {
+    uint8_t mac[6];
     uint64_t base;
     uint16_t irq;
     uint8_t* rx_buffer;
@@ -109,6 +110,21 @@ void rtl8139_clear_interrupt(struct device* dev){
     rtl8139_write_word(dev, RTL8139_REGISTER_ISR, 0x01);
 }
 
+void rtl8139_read_mac(struct device* dev){
+	ASSERT_NOT_NULL(dev);
+	ASSERT_NOT_NULL(dev->deviceData);
+    struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*) dev->deviceData;
+
+    devicedata->mac[0]=rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5);
+    devicedata->mac[1]=rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5+1);
+    devicedata->mac[2]=rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5+2);
+    devicedata->mac[3]=rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5+3);
+    devicedata->mac[4]=rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5+4);
+    devicedata->mac[5]=rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5)+5;
+    kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",devicedata->mac[0],devicedata->mac[1],devicedata->mac[2],devicedata->mac[3],devicedata->mac[4],devicedata->mac[5]);
+}   
+
+
 /*
 * perform device instance specific init here
 */
@@ -119,6 +135,10 @@ void rtl8139_init(struct device* dev){
     devicedata->irq = dev->pci->irq;
     devicedata->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Base %#hX Vendor %#hX Device %#hX (%s)\n",dev->description, devicedata->irq ,devicedata->base, dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    /*
+    * mac
+    */
+    rtl8139_read_mac(dev);
     /*
     * allocate rx buffer
     */
