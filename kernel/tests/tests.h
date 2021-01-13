@@ -11,6 +11,7 @@
 #include <tests/dev/testata.h>
 #include <tests/dev/testcpu.h>
 #include <tests/dev/testfloppy.h>
+#include <tests/dev/testparallel.h>
 #include <tests/dev/testpit.h>
 #include <tests/dev/testramdisk.h>
 #include <tests/dev/testrtc.h>

@@ -13,6 +13,10 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <types.h>
 
-struct deviceapi_parallel {};
+typedef void (*parallel_write_function)(struct device* dev, uint8_t* data, uint16_t size);
+
+struct deviceapi_parallel {
+    parallel_write_function write;
+};
 
 #endif
