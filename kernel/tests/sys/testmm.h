@@ -9,5 +9,6 @@
 #define __TEST_MM_H
 
 void test_mm();
+void test_pagetables();
 
 #endif

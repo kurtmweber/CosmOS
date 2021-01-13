@@ -8,6 +8,7 @@
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/i386/mm/mm.h>
+#include <sys/i386/mm/pagetables.h>
 #include <tests/sys/testmm.h>
 
 void test_mm() {
@@ -17,4 +18,7 @@ void test_mm() {
     do {
         kprintf("Base: %llX, Length: %llX\n", (uint64_t)tmp->base, tmp->len);
     } while ((tmp = tmp->next));
+}
+
+void test_pagetables() {
 }

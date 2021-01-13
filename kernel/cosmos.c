@@ -25,10 +25,6 @@
 #include <tests/tests.h>
 #include <types.h>
 
-// testing slab allocator
-#include <sys/i386/mm/pagetables.h>
-// end slab allocator test includes
-
 void stringtest();
 void BeethovensFifth();
 void chirp();
