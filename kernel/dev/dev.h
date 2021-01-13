@@ -22,6 +22,7 @@
 #include <dev/i386/keyboard/keyboard.h>
 #include <dev/i386/mouse/mouse.h>
 #include <dev/i386/network/network.h>
+#include <dev/i386/parallel/parallel.h>
 #include <dev/i386/pci/pci.h>
 #include <dev/i386/pci_ehci/pci_ehci.h>
 #include <dev/i386/pic/pic.h>

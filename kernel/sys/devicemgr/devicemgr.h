@@ -38,7 +38,8 @@ typedef enum deviceType {
     RAMDISK = 0x12,  // uses Block API
     VNIC = 0x13,     // uses NIC API
     VBLOCK = 0x14,   // uses Block API
-    DISK = 0x15      // uses Block API
+    DISK = 0x15,     // uses Block API
+    PARALLEL = 0x16
 } deviceType;
 
 /*
