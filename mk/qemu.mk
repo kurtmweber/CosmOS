@@ -8,8 +8,9 @@ QEMUARGS=                                                 \
   -no-reboot                                              \
   -drive format=raw,file=hda.img                          \
   -smp 1                                                  \
-  -nic user,model=rtl8139,net=192.168.76.0/24,dhcpstart=192.168.76.9,id=net1 \
-  -object filter-dump,id=f1,netdev=net1,file=dump.dat \
+  -netdev user,id=n0 \
+  -device rtl8139,netdev=n0 \
+  -object filter-dump,id=f1,netdev=n0,file=dump.dat \
   -serial stdio                                           \
   -audiodev coreaudio,id=audio0                           \
   -monitor telnet::45454,server,nowait                    \
@@ -22,7 +23,9 @@ QEMUARGS=                                                 \
 #  -device sb16,audiodev=audio0                            \
 # -nic user,model=virtio-net-pci                          \
  
-  
+#   -nic user,model=rtl8139,net=192.168.76.0/24,dhcpstart=192.168.76.9,id=net1 \
+
+
 # note that we're mounting the hda.img as a floppy image. good enough for now.
 # the first bytes are FA B4 00 B0 03 CD 10 88 16 7C 7C B8 01 24 CD 15
 
