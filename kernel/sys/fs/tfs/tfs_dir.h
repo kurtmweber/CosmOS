@@ -15,13 +15,17 @@
 typedef bool (*tfs_file_iterator)(struct tfs_file_block* file_block);
 
 /*
-* returns file block, or zero
+* find file. returns file block, or zero
 */
 uint64_t tfs_dir_find_file(struct device* dev, uint8_t* filename);
 /*
-* returns file block, or zero
+* add file. returns file block, or zero
 */
 uint64_t tfs_dir_add_file(struct device* dev, uint8_t* filename);
+/*
+* remove file.
+*/
+void tfs_dir_remove_file(struct device* dev, uint8_t* filename);
 /*
 * iterate files
 */

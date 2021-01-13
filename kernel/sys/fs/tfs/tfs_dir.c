@@ -75,6 +75,10 @@ void tfs_dir_iterate_files(struct device* dev, tfs_file_iterator file_iterator) 
     }
 }
 
+void tfs_dir_remove_file(struct device* dev, uint8_t* filename) {
+    ASSERT_NOT_NULL(dev); 
+    ASSERT(strlen(filename)<DFS_FILENAME_SIZE);
+    ASSERT_NOT_NULL(filename); 
 
-
+}
 
