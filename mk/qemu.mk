@@ -8,7 +8,8 @@ QEMUARGS=                                                 \
   -no-reboot                                              \
   -drive format=raw,file=hda.img                          \
   -smp 1                                                  \
-  -nic user,ipv6=off,model=rtl8139 \
+  -nic user,model=rtl8139,net=192.168.76.0/24,dhcpstart=192.168.76.9,id=net1 \
+  -object filter-dump,id=f1,netdev=net1,file=dump.dat \
   -serial stdio                                           \
   -audiodev coreaudio,id=audio0                           \
   -monitor telnet::45454,server,nowait                    \
