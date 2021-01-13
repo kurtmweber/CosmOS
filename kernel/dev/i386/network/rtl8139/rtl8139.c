@@ -13,6 +13,19 @@
 #include <dev/i386/pci/pci.h>
 #include <sys/deviceapi/deviceapi_ethernet.h>
 #include <sys/debug/assert.h>
+#include <sys/i386/mm/mm.h>
+
+#define RTL8139_REGISTER_MAC0_5     0x00
+#define RTL8139_REGISTER_MAR0_7     0x08
+#define RTL8139_REGISTER_RBSTART    0x30
+#define RTL8139_REGISTER_CMD        0x37
+#define RTL8139_REGISTER_IMR        0x3C
+#define RTL8139_REGISTER_ISR        0x3E
+
+struct rtl8139_devicedata {
+    uint64_t base;
+    uint16_t irq;
+} __attribute__((packed));
 
 void rtl8139_irq_handler(stackFrame *frame){
 	ASSERT_NOT_NULL(frame);
@@ -23,8 +36,12 @@ void rtl8139_irq_handler(stackFrame *frame){
 */
 void rtl8139_init(struct device* dev){
 	ASSERT_NOT_NULL(dev);
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, dev->name);
-    interrupt_router_register_interrupt_handler(dev->pci->irq, &rtl8139_irq_handler);
+	ASSERT_NOT_NULL(dev->deviceData);
+    struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*) dev->deviceData;
+    devicedata->irq = dev->pci->irq;
+    devicedata->base = pci_calcbar(dev->pci);
+    kprintf("Init %s at IRQ %llu Base %#hX Vendor %#hX Device %#hX (%s)\n",dev->description, devicedata->irq ,devicedata->base, dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    interrupt_router_register_interrupt_handler(devicedata->irq , &rtl8139_irq_handler);
 }
 
 void rtl8139_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
@@ -56,6 +73,13 @@ void rtl8139_search_cb(struct pci_device* dev){
     api->write = &rtl8139_ethernet_read;
     api->read = &rtl8139_ethernet_write;
     deviceinstance->api = api;
+    /*
+    * the deviceData
+    */
+    struct rtl8139_devicedata* deviceData = (struct rtl8139_devicedata*) kmalloc(sizeof(struct rtl8139_devicedata));
+    deviceData->base = 0;
+    deviceData->irq = 0;
+    deviceinstance->deviceData = deviceData;
     /*
     * register
     */

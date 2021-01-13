@@ -147,7 +147,7 @@ void ata_detect_devices(struct device* device, struct ata_controller* controller
 			ata_extract_identity(controller->channels[i].devices[j].identity,&(controller->channels[i].devices[j]));
 
 			// register the device
-			kprintf("    Found disk at channel %llu, device %llu\n",i,j);
+		//	kprintf("    Found disk at channel %llu, device %llu\n",i,j);
 			ata_register_disk(device, i, j);
 		}
 	}
