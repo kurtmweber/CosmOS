@@ -5,11 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _DFS_H
-#define _DFS_H
+#ifndef _TFS_H
+#define _TFS_H
 
 #include <types.h>
 
-void dfs_register();
+void tfs_register();
 
 #endif

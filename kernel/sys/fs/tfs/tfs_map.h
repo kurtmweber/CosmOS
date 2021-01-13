@@ -5,26 +5,16 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _DFS_DIR_H
-#define _DFS_DIR_H
+#ifndef _TFS_MAP_H
+#define _TFS_MAP_H
 
 #include <types.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/fs/dfs/dfs_block.h>
 
-typedef bool (*dfs_file_iterator)(struct dfs_file_block* file_block);
+#define DFS_MAP_BLOCK_FREE 0
+#define DFS_MAP_BLOCK_USED 1
 
-/*
-* returns file block, or zero
-*/
-uint64_t dfs_dir_find_file(struct device* dev, uint8_t* filename);
-/*
-* returns file block, or zero
-*/
-uint64_t dfs_dir_add_file(struct device* dev, uint8_t* filename);
-/*
-* iterate files
-*/
-void dfs_dir_iterate_files(struct device* dev, dfs_file_iterator file_iterator);
-
+uint32_t tfs_map_find_free_block(struct device* dev);
+void tfs_map_release_block(struct device* dev, uint64_t block);
+uint32_t tfs_map_block_count(struct device* dev);
 #endif

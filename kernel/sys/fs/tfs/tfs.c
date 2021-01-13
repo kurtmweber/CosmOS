@@ -5,10 +5,10 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/fs/dfs/dfs.h>
-#include <sys/fs/dfs/dfs_block.h>
-#include <sys/fs/dfs/dfs_map.h>
-#include <sys/fs/dfs/dfs_dir.h>
+#include <sys/fs/tfs/tfs.h>
+#include <sys/fs/tfs/tfs_block.h>
+#include <sys/fs/tfs/tfs_map.h>
+#include <sys/fs/tfs/tfs_dir.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/fs/block_util.h>
@@ -21,23 +21,23 @@
 
 const uint8_t DFS_NAME[] = {"dfs"};
 
-const uint8_t* dfs_name() {
+const uint8_t* tfs_name() {
     return DFS_NAME;
 }
 
 /*
 * format. I just guessed here. 
 */
-void dfs_format(struct device* dev) {
+void tfs_format(struct device* dev) {
     /*
     * figure out how many map blocks we need
     */
-    uint32_t number_map_blocks = dfs_map_block_count(dev);
+    uint32_t number_map_blocks = tfs_map_block_count(dev);
     /*
     * create superblock
     */
-    struct dfs_superblock_block superblock;
-    memset((uint8_t*)&superblock,0,sizeof(struct dfs_superblock_block));
+    struct tfs_superblock_block superblock;
+    memset((uint8_t*)&superblock,0,sizeof(struct tfs_superblock_block));
     superblock.magic = DFS_MAGIC_SUPERBLOCK;
     superblock.blocks_size = (uint64_t) block_get_sector_size(dev);
     superblock.blocks_count = (uint64_t) block_get_sector_count(dev);
@@ -49,48 +49,48 @@ void dfs_format(struct device* dev) {
     /*
     * write superblock
     */
-    dfs_write_superblock(dev,&superblock);
+    tfs_write_superblock(dev,&superblock);
     /*
     * create & write map blocks
     */
     for (uint32_t i=0; i<number_map_blocks;i++){
-        struct dfs_map_block map_block;
-        memset((uint8_t*)&map_block,0,sizeof(struct dfs_map_block));
-        dfs_write_map_block(dev, &map_block, i+1);
+        struct tfs_map_block map_block;
+        memset((uint8_t*)&map_block,0,sizeof(struct tfs_map_block));
+        tfs_write_map_block(dev, &map_block, i+1);
     //    kprintf("map block: %llu\n",i+1);
     }
     /*
     * root dir block
     */
-    struct dfs_dir_block root_dir_block;
-    memset((uint8_t*)&root_dir_block,0,sizeof(struct dfs_dir_block));
+    struct tfs_dir_block root_dir_block;
+    memset((uint8_t*)&root_dir_block,0,sizeof(struct tfs_dir_block));
     root_dir_block.next=0;
     /*
     * write root dir
     */
-    dfs_write_dir_block(dev,&root_dir_block, superblock.root_dir);
+    tfs_write_dir_block(dev,&root_dir_block, superblock.root_dir);
     kprintf("dir block: %llu\n",superblock.root_dir);
 }
 
-bool dfs_dir_list_iterator(struct dfs_file_block* file_block) {
+bool tfs_dir_list_iterator(struct tfs_file_block* file_block) {
     ASSERT_NOT_NULL(file_block); 
     kprintf("dfs file at block %s\n",file_block->name);
     return true;
 }
 
-struct fs_directory_listing* dfs_list_dir(struct device* dev) {
+struct fs_directory_listing* tfs_list_dir(struct device* dev) {
     ASSERT_NOT_NULL(dev);  
-    dfs_dir_iterate_files(dev, &dfs_dir_list_iterator);
+    tfs_dir_iterate_files(dev, &tfs_dir_list_iterator);
 }
 
-void dfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size){
+void tfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size){
     ASSERT_NOT_NULL(dev); 
     ASSERT_NOT_NULL(name); 
     ASSERT_NOT_NULL(data); 
     ASSERT(strlen(name)<DFS_FILENAME_SIZE);
 }
 
-void dfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size) {
+void tfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size) {
     ASSERT_NOT_NULL(dev); 
     ASSERT_NOT_NULL(name); 
     ASSERT_NOT_NULL(data); 
@@ -110,18 +110,18 @@ void dfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uin
     */
 }
 
-void dfs_register() {
-    ASSERT(sizeof(struct dfs_superblock_block)==DFS_BLOCK_SIZE);
-    ASSERT(sizeof(struct dfs_dir_block)==DFS_BLOCK_SIZE);
-    ASSERT(sizeof(struct dfs_file_block)==DFS_BLOCK_SIZE);
-    ASSERT(sizeof(struct dfs_file_allocation_block)==DFS_BLOCK_SIZE);
-    ASSERT(sizeof(struct dfs_map_block)==DFS_BLOCK_SIZE);
+void tfs_register() {
+    ASSERT(sizeof(struct tfs_superblock_block)==DFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct tfs_dir_block)==DFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct tfs_file_block)==DFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct tfs_file_allocation_block)==DFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct tfs_map_block)==DFS_BLOCK_SIZE);
 
     struct fs_filesystem* fs = (struct fs_filesystem*) kmalloc(sizeof(struct fs_filesystem));
-    fs->format = &dfs_format;
-    fs->list_dir= &dfs_list_dir;
-    fs->name = &dfs_name;
-    fs->read = &dfs_read;
-    fs->write = &dfs_write;
+    fs->format = &tfs_format;
+    fs->list_dir= &tfs_list_dir;
+    fs->name = &tfs_name;
+    fs->read = &tfs_read;
+    fs->write = &tfs_write;
     fs_register(fs);
 }

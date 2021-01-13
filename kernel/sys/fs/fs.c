@@ -9,7 +9,7 @@
 #include <sys/fs/cfs/cfs.h>
 #include <sys/fs/fat/fat.h>
 #include <sys/fs/sfs/sfs.h>
-#include <sys/fs/dfs/dfs.h>
+#include <sys/fs/tfs/tfs.h>
 #include <sys/debug/assert.h>
 #include <sys/console/console.h>
 #include <sys/string/string.h>
@@ -23,7 +23,7 @@ void fs_init() {
     sfs_register();
     cfs_register();
     fat_register();
-    dfs_register();
+    tfs_register();
 }
 
 void fs_register(struct fs_filesystem* fs) {

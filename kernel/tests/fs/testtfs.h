@@ -5,8 +5,8 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef __TEST_DFS_H
-#define __TEST_DFS_H
+#ifndef __TEST_TFS_H
+#define __TEST_TFS_H
 
 void test_dfs();
 
