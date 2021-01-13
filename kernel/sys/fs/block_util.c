@@ -8,45 +8,45 @@
 #ifndef _BLOCK_UTIL_H
 #define _BLOCK_UTIL_H
 
-#include <sys/fs/block_util.h>
-#include <sys/devicemgr/devicemgr.h>
-#include <sys/deviceapi/deviceapi_block.h>
 #include <sys/debug/assert.h>
+#include <sys/deviceapi/deviceapi_block.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/fs/block_util.h>
 
-uint16_t block_get_sector_count(struct device* dev){
+uint16_t block_get_sector_count(struct device* dev) {
     return block_get_total_size(dev) / block_get_sector_size(dev);
 }
 
-uint16_t block_get_sector_size(struct device* dev){
-    ASSERT_NOT_NULL(dev);    
-	struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
-    ASSERT_NOT_NULL(block_api);    
+uint16_t block_get_sector_size(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
+    ASSERT_NOT_NULL(block_api);
 
     return (*block_api->sector_size)(dev);
 }
 
 uint32_t block_get_total_size(struct device* dev) {
-    ASSERT_NOT_NULL(dev);    
-	struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
-    ASSERT_NOT_NULL(block_api);    
+    ASSERT_NOT_NULL(dev);
+    struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
+    ASSERT_NOT_NULL(block_api);
 
     return (*block_api->total_size)(dev);
 }
 
 void block_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
-    ASSERT_NOT_NULL(dev);    
-    ASSERT_NOT_NULL(data);    
-	struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
-    ASSERT_NOT_NULL(block_api);    
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(data);
+    struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
+    ASSERT_NOT_NULL(block_api);
 
     (*block_api->write)(dev, sector, data, count);
 }
 
 void block_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
-    ASSERT_NOT_NULL(dev);    
-    ASSERT_NOT_NULL(data);    
-	struct deviceapi_block* block_api = (struct deviceapi_block*) dev->api;
-    ASSERT_NOT_NULL(block_api);    
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(data);
+    struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
+    ASSERT_NOT_NULL(block_api);
     (*block_api->read)(dev, sector, data, count);
 }
 

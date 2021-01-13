@@ -11,18 +11,16 @@
 #include <types.h>
 
 /**
- *  a simple ringbuffer based on an array. 
+ *  a simple ringbuffer based on an array.
  */
 typedef struct ringbuffer {
-	void **data;
+    void** data;
     uint16_t start;
     uint16_t end;
 } ringbuffer_t;
 
 void ringbuffer_add(struct ringbuffer* buffer, void* add);
 void* ringbuffer_consume(struct ringbuffer* buffer);
-struct ringbuffer * ringbuffer_new();
-
-
+struct ringbuffer* ringbuffer_new();
 
 #endif

@@ -20,50 +20,50 @@
  * indices are zero-based
  */
 typedef struct list {
-	struct array* arr;
+    struct array* arr;
     uint32_t count;
 } list_t;
 
 /*
-* list iterator
-*/
+ * list iterator
+ */
 typedef void (*listIterator)(void* value);
 
 /*
-* new list
-*/
+ * new list
+ */
 struct list* list_new();
 /*
-* delete list
-*/
+ * delete list
+ */
 void list_delete(struct list* lst);
 /*
-* number items in the list
-*/
+ * number items in the list
+ */
 uint32_t list_count(struct list* lst);
 /*
-* size of the underlying array
-*/
+ * size of the underlying array
+ */
 uint32_t list_size(struct list* lst);
 /*
-* returns zero-based index of added item
-*/
+ * returns zero-based index of added item
+ */
 uint32_t list_add(struct list* lst, void* value);
 /*
-* set value at index
-*/
+ * set value at index
+ */
 void list_set(struct list* lst, uint32_t position, void* value);
 /*
-* get value at index
-*/
+ * get value at index
+ */
 void* list_get(struct list* lst, uint32_t position);
 /*
-* iterate
-*/
+ * iterate
+ */
 void list_iterate(struct list* lst, listIterator iter);
 /*
-* remove element at index
-*/
+ * remove element at index
+ */
 void list_remove(struct list* lst, uint32_t position);
 
 #endif

@@ -5,13 +5,13 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 /*
-* this file defines the interface that all mouse devices will implement
-*/
+ * this file defines the interface that all mouse devices will implement
+ */
 #ifndef _DEVICEAPI_MOUSE_H
 #define _DEVICEAPI_MOUSE_H
 
-#include <types.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <types.h>
 
 struct mouse_status {
     uint8_t mouse_cycle;

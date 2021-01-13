@@ -7,8 +7,7 @@
 
 #include <types.h>
 
-typedef volatile bool kernel_spinlock;    // 64 bytes to take up a full cache line, which improves performance on atomic operations
-
+typedef volatile bool kernel_spinlock;  // 64 bytes to take up a full cache line, which improves performance on atomic operations
 
 // spinlock.c
 extern kernel_spinlock page_dir_lock;

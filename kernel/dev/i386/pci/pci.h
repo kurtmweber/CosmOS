@@ -11,15 +11,15 @@
 #include <dev/i386/pci/devicetree.h>
 #include <dev/i386/pci/pci_device.h>
 
-#define PCI_CONFIG_ADDRESS_PORT	0xCF8
-#define PCI_CONFIG_DATA_PORT	0xCFC
+#define PCI_CONFIG_ADDRESS_PORT 0xCF8
+#define PCI_CONFIG_DATA_PORT 0xCFC
 
-#define PCI_BAR0_OFFSET		0x10
-#define PCI_BAR1_OFFSET		0x14
-#define PCI_BAR2_OFFSET		0x18
-#define PCI_BAR3_OFFSET		0x1C
-#define PCI_BAR4_OFFSET		0x20
-#define PCI_BAR5_OFFSET		0x24
+#define PCI_BAR0_OFFSET 0x10
+#define PCI_BAR1_OFFSET 0x14
+#define PCI_BAR2_OFFSET 0x18
+#define PCI_BAR3_OFFSET 0x1C
+#define PCI_BAR4_OFFSET 0x20
+#define PCI_BAR5_OFFSET 0x24
 
 uint32_t pci_config_address_build(uint8_t bus, uint8_t device, uint8_t function, uint8_t offset, uint8_t enabled);
 

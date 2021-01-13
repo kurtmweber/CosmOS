@@ -5,12 +5,11 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-
 #ifndef _ATA_UTIL_H
 #define _ATA_UTIL_H
 
-#include <types.h>
 #include <dev/i386/ata/ata.h>
+#include <types.h>
 
 struct ata_controller;
 

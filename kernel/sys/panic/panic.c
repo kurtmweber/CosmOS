@@ -8,11 +8,10 @@
 #include <sys/asm/asm.h>
 #include <sys/console/drivers/drivers.h>
 
-void panic(const char *s){
-	
-	console_write("!!!PANIC!!!\n");
-	console_write(s);
-	
-	asm_cli();
-	asm_hlt();
+void panic(const char *s) {
+    console_write("!!!PANIC!!!\n");
+    console_write(s);
+
+    asm_cli();
+    asm_hlt();
 }

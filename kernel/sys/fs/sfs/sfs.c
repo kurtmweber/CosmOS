@@ -5,25 +5,25 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/fs/sfs/sfs.h>
 #include <sys/console/console.h>
-#include <sys/devicemgr/devicemgr.h>
 #include <sys/debug/assert.h>
-#include <sys/i386/mm/mm.h>
 #include <sys/deviceapi/deviceapi_block.h>
-#include <sys/string/mem.h>
+#include <sys/devicemgr/devicemgr.h>
 #include <sys/fs/block_util.h>
 #include <sys/fs/fs.h>
+#include <sys/fs/sfs/sfs.h>
+#include <sys/i386/mm/mm.h>
+#include <sys/string/mem.h>
 
-#define SFS_VOLUME_IDENTIFIER           0x01
-#define SFS_STARTING_MARKER             0x02
-#define SFS_UNUSED_ENTRY                0x10
-#define SFS_DIRECTORY_ENTRY             0x11
-#define SFS_FILE_ENTRY                  0x12
-#define SFS_UNUSABLE_ENTRY              0x18
-#define SFS_DELETED_DIRECTORY_ENTRY     0x19
-#define SFS_DELETED_FILE_ENTRY          0x1A
-#define SFS_CONTINUATION_ENTRY          0x20
+#define SFS_VOLUME_IDENTIFIER 0x01
+#define SFS_STARTING_MARKER 0x02
+#define SFS_UNUSED_ENTRY 0x10
+#define SFS_DIRECTORY_ENTRY 0x11
+#define SFS_FILE_ENTRY 0x12
+#define SFS_UNUSABLE_ENTRY 0x18
+#define SFS_DELETED_DIRECTORY_ENTRY 0x19
+#define SFS_DELETED_FILE_ENTRY 0x1A
+#define SFS_CONTINUATION_ENTRY 0x20
 
 struct sfs_superblock {
     uint8_t reserved1[11];
@@ -106,19 +106,19 @@ struct sfs_continuation_entry {
 } __attribute__((packed));
 
 /*
-* check if valid superblock
-*/
-bool sfs_is_valid_superblock(struct sfs_superblock* superblock){
+ * check if valid superblock
+ */
+bool sfs_is_valid_superblock(struct sfs_superblock* superblock) {
     ASSERT_NOT_NULL(superblock);
-    if ((superblock->magic[0]==0x53) && (superblock->magic[1]==0x46) && (superblock->magic[2]==0x53)){
+    if ((superblock->magic[0] == 0x53) && (superblock->magic[1] == 0x46) && (superblock->magic[2] == 0x53)) {
         return true;
     }
     return false;
 }
 
-void sfs_read_superblock(struct device* dev, struct sfs_superblock* superblock ){
+void sfs_read_superblock(struct device* dev, struct sfs_superblock* superblock) {
     ASSERT_NOT_NULL(dev);
-    block_read(dev, 0, (uint8_t*)superblock,1);
+    block_read(dev, 0, (uint8_t*)superblock, 1);
 }
 
 void sfs_format(struct device* dev) {
@@ -131,24 +131,24 @@ void sfs_format(struct device* dev) {
 
     // create a superblock struct
     struct sfs_superblock superblock;
-    memset((uint8_t*)&superblock,0,sizeof(struct sfs_superblock));
-    superblock.timestamp=0; // later
-    superblock.dataarea_size_blocks = total_sectors-2; // 1 for superblock and 1 for index
-    superblock.indexarea_size_bytes = sector_size; // 1 sector
-    superblock.reserved_blocks=1; // 1, for the superblock
-    superblock.total_blocks=total_sectors;
-    superblock.version=0x10;  // 1.0
-    superblock.magic[0]=0x53;
-    superblock.magic[1]=0x46;
-    superblock.magic[2]=0x53;
-    superblock.block_size = (sector_size/512)+1;
+    memset((uint8_t*)&superblock, 0, sizeof(struct sfs_superblock));
+    superblock.timestamp = 0;                             // later
+    superblock.dataarea_size_blocks = total_sectors - 2;  // 1 for superblock and 1 for index
+    superblock.indexarea_size_bytes = sector_size;        // 1 sector
+    superblock.reserved_blocks = 1;                       // 1, for the superblock
+    superblock.total_blocks = total_sectors;
+    superblock.version = 0x10;  // 1.0
+    superblock.magic[0] = 0x53;
+    superblock.magic[1] = 0x46;
+    superblock.magic[2] = 0x53;
+    superblock.block_size = (sector_size / 512) + 1;
 
     // write superblock
-    block_write(dev, 0, (uint8_t*)&superblock,1);
+    block_write(dev, 0, (uint8_t*)&superblock, 1);
 }
 
 struct fs_directory_listing* sfs_list_dir(struct device* dev) {
-    ASSERT_NOT_NULL(dev);    
+    ASSERT_NOT_NULL(dev);
 }
 
 const uint8_t SFS_NAME[] = {"sfs"};
@@ -158,9 +158,9 @@ const uint8_t* sfs_name() {
 }
 
 void sfs_register() {
-    struct fs_filesystem* fs = (struct fs_filesystem*) kmalloc(sizeof(struct fs_filesystem));
+    struct fs_filesystem* fs = (struct fs_filesystem*)kmalloc(sizeof(struct fs_filesystem));
     fs->format = &sfs_format;
-    fs->list_dir= &sfs_list_dir;
+    fs->list_dir = &sfs_list_dir;
     fs->name = &sfs_name;
     fs_register(fs);
 }

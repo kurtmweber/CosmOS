@@ -8,10 +8,9 @@
 #ifndef _DE_H
 #define _DE_H
 
-
-#include <types.h>
 #include <sys/debug/assert.h>
 #include <sys/i386/interrupts/irq.h>
+#include <types.h>
 
 void isrDE(stackFrame *frame);
 void isrPFE(stackFrame *frame, uint64_t error);

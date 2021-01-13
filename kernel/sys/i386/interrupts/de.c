@@ -5,11 +5,11 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <types.h>
 #include <sys/debug/assert.h>
 #include <sys/i386/interrupts/exceptions.h>
+#include <types.h>
 
-__attribute__ ((interrupt)) void isrDE(stackFrame *frame){
-	ASSERT_NOT_NULL(frame);
-	panic("Division by zero!");
+__attribute__((interrupt)) void isrDE(stackFrame *frame) {
+    ASSERT_NOT_NULL(frame);
+    panic("Division by zero!");
 }

@@ -5,13 +5,13 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 /*
-* this file defines the interface that all floppy devices will implement
-*/
+ * this file defines the interface that all floppy devices will implement
+ */
 #ifndef _DEVICEAPI_FLOPPY_H
 #define _DEVICEAPI_FLOPPY_H
 
-#include <types.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <types.h>
 
 typedef void (*floppy_read_sector_function)(struct device* dev, uint32_t lba, uint8_t* data, uint16_t size);
 typedef void (*floppy_write_sector_function)(struct device* dev, uint32_t lba, uint8_t* data, uint16_t size);

@@ -5,15 +5,15 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <types.h>
 #include <sys/asm/misc.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/i386/interrupts/exceptions.h>
 #include <sys/i386/mm/mm.h>
+#include <types.h>
 
-__attribute__ ((interrupt)) void isrPFE(stackFrame *frame, uint64_t error){
-	ASSERT_NOT_NULL(frame);
+__attribute__((interrupt)) void isrPFE(stackFrame *frame, uint64_t error) {
+    ASSERT_NOT_NULL(frame);
 
     page_fault_handler(error, asm_cr2_read(), asm_cr3_read());
 

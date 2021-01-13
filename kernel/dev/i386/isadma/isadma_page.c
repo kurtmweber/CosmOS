@@ -13,5 +13,5 @@ uint16_t isadma_address_to_page(uint64_t address) {
 
 uint16_t isadma_address_to_buffer(uint64_t address) {
     uint16_t page = isadma_address_to_page(address);
-	return address - (page << 16);
+    return address - (page << 16);
 }

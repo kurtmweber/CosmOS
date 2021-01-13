@@ -5,50 +5,49 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <tests/dev/testspeaker.h>
+#include <sys/console/console.h>
 #include <sys/deviceapi/deviceapi_speaker.h>
 #include <sys/i386/sound/notes.h>
 #include <sys/sleep/sleep.h>
-#include <sys/console/console.h>
+#include <tests/dev/testspeaker.h>
 
 void BeethovensFifth() {
-	// get the speaker
-	struct device* speaker = devicemgr_find_device("speaker0");
-	if (0!=speaker){
-		struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
-		speaker_beep_function beep_func = speaker_api->beep;
-	//	(*beep_func)(speaker, 4000, 50);
-		(*beep_func)(speaker,NOTE_G5, 200);
-		sleep_wait(100);
-		(*beep_func)(speaker,NOTE_G5, 200);
-		sleep_wait(100);
-		(*beep_func)(speaker,NOTE_G5, 200);
-		sleep_wait(100);
-		(*beep_func)(speaker,NOTE_DS5, 400);
-		sleep_wait(400);
+    // get the speaker
+    struct device* speaker = devicemgr_find_device("speaker0");
+    if (0 != speaker) {
+        struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*)speaker->api;
+        speaker_beep_function beep_func = speaker_api->beep;
+        //	(*beep_func)(speaker, 4000, 50);
+        (*beep_func)(speaker, NOTE_G5, 200);
+        sleep_wait(100);
+        (*beep_func)(speaker, NOTE_G5, 200);
+        sleep_wait(100);
+        (*beep_func)(speaker, NOTE_G5, 200);
+        sleep_wait(100);
+        (*beep_func)(speaker, NOTE_DS5, 400);
+        sleep_wait(400);
 
-		(*beep_func)(speaker,NOTE_F5, 200);
-		sleep_wait(100);
-		(*beep_func)(speaker,NOTE_F5, 200);
-		sleep_wait(100);
-		(*beep_func)(speaker,NOTE_F5, 200);
-		sleep_wait(100);
-		(*beep_func)(speaker,NOTE_D5, 400);
-		sleep_wait(100);
-	} else {
-		kprintf("Unable to find speaker0\n");
-	}
+        (*beep_func)(speaker, NOTE_F5, 200);
+        sleep_wait(100);
+        (*beep_func)(speaker, NOTE_F5, 200);
+        sleep_wait(100);
+        (*beep_func)(speaker, NOTE_F5, 200);
+        sleep_wait(100);
+        (*beep_func)(speaker, NOTE_D5, 400);
+        sleep_wait(100);
+    } else {
+        kprintf("Unable to find speaker0\n");
+    }
 }
 
-
 void chirp() {
-	// get the speaker
-	struct device* speaker = devicemgr_find_device("speaker0");
-	if (0!=speaker){
-		struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*) speaker->api;
-		speaker_beep_function beep_func = speaker_api->beep;
-		(*beep_func)(speaker, 4000, 50);
-	} else {
-		kprintf("Unable to find speaker0\n");
-	}
+    // get the speaker
+    struct device* speaker = devicemgr_find_device("speaker0");
+    if (0 != speaker) {
+        struct deviceapi_speaker* speaker_api = (struct deviceapi_speaker*)speaker->api;
+        speaker_beep_function beep_func = speaker_api->beep;
+        (*beep_func)(speaker, 4000, 50);
+    } else {
+        kprintf("Unable to find speaker0\n");
+    }
 }

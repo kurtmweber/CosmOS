@@ -5,15 +5,16 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <tests/dev/testramdisk.h>
-#include <sys/deviceapi/deviceapi_block.h>
 #include <sys/console/console.h>
-#include <sys/debug/debug.h>
-#include <sys/string/string.h>
 #include <sys/debug/assert.h>
+#include <sys/debug/debug.h>
+#include <sys/deviceapi/deviceapi_block.h>
 #include <sys/string/mem.h>
+#include <sys/string/string.h>
+#include <tests/dev/testramdisk.h>
 
-uint8_t* testdata = "We were very tired, we were very merry, \
+uint8_t* testdata =
+    "We were very tired, we were very merry, \
 We had gone back and forth all night on the ferry. \
 We hailed, Good morrow, mother! to a shawl-covered head, \
 And bought a morning paper, which neither of us read; \
@@ -21,30 +22,27 @@ And she wept, God bless you! for the apples and pears, \
 And we gave her all our money but our subway fares.";
 
 void test_ramdisk() {
-	// get virtual block device
-	uint8_t devicename[] ={"rd0"};
+    // get virtual block device
+    uint8_t devicename[] = {"rd0"};
 
-	struct device* ata = devicemgr_find_device(devicename);
-	if (0!=ata){
-		struct deviceapi_block* ata_api = (struct deviceapi_block*) ata->api;
+    struct device* ata = devicemgr_find_device(devicename);
+    if (0 != ata) {
+        struct deviceapi_block* ata_api = (struct deviceapi_block*)ata->api;
 
-		uint8_t data[256];
-	    memset((uint8_t*)data, 0, 255*sizeof(uint8_t));
+        uint8_t data[256];
+        memset((uint8_t*)data, 0, 255 * sizeof(uint8_t));
 
-		(*ata_api->write)(ata, 7,  testdata, strlen(testdata));
+        (*ata_api->write)(ata, 7, testdata, strlen(testdata));
 
-		uint8_t readdata[255];
-	    memset((uint8_t*)readdata, 0, 255*sizeof(uint8_t));
+        uint8_t readdata[255];
+        memset((uint8_t*)readdata, 0, 255 * sizeof(uint8_t));
 
-		(*ata_api->read)(ata, 7, readdata, 512);
+        (*ata_api->read)(ata, 7, readdata, 512);
 
-		debug_show_memblock((uint8_t*)readdata, 32);
-		ASSERT(readdata[0]=='W');
-		ASSERT(strlen(readdata)==strlen(testdata));
-	} else {
-		kprintf("Unable to find %s\n",devicename);
-	}
+        debug_show_memblock((uint8_t*)readdata, 32);
+        ASSERT(readdata[0] == 'W');
+        ASSERT(strlen(readdata) == strlen(testdata));
+    } else {
+        kprintf("Unable to find %s\n", devicename);
+    }
 }
-
-
-

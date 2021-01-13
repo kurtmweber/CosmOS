@@ -8,11 +8,10 @@
 #ifndef _ETHERNET_UTIL_H
 #define _ETHERNET_UTIL_H
 
-#include <types.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <types.h>
 
 void ethernet_read(struct device* dev, uint8_t* data, uint32_t size);
 void ethernet_write(struct device* dev, uint8_t* data, uint32_t size);
 
 #endif
-

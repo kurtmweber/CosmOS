@@ -5,8 +5,8 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <types.h>
 #include <sys/deviceapi/deviceapi_block.h>
+#include <types.h>
 
 uint16_t block_get_sector_size(struct device* dev);
 uint16_t block_get_sector_count(struct device* dev);

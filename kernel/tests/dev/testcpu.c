@@ -5,35 +5,35 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <tests/dev/testcpu.h>
-#include <sys/deviceapi/deviceapi_cpu.h>
 #include <sys/console/console.h>
+#include <sys/deviceapi/deviceapi_cpu.h>
+#include <tests/dev/testcpu.h>
 
 void show_cpu_data() {
-	// get the CPU
-	struct device* cpu = devicemgr_find_device("cpu0");
-    if (0!=cpu){
-        struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*) cpu->api;
+    // get the CPU
+    struct device* cpu = devicemgr_find_device("cpu0");
+    if (0 != cpu) {
+        struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*)cpu->api;
         /*
-        * show all CPU features
-        */
+         * show all CPU features
+         */
         struct cpu_id id;
         (*cpu_api->features)(&id);
         kprintf("CPU Features %#X\n", id.edx);
 
         /*
-        * check if APIC
-        */
+         * check if APIC
+         */
         bool apic = (*cpu_api->apic)();
-        if(apic){
+        if (apic) {
             kprintf("APIC present\n");
         } else {
             kprintf("APIC not present\n");
         }
-        
+
         /*
-        * show CPU manufacturer
-        */ 
+         * show CPU manufacturer
+         */
         uint8_t cpu_manufacturer_string[13];
         (*cpu_api->manufacturer)((uint8_t*)&cpu_manufacturer_string);
         kprintf("CPU Manufacturer: %s\n", cpu_manufacturer_string);

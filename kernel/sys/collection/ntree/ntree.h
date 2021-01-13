@@ -10,8 +10,8 @@
 #define _NTREE_H
 
 /*
-* an n-ary tree
-*/
+ * an n-ary tree
+ */
 
 #include <types.h>
 struct ntree {
@@ -26,4 +26,3 @@ uint32_t ntree_childcount(struct ntree* nt);
 struct ntree* ntree_child(struct ntree* nt, uint32_t idx);
 
 #endif
-

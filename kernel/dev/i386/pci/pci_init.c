@@ -5,18 +5,18 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <types.h>
+#include <dev/i386/pci/devicetree.h>
+#include <dev/i386/pci/pci.h>
 #include <sys/console/console.h>
 #include <sys/i386/mm/mm.h>
-#include <dev/i386/pci/pci.h>
-#include <dev/i386/pci/devicetree.h>
+#include <types.h>
 
-void pci_init(){	
-	kprintf("Initializing PCI bus...\n");
-	
-	pci_devices = list_new();
+void pci_init() {
+    kprintf("Initializing PCI bus...\n");
 
-	pci_scan();
-	
-	return;
+    pci_devices = list_new();
+
+    pci_scan();
+
+    return;
 }

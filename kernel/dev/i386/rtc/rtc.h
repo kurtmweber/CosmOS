@@ -13,4 +13,3 @@
 void rtc_devicemgr_register_devices();
 
 #endif
-

@@ -12,10 +12,10 @@
 #include <types.h>
 
 struct tree {
-  void* value;
-  uint32_t key;
-  struct tree *left;
-  struct tree *right;
+    void* value;
+    uint32_t key;
+    struct tree* left;
+    struct tree* right;
 };
 
 struct tree* tree_new();
@@ -24,4 +24,3 @@ void tree_insert(struct tree* t, uint32_t key, void* value);
 void* tree_search(struct tree* t, uint32_t key);
 
 #endif
-

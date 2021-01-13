@@ -11,8 +11,8 @@
 #include <types.h>
 
 /**
-* this special function is used at boot time to write only to com1 for console output
-*/
+ * this special function is used at boot time to write only to com1 for console output
+ */
 void com1_serial_write(const uint8_t* c);
 void com1_serial_write_char(const uint8_t c);
 

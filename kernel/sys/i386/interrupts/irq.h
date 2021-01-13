@@ -10,13 +10,13 @@
 
 #include <types.h>
 
-typedef struct stackFrame{
-	uint64_t rip;
-	uint64_t cs;
-	uint64_t fflags;
-	uint64_t rsp;
-	uint64_t ss;
-	}__attribute__((packed)) stackFrame;
+typedef struct stackFrame {
+    uint64_t rip;
+    uint64_t cs;
+    uint64_t fflags;
+    uint64_t rsp;
+    uint64_t ss;
+} __attribute__((packed)) stackFrame;
 
 void irq0(stackFrame *frame);
 void irq1(stackFrame *frame);

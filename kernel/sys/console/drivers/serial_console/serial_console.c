@@ -4,23 +4,23 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/i386/serial/serial.h>
 #include <sys/console/drivers/drivers.h>
 #include <sys/console/drivers/serial_console/serial_console.h>
 #include <sys/deviceapi/deviceapi_serial.h>
-#include <dev/i386//serial/serial.h>
 
-void serial_console_init(){	
-	return;
+void serial_console_init() {
+    return;
 }
 
 uint8_t serial_console_write(const char *c) {
-	 serial_write_string(c);
+    serial_write_string(c);
 }
 
-void serial_console_register(){
-	console_interfaces[CONSOLE_DRIVER_SERIAL].init = &serial_console_init;
-	console_interfaces[CONSOLE_DRIVER_SERIAL].setpos =0;
-	console_interfaces[CONSOLE_DRIVER_SERIAL].write = &serial_console_write;
-	
-	return;
+void serial_console_register() {
+    console_interfaces[CONSOLE_DRIVER_SERIAL].init = &serial_console_init;
+    console_interfaces[CONSOLE_DRIVER_SERIAL].setpos = 0;
+    console_interfaces[CONSOLE_DRIVER_SERIAL].write = &serial_console_write;
+
+    return;
 }

@@ -5,13 +5,13 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 /*
-* this file defines the interface that all speaker devices will implement
-*/
+ * this file defines the interface that all speaker devices will implement
+ */
 #ifndef _DEVICEAPI_SPEAKER_H
 #define _DEVICEAPI_SPEAKER_H
 
-#include <types.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <types.h>
 
 typedef void (*speaker_beep_function)(struct device* dev, uint32_t frequency, uint32_t milliseconds);
 

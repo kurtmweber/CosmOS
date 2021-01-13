@@ -5,19 +5,19 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <tests/dev/testrtc.h>
+#include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_rtc.h>
-#include <sys/console/console.h>
+#include <tests/dev/testrtc.h>
 
 void test_rtc() {
     // get the time, b/c we can
-	struct device* rtc = devicemgr_find_device("rtc0");
-    if (0!=rtc){
-        struct deviceapi_rtc* rtc_api = (struct deviceapi_rtc*) rtc->api;
+    struct device* rtc = devicemgr_find_device("rtc0");
+    if (0 != rtc) {
+        struct deviceapi_rtc* rtc_api = (struct deviceapi_rtc*)rtc->api;
         rtc_time_function time_func = rtc_api->rtc_time;
         rtc_time_t daTime = (*time_func)(rtc);
-        kprintf("Hour: %llu Minute: %llu Second: %llu\n",daTime.hour, daTime.minute, daTime.second);
+        kprintf("Hour: %llu Minute: %llu Second: %llu\n", daTime.hour, daTime.minute, daTime.second);
     } else {
         kprintf("Unable to find rtc0\n");
     }

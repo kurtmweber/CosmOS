@@ -17,73 +17,73 @@ struct device;
 typedef void (*deviceInit)(struct device* dev);
 
 typedef enum deviceType {
-	NONE	=		0x00,
-	SERIAL	=		0x01,
-	VGA = 			0x02,
-	RTC=			0x03,
-	KEYBOARD=		0x04,
-	NIC=		    0x05,   // uses NIC API
-	BRIDGE=			0x06,
-	USB=			0x07,
-	ATA=			0x08,   // ATA controller
-	PIC=			0x09,
-	MOUSE=			0x0A,
-	FLOPPY=			0x0B,
-	SPEAKER=		0x0C,
-	PIT=			0x0D,
-	DSP=			0x0E,
-	CMOS=			0x0F,
-	DMA=			0x10,
-	CPU=			0x11,
-	RAMDISK=		0x12,	// uses Block API
-	VNIC=			0x13,	// uses NIC API
-	VBLOCK=			0x14,	// uses Block API
-	DISK=			0x15	// uses Block API
+    NONE = 0x00,
+    SERIAL = 0x01,
+    VGA = 0x02,
+    RTC = 0x03,
+    KEYBOARD = 0x04,
+    NIC = 0x05,  // uses NIC API
+    BRIDGE = 0x06,
+    USB = 0x07,
+    ATA = 0x08,  // ATA controller
+    PIC = 0x09,
+    MOUSE = 0x0A,
+    FLOPPY = 0x0B,
+    SPEAKER = 0x0C,
+    PIT = 0x0D,
+    DSP = 0x0E,
+    CMOS = 0x0F,
+    DMA = 0x10,
+    CPU = 0x11,
+    RAMDISK = 0x12,  // uses Block API
+    VNIC = 0x13,     // uses NIC API
+    VBLOCK = 0x14,   // uses Block API
+    DISK = 0x15      // uses Block API
 } deviceType;
 
 /*
-* array of names, indexed by deviceType
-*/
+ * array of names, indexed by deviceType
+ */
 extern int8_t* DeviceTypeNames[];
 
 typedef struct device {
-	/*
-	* the combination of name (from DeviceTypeNames) and index
-	* create the device name.  ie "serial0".
-	*/
-	int8_t* name;
-	uint8_t type_index;
-	/*
-	* the type (SERIAL, VGA etc)
-	*/
-	enum deviceType devicetype;
-	/*
-	* init function
-	*/
-	deviceInit init;
-	/*
-	* human readable description provided by the driver
-	*/
-	int8_t* description;
-	/*
-	* device-specific data
-	*/
-	void* deviceData;
-	/*
-	* For PCI devices, this is a struct pci_device*.   
-	*/
-	struct pci_device* pci;
-	/*
-	* pointer to the type-specific API struct
-	*/
-	void* api;
+    /*
+     * the combination of name (from DeviceTypeNames) and index
+     * create the device name.  ie "serial0".
+     */
+    int8_t* name;
+    uint8_t type_index;
+    /*
+     * the type (SERIAL, VGA etc)
+     */
+    enum deviceType devicetype;
+    /*
+     * init function
+     */
+    deviceInit init;
+    /*
+     * human readable description provided by the driver
+     */
+    int8_t* description;
+    /*
+     * device-specific data
+     */
+    void* deviceData;
+    /*
+     * For PCI devices, this is a struct pci_device*.
+     */
+    struct pci_device* pci;
+    /*
+     * pointer to the type-specific API struct
+     */
+    void* api;
 } device_t;
 
 // new device, allocated on the kernel heap
 struct device* devicemgr_new_device();
 
 // register a device
-void devicemgr_register_device(struct device* dev); 
+void devicemgr_register_device(struct device* dev);
 
 // init the device registry
 void devicemgr_init();

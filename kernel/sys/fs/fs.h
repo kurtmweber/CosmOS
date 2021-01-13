@@ -8,29 +8,29 @@
 #ifndef _FS_H
 #define _FS_H
 
-#include <types.h>
-#include <sys/devicemgr/devicemgr.h>
 #include <sys/collection/list/list.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <types.h>
 
 /*
-* format a file system
-*/
+ * format a file system
+ */
 typedef void (*fs_format_function)(struct device* dev);
 /*
-* returns a list of fs_file structs. remember to delete these!
-*/
+ * returns a list of fs_file structs. remember to delete these!
+ */
 typedef struct fs_directory_listing* (*fs_list_dir_function)(struct device* dev);
 /*
-* name of type (fat, sfs, cfs, etc)
-*/
+ * name of type (fat, sfs, cfs, etc)
+ */
 typedef const uint8_t* (*fs_name_function)();
 /*
-* read file
-*/
+ * read file
+ */
 typedef void (*fs_read_function)(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size);
 /*
-* write file
-*/
+ * write file
+ */
 typedef void (*fs_write_function)(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size);
 
 struct fs_filesystem {
@@ -52,28 +52,28 @@ struct fs_file {
 };
 
 /*
-* register all fs's
-*/
+ * register all fs's
+ */
 void fs_init();
 
 /*
-* register a fs
-*/
+ * register a fs
+ */
 void fs_register(struct fs_filesystem* fs);
 
 /*
-* get an fs by name
-*/
+ * get an fs by name
+ */
 struct fs_filesystem* fs_find(uint8_t* name);
 
 /*
-* new directory listing
-*/
+ * new directory listing
+ */
 struct fs_directory_listing* fs_directory_listing_new();
 
 /*
-* new directory listing
-*/
+ * new directory listing
+ */
 void fs_directory_listing_delete(struct fs_directory_listing* listing);
 
 #endif

@@ -18,8 +18,8 @@ void interrupt_router_init();
 void interrupt_router_register_interrupt_handler(int interruptNumber, interruptHandler func);
 
 /*
-* called by ISR in irq.c
-*/
+ * called by ISR in irq.c
+ */
 void interrupt_router_route_interrupt(int interruptNumber, stackFrame *frame);
 
 #endif

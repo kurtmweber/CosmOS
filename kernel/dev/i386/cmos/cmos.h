@@ -10,8 +10,8 @@
 
 #include <types.h>
 
-#define CMOS_REGISTER_SELECT_PORT	0x70
-#define CMOS_REGISTER_DATA_PORT		0x71
+#define CMOS_REGISTER_SELECT_PORT 0x70
+#define CMOS_REGISTER_DATA_PORT 0x71
 
 void cmos_devicemgr_register_devices();
 
