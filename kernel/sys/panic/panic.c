@@ -9,6 +9,7 @@
 #include <sys/console/drivers/drivers.h>
 
 void panic(const char *s){
+	
 	console_write("!!!PANIC!!!\n");
 	console_write(s);
 	

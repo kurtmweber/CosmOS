@@ -35,7 +35,6 @@ uint32_t array_size(struct array* arr){
 }
 
 void  array_set(struct array* arr, uint32_t position, void* value){
-    arr=0;
 	ASSERT_NOT_NULL(arr);
     if ((position>=0) &&(position< arr->size) ){
         arr->data[position]=value;

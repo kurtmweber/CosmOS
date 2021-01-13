@@ -9,10 +9,11 @@
 #define _ASSERT_H
 
 #include <sys/panic/panic.h>
+#include <sys/console/console.h>
 
 // assertion macros to make life easier
 // in a RELEASE build these can just expand to nothing
 #define ASSERT(condition, message) if (false==(condition)) {panic (message);}
-#define ASSERT_NOT_NULL(term) if (0==(term)) {panic ("Illegal null");}
+#define ASSERT_NOT_NULL(term) if (0==(term)) {kprintf("%s cannot be null in file %s at line %llu\n", #term,__FILE__, __LINE__);panic ("Illegal null");}
 
 #endif
