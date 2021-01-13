@@ -57,7 +57,7 @@ void CosmOS() {
     kprintf("Initializing IDT...\n");
     idt_init();
 
-    kprintf("Initializing spinlocks...\n");
+    kprintf("Initializing Spinlocks...\n");
     spinlocks_init();
 
     kprintf("Initializing MMU...\n");
