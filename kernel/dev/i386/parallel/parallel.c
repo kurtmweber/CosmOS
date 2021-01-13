@@ -20,6 +20,8 @@
 #define PARALLEL_DEVICE_LTP2_IRQ 6
 #define PARALLEL_DEVICE_LTP3_IRQ 5
 
+// https://wiki.osdev.org/Parallel_port
+
 struct parallel_devicedata {
     uint16_t address;
     uint16_t irq;
