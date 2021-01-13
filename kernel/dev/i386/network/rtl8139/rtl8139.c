@@ -39,13 +39,6 @@ void rtl8139_irq_handler(stackFrame *frame){
     kprintf("@");
 }
 
-//void rtl8139_write_long(struct device* dev, uint16_t offset, uint64_t l) {
-//	ASSERT_NOT_NULL(dev);
-//	ASSERT_NOT_NULL(dev->deviceData);
- //   struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*) dev->deviceData;
- //   asm_out_q(devicedata->base+offset, l);
-//}
-
 void rtl8139_write_dword(struct device* dev, uint16_t offset, uint32_t dword) {
 	ASSERT_NOT_NULL(dev);
 	ASSERT_NOT_NULL(dev->deviceData);
@@ -105,7 +98,6 @@ void rtl8139_set_rx_buffer(struct device* dev, uint8_t* buffer){
     rtl8139_write_dword(dev, RTL8139_REGISTER_RBSTART,(uint32_t)* buffer);
 }
 
-// how wide is this register?
 void rtl8139_configure_rcr(struct device* dev){
 	ASSERT_NOT_NULL(dev);
     // accept everything, and do buffer wrap
