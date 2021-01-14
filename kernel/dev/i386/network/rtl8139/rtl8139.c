@@ -85,7 +85,7 @@ void rtl8139_read_mac(struct device *dev) {
     devicedata->mac[2] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5 + 2);
     devicedata->mac[3] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5 + 3);
     devicedata->mac[4] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5 + 4);
-    devicedata->mac[5] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5) + 5;
+    devicedata->mac[5] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5 + 5);
     kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n", devicedata->mac[0], devicedata->mac[1], devicedata->mac[2], devicedata->mac[3], devicedata->mac[4], devicedata->mac[5]);
 }
 
