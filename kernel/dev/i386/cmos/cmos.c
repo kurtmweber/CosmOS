@@ -9,6 +9,7 @@
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
+#include <sys/deviceapi/deviceapi_cmos.h>
 #include <sys/devicemgr/devicemgr.h>
 
 void cmos_write_register(uint8_t reg, uint8_t val) {
@@ -54,5 +55,13 @@ void cmos_devicemgr_register_devices() {
     devicemgr_set_device_description(deviceinstance, "i386 CMOS");
     deviceinstance->devicetype = CMOS;
     deviceinstance->init = &cmos_device_init;
+    /*
+     * api
+     */
+    struct deviceapi_cmos* api = (struct deviceapi_cmos*)kmalloc(sizeof(struct deviceapi_cmos));
+    deviceinstance->api = api;
+    /*
+     * register
+     */
     devicemgr_register_device(deviceinstance);
 }

@@ -10,6 +10,7 @@
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
+#include <sys/deviceapi/deviceapi_bda.h>
 #include <sys/devicemgr/devicemgr.h>
 
 #define BDA_ADDRESS 0x400
@@ -31,6 +32,31 @@ struct bda {
     uint16_t keyboard_buffer_end;
     uint8_t keyboard_last;
 } __attribute__((packed));
+
+uint16_t bda_text_columns() {
+    struct bda* data_area = (struct bda*)BDA_ADDRESS;
+    return data_area->textmode_columns;
+}
+
+uint8_t bda_display_mode() {
+    struct bda* data_area = (struct bda*)BDA_ADDRESS;
+    return data_area->display_mode;
+}
+
+uint16_t bda_uptime() {
+    struct bda* data_area = (struct bda*)BDA_ADDRESS;
+    return data_area->irq0_ticks_since_boot;
+}
+
+uint16_t bda_video_port() {
+    struct bda* data_area = (struct bda*)BDA_ADDRESS;
+    return data_area->video_port_address;
+}
+
+uint8_t bda_num_hd() {
+    struct bda* data_area = (struct bda*)BDA_ADDRESS;
+    return data_area->number_hd;
+}
 
 uint16_t bda_serial0_base() {
     struct bda* data_area = (struct bda*)BDA_ADDRESS;
@@ -83,5 +109,13 @@ void bda_devicemgr_register_devices() {
     devicemgr_set_device_description(deviceinstance, "BIOS Data Area");
     deviceinstance->devicetype = BDA;
     deviceinstance->init = &bda_device_init;
+    /*
+     * api
+     */
+    struct deviceapi_bda* api = (struct deviceapi_bda*)kmalloc(sizeof(struct deviceapi_bda));
+    deviceinstance->api = api;
+    /*
+     * register
+     */
     devicemgr_register_device(deviceinstance);
 }

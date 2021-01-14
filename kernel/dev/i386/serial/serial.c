@@ -124,21 +124,21 @@ void serial_devicemgr_register_devices() {
     // serial0
     uint16_t serial0_base = bda_serial0_base();
     if (0 != serial0_base) {
-        serial_register_device(SERIAL_IRQ1, serial0_base);
+        serial_register_device(SERIAL_IRQ2, serial0_base);
     }
     // serial1
     uint16_t serial1_base = bda_serial1_base();
     if (0 != serial1_base) {
-        serial_register_device(SERIAL_IRQ2, serial1_base);
+        serial_register_device(SERIAL_IRQ1, serial1_base);
     }
     // serial2
     uint16_t serial2_base = bda_serial2_base();
     if (0 != serial2_base) {
-        serial_register_device(SERIAL_IRQ1, serial2_base);
+        serial_register_device(SERIAL_IRQ2, serial2_base);
     }
     // serial3
     uint16_t serial3_base = bda_serial3_base();
     if (0 != serial3_base) {
-        serial_register_device(SERIAL_IRQ2, serial3_base);
+        serial_register_device(SERIAL_IRQ1, serial3_base);
     }
 }
