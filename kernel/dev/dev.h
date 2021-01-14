@@ -13,6 +13,7 @@
 #include <dev/i386/ac97/ac97.h>
 #include <dev/i386/adlib/adlib.h>
 #include <dev/i386/ata/ata_controller.h>
+#include <dev/i386/bda/bda.h>
 #include <dev/i386/bridge/bridge.h>
 #include <dev/i386/cmos/cmos.h>
 #include <dev/i386/cpu/cpu.h>

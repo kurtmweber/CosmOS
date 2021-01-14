@@ -16,7 +16,7 @@
 
 #define MAX_DEVICE_NAME_LENGTH 64
 
-int8_t* DeviceTypeNames[] = {"None", "serial", "vga", "rtc", "keyboard", "nic", "bridge", "usb", "ata", "pic", "mouse", "floppy", "speaker", "pit", "dsp", "cmos", "dma", "cpu", "rd", "vnic", "vblock", "disk", "par"};
+int8_t* DeviceTypeNames[] = {"None", "serial", "vga", "rtc", "keyboard", "nic", "bridge", "usb", "ata", "pic", "mouse", "floppy", "speaker", "pit", "dsp", "cmos", "dma", "cpu", "rd", "vnic", "vblock", "disk", "par", "bda"};
 
 void devicemgr_init() {
     deviceregistry_init();
@@ -72,6 +72,10 @@ void devicemgr_init_devices() {
      * CPU first before first?
      */
     deviceregistry_iterate_type(CPU, deviceInitIterator);
+    /*
+     * BDA
+     */
+    deviceregistry_iterate_type(BDA, deviceInitIterator);
     /*
      * PIC first
      */
@@ -192,6 +196,7 @@ void devicemgr_register_devices() {
     ramdisk_devicemgr_register_devices();
     pci_ehci_devicemgr_register_devices();
     parallel_devicemgr_register_devices();
+    bda_devicemgr_register_devices();
 }
 
 #else
