@@ -5,6 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/i386/bda/bda.h>
 #include <dev/i386/serial/ns16550.h>
 #include <dev/i386/serial/serial.h>
 #include <sys/asm/asm.h>
@@ -120,10 +121,24 @@ void serial_register_device(uint8_t irq, uint64_t base) {
  * find all RS232 devices and register them
  */
 void serial_devicemgr_register_devices() {
-    serial_register_device(SERIAL_IRQ2, COM1_ADDRESS);
-
-    // TODO add code to check if these even exist
-    //    registerRS232Device(SERIAL_IRQ1,COM2_ADDRESS);
-    //    registerRS232Device(SERIAL_IRQ2,COM3_ADDRESS);
-    //    registerRS232Device(SERIAL_IRQ1,COM4_ADDRESS);
+    // serial0
+    uint16_t serial0_base = bda_serial0_base();
+    if (0 != serial0_base) {
+        serial_register_device(SERIAL_IRQ1, serial0_base);
+    }
+    // serial1
+    uint16_t serial1_base = bda_serial1_base();
+    if (0 != serial1_base) {
+        serial_register_device(SERIAL_IRQ2, serial1_base);
+    }
+    // serial2
+    uint16_t serial2_base = bda_serial2_base();
+    if (0 != serial2_base) {
+        serial_register_device(SERIAL_IRQ1, serial2_base);
+    }
+    // serial3
+    uint16_t serial3_base = bda_serial3_base();
+    if (0 != serial3_base) {
+        serial_register_device(SERIAL_IRQ2, serial3_base);
+    }
 }

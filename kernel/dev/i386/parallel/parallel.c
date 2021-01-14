@@ -5,6 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/i386/bda/bda.h>
 #include <dev/i386/parallel/parallel.h>
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
@@ -14,9 +15,6 @@
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/sleep/sleep.h>
 
-#define PARALLEL_DEVICE_LTP1_BASE 0x378
-#define PARALLEL_DEVICE_LTP2_BASE 0x278
-#define PARALLEL_DEVICE_LTP3_BASE 0x3BC
 #define PARALLEL_DEVICE_LTP1_IRQ 7
 #define PARALLEL_DEVICE_LTP2_IRQ 6
 #define PARALLEL_DEVICE_LTP3_IRQ 5
@@ -115,5 +113,19 @@ void parallel_devicemgr_register_device(uint64_t base, uint8_t irq) {
 }
 
 void parallel_devicemgr_register_devices() {
-    parallel_devicemgr_register_device(PARALLEL_DEVICE_LTP1_BASE, PARALLEL_DEVICE_LTP1_IRQ);
+    // lpt0
+    uint16_t lpt1_base = bda_parallel0_base();
+    if (0 != lpt1_base) {
+        parallel_devicemgr_register_device(lpt1_base, PARALLEL_DEVICE_LTP1_IRQ);
+    }
+    // lpt1
+    uint16_t lpt2_base = bda_parallel1_base();
+    if (0 != lpt2_base) {
+        parallel_devicemgr_register_device(lpt2_base, PARALLEL_DEVICE_LTP2_IRQ);
+    }
+    // lpt2
+    uint16_t lpt3_base = bda_parallel2_base();
+    if (0 != lpt3_base) {
+        parallel_devicemgr_register_device(lpt3_base, PARALLEL_DEVICE_LTP3_IRQ);
+    }
 }
