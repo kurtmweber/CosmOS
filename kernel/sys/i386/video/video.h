@@ -8,6 +8,8 @@
 #ifndef _VIDEO_H
 #define _VIDEO_H
 
+#include <types.h>
+
 typedef enum video_driver { VIDEO_DRIVER_VGA = 0, VIDEO_DRIVER_LAST } video_driver;
 
 typedef enum video_mode { VIDEO_MODE_TEXT = 1, VIDEO_MODE_MAX } video_mode;

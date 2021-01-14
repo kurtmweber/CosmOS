@@ -11,7 +11,6 @@
 
 void video_scroll_text(void) {
     video_interfaces[video_active_driver].scroll_text();
-
     return;
 }
 

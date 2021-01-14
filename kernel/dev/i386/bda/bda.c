@@ -33,6 +33,11 @@ struct bda {
     uint8_t keyboard_last;
 } __attribute__((packed));
 
+uint16_t bda_get_ebda_address() {
+    struct bda* data_area = (struct bda*)BDA_ADDRESS;
+    return data_area->ebda;
+}
+
 uint16_t bda_text_columns() {
     struct bda* data_area = (struct bda*)BDA_ADDRESS;
     return data_area->textmode_columns;
