@@ -6,9 +6,9 @@
 // ****************************************************************
 
 /*
-* this header defines symbols we export from rawdata.asm
-* for example, sounds, bitmaps, cursors, fonts....
-*/
+ * this header defines symbols we export from rawdata.asm
+ * for example, sounds, bitmaps, cursors, fonts....
+ */
 #ifndef _RAWDATA_H
 #define _RAWDATA_H
 
@@ -17,4 +17,3 @@
 extern uint64_t _tone_s, _tone_e;
 
 #endif
-

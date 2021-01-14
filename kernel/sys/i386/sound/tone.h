@@ -8,8 +8,8 @@
 #ifndef _TONE_H
 #define _TONE_H
 
-#include <types.h>
 #include <sys/i386/sound/wav.h>
+#include <types.h>
 
 struct wav_header* sound_get_tone();
 

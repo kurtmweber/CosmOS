@@ -5,12 +5,12 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <types.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/i386/mm/pagetables.h>
 #include <sys/sync/sync.h>
+#include <types.h>
 
-uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
+uint64_t slab_allocate(uint64_t pages, page_directory_types purpose) {
     /*
      * Allocates a CONTIGUOUS chunk of physical pages, and returns the
      * page-directory index of the first one.  If a sufficiently-sized chunk
@@ -22,7 +22,7 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
     uint64_t consecutive_pages = 0;
     uint64_t i, j;
     uint64_t start_page = 0;
-    
+
     spinlock_acquire(&page_dir_lock);
 
     /*
@@ -30,22 +30,22 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
      * free pages
      */
 
-    for (i = 0; i < page_directory_size; i++){
-        if ((page_directory[i].ref_count == 0) && (page_directory[i].type == PDT_PHYS_AVAIL)){
+    for (i = 0; i < page_directory_size; i++) {
+        if ((page_directory[i].ref_count == 0) && (page_directory[i].type == PDT_PHYS_AVAIL)) {
             /*
              * If this is the first free block, or the last free block was of
              * insufficient size, then we mark this page as the start of the
              * current free block.  If it's the start of a free block OR a
              * continuation, we increment the # of consecutive free pages.
              */
-            if (start_page == 0){
+            if (start_page == 0) {
                 start_page = i;
             }
             consecutive_pages++;
 
             // Mark pages as used and return if we've got what we need
-            if (consecutive_pages == pages){
-                for (j = start_page; j < consecutive_pages + start_page; j++){
+            if (consecutive_pages == pages) {
+                for (j = start_page; j < consecutive_pages + start_page; j++) {
                     page_directory[i].ref_count++;
                     page_directory[i].type = purpose;
                 }
@@ -54,11 +54,11 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
             }
         } else {
             /*
-            * If we get here, then we've found an unfree page, so we reset the
-            * counter and the start_page marker.
-            */
-           start_page = 0;
-           consecutive_pages = 0;
+             * If we get here, then we've found an unfree page, so we reset the
+             * counter and the start_page marker.
+             */
+            start_page = 0;
+            consecutive_pages = 0;
         }
     }
 
@@ -68,7 +68,7 @@ uint64_t slab_allocate(uint64_t pages, page_directory_types purpose){
     return 0;
 }
 
-void slab_free(uint64_t start, uint64_t len){
+void slab_free(uint64_t start, uint64_t len) {
     /*
      * Frees len pages, starting at page start
      *
@@ -81,7 +81,7 @@ void slab_free(uint64_t start, uint64_t len){
 
     spinlock_acquire(&page_dir_lock);
 
-    for (i = start; i < (start + len); i++){
+    for (i = start; i < (start + len); i++) {
         page_directory[i].ref_count = 0;
         page_directory[i].type = PDT_PHYS_AVAIL;
     }

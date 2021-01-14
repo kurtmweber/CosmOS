@@ -5,10 +5,9 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <types.h>
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
+#include <sys/debug/assert.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/string/string.h>
-#include <sys/debug/assert.h>
-
+#include <types.h>

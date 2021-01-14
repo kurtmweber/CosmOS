@@ -5,14 +5,13 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/i386/sound/wav.h>
-#include <sys/debug/assert.h>
 #include <sys/console/console.h>
+#include <sys/debug/assert.h>
+#include <sys/i386/sound/wav.h>
 
 uint8_t* wav_pcm_start(struct wav_header* header) {
     ASSERT_NOT_NULL(header);
-	uint8_t* ret =(uint8_t*) ((uint64_t) header)+sizeof(struct wav_header);
-	kprintf("PCM start %#X\n", (uint64_t) ret);
+    uint8_t* ret = (uint8_t*)((uint64_t)header) + sizeof(struct wav_header);
+    kprintf("PCM start %#X\n", (uint64_t)ret);
     return ret;
 }
-

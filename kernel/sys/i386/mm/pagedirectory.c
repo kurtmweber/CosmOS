@@ -5,11 +5,11 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <types.h>
 #include <sys/console/console.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/i386/mm/pagetables.h>
 #include <sys/panic/panic.h>
+#include <types.h>
 
 uint64_t page_directory_size;
 page_directory_t *page_directory;
@@ -18,12 +18,12 @@ uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_b
 int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, uint8_t num_blocks);
 void init_page_directory(int_15_map *phys_map, uint8_t num_blocks);
 
-uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_blocks){
+uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_blocks) {
     uint16_t i;
 
     /*
      * !!!!!!!!BE CAREFUL WITH THE RETURN VALUE FROM THIS FUNCTION!!!!!!!!
-     * 
+     *
      * It will actually return the index of the proper block + 1.  This is so
      * that zero can be used to signify a hole (since holes do not have entries
      * in the block list). This is also why the return value is a uint16 rather
@@ -35,32 +35,32 @@ uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_b
      * use that as an index into the block list.
      */
 
-    for (i = 0; i < num_blocks; i++){
+    for (i = 0; i < num_blocks; i++) {
         /*
          * We subtract 1 from base + len because len is a 1-based quantity and base is
          * 0-based, so base=0 and len=5 means that the end of the block is 4.
          */
-        if (((uint64_t)phys_map[i].base <= (uint64_t)(page * PAGE_SIZE)) && ((uint64_t)(phys_map[i].base + phys_map[i].len - 1) >= (uint64_t)(page * PAGE_SIZE))){
+        if (((uint64_t)phys_map[i].base <= (uint64_t)(page * PAGE_SIZE)) && ((uint64_t)(phys_map[i].base + phys_map[i].len - 1) >= (uint64_t)(page * PAGE_SIZE))) {
             return i + 1;
         }
     }
 
-    return 0;   // page is in a hole
+    return 0;  // page is in a hole
 }
 
-int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, uint8_t num_blocks){
+int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, uint8_t num_blocks) {
     uint16_t i;
 
     i = find_page_bios_block(page, phys_map, num_blocks);
 
-    if (!i){
+    if (!i) {
         return HOLE;
     } else {
         return phys_map[i - 1].type;
     }
 }
 
-void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
+void init_page_directory(int_15_map *phys_map, uint8_t num_blocks) {
     /*
      * This function creates blank page directory entries and fills them in with
      * the information we can glean from the BIOS memory map created at
@@ -77,20 +77,20 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
 
     // How many pages does the physical address space encompass?
     num_phys_pages = ((uint64_t)last_phys_addr / PAGE_SIZE);
-    if ((uint64_t)last_phys_addr % PAGE_SIZE){
+    if ((uint64_t)last_phys_addr % PAGE_SIZE) {
         num_phys_pages++;
     }
 
     page_directory_size = num_phys_pages;
 
-    for (i = 0; i < num_phys_pages; i++){
+    for (i = 0; i < num_phys_pages; i++) {
         bios_type = get_page_bios_type(i, phys_map, num_blocks);
 
         page_directory[i].ref_count = 0;
         page_directory[i].backing_addr = 0;
         page_directory[i].flags = 0;
 
-        switch(bios_type){
+        switch (bios_type) {
             case USABLE:
                 page_directory[i].type = PDT_PHYS_AVAIL;
                 break;
@@ -114,7 +114,7 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks){
     return;
 }
 
-void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks){
+void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks) {
     int_15_map best_block;
     void *dmap_start;
     uint64_t dmap_start_page;
@@ -125,7 +125,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
     kprintf("Setting up physical page directory...\n");
 
     page_directory = start;
-    
+
     init_page_directory(phys_map, num_blocks);
 
     /*
@@ -133,12 +133,12 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
      * first megabyte.
      */
 
-    for (i = 0; i < (1048576 / PAGE_SIZE); i++){
+    for (i = 0; i < (1048576 / PAGE_SIZE); i++) {
         /*
          * If a page is hardware-reserved, bad, or a hole, we don't mark it as
          * system-reserved.
          */
-        if (page_directory[i].type == PDT_PHYS_AVAIL){
+        if (page_directory[i].type == PDT_PHYS_AVAIL) {
             page_directory[i].type = PDT_SYSTEM_RESERVED;
         }
 
@@ -147,8 +147,8 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
     }
 
     // Now the kernel text, heap, and stack space
-    for (i = (1048576 / PAGE_SIZE); i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++){
-        if (page_directory[i].type == PDT_PHYS_AVAIL){
+    for (i = (1048576 / PAGE_SIZE); i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
+        if (page_directory[i].type == PDT_PHYS_AVAIL) {
             page_directory[i].type = PDT_SYSTEM_RESERVED;
         }
 
@@ -157,7 +157,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
 
     // And, finally, the high direct map + page directory area
     last_phys_addr = find_last_phys_addr(phys_map, num_blocks);
-    
+
     /*
      * The procedure here is to find the base of the block we put our upper
      * direct map at.  The page directory start immediately follows the direct
@@ -167,7 +167,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
      * direct map + page directory.
      */
 
-    /* 
+    /*
      * +1 because we need a 1-based size, not a 0-based address which is what
      * last_phys_addr is
      */
@@ -175,22 +175,22 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
     dmap_start = best_block.base;
     size = (uint64_t)(CONV_DMAP_ADDR(start) - dmap_start);
 
-    size += size_pd((uint64_t)last_phys_addr + 1);     // +1 for same reason as above
+    size += size_pd((uint64_t)last_phys_addr + 1);  // +1 for same reason as above
 
     /*
      *Now size = size in bytes of upper direct map + page directory, so we need
      * to know how many pages that encompasses.
      */
-    if (size % PAGE_SIZE){
+    if (size % PAGE_SIZE) {
         size = (size / PAGE_SIZE) + 1;
     } else {
         size = (size / PAGE_SIZE);
     }
 
     dmap_start_page = (uint64_t)dmap_start / PAGE_SIZE;
-    for (i = 0; i < size; i++){
+    for (i = 0; i < size; i++) {
         // Add to i the offset equal to the page of the start of the direct map.
-        if (page_directory[i + dmap_start_page].type == PDT_PHYS_AVAIL){
+        if (page_directory[i + dmap_start_page].type == PDT_PHYS_AVAIL) {
             page_directory[i + dmap_start_page].type = PDT_SYSTEM_RESERVED;
         }
         page_directory[i + dmap_start_page].ref_count++;

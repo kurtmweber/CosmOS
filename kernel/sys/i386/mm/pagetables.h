@@ -8,21 +8,21 @@
 #ifndef _PAGETABLES_H
 #define _PAGETABLES_H
 
-#include <types.h>
 #include <sys/i386/mm/mm.h>
+#include <types.h>
 
-typedef uint64_t ptt_t;     // page translation table
+typedef uint64_t ptt_t;  // page translation table
 
-#define DIRECT_MAP_OFFSET           0xFFFFA00000000000
+#define DIRECT_MAP_OFFSET 0xFFFFA00000000000
 
-#define MAX_ID_MAP                  0x100000
+#define MAX_ID_MAP 0x100000
 
 // Set this to somewhere above the last page tables that are created by the bootloader
-#define EARLY_PAGE_TABLE_PHYS_BASE      0x30000
+#define EARLY_PAGE_TABLE_PHYS_BASE 0x30000
 
 // This is the start of the Extended BIOS Data Area used by SMM.  Once we reach this point with our
 // early page tables, we need to start using heap space
-#define EARLY_PAGE_TABLE_NEVER_EXCEED   0x80000
+#define EARLY_PAGE_TABLE_NEVER_EXCEED 0x80000
 
 #define PTT_EXTRACT_BASE(x) (x & 0x000FFFFFFFFFF000)
 #define PTT_SET_BASE(ptt, base) (ptt |= base)
@@ -38,25 +38,26 @@ typedef uint64_t ptt_t;     // page translation table
 #define CONV_DMAP_ADDR(x) ((void *)((uint64_t)x - DIRECT_MAP_OFFSET))
 
 // Flags to set (or not) in PTT entries
-#define PTT_FLAG_PRESENT    1       // present in physical memory
-#define PTT_FLAG_RW         2       // read-write (0 = read-only)
-#define PTT_FLAG_USER       4       // whether to allow user access to page (0 = supervisor only)
-#define PTT_FLAG_PWT        8       // writethrough caching (0 = writeback caching)
-#define PTT_FLAG_PWD        16      // 0 = cacheable, 1 = disable caching
-#define PTT_FLAG_ACCESSED   32      // has page been accessed?
-#define PTT_FLAG_DIRTY      64      // has it been written to?
-#define PTT_FLAG_PS         128     // page size - see AMD64 docs for information, for now we'll
-                                    // use 4-kb pages so it should always be 0
-#define PTT_FLAG_GLOBAL     256     // 1 for global page
+#define PTT_FLAG_PRESENT 1    // present in physical memory
+#define PTT_FLAG_RW 2         // read-write (0 = read-only)
+#define PTT_FLAG_USER 4       // whether to allow user access to page (0 = supervisor only)
+#define PTT_FLAG_PWT 8        // writethrough caching (0 = writeback caching)
+#define PTT_FLAG_PWD 16       // 0 = cacheable, 1 = disable caching
+#define PTT_FLAG_ACCESSED 32  // has page been accessed?
+#define PTT_FLAG_DIRTY 64     // has it been written to?
+#define PTT_FLAG_PS \
+    128                      // page size - see AMD64 docs for information, for now we'll
+                             // use 4-kb pages so it should always be 0
+#define PTT_FLAG_GLOBAL 256  // 1 for global page
 
-typedef enum page_directory_types{
-    PDT_PHYS_AVAIL,                         // Physical memory available for allocation
-    PDT_SYSTEM_RESERVED,                    // Reserved by operating system
-    PDT_HARDWARE_RESERVED,                  // Reserved by hardware or BIOS - NEVER ALLOCATE
-    PDT_HOLE,                               // Hole in memory map - NEVER ALLOCATE
-    PDT_BAD,                                // Flagged as bad by BIOS - NEVER ALLOCATE
-    PDT_INUSE,                              // generic in-use flag
-    PDT_MAX_PD_TYPE = 0xFFFFFFFFFFFFFFFF    // to force enum to 64 bits
+typedef enum page_directory_types {
+    PDT_PHYS_AVAIL,                       // Physical memory available for allocation
+    PDT_SYSTEM_RESERVED,                  // Reserved by operating system
+    PDT_HARDWARE_RESERVED,                // Reserved by hardware or BIOS - NEVER ALLOCATE
+    PDT_HOLE,                             // Hole in memory map - NEVER ALLOCATE
+    PDT_BAD,                              // Flagged as bad by BIOS - NEVER ALLOCATE
+    PDT_INUSE,                            // generic in-use flag
+    PDT_MAX_PD_TYPE = 0xFFFFFFFFFFFFFFFF  // to force enum to 64 bits
 } page_directory_types;
 
 // forward type declarations to avoid compilation errors
@@ -67,12 +68,12 @@ enum ptt_levels;
 typedef enum ptt_levels ptt_levels;
 
 // use these as memos of what we're doing and when we need to convert
-typedef void * phys_addr;
-typedef void * virt_addr;
+typedef void *phys_addr;
+typedef void *virt_addr;
 
 typedef uint64_t pttentry;
 
-typedef struct page_directory_t{
+typedef struct page_directory_t {
     uint64_t ref_count;
     union {
         uint64_t backing_handle;
@@ -89,7 +90,7 @@ uint64_t size_pd(uint64_t space);
 
 // pagedirectory.c
 extern page_directory_t *page_directory;
-extern uint64_t page_directory_size;    // number of ENTRIES, not number of bytes
+extern uint64_t page_directory_size;  // number of ENTRIES, not number of bytes
 void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks);
 
 // pagetables.c

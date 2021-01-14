@@ -8,14 +8,14 @@
 #ifndef _MM_H
 #define _MM_H
 
-#include <types.h>
 #include <sys/i386/mm/pagetables.h>
+#include <types.h>
 
 // How much physical address space the bootloader has mapped
-#define BOOT_MAPPED_PHYS	0x1100000
+#define BOOT_MAPPED_PHYS 0x1100000
 
 #define PTTENTRY_BASE_MASK 0x000FFFFFFFFFF000
-#define INIT_UNMAPPED_PHYS_BASE	0xB00000
+#define INIT_UNMAPPED_PHYS_BASE 0xB00000
 
 // AND these masks w/virtual addresses and then shift them right to get the index into the respective level of the page translation tables
 #define PML4_INDEX_MASK 0x0000FF8000000000
@@ -27,16 +27,16 @@
 #define PT_INDEX_MASK 0x00000000001FF000
 #define PT_INDEX_SHIFT 12
 
-#define KMALLOC_ALIGN_BYTES	8
+#define KMALLOC_ALIGN_BYTES 8
 
 #define PAGE_SIZE 4096
 
 // PFE error flags
-#define PFE_ERROR_PRESENT	1
-#define PFE_ERROR_WRITE		2
-#define PFE_ERROR_USER		4
-#define PFE_ERROR_WRITE_R	8
-#define PFE_ERROR_FETCH_INS	16
+#define PFE_ERROR_PRESENT 1
+#define PFE_ERROR_WRITE 2
+#define PFE_ERROR_USER 4
+#define PFE_ERROR_WRITE_R 8
+#define PFE_ERROR_FETCH_INS 16
 
 extern uint64_t _end;
 
@@ -50,39 +50,34 @@ typedef uint64_t pttentry;
 enum page_directory_types;
 typedef enum page_directory_types page_directory_types;
 
-typedef enum int_15_map_region_type{
-	USABLE = 1,
-	RESERVED = 2,
-	ACPI_RECLAIM = 3,
-	ACPI_NVS = 4,
-	BAD = 5,
-	HOLE	// Not an actual type returned by the int 15 map, but we use it in page-directory setup
+typedef enum int_15_map_region_type {
+    USABLE = 1,
+    RESERVED = 2,
+    ACPI_RECLAIM = 3,
+    ACPI_NVS = 4,
+    BAD = 5,
+    HOLE  // Not an actual type returned by the int 15 map, but we use it in page-directory setup
 } int_15_map_region_type;
 
-typedef enum ptt_levels{
-	PML4 = 0,
-	PDP,
-	PD,
-	PT
-} ptt_levels;
+typedef enum ptt_levels { PML4 = 0, PDP, PD, PT } ptt_levels;
 
 // structs
 
-typedef struct int_15_map{
-	void *base;
-	uint64_t len;
-	uint32_t type;		// read this as int_15_map_region_type, but we store it as uint32_t in the struct to get the size right
-	uint32_t acpi;
-}__attribute__((packed)) int_15_map;
+typedef struct int_15_map {
+    void *base;
+    uint64_t len;
+    uint32_t type;  // read this as int_15_map_region_type, but we store it as uint32_t in the struct to get the size right
+    uint32_t acpi;
+} __attribute__((packed)) int_15_map;
 
-typedef struct mem_block{
-	struct mem_block *prev;
-	void *base;
-	uint64_t len;
-	bool used;
-	uint64_t owner;		// ignored for free blocks
-	struct mem_block *next;
-}__attribute__((aligned(8))) mem_block;
+typedef struct mem_block {
+    struct mem_block *prev;
+    void *base;
+    uint64_t len;
+    bool used;
+    uint64_t owner;  // ignored for free blocks
+    struct mem_block *next;
+} __attribute__((aligned(8))) mem_block;
 
 typedef mem_block kmalloc_block;
 
