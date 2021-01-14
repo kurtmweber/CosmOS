@@ -5,6 +5,8 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+// https://wiki.osdev.org/RTL8139
+
 #include <dev/i386/network/rtl8139/rtl8139.h>
 #include <dev/i386/network/rtl8139/rtl8139_io.h>
 #include <dev/i386/pci/pci.h>
