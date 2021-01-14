@@ -6,6 +6,7 @@
 // ****************************************************************
 
 #include <dev/i386/network/rtl8139/rtl8139.h>
+#include <dev/i386/network/rtl8139/rtl8139_io.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
@@ -27,44 +28,9 @@
 
 #define RTL8139_RX_BUFFERSIZE (16 + (1024 * 8) + 1500)
 
-struct rtl8139_devicedata {
-    uint8_t mac[6];
-    uint64_t base;
-    uint16_t irq;
-    uint8_t *rx_buffer;
-} __attribute__((packed));
-
 void rtl8139_irq_handler(stackFrame *frame) {
     ASSERT_NOT_NULL(frame);
     kprintf("@");
-}
-
-void rtl8139_write_dword(struct device *dev, uint16_t offset, uint32_t dword) {
-    ASSERT_NOT_NULL(dev);
-    ASSERT_NOT_NULL(dev->deviceData);
-    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
-    asm_out_d(devicedata->base + offset, dword);
-}
-
-void rtl8139_write_word(struct device *dev, uint16_t offset, uint16_t word) {
-    ASSERT_NOT_NULL(dev);
-    ASSERT_NOT_NULL(dev->deviceData);
-    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
-    asm_out_w(devicedata->base + offset, word);
-}
-
-void rtl8139_write_byte(struct device *dev, uint16_t offset, uint8_t byte) {
-    ASSERT_NOT_NULL(dev);
-    ASSERT_NOT_NULL(dev->deviceData);
-    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
-    asm_out_b(devicedata->base + offset, byte);
-}
-
-uint8_t rtl8139_read_byte(struct device *dev, uint16_t offset) {
-    ASSERT_NOT_NULL(dev);
-    ASSERT_NOT_NULL(dev->deviceData);
-    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
-    return asm_in_b(devicedata->base + offset);
 }
 
 void rtl8139_power_on(struct device *dev) {
