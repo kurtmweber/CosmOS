@@ -149,6 +149,7 @@ void show_cpu_data() {
     //	test_fat();
     // test_fat();
     //	test_list();
+    test_bda();
     test_parallel();
     while (1) {
         asm_hlt();

@@ -9,6 +9,7 @@
 #define __TESTS_H
 
 #include <tests/dev/testata.h>
+#include <tests/dev/testbda.h>
 #include <tests/dev/testcpu.h>
 #include <tests/dev/testfloppy.h>
 #include <tests/dev/testparallel.h>
