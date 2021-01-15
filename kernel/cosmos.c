@@ -138,7 +138,6 @@ void show_cpu_data() {
      */
     //	playsb16();
     //	floppyread();
-
     //	test_ata();
     //	test_vblock();
     //	test_ata();
@@ -147,10 +146,10 @@ void show_cpu_data() {
     //	test_sfs();
     //	test_dfs();
     //	test_fat();
-    // test_fat();
     //	test_list();
-    test_bda();
-    // test_parallel();
+    //  test_bda();
+    //  test_parallel();
+    test_rtl8139();
     while (1) {
         asm_hlt();
     }

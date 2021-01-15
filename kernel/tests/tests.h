@@ -16,6 +16,7 @@
 #include <tests/dev/testpit.h>
 #include <tests/dev/testramdisk.h>
 #include <tests/dev/testrtc.h>
+#include <tests/dev/testrtl8139.h>
 #include <tests/dev/testsb16.h>
 #include <tests/dev/testserial.h>
 #include <tests/dev/testspeaker.h>

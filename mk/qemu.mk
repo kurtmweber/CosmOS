@@ -8,9 +8,9 @@ QEMUARGS=                                                 \
   -no-reboot                                              \
   -drive format=raw,file=hda.img                          \
   -smp 1                                                  \
-  -netdev user,id=n0 \
-  -device rtl8139,netdev=n0 \
-  -object filter-dump,id=f1,netdev=n0,file=dump.dat \
+  -netdev user,id=n0,hostfwd=tcp::8080-:80  \
+  -device rtl8139,netdev=n0       \
+  -object filter-dump,id=f1,netdev=n0,file=dump.dat      \
   -serial stdio                                           \
   -audiodev coreaudio,id=audio0                           \
   -monitor telnet::45454,server,nowait                    \

@@ -5,9 +5,6 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _BLOCK_UTIL_H
-#define _BLOCK_UTIL_H
-
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/devicemgr/devicemgr.h>
@@ -49,5 +46,3 @@ void block_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t cou
     ASSERT_NOT_NULL(block_api);
     (*block_api->read)(dev, sector, data, count);
 }
-
-#endif
