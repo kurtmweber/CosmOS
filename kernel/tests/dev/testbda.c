@@ -6,6 +6,7 @@
 // ****************************************************************
 
 #include <dev/i386/bda/bda.h>
+#include <dev/i386/ebda/acpi.h>
 #include <dev/i386/ebda/ebda.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
@@ -14,6 +15,9 @@
 
 void test_bda() {
     struct rsdp_descriptor_2* rsdp = ebda_get_rsdp();
-    //   debug_show_memblock(rsdp, 32);
-    //   kprintf("RSDP %s, %s, %llu\n", rsdp->firstPart.signature, rsdp->firstPart.oem_id, rsdp->firstPart.revision);
+    // debug_show_memblock(rsdp, 32);
+
+    struct acpi_sdt_header* acpi = rsdp_get_acpi_header(rsdp);
+    kprintf("ACPI %#X\n", acpi);
+    // debug_show_memblock(acpi, 32);
 }

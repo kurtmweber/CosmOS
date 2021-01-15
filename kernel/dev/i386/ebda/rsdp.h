@@ -8,6 +8,7 @@
 #ifndef _RSDP_H
 #define _RSDP_H
 
+#include <dev/i386/ebda/acpi.h>
 #include <types.h>
 
 struct rsdp_descriptor {
@@ -27,4 +28,9 @@ struct rsdp_descriptor_2 {
     uint8_t reserved[3];
 } __attribute__((packed));
 
+void rsdp_get_signature(struct rsdp_descriptor_2* rsdp, uint8_t* buffer);
+void rsdp_get_oem_id(struct rsdp_descriptor_2* rsdp, uint8_t* buffer);
+uint8_t rsdp_get_acpi_version(struct rsdp_descriptor_2* rsdp);
+
+struct acpi_sdt_header* rsdp_get_acpi_header(struct rsdp_descriptor_2* rsdp);
 #endif
