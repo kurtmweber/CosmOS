@@ -33,9 +33,9 @@ struct bda {
     uint8_t keyboard_last;
 } __attribute__((packed));
 
-uint16_t bda_get_ebda_address() {
+uint64_t bda_get_ebda_address() {
     struct bda* data_area = (struct bda*)BDA_ADDRESS;
-    return data_area->ebda;
+    return (data_area->ebda) << 4;
 }
 
 uint16_t bda_text_columns() {

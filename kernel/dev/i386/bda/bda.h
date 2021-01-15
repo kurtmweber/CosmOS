@@ -24,5 +24,5 @@ uint16_t bda_video_port();
 uint16_t bda_uptime();
 uint8_t bda_display_mode();
 uint16_t bda_text_columns();
-uint16_t bda_get_ebda_address();
+uint64_t bda_get_ebda_address();
 #endif

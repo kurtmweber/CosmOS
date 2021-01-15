@@ -5,14 +5,15 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/i386/bda/bda.h>
+#include <dev/i386/ebda/ebda.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
-#include <sys/deviceapi/deviceapi_block.h>
-#include <sys/i386/mm/mm.h>
-#include <sys/string/mem.h>
-#include <sys/string/string.h>
 #include <tests/dev/testbda.h>
 
 void test_bda() {
+    struct rsdp_descriptor_2* rsdp = ebda_get_rsdp();
+    //   debug_show_memblock(rsdp, 32);
+    //   kprintf("RSDP %s, %s, %llu\n", rsdp->firstPart.signature, rsdp->firstPart.oem_id, rsdp->firstPart.revision);
 }
