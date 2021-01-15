@@ -18,17 +18,19 @@
 #define ARP_IP 0x0800
 #define ARP_REQUEST 0x0001
 #define ARP_REPLY 0x0002
+#define RARP_REQUEST 0x0003
+#define RARP_REPLY 0x0004
 
 struct arp {
-    uint16_t htype = ARP_ETHERNET;  // Hardware type
-    uint16_t ptype = ARP_IP;        // Protocol type
-    uint8_t hlen = ARP_HLEN;        // Hardware address length (Ethernet = 6)
-    uint8_t plen = ARP_PLEN;        // Protocol address length (IPv4 = 4)
-    uint16_t opcode;                // ARP Operation Code
-    uint8_t srchw[ARP_HLEN];        // Source hardware address - hlen bytes (see above)
-    uint8_t srcpr[ARP_PLEN];        // Source protocol address - plen bytes (see above). If IPv4 can just be a "u32" type.
-    uint8_t dsthw[ARP_HLEN];        // Destination hardware address - hlen bytes (see above)
-    uint8_t dstpr[ARP_PLEN];        // Destination protocol address - plen bytes (see above). If IPv4 can just be a "u32" type.
+    uint16_t htype = ARP_ETHERNET;      // Hardware type
+    uint16_t ptype = ARP_IP;            // Protocol type
+    uint8_t hlen = ARP_HLEN;            // Hardware address length (Ethernet = 6)
+    uint8_t plen = ARP_PLEN;            // Protocol address length (IPv4 = 4)
+    uint16_t opcode;                    // ARP Operation Code
+    uint8_t source_hardware[ARP_HLEN];  // Source hardware address - hlen bytes (see above)
+    uint8_t source_protocol[ARP_PLEN];  // Source protocol address - plen bytes (see above). If IPv4 can just be a "u32" type.
+    uint8_t dest_hardware[ARP_HLEN];    // Destination hardware address - hlen bytes (see above)
+    uint8_t dest_protocol[ARP_PLEN];    // Destination protocol address - plen bytes (see above). If IPv4 can just be a "u32" type.
 };
 
 #endif
