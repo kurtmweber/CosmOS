@@ -5,6 +5,8 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+// https://wiki.osdev.org/RSDT
+
 #ifndef _RSDP_H
 #define _RSDP_H
 
