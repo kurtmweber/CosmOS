@@ -14,7 +14,7 @@
 #include <types.h>
 
 struct rsdp_descriptor {
-    uint8_t signature[8];
+    uint8_t signature[8];   
     uint8_t checksum;
     uint8_t oem_id[6];
     uint8_t revision;
