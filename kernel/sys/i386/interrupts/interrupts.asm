@@ -258,7 +258,7 @@ irq9:
     popaq
     iretq
 
- irq14
+ irq14:
     cli
     pushaq
     xor ax, ax
