@@ -32,7 +32,9 @@ struct gdt_entry gdt[GDT_SIZE];
 // pointer to GDT
 struct gdt_ptr gdt_pointer;
 
-/* Setup a descriptor in the Global Descriptor Table */
+/*
+ * Setup a descriptor in the Global Descriptor Table
+ */
 void gdt_set_gate(uint8_t num, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran) {
     ASSERT(num < GDT_SIZE);
     /*
@@ -64,27 +66,21 @@ void gdt_install() {
     /*
      * Our NULL descriptor
      */
-    gdt_set_gate(0, 0, 0, 0, 0);
+    gdt_set_gate(0, 0, 0xFFFF, 0, 1);
 
     /*
-     * The second entry is our Code Segment.  The base address
-     * is 0, the limit is 4 gigabytes, it uses 4 kilobyte
-     * granularity, uses 32-bit opcodes, and is a Code Segment
-     * descriptor.  Please check the table above in the tutorial
-     * in order to see exactly what each value means
+     * code segment
      */
     // 10011010 = 0x9A
     // 10101111 = 0xAF
-    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xAF);
+    gdt_set_gate(1, 0, 0xFFFF, 0x9A, 0xAF);
 
     /*
-     * The third entry is our Data Segment.  It's exactly the
-     * same as our code segment, but the descriptor type in
-     * this entry's access byte says it's a Data Segment
+     * data segment
      */
     // 10010010 = 0x92
     // 00000000 = 0
-    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0x00);
+    gdt_set_gate(2, 0, 0, 0x92, 0x00);
 
     /*
      *Install the user mode segments into the GDT
@@ -103,21 +99,6 @@ void gdt_install() {
     gdt_flush();
     //   _tss_flush();
 }
-
-//   lgdt [gdt_pointer]
-
-//   mov rax, 0x10
-//   mov ds, rax
-//   mov es, rax
-//   mov fs, rax
-//   mov gs, rax
-//   mov ss, rax
-
-//   lea rax, [rel .flush]
-//   push 0x08
-//   push rax
-//  retf
-//.flush : ret
 
 inline void gdt_flush() {
     __asm__ __volatile__("lgdt %0" ::"m"(gdt_pointer));

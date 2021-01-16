@@ -61,3 +61,4 @@ dkms.conf
 .vscode
 **/*.DS_Store
 /dump.dat
+/qemu.log
