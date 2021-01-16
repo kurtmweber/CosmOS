@@ -9,7 +9,7 @@
 #include <sys/deviceapi/deviceapi_dsp.h>
 #include <sys/i386/sound/tone.h>
 #include <sys/i386/sound/wav.h>
-#include <tests/dev/testsb16.h>
+#include <tests/dev/test_sb16.h>
 
 void playsb16() {
     // get the sb

@@ -11,7 +11,7 @@
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
-#include <tests/dev/testvblock.h>
+#include <tests/dev/test_vblock.h>
 
 void test_vblock() {
     // get virtual block device

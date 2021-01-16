@@ -11,7 +11,7 @@
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
-#include <tests/dev/testramdisk.h>
+#include <tests/dev/test_ramdisk.h>
 
 uint8_t* testdata =
     "We were very tired, we were very merry, \

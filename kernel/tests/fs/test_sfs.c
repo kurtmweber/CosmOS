@@ -10,7 +10,7 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/fs/fs.h>
 #include <sys/fs/tfs/tfs_dir.h>
-#include <tests/fs/testsfs.h>
+#include <tests/fs/test_sfs.h>
 
 void test_sfs() {
     uint8_t devicename[] = {"disk2"};

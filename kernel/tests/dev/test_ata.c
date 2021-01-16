@@ -12,7 +12,7 @@
 #include <sys/i386/mm/mm.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
-#include <tests/dev/testata.h>
+#include <tests/dev/test_ata.h>
 
 void test_ata1() {
     // get virtual block device

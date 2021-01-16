@@ -10,7 +10,7 @@
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/string/string.h>
-#include <tests/sys/testlist.h>
+#include <tests/sys/test_list.h>
 
 char C_A[] = {"A"};
 char C_B[] = {"BB"};

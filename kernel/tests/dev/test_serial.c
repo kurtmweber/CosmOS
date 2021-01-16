@@ -8,7 +8,7 @@
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_serial.h>
-#include <tests/dev/testserial.h>
+#include <tests/dev/test_serial.h>
 
 /*
  * write a message via the uniform serial api

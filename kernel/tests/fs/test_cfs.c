@@ -6,18 +6,22 @@
 // ****************************************************************
 
 #include <sys/console/console.h>
-#include <sys/deviceapi/deviceapi_parallel.h>
-#include <tests/dev/testparallel.h>
+#include <sys/deviceapi/deviceapi_block.h>
+#include <sys/fs/fs.h>
+#include <tests/fs/test_cfs.h>
 
-void test_parallel() {
-    uint8_t devicename[] = {"par0"};
+void test_cfs() {
+    uint8_t devicename[] = {"disk1"};
+    uint8_t fsname[] = {"cfs"};
 
-    struct device* parallel = devicemgr_find_device(devicename);
-    if (0 != parallel) {
-        struct deviceapi_parallel* parallel_api = (struct deviceapi_parallel*)parallel->api;
-
-        (*parallel_api->write)(parallel, "hello", 6);
-
+    struct device* dsk = devicemgr_find_device(devicename);
+    if (0 != dsk) {
+        struct fs_filesystem* fs = fs_find(fsname);
+        if (0 != fs) {
+            (*fs->format)(dsk);
+        } else {
+            kprintf("Unable to find %s\n", fsname);
+        }
     } else {
         kprintf("Unable to find %s\n", devicename);
     }

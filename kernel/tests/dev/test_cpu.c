@@ -7,7 +7,7 @@
 
 #include <sys/console/console.h>
 #include <sys/deviceapi/deviceapi_cpu.h>
-#include <tests/dev/testcpu.h>
+#include <tests/dev/test_cpu.h>
 
 void show_cpu_data() {
     // get the CPU

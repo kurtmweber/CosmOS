@@ -8,26 +8,26 @@
 #ifndef __TESTS_H
 #define __TESTS_H
 
-#include <tests/dev/testata.h>
-#include <tests/dev/testbda.h>
-#include <tests/dev/testcpu.h>
-#include <tests/dev/testfloppy.h>
-#include <tests/dev/testparallel.h>
-#include <tests/dev/testpit.h>
-#include <tests/dev/testramdisk.h>
-#include <tests/dev/testrtc.h>
-#include <tests/dev/testrtl8139.h>
-#include <tests/dev/testsb16.h>
-#include <tests/dev/testserial.h>
-#include <tests/dev/testspeaker.h>
-#include <tests/dev/testvblock.h>
-#include <tests/fs/testfat.h>
-#include <tests/fs/testsfs.h>
-#include <tests/fs/testtfs.h>
-#include <tests/sys/testdebug.h>
-#include <tests/sys/testlist.h>
-#include <tests/sys/testmm.h>
-#include <tests/sys/teststring.h>
+#include <tests/dev/test_ata.h>
+#include <tests/dev/test_bda.h>
+#include <tests/dev/test_cpu.h>
+#include <tests/dev/test_floppy.h>
+#include <tests/dev/test_parallel.h>
+#include <tests/dev/test_pit.h>
+#include <tests/dev/test_ramdisk.h>
+#include <tests/dev/test_rtc.h>
+#include <tests/dev/test_rtl8139.h>
+#include <tests/dev/test_sb16.h>
+#include <tests/dev/test_serial.h>
+#include <tests/dev/test_speaker.h>
+#include <tests/dev/test_vblock.h>
+#include <tests/fs/test_fat.h>
+#include <tests/fs/test_sfs.h>
+#include <tests/fs/test_tfs.h>
+#include <tests/sys/test_debug.h>
+#include <tests/sys/test_list.h>
+#include <tests/sys/test_mm.h>
+#include <tests/sys/test_string.h>
 #include <types.h>
 
 /*

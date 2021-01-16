@@ -9,7 +9,7 @@
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/string/string.h>
-#include <tests/sys/teststring.h>
+#include <tests/sys/test_string.h>
 
 void test_string() {
     kprintf("Testing kernel string\n");
