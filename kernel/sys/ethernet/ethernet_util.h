@@ -11,7 +11,7 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <types.h>
 
-void ethernet_read(struct device* dev, uint8_t* data, uint32_t size);
-void ethernet_write(struct device* dev, uint8_t* data, uint32_t size);
+void ethernet_read(struct device* dev, uint8_t* data, uint16_t size);
+void ethernet_write(struct device* dev, uint8_t* data, uint16_t size);
 
 #endif

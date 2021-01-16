@@ -27,13 +27,13 @@ void e1000_init(struct device* dev) {
     interrupt_router_register_interrupt_handler(dev->pci->irq, &e1000_irq_handler);
 }
 
-void e1000_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
+void e1000_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
 
     panic("Ethernet read not implemented yet");
 }
-void e1000_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
+void e1000_ethernet_write(struct device* dev, uint8_t* data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
 

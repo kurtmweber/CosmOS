@@ -139,17 +139,59 @@ void rtl8139_init(struct device *dev) {
     rtl8139_enable_rx_tx(dev);
 }
 
-void rtl8139_ethernet_read(struct device *dev, uint8_t *data, uint32_t size) {
+void rtl8139_ethernet_read(struct device *dev, uint8_t *data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
+    ASSERT_NOT_NULL(dev->deviceData);
+
+    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
 
     panic("Ethernet read not implemented yet");
 }
-void rtl8139_ethernet_write(struct device *dev, uint8_t *data, uint32_t size) {
+
+void rtl8139_ethernet_write(struct device *dev, uint8_t *data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
+    // i dunno, some magic
+    ASSERT(size < 1792);
 
-    panic("Ethernet write not implemented yet");
+    /*
+     * register pair
+     */
+    uint8_t txstart;
+    uint8_t txstatus;
+    rtl8139_get_registers(devicedata->write_count, &txstart, &txstatus);
+    kprintf("write register pair %llu $%llu\n", txstart, txstatus);
+    /*
+     * TODO this needs to be a PHYSICAL address!
+     */
+    /*
+     * 32-bit address of buffer
+     */
+    rtl8139_write_dword(dev, txstart, (uint32_t)data);
+    /*
+     * status
+     */
+    uint16_t status = size;  // lower 12 bits
+    /*
+     * set bit 13 to tell the controller to start transmitting
+     */
+    status = status | (1 << 13);
+    /*
+     * set status
+     */
+    rtl8139_write_word(dev, txstatus, status);
+    /*
+     * wait for bit 15 to be set
+     */
+    uint32_t stat = rtl8139_read_word(dev, txstatus);
+
+    while (0 == (stat & (1 << 15))) {
+        sleep_wait(10);
+        stat = rtl8139_read_word(dev, txstatus);
+    }
 }
 
 void rtl8139_search_cb(struct pci_device *dev) {

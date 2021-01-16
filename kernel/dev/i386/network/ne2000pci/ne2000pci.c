@@ -150,13 +150,13 @@ void ne2000_pci_init(struct device* dev) {
     ne2000pci_init();
 }
 
-void ne2000pci_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
+void ne2000pci_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
 
     panic("Ethernet read not implemented yet");
 }
-void ne2000pci_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
+void ne2000pci_ethernet_write(struct device* dev, uint8_t* data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
 

@@ -58,7 +58,8 @@
 #define PAR3 NE2000ISA_BASE_ADDRESS + 0x04
 #define PAR4 NE2000ISA_BASE_ADDRESS + 0x05
 #define PAR5 NE2000ISA_BASE_ADDRESS + 0x06
-#define CURR NE2000ISA_BASE_ADDRESS + 0x07  // Current Page Register (R/W)
+#define CURR \
+    NE2000ISA_BASE_ADDRESS + 0x07           // Current Page Register (R/W)
                                             // This register points to the page address of the first receive buffer page to be used for a packet reception.
 #define MAR0 NE2000ISA_BASE_ADDRESS + 0x08  // Multicast Register 0
 #define MAR1 NE2000ISA_BASE_ADDRESS + 0x09  // Multicast Register 1
@@ -145,13 +146,13 @@ void ne2000_isa_init(struct device* dev) {
     ne2000isa_init();
 }
 
-void ne2000isa_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
+void ne2000isa_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
 
     panic("Ethernet read not implemented yet");
 }
-void ne2000isa_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
+void ne2000isa_ethernet_write(struct device* dev, uint8_t* data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
 
