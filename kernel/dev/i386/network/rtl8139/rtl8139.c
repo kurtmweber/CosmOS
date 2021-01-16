@@ -170,7 +170,8 @@ void rtl8139_ethernet_write(struct device *dev, uint8_t *data, uint16_t size) {
     /*
      * 32-bit address of buffer
      */
-    rtl8139_write_dword(dev, txstart, (uint32_t)data);
+    // FIX this
+    //  rtl8139_write_dword(dev, txstart, (uint32_t)data);
     /*
      * status
      */

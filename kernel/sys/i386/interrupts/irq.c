@@ -9,82 +9,82 @@
 #include <sys/i386/interrupts/irq.h>
 #include <sys/interrupt_router/interrupt_router.h>
 
-__attribute__((interrupt)) void irq0(stackFrame *frame) {
+void irq0_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(0, frame);
     pic_send_eoi(0);
 }
 
-__attribute__((interrupt)) void irq1(stackFrame *frame) {
+void irq1_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(1, frame);
     pic_send_eoi(1);
 }
 
-__attribute__((interrupt)) void irq2(stackFrame *frame) {
+void irq2_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(2, frame);
     pic_send_eoi(2);
 }
 
-__attribute__((interrupt)) void irq3(stackFrame *frame) {
+void irq3_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(3, frame);
     pic_send_eoi(3);
 }
 
-__attribute__((interrupt)) void irq4(stackFrame *frame) {
+void irq4_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(4, frame);
     pic_send_eoi(4);
 }
 
-__attribute__((interrupt)) void irq5(stackFrame *frame) {
+void irq5_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(5, frame);
     pic_send_eoi(5);
 }
 
-__attribute__((interrupt)) void irq6(stackFrame *frame) {
+void irq6_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(6, frame);
     pic_send_eoi(6);
 }
 
-__attribute__((interrupt)) void irq7(stackFrame *frame) {
+void irq7_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(7, frame);
     pic_send_eoi(7);
 }
 
-__attribute__((interrupt)) void irq8(stackFrame *frame) {
+void irq8_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(8, frame);
     pic_send_eoi(8);
 }
 
-__attribute__((interrupt)) void irq9(stackFrame *frame) {
+void irq9_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(9, frame);
     pic_send_eoi(9);
 }
 
-__attribute__((interrupt)) void irq10(stackFrame *frame) {
+void irq10_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(10, frame);
     pic_send_eoi(10);
 }
 
-__attribute__((interrupt)) void irq11(stackFrame *frame) {
+void irq11_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(11, frame);
     pic_send_eoi(11);
 }
 
-__attribute__((interrupt)) void irq12(stackFrame *frame) {
+void irq12_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(12, frame);
     pic_send_eoi(12);
 }
 
-__attribute__((interrupt)) void irq13(stackFrame *frame) {
+void irq13_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(13, frame);
     pic_send_eoi(13);
 }
 
-__attribute__((interrupt)) void irq14(stackFrame *frame) {
+void irq14_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(14, frame);
     pic_send_eoi(14);
 }
 
-__attribute__((interrupt)) void irq15(stackFrame *frame) {
+void irq15_handler(stackFrame *frame) {
     interrupt_router_route_interrupt(15, frame);
     pic_send_eoi(15);
 }

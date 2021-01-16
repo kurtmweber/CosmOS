@@ -9,7 +9,7 @@
 #include <sys/i386/interrupts/exceptions.h>
 #include <types.h>
 
-__attribute__((interrupt)) void isrDE(stackFrame *frame) {
+void isrDE_handler(stackFrame *frame) {
     ASSERT_NOT_NULL(frame);
     panic("Division by zero!");
 }
