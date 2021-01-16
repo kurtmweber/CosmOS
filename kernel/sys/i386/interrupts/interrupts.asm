@@ -297,7 +297,6 @@ irq9:
     popaq
     iretq
 
-
 isrPFE:
     cli
     pushaq
