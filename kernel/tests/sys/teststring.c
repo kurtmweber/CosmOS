@@ -14,7 +14,6 @@
 void test_string() {
     kprintf("Testing kernel string\n");
 
-    // concat
     struct kernelstring* string1 = string_from_cstr("hello");
     struct kernelstring* string2 = string_from_cstr(" world\n");
 
@@ -40,6 +39,12 @@ void test_string() {
     struct kernelstring* string8 = string_trim(string7);
     ASSERT(string8->length == 4);
     ASSERT(strcmp(string_get_cstr(string8), "beer") == 0);
-
+    string_delete(string1);
+    string_delete(string2);
+    string_delete(string3);
+    string_delete(string4);
+    string_delete(string5);
+    string_delete(string7);
+    string_delete(string8);
     return;
 }

@@ -20,6 +20,8 @@ char C_E[] = {"EEEEE"};
 char C_F[] = {"FFFFFF"};
 
 void test_list() {
+    kprintf("Testing list\n");
+
     struct list* lst = list_new();
     list_add(lst, C_A);
     ASSERT(0 == strcmp(list_get(lst, 0), C_A));
@@ -30,20 +32,28 @@ void test_list() {
     list_add(lst, C_E);
     list_add(lst, C_F);
     ASSERT(6 == list_count(lst));
-    kprintf("list count %llu\n", list_count(lst));
-    for (uint32_t i = 0; i < list_count(lst); i++) {
-        kprintf("i %llu %s\n", i, list_get(lst, i));
-    }
+    ASSERT(0 == strcmp(list_get(lst, 0), C_A));
+    ASSERT(0 == strcmp(list_get(lst, 1), C_B));
+    ASSERT(0 == strcmp(list_get(lst, 2), C_C));
+    ASSERT(0 == strcmp(list_get(lst, 3), C_D));
+    ASSERT(0 == strcmp(list_get(lst, 4), C_E));
+    ASSERT(0 == strcmp(list_get(lst, 5), C_F));
 
     list_remove(lst, 2);  // letter C
     ASSERT(5 == list_count(lst));
-    for (uint32_t i = 0; i < list_count(lst); i++) {
-        kprintf("i %llu %s\n", i, list_get(lst, i));
-    }
     ASSERT(0 == strcmp(list_get(lst, 0), C_A));
+    ASSERT(0 == strcmp(list_get(lst, 1), C_B));
+    ASSERT(0 == strcmp(list_get(lst, 2), C_D));
+    ASSERT(0 == strcmp(list_get(lst, 3), C_E));
+    ASSERT(0 == strcmp(list_get(lst, 4), C_F));
 
     list_remove(lst, 4);  // last element, special case
-    for (uint32_t i = 0; i < list_count(lst); i++) {
-        kprintf("i %llu %s\n", i, list_get(lst, i));
-    }
+    ASSERT(4 == list_count(lst));
+    ASSERT(0 == strcmp(list_get(lst, 0), C_A));
+    ASSERT(0 == strcmp(list_get(lst, 1), C_B));
+    ASSERT(0 == strcmp(list_get(lst, 2), C_D));
+    ASSERT(0 == strcmp(list_get(lst, 3), C_E));
+
+    // note, this crashes b/t the contained items are static data
+    //   list_delete(lst);
 }
