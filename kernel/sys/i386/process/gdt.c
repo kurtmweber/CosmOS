@@ -99,7 +99,3 @@ void gdt_install() {
     gdt_flush();
     //   _tss_flush();
 }
-
-inline void gdt_flush() {
-    __asm__ __volatile__("lgdt %0" ::"m"(gdt_pointer));
-}

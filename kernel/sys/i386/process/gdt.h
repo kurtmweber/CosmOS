@@ -13,6 +13,6 @@
 #include <types.h>
 
 void gdt_install();
-void gdt_flush();
+void extern gdt_flush();
 
 #endif

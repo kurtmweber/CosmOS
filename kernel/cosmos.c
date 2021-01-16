@@ -38,7 +38,7 @@ void CosmOS() {
     /*
      * switch to new GDT.  this is in place bug seems to cause crashes....
      */
-    // gdt_install();
+    //  gdt_install();
     /*
      * start video
      */
