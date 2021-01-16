@@ -82,12 +82,10 @@ irq0:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq0_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -97,12 +95,10 @@ irq1:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq1_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
  
@@ -112,12 +108,10 @@ irq1:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq2_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -127,12 +121,10 @@ irq1:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq3_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -142,12 +134,10 @@ irq1:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq4_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -157,12 +147,10 @@ irq1:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq5_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -172,12 +160,10 @@ irq1:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq6_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -187,12 +173,10 @@ irq1:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq7_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -202,12 +186,10 @@ irq1:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq8_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -217,12 +199,10 @@ irq9:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq9_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -232,12 +212,10 @@ irq9:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq10_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -247,12 +225,10 @@ irq9:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq11_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -262,12 +238,10 @@ irq9:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq12_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -277,12 +251,10 @@ irq9:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq13_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -292,12 +264,10 @@ irq9:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq14_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -307,12 +277,10 @@ irq9:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call irq15_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -322,12 +290,10 @@ irq9:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call isrDE_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
 
@@ -338,12 +304,10 @@ isrPFE:
     xor ax, ax
     mov es, ax
     mov ds, ax
-    mov qword [gs:24], 1 ; in_irq
     cld
     xor rax, rax
     mov rdi, rsp
     call isrPFE_handler
-    mov qword [gs:24], 0 ; in_irq
     popaq
     iretq
     
