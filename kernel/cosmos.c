@@ -18,6 +18,7 @@
 #include <sys/fs/fs.h>
 #include <sys/i386/interrupts/idt.h>
 #include <sys/i386/mm/mm.h>
+#include <sys/i386/process/gdt.h>
 #include <sys/i386/video/vga/vga.h>
 #include <sys/i386/video/video.h>
 #include <sys/interrupt_router/interrupt_router.h>
@@ -34,6 +35,13 @@ void show_cpu_data();
 void playsb16();
 
 void CosmOS() {
+    /*
+     * switch to new GDT
+     */
+    //   gdt_install();
+    /*
+     * start video
+     */
     video_init();
     video_select_driver(VIDEO_DRIVER_VGA);
     video_select_mode(VIDEO_MODE_TEXT);
