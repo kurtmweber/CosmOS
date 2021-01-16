@@ -160,6 +160,7 @@ struct kernelstring* string_copy(const struct kernelstring* str) {
         struct kernelstring* ret = string_new_sized(str->length);
         uint32_t i = 0;
         for (i = 0; i < str->length; i++) {
+            ret[i] = str[i];
         }
         ret->str[i + 1] = 0;
         ret->length = str->length;

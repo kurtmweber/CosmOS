@@ -5,9 +5,12 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef __TEST_STRING_H
-#define __TEST_STRING_H
+#include <tests/tests.h>
 
-void test_string();
+void tests_run() {
+    // always run the list tests
+    test_list();
 
-#endif
+    // always run the string tests
+    test_string();
+}

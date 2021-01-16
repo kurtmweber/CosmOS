@@ -110,6 +110,11 @@ void CosmOS() {
     kprintf("************************************\n");
     kprintf("\n");
 
+    /*
+     * standard suite of tests to make sure things are as expected
+     */
+    tests_run();
+
     show_cpu_data();
     /*
      * run various functions to show that things work....

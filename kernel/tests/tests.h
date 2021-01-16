@@ -30,4 +30,9 @@
 #include <tests/sys/teststring.h>
 #include <types.h>
 
+/*
+ * some tests we always run on startup, just to be sure
+ */
+void tests_run();
+
 #endif
