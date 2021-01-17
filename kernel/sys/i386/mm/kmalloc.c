@@ -152,11 +152,13 @@ void kfree(void *ptr) {
     // mark not used
     b->used = false;
 
+    // combine with next block if it's free
     if ((b->next) && (b->next->used == false)) {
         b->len = b->len + sizeof(kmalloc_block) + b->next->len;
         b->next = b->next->next;
     }
 
+    // combine with previous block if it's free
     if ((b->prev) && (b->prev->used == false)) {
         b->prev->len = b->prev->len + sizeof(kmalloc_block) + b->len;
         b->prev->next = b->next;
@@ -203,8 +205,6 @@ void *kmalloc(uint64_t size) {
 void kmalloc_init() {
     kmalloc_block_list = 0;
     kmalloc_block_list_end = 0;
-
-    return;
 }
 
 kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
