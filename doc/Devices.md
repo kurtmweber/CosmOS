@@ -44,14 +44,14 @@ Not all devices are fixed hardware devices.  For example:
 
 * Disk partitions
 * RAM disks
-* Virtio Devices
+* File systems
 * Swap devices
 
 These devices should expose an attach() API, and an unattach() API which can dynamically register and unregister the devices via the device manager.  The device manager functions attach_device and detach_device are used provided for use by device attach and unattach
 
 # Initialization
 
-The function `void initDevices();` is used by the device manager to initialize all devices. The devices will have passed a pointer to a init function with this prototype:
+The function `void initDevices();` is used by the device manager to initialize all fixed hardware devices. The devices will have passed a pointer to a init function with this prototype:
 
 `typedef void (*deviceInit)(struct device* dev);`
 
@@ -63,24 +63,34 @@ The enum `deviceType` includes all types of devices known by CosmOS.
 
 ```java
 typedef enum deviceType {
-	NONE	=		0x00,
-	SERIAL	=		0x01,
-	VGA = 			0x02,
-	RTC=			0x03,
-	KEYBOARD=		0x04,
-	ETHERNET=		0x05,
-	BRIDGE=			0x06,
-	USB=			0x07,
-	ATA=			0x08,
-	PIC=			0x09,
-	MOUSE=			0x0A,
-	FLOPPY=			0x0B,
-	SPEAKER=		0x0C,
-	PIT=			0x0D,
-	DSP=			0x0E,
-	CMOS=			0x0F,
-	DMA=			0x10,
-	CPU=			0x11
+    NONE = 0x00,
+    SERIAL = 0x01,
+    VGA = 0x02,
+    RTC = 0x03,
+    KEYBOARD = 0x04,
+    NIC = 0x05,  // uses NIC API
+    BRIDGE = 0x06,
+    USB = 0x07,
+    ATA = 0x08,  // ATA controller
+    PIC = 0x09,
+    MOUSE = 0x0A,
+    FLOPPY = 0x0B,
+    SPEAKER = 0x0C,
+    PIT = 0x0D,
+    DSP = 0x0E,
+    CMOS = 0x0F,
+    DMA = 0x10,
+    CPU = 0x11,
+    RAMDISK = 0x12,  // uses Block API
+    VNIC = 0x13,     // uses NIC API
+    VBLOCK = 0x14,   // uses Block API
+    DISK = 0x15,     // uses Block API
+    PARALLEL = 0x16,
+    BDA = 0x17,
+    EBDA = 0x18,
+    SWAP = 0x19,
+    FILESYSTEM = 0x1A,
+    PARITION_TABLE = 0x1B
 } deviceType;
 ```
 Devices can be queried by type in order to find appropriate devices for higher level functions to use.  For example, a screen driver could search for VGA devices, or a storage driver could search for ATA devices. 
