@@ -16,8 +16,8 @@ void tests_run() {
     test_array();
 
     // always run the list tests
-    // test_list();
+    test_list();
 
     // always run the string tests
-    // test_string();
+    //  test_string();
 }
