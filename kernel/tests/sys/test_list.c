@@ -54,6 +54,5 @@ void test_list() {
     ASSERT(0 == strcmp(list_get(lst, 2), C_D));
     ASSERT(0 == strcmp(list_get(lst, 3), C_E));
 
-    // note, this crashes b/t the contained items are static data
-    //   list_delete(lst);
+    list_delete(lst);
 }
