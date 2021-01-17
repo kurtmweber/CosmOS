@@ -21,6 +21,9 @@ void tests_run() {
     // always run the ringbuffer tests
     test_ringbuffer();
 
+    // always test the linkedlist
+    test_linkedlist();
+
     // always run the tree tests
     test_tree();
     // always run the string tests

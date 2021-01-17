@@ -27,6 +27,7 @@
 #include <tests/sys/test_array.h>
 #include <tests/sys/test_arraylist.h>
 #include <tests/sys/test_debug.h>
+#include <tests/sys/test_linkedlist.h>
 #include <tests/sys/test_malloc.h>
 #include <tests/sys/test_mm.h>
 #include <tests/sys/test_ringbuffer.h>

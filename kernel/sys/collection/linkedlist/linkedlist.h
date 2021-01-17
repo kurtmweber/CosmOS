@@ -15,21 +15,9 @@ struct linkedlist {
     void* data;
 };
 
-/*
- * new list
- */
-struct linkedlist* linkedarraylist_new();
-/*
- * delete list
- */
-void linkedarraylist_delete(struct linkedlist* lst);
-/*
- * number items in the list
- */
-uint32_t linkedarraylist_count(struct linkedlist* lst);
-/*
- * returns zero-based index of added item
- */
-uint32_t linkedarraylist_add(struct linkedlist* lst, void* value);
+struct linkedlist* linkedlist_new();
+void linkedlist_delete(struct linkedlist* lst);
+uint32_t linkedlist_count(struct linkedlist* lst);
+void linkedlist_add(struct linkedlist* lst, void* value);
 
 #endif

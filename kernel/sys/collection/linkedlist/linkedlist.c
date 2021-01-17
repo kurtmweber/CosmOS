@@ -10,30 +10,20 @@
 #include <sys/debug/assert.h>
 #include <sys/i386/mm/mm.h>
 
-/*
- * new list
- */
-struct linkedlist* linkedarraylist_new() {
+struct linkedlist* linkedlist_new() {
     struct linkedlist* ret = kmalloc(sizeof(struct linkedlist));
     ret->data = 0;
     ret->next = 0;
 }
 
-/*
- * delete list
- */
-void linkedarraylist_delete(struct linkedlist* lst) {
+void linkedlist_delete(struct linkedlist* lst) {
     ASSERT_NOT_NULL(lst);
 }
-/*
- * number items in the list
- */
-uint32_t linkedarraylist_count(struct linkedlist* lst) {
+
+uint32_t linkedlist_count(struct linkedlist* lst) {
     ASSERT_NOT_NULL(lst);
 }
-/*
- * returns zero-based index of added item
- */
-uint32_t linkedarraylist_add(struct linkedlist* lst, void* value) {
+
+void linkedlist_add(struct linkedlist* lst, void* value) {
     ASSERT_NOT_NULL(lst);
 }
