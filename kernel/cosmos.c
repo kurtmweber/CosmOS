@@ -5,6 +5,7 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#include <dev/ramdisk/ramdisk.h>
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
 #include <sys/console/drivers/drivers.h>
@@ -27,6 +28,7 @@
 #include <types.h>
 
 void dev_tests();
+void mount_ramdisks();
 
 void CosmOS() {
     /*
@@ -97,6 +99,10 @@ void CosmOS() {
      * register file systems
      */
     fs_init();
+    /*
+     * mount two ram disks.  b/c we can.
+     */
+    mount_ramdisks();
 
     kprintf("\n");
     kprintf("************************************\n");
@@ -138,6 +144,14 @@ void CosmOS() {
     }
 }
 
+void mount_ramdisks() {
+    const uint16_t sector_size = 512;
+    const uint16_t sector_count1 = 1000;
+    ramdisk_attach(sector_size, sector_count1);
+    const uint16_t sector_count2 = 100;
+    ramdisk_attach(sector_size, sector_count2);
+}
+
 void dev_tests() {
     //	playsb16();
     //	floppyread();
@@ -154,6 +168,6 @@ void dev_tests() {
     //  test_parallel();
     //    test_rtl8139();
     // test_gpt();
-    test_ramdisk();
+    //   test_ramdisk();
     test_swap();
 }

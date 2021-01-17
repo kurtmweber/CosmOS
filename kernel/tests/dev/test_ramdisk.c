@@ -29,10 +29,7 @@ void test_ramdisk() {
     // attach the ramdisk
     struct device* ramdisk_device = ramdisk_attach(RAMDISK_SECTOR_SIZE, RAMDISK_TOTAL_SECTORS);
 
-    // get virtual block device
-    uint8_t devicename[] = {"rd0"};
-
-    struct device* ata = devicemgr_find_device(devicename);
+    struct device* ata = devicemgr_find_device(ramdisk_device->name);
     if (0 != ata) {
         struct deviceapi_block* ata_api = (struct deviceapi_block*)ata->api;
 
@@ -50,7 +47,7 @@ void test_ramdisk() {
         ASSERT(readdata[0] == 'W');
         ASSERT(strlen(readdata) == strlen(testdata));
     } else {
-        kprintf("Unable to find %s\n", devicename);
+        kprintf("Unable to find %s\n", ramdisk_device->name);
     }
 
     // attach the ramdisk
