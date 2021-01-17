@@ -118,6 +118,7 @@ void CosmOS() {
     /*
      * enable interrupts
      */
+    kprintf("Enabling Interrupts...\n");
     asm_sti();
 
     kprintf("\n");
