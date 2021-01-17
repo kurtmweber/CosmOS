@@ -58,8 +58,8 @@ void cmos_devicemgr_register_devices() {
     /*
      * api
      */
-    struct deviceapi_cmos* api = (struct deviceapi_cmos*)kmalloc(sizeof(struct deviceapi_cmos));
-    deviceinstance->api = api;
+    //    struct deviceapi_cmos* api = (struct deviceapi_cmos*)kmalloc(sizeof(struct deviceapi_cmos));
+    //    deviceinstance->api = api;
     /*
      * register
      */

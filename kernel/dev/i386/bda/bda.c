@@ -117,8 +117,8 @@ void bda_devicemgr_register_devices() {
     /*
      * api
      */
-    struct deviceapi_bda* api = (struct deviceapi_bda*)kmalloc(sizeof(struct deviceapi_bda));
-    deviceinstance->api = api;
+    //   struct deviceapi_bda* api = (struct deviceapi_bda*)kmalloc(sizeof(struct deviceapi_bda));
+    //   deviceinstance->api = api;
     /*
      * register
      */
