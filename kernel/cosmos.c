@@ -115,6 +115,18 @@ void CosmOS() {
      */
     tests_run();
 
+    kprintf("\n");
+    kprintf("************************************\n");
+    kprintf("**     Sanity Tests Complete       **\n");
+    kprintf("************************************\n");
+    kprintf("\n");
+
+    kprintf("\n");
+    kprintf("************************************\n");
+    kprintf("**       Welcome to CosmOS!       **\n");
+    kprintf("************************************\n");
+    kprintf("\n");
+
     show_cpu_data();
     /*
      * run various functions to show that things work....
