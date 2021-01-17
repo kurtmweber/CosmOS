@@ -127,6 +127,7 @@ void devicemgr_find_devices_by_description(deviceType dt, const uint8_t* descrip
 void devicemgr_attach_device(struct device* dev);
 
 // detach a device (non-fixed devices... like RAM disks and SWAP)
+// be aware, this has the effect of deleting the dev struct!
 void devicemgr_detach_device(struct device* dev);
 
 #endif
