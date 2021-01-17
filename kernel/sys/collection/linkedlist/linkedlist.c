@@ -16,14 +16,42 @@ struct linkedlist* linkedlist_new() {
     ret->next = 0;
 }
 
+/*
+ * warning: recursive
+ */
 void linkedlist_delete(struct linkedlist* lst) {
     ASSERT_NOT_NULL(lst);
+    if (0 != lst->next) {
+        linkedlist_delete(lst->next);
+        kfree(lst);
+    }
 }
 
 uint32_t linkedlist_count(struct linkedlist* lst) {
     ASSERT_NOT_NULL(lst);
+    uint32_t count = 1;
+    if (0 != lst->next) {
+        lst = lst->next;
+        count = count + 1;
+    }
+    return count;
 }
 
 void linkedlist_add(struct linkedlist* lst, void* value) {
     ASSERT_NOT_NULL(lst);
+    /*
+     * find the end
+     */
+    while (0 != lst->next) {
+        lst = lst->next;
+    }
+    /*
+     * allocate a node and set data
+     */
+    struct linkedlist* newlist = linkedlist_new();
+    newlist->data = value;
+    /*
+     * connect it in
+     */
+    lst->next = newlist;
 }
