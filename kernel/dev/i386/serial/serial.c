@@ -18,6 +18,8 @@
 
 #define SERIAL_RINGBUFFER_SIZE 255
 
+#define SERIAL_DESCRIPTION "RS232"
+
 struct serial_devicedata {
     uint8_t irq;
     uint16_t address;
@@ -39,13 +41,21 @@ void serial_write_char(const uint8_t c) {
     asm_out_b((uint64_t) & (comport->data), c);
 }
 
-void serial_irq_handler(stackFrame* frame) {
-    ASSERT_NOT_NULL(frame);
+void serial_irq_handler_for_device(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct serial_devicedata* deviceData = (struct serial_devicedata*)dev->deviceData;
+
+    // TODO figure out if it was THIS dev that made the interrupt and respond accordingly (like by putting the data into the ringbuffer)
     struct rs232_16550* comport = (struct rs232_16550*)COM1_ADDRESS;
     uint8_t data = asm_in_b((uint64_t) & (comport->data));
 
     // echo the data
     serial_write_char(data);
+}
+void serial_irq_handler(stackFrame* frame) {
+    ASSERT_NOT_NULL(frame);
+    devicemgr_find_devices_by_description(SERIAL, SERIAL_DESCRIPTION, &serial_irq_handler_for_device);
 }
 
 void serial_write_string(const uint8_t* c) {
@@ -106,7 +116,7 @@ void serial_register_device(uint8_t irq, uint64_t base) {
     deviceinstance->init = &serial_device_init;
     deviceinstance->deviceData = deviceData;
     deviceinstance->devicetype = SERIAL;
-    devicemgr_set_device_description(deviceinstance, "RS232");
+    devicemgr_set_device_description(deviceinstance, SERIAL_DESCRIPTION);
     /*
      * the device api
      */

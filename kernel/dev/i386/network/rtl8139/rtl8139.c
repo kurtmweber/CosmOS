@@ -30,9 +30,23 @@
 
 #define RTL8139_RX_BUFFERSIZE (16 + (1024 * 8) + 1500)
 
+#define RTL8139_DESCRIPTION "Realtek RTL8139 10/100 NIC"
+
+void rtl8139_clear_interrupt(struct device *dev);
+
+void rtl8139_irq_handler_for_device(struct device *dev) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
+
+    // TODO check if there is an interrupt set before we clear it!
+    rtl8139_clear_interrupt(dev);
+    kprintf("@");
+}
+
 void rtl8139_irq_handler(stackFrame *frame) {
     ASSERT_NOT_NULL(frame);
-    kprintf("@");
+    devicemgr_find_devices_by_description(NIC, RTL8139_DESCRIPTION, &rtl8139_irq_handler_for_device);
 }
 
 void rtl8139_power_on(struct device *dev) {
@@ -203,7 +217,7 @@ void rtl8139_search_cb(struct pci_device *dev) {
     deviceinstance->init = &rtl8139_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = NIC;
-    devicemgr_set_device_description(deviceinstance, "Realtek RTL8139 10/100 NIC");
+    devicemgr_set_device_description(deviceinstance, RTL8139_DESCRIPTION);
     /*
      * the device api
      */

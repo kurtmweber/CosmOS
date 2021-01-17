@@ -103,6 +103,11 @@ void devicemgr_init_devices();
 // set description
 void devicemgr_set_device_description(struct device* dev, int8_t* description);
 
-// find a device
+// find a device ie ("rtc0")
 struct device* devicemgr_find_device(const int8_t* name);
+
+// find devices by the device description
+typedef void (*deviceSearchCallback)(struct device* dev);
+void devicemgr_find_devices_by_description(deviceType dt, const int8_t* description, deviceSearchCallback cb);
+
 #endif

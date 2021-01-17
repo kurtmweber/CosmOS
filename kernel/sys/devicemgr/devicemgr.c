@@ -150,6 +150,13 @@ struct device* devicemgr_find_device(const int8_t* name) {
     return deviceregistry_findDevice(name);
 }
 
+void devicemgr_find_devices_by_description(deviceType dt, const int8_t* description, deviceSearchCallback cb) {
+    ASSERT_NOT_NULL(description);
+    ASSERT_NOT_NULL(cb);
+    ASSERT_NOT_NULL(dt);
+    deviceregistry_find_devices_by_description(dt, description, cb);
+}
+
 #ifdef TARGET_PLATFORM_i386
 void devicemgr_register_devices() {
     /*
