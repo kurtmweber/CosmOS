@@ -58,7 +58,7 @@ uint8_t kmalloc_block_valid(kmalloc_block *b) {
     if (b->end_magic[5] != MALLOC_MAGIC_0) {
         return false;
     }
-
+    
     return true;
 }
 
@@ -71,6 +71,13 @@ kmalloc_block *kmalloc_block_from_address(void *ptr) {
     kmalloc_block *ret = ptr - sizeof(kmalloc_block);
     ASSERT(kmalloc_block_valid(ret));
     return ret;
+}
+
+uint8_t kmalloc_pointer_valid(void *ptr) {
+    ASSERT_NOT_NULL(ptr);
+    kmalloc_block *block = kmalloc_block_from_address(ptr);
+    ASSERT_NOT_NULL(block);
+    return kmalloc_block_valid(block);
 }
 
 kmalloc_block *find_avail_kmalloc_block_list(uint64_t size) {

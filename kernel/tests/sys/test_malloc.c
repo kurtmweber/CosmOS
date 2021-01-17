@@ -19,7 +19,13 @@ void test_malloc() {
     for (uint32_t i = 0; i < TEST_MALLOC_LOOPS; i++) {
         uint8_t* x = kmalloc(TEST_MALLOC_INCREMENT * (i + 1));
         ASSERT_NOT_NULL(x);
-        kprintf("Block: %#hX\n", x);
+        kmalloc_block* block = kmalloc_block_from_address(x);
+        ASSERT(block->used == true);
+
+        ASSERT(kmalloc_block_valid(block));
+
+        kprintf("Size asked %llu ,Block: %#hX Block size: %llu\n", TEST_MALLOC_INCREMENT * (i + 1), x, block->len);
         kfree(x);
+        ASSERT(block->used == false);
     }
 }

@@ -99,6 +99,10 @@ void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment);
 void kmalloc_init();
 void *krealloc(void *ptr, uint64_t size);
 kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size);
+uint8_t kmalloc_block_valid(kmalloc_block *b);
+uint8_t kmalloc_pointer_valid(void *ptr);
+
+kmalloc_block *kmalloc_block_from_address(void *ptr);
 
 // mm.c
 extern void *brk;
