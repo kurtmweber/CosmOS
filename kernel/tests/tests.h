@@ -31,6 +31,7 @@
 #include <tests/sys/test_mm.h>
 #include <tests/sys/test_ringbuffer.h>
 #include <tests/sys/test_string.h>
+#include <tests/sys/test_tree.h>
 #include <types.h>
 
 /*
