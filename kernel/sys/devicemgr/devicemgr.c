@@ -253,4 +253,8 @@ void devicemgr_detach_device(struct device* dev) {
     if (0 != dev->uninit) {
         dev->uninit(dev);
     }
+    /*
+     * free the device struct
+     */
+    kfree(dev);
 }
