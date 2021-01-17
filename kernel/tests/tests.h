@@ -27,6 +27,7 @@
 #include <tests/sys/test_array.h>
 #include <tests/sys/test_debug.h>
 #include <tests/sys/test_list.h>
+#include <tests/sys/test_malloc.h>
 #include <tests/sys/test_mm.h>
 #include <tests/sys/test_string.h>
 #include <types.h>
