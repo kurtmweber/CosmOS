@@ -23,6 +23,7 @@ void test_malloc() {
         ASSERT(block->used == true);
 
         ASSERT(kmalloc_block_valid(block));
+        ASSERT(block->len >= (TEST_MALLOC_INCREMENT * (i + 1)));
 
         //      kprintf("Size asked %llu ,Block: %#hX Block size: %llu\n", TEST_MALLOC_INCREMENT * (i + 1), x, block->len);
         kfree(x);

@@ -24,6 +24,5 @@ void test_array() {
         ASSERT(0 == array_get(arr, i));
     }
 
-    // TODO, if I enable this it works, but the NEXT test crashes!  whats the problem?
-    //  array_delete(arr);
+    array_delete(arr);
 }
