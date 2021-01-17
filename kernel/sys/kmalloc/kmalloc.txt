@@ -1,0 +1,3 @@
+
+kmalloc is a platform-independent implementation of malloc/free.  
+It only requires brk from i386 and something similar will be required for arm

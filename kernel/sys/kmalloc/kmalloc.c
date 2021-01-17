@@ -7,7 +7,7 @@
 
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <types.h>
 
 #define MALLOC_MAGIC_0 'C'

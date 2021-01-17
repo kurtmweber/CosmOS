@@ -9,6 +9,7 @@
 #define _MM_H
 
 #include <sys/i386/mm/pagetables.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <types.h>
 
 // How much physical address space the bootloader has mapped
@@ -26,8 +27,6 @@
 #define PD_INDEX_SHIFT 21
 #define PT_INDEX_MASK 0x00000000001FF000
 #define PT_INDEX_SHIFT 12
-
-#define KMALLOC_ALIGN_BYTES 8
 
 #define PAGE_SIZE 4096
 
@@ -70,19 +69,6 @@ typedef struct int_15_map {
     uint32_t acpi;
 } __attribute__((packed)) int_15_map;
 
-typedef struct mem_block {
-    uint8_t start_magic[6];
-    struct mem_block *prev;
-    void *base;
-    uint64_t len;
-    bool used;
-    uint64_t owner;  // ignored for free blocks
-    struct mem_block *next;
-    uint8_t end_magic[6];
-} __attribute__((aligned(8))) mem_block;
-
-typedef mem_block kmalloc_block;
-
 // blockmgmt.c
 mem_block *find_containing_block(void *addr, mem_block *list);
 int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block);
@@ -90,19 +76,6 @@ int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block);
 // init.c
 extern uint64_t future_pt_expansion[3];
 void mmu_init();
-
-// kmalloc.c
-kmalloc_block *find_avail_kmalloc_block_list(uint64_t size);
-void kfree(void *ptr);
-void *kmalloc(uint64_t size);
-void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment);
-void kmalloc_init();
-void *krealloc(void *ptr, uint64_t size);
-kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size);
-uint8_t kmalloc_block_valid(kmalloc_block *b);
-uint8_t kmalloc_pointer_valid(void *ptr);
-
-kmalloc_block *kmalloc_block_from_address(void *ptr);
 
 // mm.c
 extern void *brk;
