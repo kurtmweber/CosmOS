@@ -127,11 +127,13 @@ void sfs_read_superblock(struct device* dev, struct sfs_superblock* superblock) 
 
 void sfs_format(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct sfs_devicedata* deviceData = (struct sfs_devicedata*)dev->deviceData;
 
     // device parameters
-    uint64_t total_size = block_get_total_size(dev);
-    uint32_t sector_size = block_get_sector_size(dev);
-    uint32_t total_sectors = block_get_sector_count(dev);
+    uint64_t total_size = block_get_total_size(deviceData->block_device);
+    uint32_t sector_size = block_get_sector_size(deviceData->block_device);
+    uint32_t total_sectors = block_get_sector_count(deviceData->block_device);
 
     // create a superblock struct
     struct sfs_superblock superblock;
@@ -148,7 +150,7 @@ void sfs_format(struct device* dev) {
     superblock.block_size = (sector_size / 512) + 1;
 
     // write superblock
-    block_write(dev, 0, (uint8_t*)&superblock, 1);
+    block_write(deviceData->block_device, 0, (uint8_t*)&superblock, 1);
 }
 
 /*

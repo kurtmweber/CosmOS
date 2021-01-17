@@ -27,18 +27,22 @@ struct tfs_devicedata {
  * format. I just guessed here.
  */
 void tfs_format(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
+
     /*
      * figure out how many map blocks we need
      */
-    uint32_t number_map_blocks = tfs_map_block_count(dev);
+    uint32_t number_map_blocks = tfs_map_block_count(deviceData->block_device);
     /*
      * create superblock
      */
     struct tfs_superblock_block superblock;
     memset((uint8_t*)&superblock, 0, sizeof(struct tfs_superblock_block));
     superblock.magic = DFS_MAGIC_SUPERBLOCK;
-    superblock.blocks_size = (uint64_t)block_get_sector_size(dev);
-    superblock.blocks_count = (uint64_t)block_get_sector_count(dev);
+    superblock.blocks_size = (uint64_t)block_get_sector_size(deviceData->block_device);
+    superblock.blocks_count = (uint64_t)block_get_sector_count(deviceData->block_device);
     superblock.number_map_blocks = number_map_blocks;
     superblock.root_dir = number_map_blocks + 1;  // sector one, since sector zero is the super-block
     kprintf("blocks_count %llu\n", superblock.blocks_count);
@@ -47,14 +51,14 @@ void tfs_format(struct device* dev) {
     /*
      * write superblock
      */
-    tfs_write_superblock(dev, &superblock);
+    tfs_write_superblock(deviceData->block_device, &superblock);
     /*
      * create & write map blocks
      */
     for (uint32_t i = 0; i < number_map_blocks; i++) {
         struct tfs_map_block map_block;
         memset((uint8_t*)&map_block, 0, sizeof(struct tfs_map_block));
-        tfs_write_map_block(dev, &map_block, i + 1);
+        tfs_write_map_block(deviceData->block_device, &map_block, i + 1);
         //    kprintf("map block: %llu\n",i+1);
     }
     /*
@@ -66,7 +70,7 @@ void tfs_format(struct device* dev) {
     /*
      * write root dir
      */
-    tfs_write_dir_block(dev, &root_dir_block, superblock.root_dir);
+    tfs_write_dir_block(deviceData->block_device, &root_dir_block, superblock.root_dir);
     kprintf("dir block: %llu\n", superblock.root_dir);
 }
 
@@ -86,6 +90,8 @@ void tfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint
     ASSERT_NOT_NULL(name);
     ASSERT_NOT_NULL(data);
     ASSERT(strlen(name) < DFS_FILENAME_SIZE);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
 }
 
 void tfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size) {
@@ -93,6 +99,8 @@ void tfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uin
     ASSERT_NOT_NULL(name);
     ASSERT_NOT_NULL(data);
     ASSERT(strlen(name) < DFS_FILENAME_SIZE);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
 
     kprintf("write file: %s of length %llu\n", name, size);
     /*

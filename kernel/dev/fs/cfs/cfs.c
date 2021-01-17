@@ -126,7 +126,10 @@ void cfs_read_blockmap(struct device* dev, struct cfs_blockmap* blockmap, uint32
  * format. I just guessed here.
  */
 void cfs_format(struct device* dev) {
-    uint32_t total_sectors_blockmap = cfs_total_sectormap_sectors(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct cfs_devicedata* deviceData = (struct cfs_devicedata*)dev->deviceData;
+
+    uint32_t total_sectors_blockmap = cfs_total_sectormap_sectors(deviceData->block_device);
     // kprintf("Blockmap sectors %llu\n",total_sectors_blockmap);
     /*
      * superblock
@@ -138,14 +141,14 @@ void cfs_format(struct device* dev) {
     superblock.primary_data_space = 2;
     superblock.primary_presentation_space = 3;
     superblock.primary_group_directory = 4;
-    cfs_write_superblock(dev, &superblock);
+    cfs_write_superblock(deviceData->block_device, &superblock);
     /*
      * blockmaps.  first one at lba 1.
      */
     for (uint32_t i = 0; i < total_sectors_blockmap; i++) {
         struct cfs_blockmap blockmap;
         memset((uint8_t*)&blockmap, 0, sizeof(struct cfs_superblock));
-        cfs_write_blockmap(dev, &blockmap, 1 + i);
+        cfs_write_blockmap(deviceData->block_device, &blockmap, 1 + i);
     }
 }
 
