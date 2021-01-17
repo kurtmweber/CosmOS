@@ -58,7 +58,7 @@ uint8_t kmalloc_block_valid(kmalloc_block *b) {
     if (b->end_magic[5] != MALLOC_MAGIC_0) {
         return false;
     }
-    
+
     return true;
 }
 
@@ -115,6 +115,8 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size) {
         }
 
         if (cur_block->len == size) {
+            //      kprintf("same size\n");
+            cur_block->used = true;
             return cur_block;
         }
 
@@ -131,8 +133,11 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size) {
     } while ((cur_block = cur_block->next));
 
     if (best) {
+        //    kprintf("best\n");
+        best->used = true;
         return best;
     }
+    // kprintf("new_kmalloc_block\n");
 
     return new_kmalloc_block(last, size);
 }
@@ -176,12 +181,12 @@ void *kmalloc(uint64_t size) {
         } else {
             cur_block = (kmalloc_block *)brk;
         }
-
         kmalloc_block_list = cur_block;
-
         cur_block = new_kmalloc_block(0, size);
+        ASSERT(cur_block->used == true);
     } else {
         cur_block = find_avail_kmalloc_block_list(size);
+        ASSERT(cur_block->used == true);
     }
 
     if (!cur_block) {
@@ -190,6 +195,7 @@ void *kmalloc(uint64_t size) {
     } else {
         ASSERT(kmalloc_block_valid(cur_block));
         ASSERT_NOT_NULL(cur_block->base);
+        ASSERT(cur_block->used == true);
         return cur_block->base;
     }
 }
