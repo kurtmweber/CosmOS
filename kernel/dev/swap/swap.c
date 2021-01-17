@@ -5,6 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/fs/block_util.h>
 #include <dev/swap/swap.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
@@ -16,6 +17,7 @@
 
 struct swap_devicedata {
     struct device* block_device;
+    uint16_t block_size;  // block size of the underlying physical device
 } __attribute__((packed));
 
 /*
@@ -44,22 +46,28 @@ void swap_read(struct device* dev, uint8_t* data, uint32_t block) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
+    block_read(deviceData->block_device, block, data, deviceData->block_size);
 }
+
 void swap_write(struct device* dev, uint8_t* data, uint32_t block) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
+    block_write(deviceData->block_device, block, data, deviceData->block_size);
 }
 
 uint16_t swap_block_size(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
+    return block_get_sector_size(deviceData->block_device);
 }
+
 uint16_t swap_block_count(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
+    return block_get_sector_count(deviceData->block_device);
 }
 
 struct device* swap_attach(struct device* block_device) {
@@ -86,6 +94,7 @@ struct device* swap_attach(struct device* block_device) {
      */
     struct swap_devicedata* deviceData = (struct swap_devicedata*)kmalloc(sizeof(struct swap_devicedata));
     deviceData->block_device = block_device;
+    deviceData->block_size = block_get_sector_size(block_device);
     deviceinstance->deviceData = deviceData;
     /*
      * register
