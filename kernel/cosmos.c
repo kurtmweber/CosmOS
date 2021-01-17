@@ -26,13 +26,7 @@
 #include <tests/tests.h>
 #include <types.h>
 
-void stringtest();
-void BeethovensFifth();
-void chirp();
-void serialMessage(const uint8_t* message);
-void testFunctions();
-void show_cpu_data();
-void playsb16();
+void dev_tests();
 
 void CosmOS() {
     /*
@@ -121,13 +115,18 @@ void CosmOS() {
     kprintf("************************************\n");
     kprintf("\n");
 
+    /*
+     * enable interrupts
+     */
+    asm_sti();
+
     kprintf("\n");
     kprintf("************************************\n");
     kprintf("**       Welcome to CosmOS!       **\n");
     kprintf("************************************\n");
     kprintf("\n");
 
-    show_cpu_data();
+    dev_tests();
     /*
      * run various functions to show that things work....
      */
@@ -138,29 +137,7 @@ void CosmOS() {
     }
 }
 
-void show_cpu_data() {
-    /*
-     * show CPU features
-     */
-    // get the CPU
-    struct device* cpu = devicemgr_find_device("cpu0");
-    struct deviceapi_cpu* cpu_api = (struct deviceapi_cpu*)cpu->api;
-
-    /*
-     * show all CPU features
-     */
-    struct cpu_id id;
-    (*cpu_api->features)(&id);
-    kprintf("CPU Features %#X\n", id.edx);
-
-    /*
-     * enable interrupts
-     */
-    asm_sti();
-
-    /*
-     * play
-     */
+void dev_tests() {
     //	playsb16();
     //	floppyread();
     //	test_ata();
@@ -174,8 +151,6 @@ void show_cpu_data() {
     //	test_list();
     //  test_bda();
     //  test_parallel();
-    test_rtl8139();
-    while (1) {
-        asm_hlt();
-    }
+    //    test_rtl8139();
+    // test_gpt();
 }
