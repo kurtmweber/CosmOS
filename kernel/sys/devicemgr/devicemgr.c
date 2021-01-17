@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <dev/dev.h>
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>

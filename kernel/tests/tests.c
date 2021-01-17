@@ -15,8 +15,8 @@ void tests_run() {
     // alway run array tests
     test_array();
 
-    // always run the list tests
-    test_list();
+    // always run the arraylist tests
+    test_arraylist();
 
     // always run the ringbuffer tests
     test_ringbuffer();

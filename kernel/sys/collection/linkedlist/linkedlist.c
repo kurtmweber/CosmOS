@@ -13,7 +13,7 @@
 /*
  * new list
  */
-struct linkedlist* linkedlist_new() {
+struct linkedlist* linkedarraylist_new() {
     struct linkedlist* ret = kmalloc(sizeof(struct linkedlist));
     ret->data = 0;
     ret->next = 0;
@@ -22,18 +22,18 @@ struct linkedlist* linkedlist_new() {
 /*
  * delete list
  */
-void linkedlist_delete(struct linkedlist* lst) {
+void linkedarraylist_delete(struct linkedlist* lst) {
     ASSERT_NOT_NULL(lst);
 }
 /*
  * number items in the list
  */
-uint32_t linkedlist_count(struct linkedlist* lst) {
+uint32_t linkedarraylist_count(struct linkedlist* lst) {
     ASSERT_NOT_NULL(lst);
 }
 /*
  * returns zero-based index of added item
  */
-uint32_t linkedlist_add(struct linkedlist* lst, void* value) {
+uint32_t linkedarraylist_add(struct linkedlist* lst, void* value) {
     ASSERT_NOT_NULL(lst);
 }

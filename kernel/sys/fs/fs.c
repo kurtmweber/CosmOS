@@ -15,11 +15,11 @@
 #include <sys/i386/mm/mm.h>
 #include <sys/string/string.h>
 
-struct list* fs_list;
+struct arraylist* fs_list;
 
 void fs_init() {
     kprintf("Registering filesystems\n");
-    fs_list = list_new();
+    fs_list = arraylist_new();
     sfs_register();
     cfs_register();
     fat_register();
@@ -32,13 +32,13 @@ void fs_register(struct fs_filesystem* fs) {
     ASSERT_NOT_NULL(fs->list_dir);
     ASSERT_NOT_NULL(fs->name);
     //   kprintf("Registering filesystem %s\n",(*fs->name)());
-    list_add(fs_list, fs);
+    arraylist_add(fs_list, fs);
 }
 
 struct fs_filesystem* fs_find(uint8_t* name) {
     ASSERT_NOT_NULL(name);
-    for (uint8_t i = 0; i < list_count(fs_list); i++) {
-        struct fs_filesystem* fs = (struct fs_filesystem*)list_get(fs_list, i);
+    for (uint8_t i = 0; i < arraylist_count(fs_list); i++) {
+        struct fs_filesystem* fs = (struct fs_filesystem*)arraylist_get(fs_list, i);
         if (strcmp(name, (*fs->name)()) == 0) {
             return fs;
         }
@@ -51,7 +51,7 @@ struct fs_filesystem* fs_find(uint8_t* name) {
  */
 struct fs_directory_listing* fs_directory_listing_new() {
     struct fs_directory_listing* ret = (struct fs_directory_listing*)kmalloc(sizeof(struct fs_directory_listing));
-    ret->lst = list_new();
+    ret->lst = arraylist_new();
     return ret;
 }
 
@@ -62,8 +62,8 @@ void fs_directory_listing_delete(struct fs_directory_listing* listing) {
     ASSERT_NOT_NULL(listing);
     ASSERT_NOT_NULL(listing->lst);
 
-    for (uint32_t i; i < list_count(listing->lst); i++) {
-        struct fs_directory* dir = (struct fs_directory*)list_get(listing->lst, i);
+    for (uint32_t i; i < arraylist_count(listing->lst); i++) {
+        struct fs_directory* dir = (struct fs_directory*)arraylist_get(listing->lst, i);
         if (0 != dir) {
             kfree(dir);
         }

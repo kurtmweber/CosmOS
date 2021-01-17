@@ -19,16 +19,16 @@ void devicetypes_init() {
     }
 }
 
-struct list* devicetypes_get_devicelist(deviceType dt) {
+struct arraylist* devicetypes_get_devicelist(deviceType dt) {
     ASSERT_NOT_NULL(types);
     if ((dt >= 0) && (dt < MAX_DEVICE_TYPES)) {
-        return (struct list*)array_get(types, dt);
+        return (struct arraylist*)array_get(types, dt);
     } else {
         panic("Invalid device type passed to devicetypes_get_devicelist");
     }
 }
 
-void devicetypes_set_devicelist(deviceType dt, struct list* lst) {
+void devicetypes_set_devicelist(deviceType dt, struct arraylist* lst) {
     ASSERT_NOT_NULL(types);
     if ((dt >= 0) && (dt < MAX_DEVICE_TYPES)) {
         array_set(types, dt, lst);

@@ -19,7 +19,7 @@
 /**
  * indices are zero-based
  */
-struct list {
+struct arraylist {
     struct array* arr;
     uint32_t count;
 };
@@ -32,38 +32,38 @@ typedef void (*listIterator)(void* value);
 /*
  * new list
  */
-struct list* list_new();
+struct arraylist* arraylist_new();
 /*
  * delete list
  */
-void list_delete(struct list* lst);
+void arraylist_delete(struct arraylist* lst);
 /*
  * number items in the list
  */
-uint32_t list_count(struct list* lst);
+uint32_t arraylist_count(struct arraylist* lst);
 /*
  * size of the underlying array
  */
-uint32_t list_size(struct list* lst);
+uint32_t arraylist_size(struct arraylist* lst);
 /*
  * returns zero-based index of added item
  */
-uint32_t list_add(struct list* lst, void* value);
+uint32_t arraylist_add(struct arraylist* lst, void* value);
 /*
  * set value at index
  */
-void list_set(struct list* lst, uint32_t position, void* value);
+void arraylist_set(struct arraylist* lst, uint32_t position, void* value);
 /*
  * get value at index
  */
-void* list_get(struct list* lst, uint32_t position);
+void* arraylist_get(struct arraylist* lst, uint32_t position);
 /*
  * iterate
  */
-void list_iterate(struct list* lst, listIterator iter);
+void arraylist_iterate(struct arraylist* lst, listIterator iter);
 /*
  * remove element at index
  */
-void list_remove(struct list* lst, uint32_t position);
+void arraylist_remove(struct arraylist* lst, uint32_t position);
 
 #endif

@@ -8,7 +8,7 @@
 #include <dev/i386/isadma/isadma.h>
 #include <dev/i386/sb16/sb16.h>
 #include <sys/asm/asm.h>
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>

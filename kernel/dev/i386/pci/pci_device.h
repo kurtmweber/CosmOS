@@ -9,7 +9,7 @@
 #define _PCI_DEVICE_H
 
 #include <dev/i386/pci/devicetree.h>
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <types.h>
 
 struct pci_device {
@@ -33,6 +33,6 @@ void pci_devicemgr_search_devicetype(pci_class_codes pci_class, uint8_t pci_subc
 // calc PCI base address
 uint64_t pci_calcbar(struct pci_device* pci_dev);
 
-extern struct list* pci_devices;
+extern struct arraylist* pci_devices;
 
 #endif

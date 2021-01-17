@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
@@ -21,10 +21,10 @@ void test_fat() {
         struct fs_filesystem* fs = fs_find(fsname);
         if (0 != fs) {
             struct fs_directory_listing* listing = (*fs->list_dir)(dsk);
-            kprintf("size %llu\n", list_count(listing->lst));
+            kprintf("size %llu\n", arraylist_count(listing->lst));
 
-            for (uint32_t i = 0; i < list_count(listing->lst); i++) {
-                struct fs_file* file = (struct fs_file*)list_get(listing->lst, i);
+            for (uint32_t i = 0; i < arraylist_count(listing->lst); i++) {
+                struct fs_file* file = (struct fs_file*)arraylist_get(listing->lst, i);
                 kprintf("%llu %s %llu\n", i, file->name, file->size);
             }
             fs_directory_listing_delete(listing);

@@ -262,7 +262,7 @@ struct fs_directory_listing* fat_list_dir(struct device* dev) {
                             // dir->name = name;
 
                             //		dir->size = entry->size;
-                            //		list_add(ret->lst,dir);
+                            //		arraylist_add(ret->lst,dir);
                             //		kprintf("FF%s\n",dir->name);
                         }
                     }

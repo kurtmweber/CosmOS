@@ -7,7 +7,7 @@
 
 #include <dev/i386/pit/pit.h>
 #include <sys/asm/asm.h>
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_pit.h>
@@ -24,7 +24,7 @@
 #define PIT_PORT_2 0x42
 #define PIT_PORT_COMMAND 0x43
 
-struct list* pitEvents;
+struct arraylist* pitEvents;
 
 uint64_t tickcount = 0;
 ;
@@ -63,11 +63,11 @@ uint64_t pit_tickcount(struct device* dev) {
 void pit_subscribe(pit_event event) {
     ASSERT_NOT_NULL(pitEvents);
     ASSERT_NOT_NULL(event);
-    list_add(pitEvents, event);
+    arraylist_add(pitEvents, event);
 }
 
 void pit_devicemgr_register_devices() {
-    pitEvents = list_new();
+    pitEvents = arraylist_new();
     /*
      * register device
      */

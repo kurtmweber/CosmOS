@@ -8,7 +8,7 @@
 #include <dev/i386/cmos/cmos.h>
 #include <dev/i386/rtc/rtc.h>
 #include <sys/asm/asm.h>
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_rtc.h>
@@ -21,14 +21,14 @@
 
 // https://wiki.osdev.org/RTC
 
-struct list* rtcEvents;
+struct arraylist* rtcEvents;
 
 typedef enum rtc_registers { RTC_REGISTER_SECOND = 0x00, RTC_REGISTER_MINUTE = 0x02, RTC_REGISTER_HOUR = 0x04, RTC_REGISTER_WEEKDAY = 0x06, RTC_REGISTER_MONTHDAY = 0x07, RTC_REGISTER_MONTH = 0x08, RTC_REGISTER_YEAR = 0x09, RTC_REGISTER_STATUS_A = 0x0A, RTC_REGISTER_STATUS_B = 0x0B, RTC_REGISTER_STATUS_C = 0x0C, RTC_REGISTER_CENTURY = 0x32 } rtc_registers;
 
 void rtc_handle_irq(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);
-    for (uint32_t i = 0; i < list_count(rtcEvents); i++) {
-        rtc_event rtcEvent = (rtc_event)list_get(rtcEvents, i);
+    for (uint32_t i = 0; i < arraylist_count(rtcEvents); i++) {
+        rtc_event rtcEvent = (rtc_event)arraylist_get(rtcEvents, i);
         (*rtcEvent)();
     }
 
@@ -45,7 +45,7 @@ void rtc_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu (%s)\n", dev->description, RTC_IRQ_NUMBER, dev->name);
 
-    rtcEvents = list_new();
+    rtcEvents = arraylist_new();
     asm_cli();
 
     asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x8B);       // select register B, and disable NMI
@@ -103,7 +103,7 @@ rtc_time_t rtc_time(struct device* dev) {
 void rtc_subscribe(rtc_event event) {
     ASSERT_NOT_NULL(rtcEvents);
     ASSERT_NOT_NULL(event);
-    list_add(rtcEvents, event);
+    arraylist_add(rtcEvents, event);
 }
 
 /*

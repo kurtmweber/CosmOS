@@ -5,20 +5,20 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <sys/debug/assert.h>
 #include <sys/i386/mm/mm.h>
 
 #define EXPAND_SIZE 64
 #define START_SIZE 16
 
-struct list* list_new() {
-    struct list* ret = (struct list*)kmalloc(sizeof(struct list));
+struct arraylist* arraylist_new() {
+    struct arraylist* ret = (struct arraylist*)kmalloc(sizeof(struct arraylist));
     ret->arr = array_new(START_SIZE);
     ret->count = 0;
 }
 
-void list_delete(struct list* lst) {
+void arraylist_delete(struct arraylist* lst) {
     ASSERT_NOT_NULL(lst);
     if (0 == lst->arr) {
         panic("why is the underlying array null?!");
@@ -27,12 +27,12 @@ void list_delete(struct list* lst) {
     kfree(lst);
 }
 
-uint32_t list_count(struct list* lst) {
+uint32_t arraylist_count(struct arraylist* lst) {
     ASSERT_NOT_NULL(lst);
     return lst->count;
 }
 
-uint32_t list_size(struct list* lst) {
+uint32_t arraylist_size(struct arraylist* lst) {
     ASSERT_NOT_NULL(lst);
     if (0 == lst->arr) {
         panic("why is the underlying array null?!");
@@ -40,7 +40,7 @@ uint32_t list_size(struct list* lst) {
     return lst->arr->size;
 }
 
-uint32_t list_add(struct list* lst, void* value) {
+uint32_t arraylist_add(struct arraylist* lst, void* value) {
     ASSERT_NOT_NULL(lst);
     // sanity check
     if (0 == lst->arr) {
@@ -58,14 +58,14 @@ uint32_t list_add(struct list* lst, void* value) {
     array_set(lst->arr, lst->count, value);
     lst->count = lst->count + 1;
 
-    // return the index for later use by list_set, list_get, etc
+    // return the index for later use by arraylist_set, arraylist_get, etc
     return lst->count - 1;
 }
 
 /*
  * set value at index
  */
-void list_set(struct list* lst, uint32_t position, void* value) {
+void arraylist_set(struct arraylist* lst, uint32_t position, void* value) {
     ASSERT_NOT_NULL(lst);
     if (0 == lst->arr) {
         panic("why is the underlying array null?!");
@@ -73,11 +73,11 @@ void list_set(struct list* lst, uint32_t position, void* value) {
     if ((position >= 0) && (position < lst->count)) {
         lst->arr->data[position] = value;
     } else {
-        panic("invalid list index passed to list_set\n");
+        panic("invalid list index passed to arraylist_set\n");
     }
 }
 
-void* list_get(struct list* lst, uint32_t position) {
+void* arraylist_get(struct arraylist* lst, uint32_t position) {
     ASSERT_NOT_NULL(lst);
     if (0 == lst->arr) {
         panic("why is the underlying array null?!");
@@ -85,11 +85,11 @@ void* list_get(struct list* lst, uint32_t position) {
     if ((position >= 0) && (position < lst->count)) {
         return lst->arr->data[position];
     } else {
-        panic("invalid list index passed to list_get\n");
+        panic("invalid list index passed to arraylist_get\n");
     }
 }
 
-void list_iterate(struct list* lst, listIterator iter) {
+void arraylist_iterate(struct arraylist* lst, listIterator iter) {
     ASSERT_NOT_NULL(lst);
     ASSERT_NOT_NULL(iter);
     if (0 == lst->arr) {
@@ -103,7 +103,7 @@ void list_iterate(struct list* lst, listIterator iter) {
 /*
  * remove element at index
  */
-void list_remove(struct list* lst, uint32_t position) {
+void arraylist_remove(struct arraylist* lst, uint32_t position) {
     ASSERT_NOT_NULL(lst);
     if (0 == lst->arr) {
         panic("why is the underlying array null?!");
@@ -116,6 +116,6 @@ void list_remove(struct list* lst, uint32_t position) {
         }
         lst->count = lst->count - 1;
     } else {
-        panic("invalid list index passed to list_remove\n");
+        panic("invalid list index passed to arraylist_remove\n");
     }
 }

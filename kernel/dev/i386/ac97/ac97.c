@@ -8,7 +8,7 @@
 #include <dev/i386/ac97/ac97.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/asm/asm.h>
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_dsp.h>

@@ -8,7 +8,7 @@
 #ifndef _FS_H
 #define _FS_H
 
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <types.h>
 
@@ -42,7 +42,7 @@ struct fs_filesystem {
 };
 
 struct fs_directory_listing {
-    struct list* lst;
+    struct arraylist* lst;
 };
 
 struct fs_file {

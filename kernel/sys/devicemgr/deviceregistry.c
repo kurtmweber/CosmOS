@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/collection/list/list.h>
+#include <sys/collection/arraylist/arraylist.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/deviceregistry.h>
@@ -21,20 +21,20 @@ void deviceregistry_registerdevice(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->devicetype);
 
-    struct list* lst = devicetypes_get_devicelist(dev->devicetype);
+    struct arraylist* lst = devicetypes_get_devicelist(dev->devicetype);
     if (0 == lst) {
-        lst = list_new();
+        lst = arraylist_new();
         devicetypes_set_devicelist(dev->devicetype, lst);
     }
-    list_add(lst, dev);
+    arraylist_add(lst, dev);
 }
 
 uint16_t deviceregistry_devicecount() {
     uint16_t ret = 0;
     for (uint16_t i = 0; i < MAX_DEVICE_TYPES; i++) {
-        struct list* lst = devicetypes_get_devicelist(i);
+        struct arraylist* lst = devicetypes_get_devicelist(i);
         if (0 != lst) {
-            ret = ret + list_count(lst);
+            ret = ret + arraylist_count(lst);
         }
     }
     return ret;
@@ -42,9 +42,9 @@ uint16_t deviceregistry_devicecount() {
 
 uint16_t deviceregistry_devicecount_type(deviceType dt) {
     if ((dt >= 0) && (dt < MAX_DEVICE_TYPES)) {
-        struct list* lst = devicetypes_get_devicelist(dt);
+        struct arraylist* lst = devicetypes_get_devicelist(dt);
         if (0 != lst) {
-            return list_count(lst);
+            return arraylist_count(lst);
         }
         return 0;
     } else {
@@ -54,9 +54,9 @@ uint16_t deviceregistry_devicecount_type(deviceType dt) {
 
 struct device* deviceregistry_get_device(deviceType dt, uint16_t idx) {
     if ((dt >= 0) && (dt < MAX_DEVICE_TYPES)) {
-        struct list* lst = devicetypes_get_devicelist(dt);
+        struct arraylist* lst = devicetypes_get_devicelist(dt);
         if (0 != lst) {
-            return list_get(lst, idx);
+            return arraylist_get(lst, idx);
         } else {
             panic("there are no devices of type");
         }
@@ -68,10 +68,10 @@ struct device* deviceregistry_get_device(deviceType dt, uint16_t idx) {
 void deviceregistry_iterate(DeviceIterator deviceIterator) {
     if (0 != deviceIterator) {
         for (uint16_t i = 0; i < MAX_DEVICE_TYPES; i++) {
-            struct list* lst = devicetypes_get_devicelist(i);
+            struct arraylist* lst = devicetypes_get_devicelist(i);
             if (0 != lst) {
-                for (uint16_t j = 0; j < list_count(lst); j++) {
-                    struct device* dev = (struct device*)list_get(lst, j);
+                for (uint16_t j = 0; j < arraylist_count(lst); j++) {
+                    struct device* dev = (struct device*)arraylist_get(lst, j);
                     if (0 != dev) {
                         (*deviceIterator)(dev);
                     } else {
@@ -88,10 +88,10 @@ void deviceregistry_iterate(DeviceIterator deviceIterator) {
 void deviceregistry_iterate_type(deviceType dt, DeviceIterator deviceIterator) {
     ASSERT_NOT_NULL(deviceIterator);
     if ((dt >= 0) && (dt < MAX_DEVICE_TYPES)) {
-        struct list* lst = devicetypes_get_devicelist(dt);
+        struct arraylist* lst = devicetypes_get_devicelist(dt);
         if (0 != lst) {
-            for (uint16_t j = 0; j < list_count(lst); j++) {
-                struct device* dev = (struct device*)list_get(lst, j);
+            for (uint16_t j = 0; j < arraylist_count(lst); j++) {
+                struct device* dev = (struct device*)arraylist_get(lst, j);
                 if (0 != dev) {
                     (*deviceIterator)(dev);
                 } else {
@@ -110,10 +110,10 @@ void deviceregistry_iterate_type(deviceType dt, DeviceIterator deviceIterator) {
 struct device* deviceregistry_findDevice(const int8_t* name) {
     ASSERT_NOT_NULL(name);
     for (uint16_t i = 0; i < MAX_DEVICE_TYPES; i++) {
-        struct list* lst = devicetypes_get_devicelist(i);
+        struct arraylist* lst = devicetypes_get_devicelist(i);
         if (0 != lst) {
-            for (uint16_t j = 0; j < list_count(lst); j++) {
-                struct device* dev = (struct device*)list_get(lst, j);
+            for (uint16_t j = 0; j < arraylist_count(lst); j++) {
+                struct device* dev = (struct device*)arraylist_get(lst, j);
                 if (0 != dev) {
                     if (0 == strcmp(name, dev->name)) {
                         return dev;

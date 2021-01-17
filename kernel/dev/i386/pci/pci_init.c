@@ -14,7 +14,7 @@
 void pci_init() {
     kprintf("Initializing PCI bus...\n");
 
-    pci_devices = list_new();
+    pci_devices = arraylist_new();
 
     pci_scan();
 
