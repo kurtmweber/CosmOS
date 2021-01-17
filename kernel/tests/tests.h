@@ -10,6 +10,7 @@
 
 #include <tests/dev/test_ata.h>
 #include <tests/dev/test_bda.h>
+#include <tests/dev/test_console.h>
 #include <tests/dev/test_cpu.h>
 #include <tests/dev/test_floppy.h>
 #include <tests/dev/test_parallel.h>

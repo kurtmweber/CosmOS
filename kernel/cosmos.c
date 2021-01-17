@@ -165,4 +165,5 @@ void dev_tests() {
     // test_gpt();
     //   test_ramdisk();
     //  test_swap();
+    test_console_dev();
 }
