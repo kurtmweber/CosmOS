@@ -117,7 +117,7 @@ void CosmOS() {
 
     kprintf("\n");
     kprintf("************************************\n");
-    kprintf("**     Sanity Tests Complete       **\n");
+    kprintf("**     Sanity Tests Complete      **\n");
     kprintf("************************************\n");
     kprintf("\n");
 
