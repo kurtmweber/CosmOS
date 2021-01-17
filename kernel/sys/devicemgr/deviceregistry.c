@@ -1,6 +1,6 @@
 //*****************************************************************
 // This file is part of CosmOS                                    *
-// Copyright (C) 2020 Tom Everett                                 *
+// Copyright (C) 2020-2021 Tom Everett                            *
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
@@ -27,6 +27,21 @@ void deviceregistry_registerdevice(struct device* dev) {
         devicetypes_set_devicelist(dev->devicetype, lst);
     }
     arraylist_add(lst, dev);
+}
+
+void deviceregistry_unregisterdevice(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->devicetype);
+    struct arraylist* lst = devicetypes_get_devicelist(dev->devicetype);
+    ASSERT_NOT_NULL(lst);
+    for (uint32_t i = 0; i < arraylist_count(lst); i++) {
+        struct device* d = (struct device*)arraylist_get(lst, i);
+        ASSERT_NOT_NULL(d);
+        if (0 == strcmp(d->name, dev->name)) {
+            arraylist_remove(lst, i);
+            return;
+        }
+    }
 }
 
 uint16_t deviceregistry_devicecount() {
@@ -67,10 +82,10 @@ struct device* deviceregistry_get_device(deviceType dt, uint16_t idx) {
 
 void deviceregistry_iterate(DeviceIterator deviceIterator) {
     if (0 != deviceIterator) {
-        for (uint16_t i = 0; i < MAX_DEVICE_TYPES; i++) {
+        for (uint32_t i = 0; i < MAX_DEVICE_TYPES; i++) {
             struct arraylist* lst = devicetypes_get_devicelist(i);
             if (0 != lst) {
-                for (uint16_t j = 0; j < arraylist_count(lst); j++) {
+                for (uint32_t j = 0; j < arraylist_count(lst); j++) {
                     struct device* dev = (struct device*)arraylist_get(lst, j);
                     if (0 != dev) {
                         (*deviceIterator)(dev);

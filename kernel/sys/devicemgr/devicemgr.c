@@ -1,6 +1,6 @@
 //*****************************************************************
 // This file is part of CosmOS                                    *
-// Copyright (C) 2020 Tom Everett                                 *
+// Copyright (C) 2020-2021 Tom Everett                            *
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
@@ -49,6 +49,14 @@ void devicemgr_register_device(struct device* dev) {
      * register
      */
     deviceregistry_registerdevice(dev);
+}
+
+void devicemgr_unregister_device(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    /*
+     * unregister
+     */
+    deviceregistry_unregisterdevice(dev);
 }
 
 uint16_t devicemgr_device_count() {

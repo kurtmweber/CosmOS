@@ -37,6 +37,18 @@ All devices can use the `deviceData` field of the `device` struct to hold device
 
 All devices must assign a value to the field `devicetype` from the enum `deviceType`.  Additionally devices which expose an API must assign an API struct to the field `api`.   Appropriate API structs are in `kernel/devicemgr/deviceapi`
 
+
+# Dynamic registration
+
+Not all devices are fixed hardware devices.  For example:
+
+* Disk partitions
+* RAM disks
+* Virtio Devices
+* Swap devices
+
+These devices should expose an attach() API, and an unattach() API which can dynamically register and unregister the devices via the device manager.
+
 # Initialization
 
 The function `void initDevices();` is used by the device manager to initialize all devices. The devices will have passed a pointer to a init function with this prototype:

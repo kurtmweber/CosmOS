@@ -1,6 +1,6 @@
 //*****************************************************************
 // This file is part of CosmOS                                    *
-// Copyright (C) 2021 Tom Everett                                 *
+// Copyright (C) 2020-2021 Tom Everett                            *
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
@@ -14,7 +14,7 @@
 #include <types.h>
 
 struct rsdp_descriptor {
-    uint8_t signature[8];   
+    uint8_t signature[8];
     uint8_t checksum;
     uint8_t oem_id[6];
     uint8_t revision;

@@ -1,6 +1,6 @@
 //*****************************************************************
 // This file is part of CosmOS                                    *
-// Copyright (C) 2020 Tom Everett                                 *
+// Copyright (C) 2020-2021 Tom Everett                            *
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
@@ -88,6 +88,9 @@ struct device* devicemgr_new_device();
 
 // register a device
 void devicemgr_register_device(struct device* dev);
+
+// unregister a device
+void devicemgr_unregister_device(struct device* dev);
 
 // init the device registry
 void devicemgr_init();
