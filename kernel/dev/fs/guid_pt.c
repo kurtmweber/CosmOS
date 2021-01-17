@@ -7,9 +7,9 @@
 
 // https://wiki.osdev.org/GPT
 
+#include <dev/fs/block_util.h>
+#include <dev/fs/guid_pt.h>
 #include <sys/debug/assert.h>
-#include <sys/fs/block_util.h>
-#include <sys/fs/guid_pt.h>
 
 #define GUID_PT_HEADER_LBA 1
 

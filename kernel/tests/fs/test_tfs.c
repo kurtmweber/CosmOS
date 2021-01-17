@@ -5,9 +5,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/fs/fs.h>
 #include <sys/console/console.h>
 #include <sys/deviceapi/deviceapi_block.h>
-#include <sys/fs/fs.h>
 #include <sys/string/string.h>
 #include <tests/fs/test_tfs.h>
 

@@ -5,13 +5,13 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/fs/block_util.h>
+#include <dev/fs/fs.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_block.h>
-#include <sys/fs/block_util.h>
-#include <sys/fs/fat/fat.h>
-#include <sys/fs/fs.h>
+#include <dev/fs/fat/fat.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>

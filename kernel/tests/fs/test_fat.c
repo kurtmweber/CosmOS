@@ -5,11 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/fs/fs.h>
 #include <sys/collection/arraylist/arraylist.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/fs/fs.h>
 #include <tests/fs/test_fat.h>
 
 void test_fat() {

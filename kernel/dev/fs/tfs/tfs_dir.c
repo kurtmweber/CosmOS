@@ -5,11 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/fs/block_util.h>
+#include <dev/fs/tfs/tfs_block.h>
+#include <dev/fs/tfs/tfs_dir.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
-#include <sys/fs/block_util.h>
-#include <sys/fs/tfs/tfs_block.h>
-#include <sys/fs/tfs/tfs_dir.h>
 #include <sys/string/string.h>
 
 /*

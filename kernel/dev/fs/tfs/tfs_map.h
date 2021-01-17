@@ -8,8 +8,8 @@
 #ifndef _TFS_MAP_H
 #define _TFS_MAP_H
 
+#include <dev/fs/tfs/tfs_block.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/fs/tfs/tfs_block.h>
 #include <types.h>
 
 #define DFS_MAP_BLOCK_FREE 0

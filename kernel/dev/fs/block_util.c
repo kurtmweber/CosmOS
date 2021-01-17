@@ -5,10 +5,10 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/fs/block_util.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/fs/block_util.h>
 
 uint16_t block_get_sector_count(struct device* dev) {
     return block_get_total_size(dev) / block_get_sector_size(dev);

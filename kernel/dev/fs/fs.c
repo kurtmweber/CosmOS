@@ -5,13 +5,13 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/fs/cfs/cfs.h>
+#include <dev/fs/fat/fat.h>
+#include <dev/fs/fs.h>
+#include <dev/fs/sfs/sfs.h>
+#include <dev/fs/tfs/tfs.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
-#include <sys/fs/cfs/cfs.h>
-#include <sys/fs/fat/fat.h>
-#include <sys/fs/fs.h>
-#include <sys/fs/sfs/sfs.h>
-#include <sys/fs/tfs/tfs.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/string.h>
 

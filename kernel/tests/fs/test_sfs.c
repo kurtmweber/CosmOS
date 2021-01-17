@@ -5,11 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/fs/fs.h>
+#include <dev/fs/tfs/tfs_dir.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/fs/fs.h>
-#include <sys/fs/tfs/tfs_dir.h>
 #include <tests/fs/test_sfs.h>
 
 void test_sfs() {

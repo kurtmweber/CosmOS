@@ -5,6 +5,7 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#include <dev/fs/fs.h>
 #include <dev/ramdisk/ramdisk.h>
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
@@ -16,7 +17,6 @@
 #include <sys/deviceapi/deviceapi_serial.h>
 #include <sys/deviceapi/deviceapi_speaker.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/fs/fs.h>
 #include <sys/i386/interrupts/idt.h>
 #include <sys/i386/process/gdt.h>
 #include <sys/i386/video/vga/vga.h>
