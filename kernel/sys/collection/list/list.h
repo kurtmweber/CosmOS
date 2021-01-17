@@ -19,10 +19,10 @@
 /**
  * indices are zero-based
  */
-typedef struct list {
+struct list {
     struct array* arr;
     uint32_t count;
-} list_t;
+};
 
 /*
  * list iterator

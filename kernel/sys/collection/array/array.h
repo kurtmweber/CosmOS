@@ -20,11 +20,11 @@
 /**
  * array is zero-indexed
  */
-typedef struct array {
+struct array {
     void** data;
     uint32_t size;
     uint32_t byte_size;
-} array_t;
+};
 
 /*
  * array iterator
