@@ -9,13 +9,12 @@
 #define _RAMDISK_H
 
 #include <types.h>
-
 struct device;
 
 /*
  * note that ramdisk uses the block api
  */
-struct device* ramdisk_attach();
+struct device* ramdisk_attach(uint16_t sector_size, uint16_t sector_count);
 void ramdisk_detach(struct device* dev);
 
 #endif

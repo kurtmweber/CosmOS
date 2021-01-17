@@ -14,6 +14,9 @@
 #include <sys/string/string.h>
 #include <tests/dev/test_ramdisk.h>
 
+#define RAMDISK_SECTOR_SIZE 512
+#define RAMDISK_TOTAL_SECTORS 1000
+
 uint8_t* testdata =
     "We were very tired, we were very merry, \
 We had gone back and forth all night on the ferry. \
@@ -24,7 +27,7 @@ And we gave her all our money but our subway fares.";
 
 void test_ramdisk() {
     // attach the ramdisk
-    struct device* ramdisk_device = ramdisk_attach();
+    struct device* ramdisk_device = ramdisk_attach(RAMDISK_SECTOR_SIZE, RAMDISK_TOTAL_SECTORS);
 
     // get virtual block device
     uint8_t devicename[] = {"rd0"};
