@@ -12,7 +12,7 @@
 #include <sys/fs/block_util.h>
 #include <sys/fs/fs.h>
 #include <sys/fs/tfs/tfs_block.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 
 /*

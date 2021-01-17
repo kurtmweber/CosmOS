@@ -16,8 +16,8 @@
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_ethernet.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/i386/mm/mm.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/sleep/sleep.h>
 
 #define RTL8139_REGISTER_MAC0_5 0x00

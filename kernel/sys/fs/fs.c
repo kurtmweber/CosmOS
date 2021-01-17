@@ -12,7 +12,7 @@
 #include <sys/fs/fs.h>
 #include <sys/fs/sfs/sfs.h>
 #include <sys/fs/tfs/tfs.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/string/string.h>
 
 struct arraylist* fs_list;

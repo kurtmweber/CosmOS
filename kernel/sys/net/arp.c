@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/net/arp.h>
 #include <sys/string/mem.h>
 

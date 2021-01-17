@@ -17,11 +17,11 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/fs/fs.h>
 #include <sys/i386/interrupts/idt.h>
-#include <sys/i386/mm/mm.h>
 #include <sys/i386/process/gdt.h>
 #include <sys/i386/video/vga/vga.h>
 #include <sys/i386/video/video.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/sync/sync.h>
 #include <tests/tests.h>
 #include <types.h>

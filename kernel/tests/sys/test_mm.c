@@ -7,8 +7,8 @@
 
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
-#include <sys/i386/mm/mm.h>
 #include <sys/i386/mm/pagetables.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <tests/sys/test_mm.h>
 
 void test_mm() {

@@ -15,7 +15,7 @@
 #include <sys/fs/tfs/tfs_block.h>
 #include <sys/fs/tfs/tfs_dir.h>
 #include <sys/fs/tfs/tfs_map.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
 

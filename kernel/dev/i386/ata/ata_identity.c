@@ -10,7 +10,7 @@
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 
 uint32_t ata_detect_extract_dword(const char *identify_buf, ata_identify_offsets offset) {
     return *((uint32_t *)(&identify_buf[offset]));

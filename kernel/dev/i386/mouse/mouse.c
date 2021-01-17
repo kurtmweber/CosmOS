@@ -12,8 +12,8 @@
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_mouse.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/i386/mm/mm.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kmalloc/kmalloc.h>
 
 #define MOUSE_IRQ_NUMBER 12
 

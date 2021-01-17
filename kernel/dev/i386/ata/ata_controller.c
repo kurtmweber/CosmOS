@@ -15,7 +15,7 @@
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/sleep/sleep.h>
 #include <sys/string/string.h>
 #include <types.h>

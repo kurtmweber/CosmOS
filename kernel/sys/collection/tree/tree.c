@@ -8,7 +8,7 @@
 
 #include <sys/collection/tree/tree.h>
 #include <sys/debug/assert.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 
 struct tree* tree_new() {
     struct tree* ret = (struct tree*)kmalloc(sizeof(struct tree));

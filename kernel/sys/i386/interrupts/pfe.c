@@ -9,7 +9,7 @@
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/i386/interrupts/exceptions.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <types.h>
 
 void isrPFE_handler(stackFrame *frame, uint64_t error) {

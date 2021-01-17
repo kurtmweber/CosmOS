@@ -7,7 +7,7 @@
 
 #include <sys/collection/ringbuffer/ringbuffer.h>
 #include <sys/debug/assert.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 
 #define RINGBUFFER_SIZE 256
 

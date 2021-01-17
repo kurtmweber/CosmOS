@@ -8,7 +8,7 @@
 #include <dev/virtio/virtqueue.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 
 // https://docs.oasis-open.org/virtio/virtio/v1.1/virtio-v1.1.pdf
 

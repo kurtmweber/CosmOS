@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <sys/debug/assert.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/string/string.h>
 #include <types.h>
 

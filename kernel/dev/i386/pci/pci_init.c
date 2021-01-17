@@ -8,7 +8,7 @@
 #include <dev/i386/pci/devicetree.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/console/console.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <types.h>
 
 void pci_init() {

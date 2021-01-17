@@ -12,7 +12,7 @@
 #include <sys/fs/block_util.h>
 #include <sys/fs/fs.h>
 #include <sys/fs/sfs/sfs.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 
 #define SFS_VOLUME_IDENTIFIER 0x01

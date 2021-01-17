@@ -9,7 +9,7 @@
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_block.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
 #include <tests/dev/test_ata.h>

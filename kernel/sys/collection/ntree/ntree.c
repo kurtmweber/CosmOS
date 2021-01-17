@@ -8,7 +8,7 @@
 
 #include <sys/collection/ntree/ntree.h>
 #include <sys/debug/assert.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 
 struct ntree* ntree_new() {
     struct ntree* ret = (struct ntree*)kmalloc(sizeof(struct ntree));

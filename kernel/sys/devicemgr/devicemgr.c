@@ -11,7 +11,7 @@
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/devicemgr/deviceregistry.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/string/string.h>
 
 #define MAX_DEVICE_NAME_LENGTH 64

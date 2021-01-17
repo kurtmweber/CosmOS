@@ -10,7 +10,7 @@
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 #include <types.h>
 

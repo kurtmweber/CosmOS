@@ -12,7 +12,7 @@
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
-#include <sys/i386/mm/mm.h>
+#include <sys/kmalloc/kmalloc.h>
 #include <sys/sleep/sleep.h>
 
 // https://wiki.osdev.org/PCI_IDE_Controller
