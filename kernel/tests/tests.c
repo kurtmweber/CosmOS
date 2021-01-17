@@ -13,11 +13,11 @@ void tests_run() {
     //  test_malloc();
 
     // alway run array tests
-    test_array();
+    // test_array();
 
     // always run the list tests
-    test_list();
+    // test_list();
 
     // always run the string tests
-    test_string();
+    // test_string();
 }

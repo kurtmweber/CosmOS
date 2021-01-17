@@ -71,12 +71,14 @@ typedef struct int_15_map {
 } __attribute__((packed)) int_15_map;
 
 typedef struct mem_block {
+    uint8_t start_magic[6];
     struct mem_block *prev;
     void *base;
     uint64_t len;
     bool used;
     uint64_t owner;  // ignored for free blocks
     struct mem_block *next;
+    uint8_t end_magic[6];
 } __attribute__((aligned(8))) mem_block;
 
 typedef mem_block kmalloc_block;
@@ -91,7 +93,7 @@ void mmu_init();
 
 // kmalloc.c
 kmalloc_block *find_avail_kmalloc_block_list(uint64_t size);
-void kfree(void *p);
+void kfree(void *ptr);
 void *kmalloc(uint64_t size);
 void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment);
 void kmalloc_init();

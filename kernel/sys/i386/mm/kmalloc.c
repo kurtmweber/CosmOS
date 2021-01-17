@@ -10,8 +10,66 @@
 #include <sys/i386/mm/mm.h>
 #include <types.h>
 
+#define MALLOC_MAGIC_0 'C'
+#define MALLOC_MAGIC_1 'O'
+#define MALLOC_MAGIC_2 'S'
+#define MALLOC_MAGIC_3 'M'
+#define MALLOC_MAGIC_4 'O'
+#define MALLOC_MAGIC_5 'S'
+
 kmalloc_block *kmalloc_block_list;
 kmalloc_block *kmalloc_block_list_end;
+
+uint8_t kmalloc_block_valid(kmalloc_block *b) {
+    if (b->start_magic[0] != MALLOC_MAGIC_0) {
+        return false;
+    }
+    if (b->start_magic[1] != MALLOC_MAGIC_1) {
+        return false;
+    }
+    if (b->start_magic[2] != MALLOC_MAGIC_2) {
+        return false;
+    }
+    if (b->start_magic[3] != MALLOC_MAGIC_3) {
+        return false;
+    }
+    if (b->start_magic[4] != MALLOC_MAGIC_4) {
+        return false;
+    }
+    if (b->start_magic[5] != MALLOC_MAGIC_5) {
+        return false;
+    }
+    if (b->end_magic[0] != MALLOC_MAGIC_5) {
+        return false;
+    }
+    if (b->end_magic[1] != MALLOC_MAGIC_4) {
+        return false;
+    }
+    if (b->end_magic[2] != MALLOC_MAGIC_3) {
+        return false;
+    }
+    if (b->end_magic[3] != MALLOC_MAGIC_2) {
+        return false;
+    }
+    if (b->end_magic[4] != MALLOC_MAGIC_1) {
+        return false;
+    }
+    if (b->end_magic[5] != MALLOC_MAGIC_0) {
+        return false;
+    }
+
+    return true;
+}
+
+kmalloc_block *kmalloc_block_from_address(void *ptr) {
+    // The following is arithmetic on a void pointer, which is not permitted per C standard.
+    // However, per GCC documentation, as a nonstandard extension GCC permits pointer arithmetic
+    // on void pointers with an assumption that the object size is 1.
+    // At time of writing (2020-05-25), this is documented at https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
+    kmalloc_block *ret = ptr - sizeof(kmalloc_block);
+    ASSERT(kmalloc_block_valid(ret));
+    return ret;
+}
 
 kmalloc_block *find_avail_kmalloc_block_list(uint64_t size) {
     kmalloc_block *cur_block;
@@ -69,16 +127,14 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size) {
     return new_kmalloc_block(last, size);
 }
 
-void kfree(void *p) {
-    ASSERT_NOT_NULL(p);
-    kmalloc_block *b;
+void kfree(void *ptr) {
+    ASSERT_NOT_NULL(ptr);
+    kmalloc_block *b = kmalloc_block_from_address(ptr);
 
-    // The following is arithmetic on a void pointer, which is not permitted per C standard.
-    // However, per GCC documentation, as a nonstandard extension GCC permits pointer arithmetic
-    // on void pointers with an assumption that the object size is 1.
-    // At time of writing (2020-05-25), this is documented at https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
-    b = p - sizeof(kmalloc_block);
+    // double free check
+    ASSERT(b->used = true);
 
+    // mark not used
     b->used = false;
 
     if ((b->next) && (b->next->used == false)) {
@@ -146,6 +202,19 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
     // on void pointers with an assumption that the object size is 1.
     // At time of writing (2020-05-25), this is documented at https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
     new->base = (void *)((uint64_t) new + sizeof(kmalloc_block));
+    new->start_magic[0] = MALLOC_MAGIC_0;
+    new->start_magic[1] = MALLOC_MAGIC_1;
+    new->start_magic[2] = MALLOC_MAGIC_2;
+    new->start_magic[3] = MALLOC_MAGIC_3;
+    new->start_magic[4] = MALLOC_MAGIC_4;
+    new->start_magic[5] = MALLOC_MAGIC_5;
+
+    new->end_magic[0] = MALLOC_MAGIC_5;
+    new->end_magic[1] = MALLOC_MAGIC_4;
+    new->end_magic[2] = MALLOC_MAGIC_3;
+    new->end_magic[3] = MALLOC_MAGIC_2;
+    new->end_magic[4] = MALLOC_MAGIC_1;
+    new->end_magic[5] = MALLOC_MAGIC_0;
 
     new->len = size;
     new->used = true;
@@ -167,13 +236,13 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
 
 void *krealloc(void *ptr, uint64_t size) {
     ASSERT_NOT_NULL(ptr);
-
-    kmalloc_block *b;
     void *new_block;
     BYTE *dest, *src;
     uint64_t i;
 
-    b = ptr - sizeof(kmalloc_block);
+    kmalloc_block *b = kmalloc_block_from_address(ptr);
+    // only realloc used blocks
+    ASSERT(b->used == true);
 
     // to keep it simple, if the new size is less than the old size we just leave it alone
     // we might fix this later if memory pressure becomes an issues
