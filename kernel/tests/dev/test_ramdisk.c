@@ -5,6 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/ramdisk/ramdisk.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
@@ -22,6 +23,9 @@ And she wept, God bless you! for the apples and pears, \
 And we gave her all our money but our subway fares.";
 
 void test_ramdisk() {
+    // attach the ramdisk
+    struct device* ramdisk_device = ramdisk_attach();
+
     // get virtual block device
     uint8_t devicename[] = {"rd0"};
 
@@ -45,4 +49,7 @@ void test_ramdisk() {
     } else {
         kprintf("Unable to find %s\n", devicename);
     }
+
+    // attach the ramdisk
+    ramdisk_detach(ramdisk_device);
 }

@@ -20,6 +20,7 @@
 #include <tests/dev/test_sb16.h>
 #include <tests/dev/test_serial.h>
 #include <tests/dev/test_speaker.h>
+#include <tests/dev/test_swap.h>
 #include <tests/dev/test_vblock.h>
 #include <tests/fs/test_fat.h>
 #include <tests/fs/test_gpt.h>

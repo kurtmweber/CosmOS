@@ -36,6 +36,19 @@ void ramdisk_init(struct device* dev) {
     memset(deviceData->data, 0, deviceData->size);
 }
 
+/*
+ * perform device instance specific uninit here, like removing API structs and Device data
+ */
+void ramdisk_uninit(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct ramdisk_devicedata* deviceData = (struct ramdisk_devicedata*)dev->deviceData;
+    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    kfree(deviceData->data);
+    kfree(deviceData);
+    kfree(dev->api);
+}
+
 uint64_t ramdisk_calc_address(uint64_t data, uint32_t sector) {
     return data + (sector * RAMDISK_SECTOR_SIZE);
 }
@@ -71,15 +84,13 @@ uint32_t ramdisk_total_size(struct device* dev) {
     return RAMDISK_TOTAL_SECTORS * RAMDISK_SECTOR_SIZE;
 }
 
-/**
- *  register
- */
-void ramdisk_devicemgr_register_devices() {
+struct device* ramdisk_attach() {
     /*
      * register device
      */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init = &ramdisk_init;
+    deviceinstance->uninit = &ramdisk_uninit;
     deviceinstance->pci = 0;
     deviceinstance->devicetype = RAMDISK;
     devicemgr_set_device_description(deviceinstance, "RAM disk");
@@ -102,5 +113,15 @@ void ramdisk_devicemgr_register_devices() {
     /*
      * register
      */
-    devicemgr_register_device(deviceinstance);
+    devicemgr_attach_device(deviceinstance);
+
+    /*
+     * return device
+     */
+    return deviceinstance;
+}
+
+void ramdisk_detach(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    devicemgr_detach_device(dev);
 }

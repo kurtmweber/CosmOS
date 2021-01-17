@@ -15,12 +15,10 @@
 
 typedef void (*swap_read_function)(struct device* dev, uint8_t* data, uint32_t block);
 typedef void (*swap_write_function)(struct device* dev, uint8_t* data, uint32_t block);
-typedef void (*swap_mount_function)(struct device* dev);
 
 struct deviceapi_swap {
     swap_read_function read;
     swap_write_function write;
-    swap_mount_function mount;
 };
 
 #endif

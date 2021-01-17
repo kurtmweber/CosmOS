@@ -47,7 +47,7 @@ Not all devices are fixed hardware devices.  For example:
 * Virtio Devices
 * Swap devices
 
-These devices should expose an attach() API, and an unattach() API which can dynamically register and unregister the devices via the device manager.
+These devices should expose an attach() API, and an unattach() API which can dynamically register and unregister the devices via the device manager.  The device manager functions attach_device and detach_device are used provided for use by device attach and unattach
 
 # Initialization
 

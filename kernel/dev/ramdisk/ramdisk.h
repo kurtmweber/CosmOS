@@ -10,9 +10,12 @@
 
 #include <types.h>
 
+struct device;
+
 /*
  * note that ramdisk uses the block api
  */
-void ramdisk_devicemgr_register_devices();
+struct device* ramdisk_attach();
+void ramdisk_detach(struct device* dev);
 
 #endif

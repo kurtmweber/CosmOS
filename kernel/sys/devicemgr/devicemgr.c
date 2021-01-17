@@ -125,9 +125,10 @@ void devicemgr_init_devices() {
     deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
     deviceregistry_iterate_type(DSP, deviceInitIterator);
     deviceregistry_iterate_type(DISK, deviceInitIterator);
-    deviceregistry_iterate_type(RAMDISK, deviceInitIterator);
+
+    //  deviceregistry_iterate_type(RAMDISK, deviceInitIterator);
     deviceregistry_iterate_type(PARALLEL, deviceInitIterator);
-    deviceregistry_iterate_type(SWAP, deviceInitIterator);
+    //  deviceregistry_iterate_type(SWAP, deviceInitIterator);
 }
 
 struct device* devicemgr_new_device() {
@@ -152,6 +153,8 @@ void devicemgr_set_device_description(struct device* dev, int8_t* description) {
     }
     dev->description = kmalloc(size + 1);
     strcpy(dev->description, description);
+    //    kprintf("%s\n", description);
+    //    kprintf("%s\n", dev->description);
 }
 
 struct device* devicemgr_find_device(const int8_t* name) {
@@ -195,7 +198,7 @@ void devicemgr_register_devices() {
     /*
      * rest of this stuff can really happen in any order
      */
-    swap_devicemgr_register_devices();
+    //   swap_devicemgr_register_devices();
     rtc_devicemgr_register_devices();
     keyboard_devicemgr_register_devices();
     display_devicemgr_register_devices();
@@ -211,7 +214,7 @@ void devicemgr_register_devices() {
     //	adlib_devicemgr_register_devices();
     cpu_devicemgr_register_devices();
     virtio_devicemgr_register_devices();
-    ramdisk_devicemgr_register_devices();
+    //  ramdisk_devicemgr_register_devices();
     pci_ehci_devicemgr_register_devices();
     parallel_devicemgr_register_devices();
     bda_devicemgr_register_devices();
@@ -225,3 +228,29 @@ void devicemgr_register_devices() {
 }
 
 #endif
+
+// attach a device (non-fixed devices... like RAM disks and SWAP)
+void devicemgr_attach_device(struct device* dev) {
+    /*
+     * register
+     */
+    devicemgr_register_device(dev);
+    /*
+     * init
+     */
+    dev->init(dev);
+}
+
+// detach a device (non-fixed devices... like RAM disks and SWAP)
+void devicemgr_detach_device(struct device* dev) {
+    /*
+     * unregister
+     */
+    devicemgr_unregister_device(dev);
+    /*
+     * uninit
+     */
+    if (0 != dev->uninit) {
+        dev->uninit(dev);
+    }
+}

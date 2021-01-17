@@ -5,14 +5,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _SWAP_H
-#define _SWAP_H
+#ifndef __TEST_SWAP_H
+#define __TEST_SWAP_H
 
-#include <types.h>
-
-struct device;
-
-struct device* swap_attach(struct device* block_device);
-void swap_detach(struct device* dev);
+void test_swap();
 
 #endif
