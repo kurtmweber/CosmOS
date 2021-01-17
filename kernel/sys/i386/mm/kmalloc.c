@@ -74,6 +74,7 @@ kmalloc_block *kmalloc_block_from_address(void *ptr) {
 }
 
 kmalloc_block *find_avail_kmalloc_block_list(uint64_t size) {
+    ASSERT(0 != size);
     kmalloc_block *cur_block;
     kmalloc_block *best = 0;
     kmalloc_block *last = 0;
@@ -153,6 +154,7 @@ void kfree(void *ptr) {
 }
 
 void *kmalloc(uint64_t size) {
+    ASSERT(0 != size);
     kmalloc_block *cur_block = 0;
 
     // align size to KMALLOC_ALIGN_BYTES
@@ -179,6 +181,7 @@ void *kmalloc(uint64_t size) {
         panic("Unable to return block from kmalloc");
         return 0;
     } else {
+        ASSERT(kmalloc_block_valid(cur_block));
         ASSERT_NOT_NULL(cur_block->base);
         return cur_block->base;
     }
@@ -192,6 +195,7 @@ void kmalloc_init() {
 }
 
 kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
+    ASSERT(0 != size);
     /*
      * last can be null here
      */
@@ -241,6 +245,7 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
 }
 
 void *krealloc(void *ptr, uint64_t size) {
+    ASSERT(0 != size);
     ASSERT_NOT_NULL(ptr);
     void *new_block = 0;
     BYTE *dest, *src;

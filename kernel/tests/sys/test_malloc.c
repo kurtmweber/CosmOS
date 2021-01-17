@@ -17,8 +17,9 @@ void test_malloc() {
     kprintf("Testing malloc\n");
 
     for (uint32_t i = 0; i < TEST_MALLOC_LOOPS; i++) {
-        uint8_t* x = kmalloc(TEST_MALLOC_INCREMENT * i);
+        uint8_t* x = kmalloc(TEST_MALLOC_INCREMENT * (i + 1));
         ASSERT_NOT_NULL(x);
+        kprintf("Block: %#hX\n", x);
         kfree(x);
     }
 }

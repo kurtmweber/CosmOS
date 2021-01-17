@@ -10,7 +10,7 @@
 void tests_run() {
     // alway run malloc tests
     // TODO, check this, something might be weird in kfree?
-    //   test_malloc();
+  //  test_malloc();
 
     // alway run array tests
     test_array();
