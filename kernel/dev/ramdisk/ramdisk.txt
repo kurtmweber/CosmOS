@@ -1,0 +1,1 @@
+A generic disk mounted on ram
