@@ -69,6 +69,10 @@ struct cfs_blockmap {
     uint8_t map[512 - 64];  // 448 bytes of bitmap, mapping 448*8=3584 sectors
 } __attribute__((packed));
 
+struct cfs_devicedata {
+    struct device* block_device;
+} __attribute__((packed));
+
 /*
  * total number of sectormap sectors for this disk
  */
@@ -150,7 +154,9 @@ void cfs_format(struct device* dev) {
  */
 void cfs_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Init %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct cfs_devicedata* deviceData = (struct cfs_devicedata*)dev->deviceData;
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 }
 
 /*
@@ -158,8 +164,12 @@ void cfs_init(struct device* dev) {
  */
 void cfs_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct cfs_devicedata* deviceData = (struct cfs_devicedata*)dev->deviceData;
+
+    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
+    kfree(dev->deviceData);
 }
 
 struct device* cfs_attach(struct device* block_device) {
@@ -178,6 +188,12 @@ struct device* cfs_attach(struct device* block_device) {
     struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
     api->format = &cfs_format;
     deviceinstance->api = api;
+    /*
+     * device data
+     */
+    struct cfs_devicedata* deviceData = (struct cfs_devicedata*)kmalloc(sizeof(struct cfs_devicedata));
+    deviceData->block_device = block_device;
+    deviceinstance->deviceData = deviceData;
     /*
      * register
      */

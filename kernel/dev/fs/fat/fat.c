@@ -107,6 +107,10 @@ struct fat_fs_parameters {
     enum fat_type type;
 };
 
+struct fat_devicedata {
+    struct device* block_device;
+} __attribute__((packed));
+
 void fat_dump_fat_fs_parameters(struct fat_fs_parameters* param) {
     kprintf("sector size: %llu\n", param->sector_size);
     kprintf("total size: %llu\n", param->total_size);
@@ -293,7 +297,9 @@ struct fs_directory_listing* fat_list_dir(struct device* dev) {
  */
 void fat_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Init %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct fat_devicedata* deviceData = (struct fat_devicedata*)dev->deviceData;
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 }
 
 /*
@@ -301,8 +307,11 @@ void fat_init(struct device* dev) {
  */
 void fat_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct fat_devicedata* deviceData = (struct fat_devicedata*)dev->deviceData;
+    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
+    kfree(dev->deviceData);
 }
 
 struct device* fat_attach(struct device* block_device) {
@@ -321,6 +330,13 @@ struct device* fat_attach(struct device* block_device) {
     struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
     api->format = &fat_format;
     deviceinstance->api = api;
+    /*
+     * device data
+     */
+    struct fat_devicedata* deviceData = (struct fat_devicedata*)kmalloc(sizeof(struct fat_devicedata));
+    deviceData->block_device = block_device;
+    deviceinstance->deviceData = deviceData;
+
     /*
      * register
      */

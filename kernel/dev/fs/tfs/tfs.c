@@ -19,6 +19,10 @@
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
 
+struct tfs_devicedata {
+    struct device* block_device;
+} __attribute__((packed));
+
 /*
  * format. I just guessed here.
  */
@@ -109,7 +113,9 @@ void tfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uin
  */
 void tfs_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Init %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 }
 
 /*
@@ -117,8 +123,12 @@ void tfs_init(struct device* dev) {
  */
 void tfs_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+
+    struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
+    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
+    kfree(dev->deviceData);
 }
 
 struct device* tfs_attach(struct device* block_device) {
@@ -143,6 +153,13 @@ struct device* tfs_attach(struct device* block_device) {
     struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
     api->format = &tfs_format;
     deviceinstance->api = api;
+    /*
+     * device data
+     */
+    struct tfs_devicedata* deviceData = (struct tfs_devicedata*)kmalloc(sizeof(struct tfs_devicedata));
+    deviceData->block_device = block_device;
+    deviceinstance->deviceData = deviceData;
+
     /*
      * register
      */

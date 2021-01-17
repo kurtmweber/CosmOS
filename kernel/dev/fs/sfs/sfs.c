@@ -105,6 +105,10 @@ struct sfs_continuation_entry {
     uint8_t name[64];
 } __attribute__((packed));
 
+struct sfs_devicedata {
+    struct device* block_device;
+} __attribute__((packed));
+
 /*
  * check if valid superblock
  */
@@ -152,7 +156,9 @@ void sfs_format(struct device* dev) {
  */
 void sfs_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Init %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct sfs_devicedata* deviceData = (struct sfs_devicedata*)dev->deviceData;
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 }
 
 /*
@@ -160,8 +166,12 @@ void sfs_init(struct device* dev) {
  */
 void sfs_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+
+    struct sfs_devicedata* deviceData = (struct sfs_devicedata*)dev->deviceData;
+    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
+    kfree(dev->deviceData);
 }
 
 struct device* sfs_attach(struct device* block_device) {
@@ -180,6 +190,13 @@ struct device* sfs_attach(struct device* block_device) {
     struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
     api->format = &sfs_format;
     deviceinstance->api = api;
+    /*
+     * device data
+     */
+    struct sfs_devicedata* deviceData = (struct sfs_devicedata*)kmalloc(sizeof(struct sfs_devicedata));
+    deviceData->block_device = block_device;
+    deviceinstance->deviceData = deviceData;
+
     /*
      * register
      */

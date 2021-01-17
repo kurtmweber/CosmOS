@@ -17,6 +17,10 @@
 
 const uint8_t GUID_PT_EFI_PART[] = {0x45, 0x46, 0x49, 0x20, 0x50, 0x41, 0x52, 0x54};
 
+struct guid_pt_devicedata {
+    struct device* block_device;
+} __attribute__((packed));
+
 void guid_pt_read_guid_pt_header(struct device* dev, struct guid_pt_header* header) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(header);
@@ -30,7 +34,9 @@ void guid_pt_read_guid_pt_header(struct device* dev, struct guid_pt_header* head
  */
 void guid_pt_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Init %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 }
 
 /*
@@ -38,8 +44,12 @@ void guid_pt_init(struct device* dev) {
  */
 void guid_pt_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+
+    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
+    kfree(dev->deviceData);
 }
 
 uint8_t guid_pt_part_table_total_partitions(struct device* dev) {
@@ -61,6 +71,12 @@ struct device* guid_pt_attach(struct device* block_device) {
     struct deviceapi_part_table* api = (struct deviceapi_part_table*)kmalloc(sizeof(struct deviceapi_part_table));
     api->parititions = &guid_pt_part_table_total_partitions;
     deviceinstance->api = api;
+    /*
+     * device data
+     */
+    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)kmalloc(sizeof(struct guid_pt_devicedata));
+    deviceData->block_device = block_device;
+    deviceinstance->deviceData = deviceData;
     /*
      * register
      */
