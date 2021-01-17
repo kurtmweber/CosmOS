@@ -16,7 +16,7 @@
 
 #define MAX_DEVICE_NAME_LENGTH 64
 
-int8_t* DeviceTypeNames[] = {"None", "serial", "vga", "rtc", "keyboard", "nic", "bridge", "usb", "ata", "pic", "mouse", "floppy", "speaker", "pit", "dsp", "cmos", "dma", "cpu", "rd", "vnic", "vblock", "disk", "par", "bda", "ebda"};
+int8_t* DeviceTypeNames[] = {"None", "serial", "vga", "rtc", "keyboard", "nic", "bridge", "usb", "ata", "pic", "mouse", "floppy", "speaker", "pit", "dsp", "cmos", "dma", "cpu", "rd", "vnic", "vblock", "disk", "par", "bda", "ebda", "swap"};
 
 void devicemgr_init() {
     deviceregistry_init();
@@ -119,6 +119,7 @@ void devicemgr_init_devices() {
     deviceregistry_iterate_type(DISK, deviceInitIterator);
     deviceregistry_iterate_type(RAMDISK, deviceInitIterator);
     deviceregistry_iterate_type(PARALLEL, deviceInitIterator);
+    deviceregistry_iterate_type(SWAP, deviceInitIterator);
 }
 
 struct device* devicemgr_new_device() {
@@ -186,6 +187,7 @@ void devicemgr_register_devices() {
     /*
      * rest of this stuff can really happen in any order
      */
+    swap_devicemgr_register_devices();
     rtc_devicemgr_register_devices();
     keyboard_devicemgr_register_devices();
     display_devicemgr_register_devices();

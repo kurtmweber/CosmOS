@@ -41,7 +41,8 @@ typedef enum deviceType {
     DISK = 0x15,     // uses Block API
     PARALLEL = 0x16,
     BDA = 0x17,
-    EBDA = 0x18
+    EBDA = 0x18,
+    SWAP = 0x19,
 } deviceType;
 
 /*

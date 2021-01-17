@@ -8,6 +8,10 @@
 #ifndef _DEV_H
 #define _DEV_H
 
+#include <dev/ramdisk/ramdisk.h>
+#include <dev/swap/swap.h>
+#include <dev/virtio/virtio.h>
+
 #ifdef TARGET_PLATFORM_i386
 
 #include <dev/i386/ac97/ac97.h>
@@ -34,8 +38,6 @@
 #include <dev/i386/serial/serial.h>
 #include <dev/i386/speaker/speaker.h>
 #include <dev/i386/usb_ehci/usb_ehci.h>
-#include <dev/ramdisk/ramdisk.h>
-#include <dev/virtio/virtio.h>
 #else
 
 #include <dev/arm/pl101/pl101.h>
