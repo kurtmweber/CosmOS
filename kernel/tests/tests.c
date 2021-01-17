@@ -18,6 +18,9 @@ void tests_run() {
     // always run the list tests
     test_list();
 
+    // always run the ringbuffer tests
+    test_ringbuffer();
+
     // always run the string tests
     //  test_string();
 }

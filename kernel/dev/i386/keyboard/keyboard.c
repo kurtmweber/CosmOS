@@ -31,6 +31,8 @@
 #define KBD_TEST_FAILED_2 0xFD
 #define KBD_TEST_PASSED 0xAA
 
+#define KBD_RINGBUFFER_SIZE 255
+
 struct ringbuffer* keyboard_ringbuffer;
 
 void keyboard_add_command_queue(uint8_t command) {
@@ -188,7 +190,7 @@ key_action_t keyboard_read(struct device* dev) {
  * find all keyboard devices and register them
  */
 void keyboard_devicemgr_register_devices() {
-    keyboard_ringbuffer = ringbuffer_new();
+    keyboard_ringbuffer = ringbuffer_new(KBD_RINGBUFFER_SIZE);
 
     /*
      * register device

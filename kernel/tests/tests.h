@@ -29,6 +29,7 @@
 #include <tests/sys/test_list.h>
 #include <tests/sys/test_malloc.h>
 #include <tests/sys/test_mm.h>
+#include <tests/sys/test_ringbuffer.h>
 #include <tests/sys/test_string.h>
 #include <types.h>
 

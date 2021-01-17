@@ -54,10 +54,21 @@ void* ringbuffer_consume(struct ringbuffer* buffer) {
     return buffer->data[i];
 }
 
-struct ringbuffer* ringbuffer_new() {
+struct ringbuffer* ringbuffer_new(uint16_t size) {
     struct ringbuffer* ret = (struct ringbuffer*)kmalloc(sizeof(struct ringbuffer));
+    ret->size = size;
     ret->start = 0;
     ret->end = 0;
     ret->data = kmalloc(sizeof(void*) * RINGBUFFER_SIZE);
     return ret;
+}
+
+void ringbuffer_delete(struct ringbuffer* buffer) {
+    ASSERT_NOT_NULL(buffer);
+    kfree(buffer);
+}
+
+uint16_t ringbuffer_size(struct ringbuffer* buffer) {
+    ASSERT_NOT_NULL(buffer);
+    return buffer->size;
 }

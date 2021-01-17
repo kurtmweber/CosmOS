@@ -16,6 +16,8 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
 
+#define SERIAL_RINGBUFFER_SIZE 255
+
 struct serial_devicedata {
     uint8_t irq;
     uint16_t address;
@@ -96,7 +98,7 @@ void serial_register_device(uint8_t irq, uint64_t base) {
     struct serial_devicedata* deviceData = kmalloc(sizeof(struct serial_devicedata));
     deviceData->irq = irq;
     deviceData->address = base;
-    deviceData->buffer = ringbuffer_new();
+    deviceData->buffer = ringbuffer_new(SERIAL_RINGBUFFER_SIZE);
     /*
      * the device instance
      */
