@@ -13,6 +13,7 @@
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
+#include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_ethernet.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/i386/mm/mm.h>
@@ -39,8 +40,11 @@ void rtl8139_irq_handler_for_device(struct device *dev) {
     ASSERT_NOT_NULL(dev->deviceData);
     struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
 
+    debug_show_memblock(devicedata->rx_buffer, 32);
+
     // TODO check if there is an interrupt set before we clear it!
     rtl8139_clear_interrupt(dev);
+
     kprintf("@");
 }
 
