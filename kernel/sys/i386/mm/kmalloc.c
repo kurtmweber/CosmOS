@@ -21,6 +21,7 @@ kmalloc_block *kmalloc_block_list;
 kmalloc_block *kmalloc_block_list_end;
 
 uint8_t kmalloc_block_valid(kmalloc_block *b) {
+    ASSERT_NOT_NULL(b);
     if (b->start_magic[0] != MALLOC_MAGIC_0) {
         return false;
     }
@@ -62,6 +63,7 @@ uint8_t kmalloc_block_valid(kmalloc_block *b) {
 }
 
 kmalloc_block *kmalloc_block_from_address(void *ptr) {
+    ASSERT_NOT_NULL(ptr);
     // The following is arithmetic on a void pointer, which is not permitted per C standard.
     // However, per GCC documentation, as a nonstandard extension GCC permits pointer arithmetic
     // on void pointers with an assumption that the object size is 1.
@@ -151,12 +153,14 @@ void kfree(void *ptr) {
 }
 
 void *kmalloc(uint64_t size) {
-    kmalloc_block *cur_block;
+    kmalloc_block *cur_block = 0;
 
+    // align size to KMALLOC_ALIGN_BYTES
     if (size % KMALLOC_ALIGN_BYTES) {
         size += (KMALLOC_ALIGN_BYTES - (size % KMALLOC_ALIGN_BYTES));
     }
 
+    // check the block list
     if (!kmalloc_block_list) {
         if ((uint64_t)brk % KMALLOC_ALIGN_BYTES) {
             cur_block = (kmalloc_block *)(brk + (KMALLOC_ALIGN_BYTES - ((uint64_t)brk % KMALLOC_ALIGN_BYTES)));
@@ -172,8 +176,10 @@ void *kmalloc(uint64_t size) {
     }
 
     if (!cur_block) {
+        panic("Unable to return block from kmalloc");
         return 0;
     } else {
+        ASSERT_NOT_NULL(cur_block->base);
         return cur_block->base;
     }
 }
@@ -189,7 +195,7 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
     /*
      * last can be null here
      */
-    kmalloc_block *new;
+    kmalloc_block *new = 0;
 
     if ((UINT64_T_MAX - (sizeof(kmalloc_block) + size - 1)) < (uint64_t)brk) {  // out of address space
         return 0;
@@ -236,7 +242,7 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
 
 void *krealloc(void *ptr, uint64_t size) {
     ASSERT_NOT_NULL(ptr);
-    void *new_block;
+    void *new_block = 0;
     BYTE *dest, *src;
     uint64_t i;
 
