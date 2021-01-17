@@ -135,7 +135,9 @@ void devicemgr_init_devices() {
 
 struct device* devicemgr_new_device() {
     struct device* ret = (struct device*)kmalloc(sizeof(struct device));
-    ret->description[0] = 0;
+    for (uint16_t i = 0; i < DEVICEMGR_MAX_DESCRIPTION; i++) {
+        ret->description[i] = 0;
+    }
     ret->init = 0;
     ret->deviceData = 0;
     ret->name = 0;

@@ -14,12 +14,18 @@
 #include <sys/string/mem.h>
 #include <types.h>
 
+struct swap_devicedata {
+    struct device* block_device;
+} __attribute__((packed));
+
 /*
  * perform device instance specific init here
  */
 void swap_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Init %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 }
 
 /*
@@ -27,13 +33,33 @@ void swap_init(struct device* dev) {
  */
 void swap_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
+    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
+    kfree(dev->deviceData);
 }
 
 void swap_read(struct device* dev, uint8_t* data, uint32_t block) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
 }
 void swap_write(struct device* dev, uint8_t* data, uint32_t block) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
+}
+
+uint16_t swap_block_size(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
+}
+uint16_t swap_block_count(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
 }
 
 struct device* swap_attach(struct device* block_device) {
@@ -52,7 +78,15 @@ struct device* swap_attach(struct device* block_device) {
     struct deviceapi_swap* api = (struct deviceapi_swap*)kmalloc(sizeof(struct deviceapi_swap));
     api->write = &swap_write;
     api->read = &swap_read;
+    api->block_count = &swap_block_count;
+    api->block_size = &swap_block_size;
     deviceinstance->api = api;
+    /*
+     * device data
+     */
+    struct swap_devicedata* deviceData = (struct swap_devicedata*)kmalloc(sizeof(struct swap_devicedata));
+    deviceData->block_device = block_device;
+    deviceinstance->deviceData = deviceData;
     /*
      * register
      */

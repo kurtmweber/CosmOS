@@ -63,7 +63,7 @@ struct device* guid_pt_attach(struct device* block_device) {
     deviceinstance->init = &guid_pt_init;
     deviceinstance->uninit = guid_pt_uninit;
     deviceinstance->pci = 0;
-    deviceinstance->devicetype = PARITION_TABLE;
+    deviceinstance->devicetype = PARTITION_TABLE;
     devicemgr_set_device_description(deviceinstance, "GUID parition table");
     /*
      * the device api

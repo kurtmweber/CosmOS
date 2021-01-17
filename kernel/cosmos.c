@@ -164,5 +164,5 @@ void dev_tests() {
     //    test_rtl8139();
     test_gpt();
     //   test_ramdisk();
-    // test_swap();
+    test_swap();
 }
