@@ -10,6 +10,7 @@
 
 #include <types.h>
 
-void fat_register();
+struct device* fat_attach(struct device* block_device);
+void fat_detach(struct device* dev);
 
 #endif

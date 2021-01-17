@@ -10,6 +10,9 @@
 
 #include <types.h>
 
-void cfs_register();
+struct device;
+
+struct device* cfs_attach(struct device* block_device);
+void cfs_detach(struct device* dev);
 
 #endif

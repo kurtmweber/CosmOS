@@ -6,12 +6,12 @@
 // ****************************************************************
 
 #include <dev/fs/block_util.h>
-#include <dev/fs/fs.h>
+#include <dev/fs/fat/fat.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_block.h>
-#include <dev/fs/fat/fat.h>
+#include <sys/deviceapi/deviceapi_filesystem.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
@@ -107,8 +107,6 @@ struct fat_fs_parameters {
     enum fat_type type;
 };
 
-const uint8_t FAT_NAME[] = {"fat"};
-
 void fat_dump_fat_fs_parameters(struct fat_fs_parameters* param) {
     kprintf("sector size: %llu\n", param->sector_size);
     kprintf("total size: %llu\n", param->total_size);
@@ -174,10 +172,6 @@ void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param)
     kfree(buffer);
 }
 
-const uint8_t* fat_name() {
-    return FAT_NAME;
-}
-
 void fat_format(struct device* dev) {
     ASSERT_NOT_NULL(dev);
 }
@@ -223,7 +217,7 @@ uint32_t fat_fat16_next_cluster(struct device* dev, uint32_t current_cluster, st
 
     return *(unsigned short*)&FAT_table[ent_offset];
 }
-
+/*
 struct fs_directory_listing* fat_list_dir(struct device* dev) {
     ASSERT_NOT_NULL(dev);
 
@@ -280,7 +274,7 @@ struct fs_directory_listing* fat_list_dir(struct device* dev) {
     }
     return ret;
 }
-
+*/
 // if (fs_parameters.type==FAT12){
 // 	current_sector = current_sector +1;
 // 	uint64_t next_cluster = fat_fat12_next_cluster(dev, current_cluster, &fs_parameters);
@@ -294,10 +288,51 @@ struct fs_directory_listing* fat_list_dir(struct device* dev) {
 
 // }
 
-void fat_register() {
-    struct fs_filesystem* fs = (struct fs_filesystem*)kmalloc(sizeof(struct fs_filesystem));
-    fs->format = &fat_format;
-    fs->list_dir = &fat_list_dir;
-    fs->name = &fat_name;
-    fs_register(fs);
+/*
+ * perform device instance specific init here
+ */
+void fat_init(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    kprintf("Init %s (%s)\n", dev->description, dev->name);
+}
+
+/*
+ * perform device instance specific uninit here, like removing API structs and Device data
+ */
+void fat_uninit(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    kfree(dev->api);
+}
+
+struct device* fat_attach(struct device* block_device) {
+    /*
+     * register device
+     */
+    struct device* deviceinstance = devicemgr_new_device();
+    deviceinstance->init = &fat_init;
+    deviceinstance->uninit = &fat_uninit;
+    deviceinstance->pci = 0;
+    deviceinstance->devicetype = FILESYSTEM;
+    devicemgr_set_device_description(deviceinstance, "fat");
+    /*
+     * the device api
+     */
+    struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
+    api->format = &fat_format;
+    deviceinstance->api = api;
+    /*
+     * register
+     */
+    devicemgr_attach_device(deviceinstance);
+
+    /*
+     * return device
+     */
+    return deviceinstance;
+}
+
+void fat_detach(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    devicemgr_detach_device(dev);
 }

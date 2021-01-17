@@ -10,6 +10,7 @@
 
 #include <types.h>
 
-void tfs_register();
+struct device* tfs_attach(struct device* block_device);
+void tfs_detach(struct device* dev);
 
 #endif

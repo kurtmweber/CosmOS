@@ -6,7 +6,6 @@
 // ****************************************************************
 
 #include <dev/fs/block_util.h>
-#include <dev/fs/fs.h>
 #include <dev/fs/tfs/tfs.h>
 #include <dev/fs/tfs/tfs_block.h>
 #include <dev/fs/tfs/tfs_dir.h>
@@ -15,15 +14,10 @@
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_block.h>
+#include <sys/deviceapi/deviceapi_filesystem.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
-
-const uint8_t DFS_NAME[] = {"dfs"};
-
-const uint8_t* tfs_name() {
-    return DFS_NAME;
-}
 
 /*
  * format. I just guessed here.
@@ -110,18 +104,57 @@ void tfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uin
      */
 }
 
-void tfs_register() {
+/*
+ * perform device instance specific init here
+ */
+void tfs_init(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    kprintf("Init %s (%s)\n", dev->description, dev->name);
+}
+
+/*
+ * perform device instance specific uninit here, like removing API structs and Device data
+ */
+void tfs_uninit(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    kfree(dev->api);
+}
+
+struct device* tfs_attach(struct device* block_device) {
     ASSERT(sizeof(struct tfs_superblock_block) == DFS_BLOCK_SIZE);
     ASSERT(sizeof(struct tfs_dir_block) == DFS_BLOCK_SIZE);
     ASSERT(sizeof(struct tfs_file_block) == DFS_BLOCK_SIZE);
     ASSERT(sizeof(struct tfs_file_allocation_block) == DFS_BLOCK_SIZE);
     ASSERT(sizeof(struct tfs_map_block) == DFS_BLOCK_SIZE);
 
-    struct fs_filesystem* fs = (struct fs_filesystem*)kmalloc(sizeof(struct fs_filesystem));
-    fs->format = &tfs_format;
-    fs->list_dir = &tfs_list_dir;
-    fs->name = &tfs_name;
-    fs->read = &tfs_read;
-    fs->write = &tfs_write;
-    fs_register(fs);
+    /*
+     * register device
+     */
+    struct device* deviceinstance = devicemgr_new_device();
+    deviceinstance->init = &tfs_init;
+    deviceinstance->uninit = &tfs_uninit;
+    deviceinstance->pci = 0;
+    deviceinstance->devicetype = FILESYSTEM;
+    devicemgr_set_device_description(deviceinstance, "tfs");
+    /*
+     * the device api
+     */
+    struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
+    api->format = &tfs_format;
+    deviceinstance->api = api;
+    /*
+     * register
+     */
+    devicemgr_attach_device(deviceinstance);
+
+    /*
+     * return device
+     */
+    return deviceinstance;
+}
+
+void tfs_detach(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    devicemgr_detach_device(dev);
 }

@@ -6,11 +6,11 @@
 // ****************************************************************
 
 #include <dev/fs/block_util.h>
-#include <dev/fs/fs.h>
 #include <dev/fs/sfs/sfs.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
+#include <sys/deviceapi/deviceapi_filesystem.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
@@ -147,20 +147,51 @@ void sfs_format(struct device* dev) {
     block_write(dev, 0, (uint8_t*)&superblock, 1);
 }
 
-struct fs_directory_listing* sfs_list_dir(struct device* dev) {
+/*
+ * perform device instance specific init here
+ */
+void sfs_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    kprintf("Init %s (%s)\n", dev->description, dev->name);
 }
 
-const uint8_t SFS_NAME[] = {"sfs"};
-
-const uint8_t* sfs_name() {
-    return SFS_NAME;
+/*
+ * perform device instance specific uninit here, like removing API structs and Device data
+ */
+void sfs_uninit(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    kfree(dev->api);
 }
 
-void sfs_register() {
-    struct fs_filesystem* fs = (struct fs_filesystem*)kmalloc(sizeof(struct fs_filesystem));
-    fs->format = &sfs_format;
-    fs->list_dir = &sfs_list_dir;
-    fs->name = &sfs_name;
-    fs_register(fs);
+struct device* sfs_attach(struct device* block_device) {
+    /*
+     * register device
+     */
+    struct device* deviceinstance = devicemgr_new_device();
+    deviceinstance->init = &sfs_init;
+    deviceinstance->uninit = &sfs_uninit;
+    deviceinstance->pci = 0;
+    deviceinstance->devicetype = FILESYSTEM;
+    devicemgr_set_device_description(deviceinstance, "sfs");
+    /*
+     * the device api
+     */
+    struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
+    api->format = &sfs_format;
+    deviceinstance->api = api;
+    /*
+     * register
+     */
+    devicemgr_attach_device(deviceinstance);
+
+    /*
+     * return device
+     */
+    return deviceinstance;
+}
+
+void sfs_detach(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    devicemgr_detach_device(dev);
 }

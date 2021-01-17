@@ -44,6 +44,7 @@ typedef enum deviceType {
     BDA = 0x17,
     EBDA = 0x18,
     SWAP = 0x19,
+    FILESYSTEM = 0x20
 } deviceType;
 
 /*

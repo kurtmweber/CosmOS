@@ -5,32 +5,19 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/fs/fs.h>
-#include <dev/fs/tfs/tfs_dir.h>
+#include <dev/fs/sfs/sfs.h>
 #include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <tests/fs/test_sfs.h>
 
 void test_sfs() {
-    uint8_t devicename[] = {"disk2"};
-    uint8_t fsname[] = {"sfs"};
-    uint8_t filename[] = {"file1.txt"};
+    uint8_t devicename[] = {"disk1"};
 
     struct device* dsk = devicemgr_find_device(devicename);
     if (0 != dsk) {
-        struct fs_filesystem* fs = fs_find(fsname);
-        if (0 != fs) {
-            kprintf("Formatting %s to %s\n", devicename, fsname);
-            (*fs->format)(dsk);
-            kprintf("Done\n");
-
-            uint64_t id = tfs_dir_find_file(dsk, filename);
-            //	if (0==id){
-            //	}
-        } else {
-            kprintf("Unable to find %s\n", fsname);
-        }
+        sfs_attach(dsk);
+        sfs_detach(dsk);
     } else {
         kprintf("Unable to find %s\n", devicename);
     }

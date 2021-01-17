@@ -5,7 +5,6 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <dev/fs/fs.h>
 #include <dev/ramdisk/ramdisk.h>
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
@@ -95,10 +94,6 @@ void CosmOS() {
 
     asm_sti();
 
-    /*
-     * register file systems
-     */
-    fs_init();
     /*
      * mount two ram disks.  b/c we can.
      */

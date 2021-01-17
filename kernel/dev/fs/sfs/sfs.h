@@ -10,6 +10,7 @@
 
 #include <types.h>
 
-void sfs_register();
+struct device* sfs_attach(struct device* block_device);
+void sfs_detach(struct device* dev);
 
 #endif

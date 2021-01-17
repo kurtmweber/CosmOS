@@ -5,9 +5,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/fs/fs.h>
 #include <dev/fs/guid_pt.h>
 #include <sys/console/console.h>
+#include <sys/devicemgr/devicemgr.h>
 #include <tests/fs/test_gpt.h>
 
 void test_gpt() {

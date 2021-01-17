@@ -6,7 +6,6 @@
 // ****************************************************************
 
 #include <dev/fs/block_util.h>
-#include <dev/fs/fs.h>
 #include <dev/fs/tfs/tfs_block.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>

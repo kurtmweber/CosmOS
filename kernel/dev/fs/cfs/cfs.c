@@ -7,11 +7,11 @@
 
 #include <dev/fs/block_util.h>
 #include <dev/fs/cfs/cfs.h>
-#include <dev/fs/fs.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_block.h>
+#include <sys/deviceapi/deviceapi_filesystem.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 
@@ -82,21 +82,6 @@ uint32_t cfs_total_sectormap_sectors(struct device* dev) {
     }
 }
 
-struct fs_directory_listing* cfs_list_dir(struct device* dev) {
-    ASSERT_NOT_NULL(dev);
-
-    uint16_t sector_size = block_get_sector_size(dev);
-    kprintf("sector size: %llu\n", sector_size);
-
-    uint32_t total_size = block_get_total_size(dev);
-    kprintf("total size: %llu\n", total_size);
-
-    uint8_t* buffer = kmalloc(sector_size);
-    memset(buffer, 0, sector_size);
-
-    block_read(dev, 0, buffer, 1);
-}
-
 /*
  * read the superblock at lba 0
  */
@@ -160,16 +145,51 @@ void cfs_format(struct device* dev) {
     }
 }
 
-const uint8_t CFS_NAME[] = {"cfs"};
-
-const uint8_t* cfs_name() {
-    return CFS_NAME;
+/*
+ * perform device instance specific init here
+ */
+void cfs_init(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    kprintf("Init %s (%s)\n", dev->description, dev->name);
 }
 
-void cfs_register() {
-    struct fs_filesystem* fs = (struct fs_filesystem*)kmalloc(sizeof(struct fs_filesystem));
-    fs->format = &cfs_format;
-    fs->list_dir = &cfs_list_dir;
-    fs->name = &cfs_name;
-    fs_register(fs);
+/*
+ * perform device instance specific uninit here, like removing API structs and Device data
+ */
+void cfs_uninit(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    kprintf("Uninit %s (%s)\n", dev->description, dev->name);
+    kfree(dev->api);
+}
+
+struct device* cfs_attach(struct device* block_device) {
+    /*
+     * register device
+     */
+    struct device* deviceinstance = devicemgr_new_device();
+    deviceinstance->init = &cfs_init;
+    deviceinstance->uninit = &cfs_uninit;
+    deviceinstance->pci = 0;
+    deviceinstance->devicetype = FILESYSTEM;
+    devicemgr_set_device_description(deviceinstance, "cfs");
+    /*
+     * the device api
+     */
+    struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
+    api->format = &cfs_format;
+    deviceinstance->api = api;
+    /*
+     * register
+     */
+    devicemgr_attach_device(deviceinstance);
+
+    /*
+     * return device
+     */
+    return deviceinstance;
+}
+
+void cfs_detach(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    devicemgr_detach_device(dev);
 }
