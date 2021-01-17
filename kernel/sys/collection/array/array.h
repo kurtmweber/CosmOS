@@ -23,6 +23,7 @@
 typedef struct array {
     void** data;
     uint32_t size;
+    uint32_t byte_size;
 } array_t;
 
 /*

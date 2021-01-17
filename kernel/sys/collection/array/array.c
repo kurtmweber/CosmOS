@@ -12,7 +12,8 @@
 
 struct array* array_new(uint32_t size) {
     struct array* ret = (struct array*)kmalloc(sizeof(struct array));
-    ret->data = (void**)kmalloc(sizeof(void*) * size);
+    ret->byte_size = sizeof(void*) * size;
+    ret->data = (void**)kmalloc(ret->byte_size);
     ret->size = size;
     for (uint32_t i = 0; i < size; i++) {
         ret->data[i] = 0;
@@ -61,7 +62,8 @@ void array_resize(struct array* arr, uint32_t size) {
          */
         uint32_t oldsize = arr->size;
         void** oldata = arr->data;
-        void** newdata = (void**)kmalloc(sizeof(void*) * size);
+        arr->byte_size = sizeof(void*) * size;
+        void** newdata = (void**)kmalloc(arr->byte_size);
         for (uint32_t i = 0; i < oldsize; i++) {
             newdata[i] = oldata[i];
         }

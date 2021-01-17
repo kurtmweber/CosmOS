@@ -8,6 +8,9 @@
 #include <tests/tests.h>
 
 void tests_run() {
+    // alway run array tests
+    test_array();
+
     // always run the list tests
     test_list();
 

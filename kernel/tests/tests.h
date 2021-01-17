@@ -24,6 +24,7 @@
 #include <tests/fs/test_fat.h>
 #include <tests/fs/test_sfs.h>
 #include <tests/fs/test_tfs.h>
+#include <tests/sys/test_array.h>
 #include <tests/sys/test_debug.h>
 #include <tests/sys/test_list.h>
 #include <tests/sys/test_mm.h>
