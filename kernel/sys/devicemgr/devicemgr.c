@@ -16,7 +16,7 @@
 
 #define MAX_DEVICE_NAME_LENGTH 64
 
-int8_t* DeviceTypeNames[] = {"None", "serial", "vga", "rtc", "keyboard", "nic", "bridge", "usb", "ata", "pic", "mouse", "floppy", "speaker", "pit", "dsp", "cmos", "dma", "cpu", "rd", "vnic", "vblock", "disk", "par", "bda", "ebda", "swap", "fs"};
+int8_t* DeviceTypeNames[] = {"None", "serial", "vga", "rtc", "keyboard", "nic", "bridge", "usb", "ata", "pic", "mouse", "floppy", "speaker", "pit", "dsp", "cmos", "dma", "cpu", "rd", "vnic", "vblock", "disk", "par", "bda", "ebda", "swap", "fs", "pt"};
 
 void devicemgr_init() {
     deviceregistry_init();
@@ -24,8 +24,10 @@ void devicemgr_init() {
 
 int8_t* createDeviceName(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->devicetype);
     int8_t nn[32];
     int8_t* ret = kmalloc(MAX_DEVICE_NAME_LENGTH);
+    ASSERT_NOT_NULL(DeviceTypeNames[dev->devicetype]);
     strcpy(ret, DeviceTypeNames[dev->devicetype]);
     uitoa3(dev->type_index, nn, 32, 10);
     ret = strcat(ret, nn);
@@ -133,7 +135,7 @@ void devicemgr_init_devices() {
 
 struct device* devicemgr_new_device() {
     struct device* ret = (struct device*)kmalloc(sizeof(struct device));
-    ret->description = 0;
+    ret->description[0] = 0;
     ret->init = 0;
     ret->deviceData = 0;
     ret->name = 0;
@@ -144,25 +146,23 @@ struct device* devicemgr_new_device() {
     return ret;
 }
 
-void devicemgr_set_device_description(struct device* dev, int8_t* description) {
+void devicemgr_set_device_description(struct device* dev, const uint8_t* description) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(description);
-    uint32_t size = strlen(description);
-    if (0 != dev->description) {
-        kfree(dev->description);
-    }
-    dev->description = kmalloc(size + 1);
+    ASSERT(strlen(description) < DEVICEMGR_MAX_DESCRIPTION);
+    ASSERT(strlen(description) > 0);
+
     strcpy(dev->description, description);
-    //    kprintf("%s\n", description);
+
     //    kprintf("%s\n", dev->description);
 }
 
-struct device* devicemgr_find_device(const int8_t* name) {
+struct device* devicemgr_find_device(const uint8_t* name) {
     ASSERT_NOT_NULL(name);
     return deviceregistry_findDevice(name);
 }
 
-void devicemgr_find_devices_by_description(deviceType dt, const int8_t* description, deviceSearchCallback cb) {
+void devicemgr_find_devices_by_description(deviceType dt, const uint8_t* description, deviceSearchCallback cb) {
     ASSERT_NOT_NULL(description);
     ASSERT_NOT_NULL(cb);
     ASSERT_NOT_NULL(dt);

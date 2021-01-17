@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/fs/guid_pt.h>
+#include <dev/pt/guid_pt.h>
 #include <sys/console/console.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <tests/fs/test_gpt.h>
@@ -15,9 +15,8 @@ void test_gpt() {
 
     struct device* dsk = devicemgr_find_device(devicename);
     if (0 != dsk) {
-        struct guid_pt_header header;
-        guid_pt_read_guid_pt_header(dsk, &header);
-        kprintf("GPT paritions: %llu\n", header.num_partitions);
+      struct device* dev =     guid_pt_attach(dsk);
+        guid_pt_detach(dev);
     } else {
         kprintf("Unable to find %s\n", devicename);
     }

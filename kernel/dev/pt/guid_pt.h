@@ -38,6 +38,9 @@ struct guid_pt_entry {
     uint8_t name[72];
 } __attribute__((packed));
 
-void guid_pt_read_guid_pt_header(struct device* dev, struct guid_pt_header* header);
+struct device;
+
+struct device* guid_pt_attach(struct device* block_device);
+void guid_pt_detach(struct device* dev);
 
 #endif

@@ -16,8 +16,8 @@ void test_sfs() {
 
     struct device* dsk = devicemgr_find_device(devicename);
     if (0 != dsk) {
-        sfs_attach(dsk);
-        sfs_detach(dsk);
+        struct device* dev = sfs_attach(dsk);
+        sfs_detach(dev);
     } else {
         kprintf("Unable to find %s\n", devicename);
     }

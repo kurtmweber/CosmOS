@@ -136,7 +136,7 @@ struct device* tfs_attach(struct device* block_device) {
     deviceinstance->uninit = &tfs_uninit;
     deviceinstance->pci = 0;
     deviceinstance->devicetype = FILESYSTEM;
-    devicemgr_set_device_description(deviceinstance, "tfs");
+    devicemgr_set_device_description(deviceinstance, "Trivial File System");
     /*
      * the device api
      */

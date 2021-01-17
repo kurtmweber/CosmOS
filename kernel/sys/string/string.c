@@ -10,7 +10,7 @@
 #include <sys/string/string.h>
 #include <types.h>
 
-uint64_t strlen(const char *s) {
+uint64_t strlen(const uint8_t *s) {
     ASSERT_NOT_NULL(s);
     uint64_t i = 0;
 
@@ -21,12 +21,12 @@ uint64_t strlen(const char *s) {
     return i;
 }
 
-char *strtrim(const char *s) {
+uint8_t *strtrim(const uint8_t *s) {
     ASSERT_NOT_NULL(s);
     uint64_t i = 0;
     uint64_t j;
 
-    char *tgt;
+    uint8_t *tgt;
 
     i = strlen(s);
 
@@ -36,7 +36,7 @@ char *strtrim(const char *s) {
         j--;
     }
 
-    tgt = kmalloc((j + 2) * sizeof(char));  // +1 for the fact that it's a zero-based index, +1 for the terminator
+    tgt = kmalloc((j + 2) * sizeof(uint8_t));  // +1 for the fact that it's a zero-based index, +1 for the terminator
 
     for (i = 0; i <= j; i++) {
         tgt[i] = s[i];
@@ -46,7 +46,7 @@ char *strtrim(const char *s) {
     return tgt;
 }
 
-char *strcpy(char *dest, const char *src) {
+uint8_t *strcpy(uint8_t *dest, const uint8_t *src) {
     ASSERT_NOT_NULL(dest);
     ASSERT_NOT_NULL(src);
     uint32_t i;
@@ -54,7 +54,7 @@ char *strcpy(char *dest, const char *src) {
     return dest;
 }
 
-char *strcat(char *dest, const char *src) {
+uint8_t *strcat(uint8_t *dest, const uint8_t *src) {
     ASSERT_NOT_NULL(dest);
     ASSERT_NOT_NULL(src);
 
@@ -71,7 +71,7 @@ char *strcat(char *dest, const char *src) {
     return dest;
 }
 
-char strcmp(const char *str1, const char *str2) {
+uint8_t strcmp(const uint8_t *str1, const uint8_t *str2) {
     ASSERT_NOT_NULL(str1);
     ASSERT_NOT_NULL(str2);
     for (int i = 0;; i++) {

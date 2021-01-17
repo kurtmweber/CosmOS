@@ -154,15 +154,15 @@ void dev_tests() {
     //	test_vblock();
     //	test_ata();
     //	test_ramdisk();
-    //	test_cfs();
-    //	test_sfs();
-    //	test_dfs();
-    //	test_fat();
+    test_cfs();
+    test_sfs();
+    test_tfs();
+    test_fat();
     //	test_list();
     //  test_bda();
     //  test_parallel();
     //    test_rtl8139();
-    // test_gpt();
+    test_gpt();
     //   test_ramdisk();
-    test_swap();
+    // test_swap();
 }

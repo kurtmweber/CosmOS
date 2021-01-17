@@ -173,7 +173,7 @@ struct device* sfs_attach(struct device* block_device) {
     deviceinstance->uninit = &sfs_uninit;
     deviceinstance->pci = 0;
     deviceinstance->devicetype = FILESYSTEM;
-    devicemgr_set_device_description(deviceinstance, "sfs");
+    devicemgr_set_device_description(deviceinstance, "Simple File System");
     /*
      * the device api
      */

@@ -10,6 +10,8 @@
 
 #include <types.h>
 
+#define DEVICEMGR_MAX_DESCRIPTION 64
+
 // forward declare these
 struct pci_device;
 struct device;
@@ -44,7 +46,8 @@ typedef enum deviceType {
     BDA = 0x17,
     EBDA = 0x18,
     SWAP = 0x19,
-    FILESYSTEM = 0x20
+    FILESYSTEM = 0x1A,
+    PARITION_TABLE = 0x1B
 } deviceType;
 
 /*
@@ -74,7 +77,7 @@ typedef struct device {
     /*
      * human readable description provided by the driver
      */
-    int8_t* description;
+    uint8_t description[DEVICEMGR_MAX_DESCRIPTION];
     /*
      * device-specific data
      */
@@ -111,14 +114,14 @@ uint16_t devicemgr_device_count();
 void devicemgr_init_devices();
 
 // set description
-void devicemgr_set_device_description(struct device* dev, int8_t* description);
+void devicemgr_set_device_description(struct device* dev, const uint8_t* description);
 
 // find a device ie ("rtc0")
-struct device* devicemgr_find_device(const int8_t* name);
+struct device* devicemgr_find_device(const uint8_t* name);
 
 // find devices by the device description
 typedef void (*deviceSearchCallback)(struct device* dev);
-void devicemgr_find_devices_by_description(deviceType dt, const int8_t* description, deviceSearchCallback cb);
+void devicemgr_find_devices_by_description(deviceType dt, const uint8_t* description, deviceSearchCallback cb);
 
 // attach a device (non-fixed devices... like RAM disks and SWAP)
 void devicemgr_attach_device(struct device* dev);

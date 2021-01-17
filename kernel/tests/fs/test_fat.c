@@ -16,8 +16,8 @@ void test_fat() {
 
     struct device* dsk = devicemgr_find_device(devicename);
     if (0 != dsk) {
-        fat_attach(dsk);
-        fat_detach(dsk);
+        struct device* dev = fat_attach(dsk);
+        fat_detach(dev);
     } else {
         kprintf("Unable to find %s\n", devicename);
     }

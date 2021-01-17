@@ -314,7 +314,7 @@ struct device* fat_attach(struct device* block_device) {
     deviceinstance->uninit = &fat_uninit;
     deviceinstance->pci = 0;
     deviceinstance->devicetype = FILESYSTEM;
-    devicemgr_set_device_description(deviceinstance, "fat");
+    devicemgr_set_device_description(deviceinstance, "FAT File System");
     /*
      * the device api
      */

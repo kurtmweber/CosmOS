@@ -171,7 +171,7 @@ struct device* cfs_attach(struct device* block_device) {
     deviceinstance->uninit = &cfs_uninit;
     deviceinstance->pci = 0;
     deviceinstance->devicetype = FILESYSTEM;
-    devicemgr_set_device_description(deviceinstance, "cfs");
+    devicemgr_set_device_description(deviceinstance, "Cosmos File System");
     /*
      * the device api
      */
