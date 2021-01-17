@@ -19,6 +19,9 @@ struct tree* tree_new() {
     return ret;
 }
 
+/*
+ * warning, recursive
+ */
 void tree_delete(struct tree* t) {
     ASSERT_NOT_NULL(t);
     if (0 != t->left) {
@@ -30,6 +33,9 @@ void tree_delete(struct tree* t) {
     kfree(t);
 }
 
+/*
+ * warning, recursive
+ */
 void tree_insert(struct tree* t, uint32_t key, void* value) {
     ASSERT_NOT_NULL(t);
     if (key < t->key) {
@@ -51,6 +57,9 @@ void tree_insert(struct tree* t, uint32_t key, void* value) {
     }
 }
 
+/*
+ * warning, recursive
+ */
 void* tree_search(struct tree* t, uint32_t key) {
     ASSERT_NOT_NULL(t);
     if (key == t->key) {

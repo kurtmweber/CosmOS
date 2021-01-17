@@ -19,7 +19,7 @@ struct tree {
 };
 
 struct tree* tree_new();
-void tree_delete(struct tree* tree);
+void tree_delete(struct tree* t);
 void tree_insert(struct tree* t, uint32_t key, void* value);
 void* tree_search(struct tree* t, uint32_t key);
 
