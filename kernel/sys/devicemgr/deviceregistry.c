@@ -13,7 +13,7 @@
 #include <sys/string/string.h>
 
 void deviceregistry_init() {
-    kprintf("Init Device Registry\n");
+    //   kprintf("Init Device Registry\n");
     devicetypes_init();
 }
 

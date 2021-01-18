@@ -77,7 +77,7 @@ void deviceInitIterator(struct device* dev) {
  * init order matters
  */
 void devicemgr_init_devices() {
-    kprintf("Initializing Devices\n");
+    //   kprintf("Initializing Devices\n");
     /*
      * CPU first before first?
      */

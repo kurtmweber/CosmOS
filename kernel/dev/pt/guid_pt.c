@@ -8,6 +8,7 @@
 // https://wiki.osdev.org/GPT
 
 #include <dev/fs/block_util.h>
+#include <dev/partition/partition.h>
 #include <dev/pt/guid_pt.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_part_table.h>
@@ -19,6 +20,7 @@
 const uint8_t GUID_PT_EFI_PART[] = {0x45, 0x46, 0x49, 0x20, 0x50, 0x41, 0x52, 0x54};
 
 uint8_t guid_pt_part_table_total_partitions(struct device* dev);
+uint64_t guid_pt_part_table_get_partition_lba(struct device* dev, uint8_t partition);
 
 struct guid_pt_devicedata {
     struct device* block_device;
@@ -52,6 +54,12 @@ void guid_pt_init(struct device* dev) {
     kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 
     deviceData->num_partitions = guid_pt_part_table_total_partitions(dev);
+    /*
+     * mount partition devices
+     */
+    for (uint32_t i = 0; i < deviceData->num_partitions; i++) {
+        partition_attach(deviceData->block_device, guid_pt_part_table_get_partition_lba(dev, i));
+    }
 }
 
 /*
@@ -62,6 +70,14 @@ void guid_pt_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev->deviceData);
     struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
     kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    /*
+     * unmount partitions
+     */
+
+    /*
+     * done w device
+     */
+
     kfree(dev->api);
     kfree(dev->deviceData);
 }

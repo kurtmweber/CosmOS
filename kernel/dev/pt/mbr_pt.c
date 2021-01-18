@@ -7,8 +7,10 @@
 
 // https://wiki.osdev.org/Partition_Table
 // https://wiki.osdev.org/MBR_(x86)
+// https://en.wikipedia.org/wiki/Master_boot_record
 
 #include <dev/fs/block_util.h>
+#include <dev/partition/partition.h>
 #include <dev/pt/mbr_pt.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
@@ -19,6 +21,7 @@
 #define MBR_HEADER_LBA 0
 
 uint8_t mbr_pt_part_table_total_partitions(struct device* dev);
+uint64_t mbr_pt_part_table_get_partition_lba(struct device* dev, uint8_t partition);
 
 struct mbr_pt_devicedata {
     struct device* block_device;
@@ -47,6 +50,13 @@ void mbr_pt_init(struct device* dev) {
     kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 
     deviceData->num_partitions = mbr_pt_part_table_total_partitions(dev);
+
+    /*
+     * mount partition devices
+     */
+    for (uint32_t i = 0; i < deviceData->num_partitions; i++) {
+        partition_attach(deviceData->block_device, mbr_pt_part_table_get_partition_lba(dev, i));
+    }
 }
 
 /*
@@ -55,9 +65,16 @@ void mbr_pt_init(struct device* dev) {
 void mbr_pt_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-
     struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
     kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+
+    /*
+     * unmount partitions
+     */
+    // use a matching function
+    /*
+     * done w device
+     */
     kfree(dev->api);
     kfree(dev->deviceData);
 }

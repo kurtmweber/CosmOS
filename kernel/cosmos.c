@@ -64,20 +64,16 @@ void CosmOS() {
      * Register all devices
      */
     devicemgr_register_devices();
-    kprintf("Registered %llu devices\n", devicemgr_device_count());
+    //   kprintf("Registered %llu devices\n", devicemgr_device_count());
 
     /*
      * Init all devices
      */
     devicemgr_init_devices();
-    kprintf("There are %llu devices\n", devicemgr_device_count());
+    //  kprintf("There are %llu devices\n", devicemgr_device_count());
     kprintf("\n");
-    kprintf("************************************\n");
-    kprintf("* Hardware Initialization Complete *\n");
-    kprintf("************************************\n");
+    kprintf("***** Hardware Initialization Complete *****\n");
     kprintf("\n");
-
-    asm_sti();
 
     /*
      * mount two ram disks.  b/c we can.
@@ -95,9 +91,7 @@ void CosmOS() {
     video_write("Welcome to Cosmos");
 
     kprintf("\n");
-    kprintf("************************************\n");
-    kprintf("** Kernel Initialization Complete **\n");
-    kprintf("************************************\n");
+    kprintf("***** Kernel Initialization Complete *****\n");
     kprintf("\n");
 
     /*
@@ -106,9 +100,7 @@ void CosmOS() {
     tests_run();
 
     kprintf("\n");
-    kprintf("************************************\n");
-    kprintf("**     Sanity Tests Complete      **\n");
-    kprintf("************************************\n");
+    kprintf("***** Sanity Tests Complete *****\n");
     kprintf("\n");
 
     /*
@@ -118,9 +110,7 @@ void CosmOS() {
     asm_sti();
 
     kprintf("\n");
-    kprintf("************************************\n");
-    kprintf("**       Welcome to CosmOS!       **\n");
-    kprintf("************************************\n");
+    kprintf("***** Welcome to CosmOS! *****\n");
     kprintf("\n");
 
     // any dev tests we want to run
@@ -187,5 +177,5 @@ void dev_tests() {
     // test_serial_console_dev();
     // test_vga_console_dev();
     // test_display();
-    // test_mbr();
+    //  test_mbr();
 }

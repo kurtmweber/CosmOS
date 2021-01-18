@@ -53,7 +53,7 @@ struct device* partition_device(struct device* dev) {
     return deviceData->block_device;
 }
 
-struct device* guid_pt_attach(struct device* block_device, uint64_t lba) {
+struct device* partition_attach(struct device* block_device, uint64_t lba) {
     /*
      * register device
      */
@@ -88,7 +88,7 @@ struct device* guid_pt_attach(struct device* block_device, uint64_t lba) {
     return deviceinstance;
 }
 
-void guid_pt_detach(struct device* dev) {
+void partition_detach(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     devicemgr_detach_device(dev);
 }
