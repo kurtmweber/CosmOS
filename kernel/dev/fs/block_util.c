@@ -39,6 +39,9 @@ void block_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t co
     (*block_api->write)(dev, sector, data, count);
 }
 
+/*
+* reads 
+*/
 void block_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);

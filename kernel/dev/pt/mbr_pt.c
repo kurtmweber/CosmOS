@@ -11,8 +11,10 @@
 #include <dev/fs/block_util.h>
 #include <dev/pt/mbr_pt.h>
 #include <sys/debug/assert.h>
+#include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_part_table.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/string/mem.h>
 
 #define MBR_HEADER_LBA 0
 
@@ -23,8 +25,11 @@ struct mbr_pt_devicedata {
 void mbr_pt_read_mbr_pt_header(struct device* dev, struct mbr_pt_header* header) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(header);
-
-    block_read(dev, MBR_HEADER_LBA, (uint8_t*)header, sizeof(struct mbr_pt_header));
+    uint8_t buffer[512];
+    block_read(dev, MBR_HEADER_LBA, buffer, 1);
+    debug_show_memblock((uint8_t*)buffer, 512);
+    memcpy((uint8_t*)header, buffer, sizeof(struct mbr_pt_header));
+    kprintf("sig bytes %llu %llu\n", header->signature[0], header->signature[1]);
     ASSERT(header->signature[0] == 0x55);
     ASSERT(header->signature[1] == 0xAA);
 }
@@ -53,7 +58,19 @@ void mbr_pt_uninit(struct device* dev) {
 }
 
 uint8_t mbr_pt_part_table_total_partitions(struct device* dev) {
-    return 0;
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
+    struct mbr_pt_header header;
+    mbr_pt_read_mbr_pt_header(deviceData->block_device, &header);
+
+    uint8_t ret = 0;
+    for (uint8_t i = 0; i < 4; i++) {
+        if (header.partitions[i].lba_start != 0) {
+            ret = ret + 1;
+        }
+    }
+    return ret;
 }
 
 struct device* mbr_pt_attach(struct device* block_device) {

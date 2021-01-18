@@ -53,7 +53,14 @@ void guid_pt_uninit(struct device* dev) {
 }
 
 uint8_t guid_pt_part_table_total_partitions(struct device* dev) {
-    return 0;
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+
+    struct guid_pt_header header;
+    guid_pt_read_guid_pt_header(deviceData->block_device, &header);
+
+    return header.num_partitions;
 }
 
 struct device* guid_pt_attach(struct device* block_device) {
