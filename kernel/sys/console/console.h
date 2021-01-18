@@ -10,14 +10,6 @@
 
 #include <types.h>
 
-// CRT control I/O ports
-#define CRT_INDEX_REGISTER 0x3D4
-#define CRT_DATA_REGISTER 0x3D5
-
-// cursor control commands
-#define CURSOR_LOCATION_HIBYTE 0x0E
-#define CURSOR_LOCATION_LOBYTE 0x0F
-
 #define CONSOLE_TAB_WIDTH 5
 
 uint64_t kprintf(const char *s, ...);

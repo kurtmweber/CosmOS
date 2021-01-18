@@ -5,12 +5,12 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#include <dev/i386/serial/serial.h>
 #include <sys/asm/asm.h>
-#include <sys/console/drivers/drivers.h>
 
 void panic(const char *s) {
-    console_write("!!!PANIC!!!\n");
-    console_write(s);
+    serial_write_string("!!!PANIC!!!\n");
+    serial_write_string(s);
 
     asm_cli();
     asm_hlt();

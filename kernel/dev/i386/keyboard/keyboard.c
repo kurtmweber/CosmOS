@@ -10,7 +10,6 @@
 #include <sys/asm/asm.h>
 #include <sys/collection/ringbuffer/ringbuffer.h>
 #include <sys/console/console.h>
-#include <sys/console/drivers/drivers.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_keyboard.h>
 #include <sys/devicemgr/devicemgr.h>

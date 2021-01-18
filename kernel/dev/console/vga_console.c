@@ -12,6 +12,8 @@
 #include <sys/deviceapi/deviceapi_vga.h>
 #include <sys/kmalloc/kmalloc.h>
 
+#define CONSOLE_TAB_WIDTH 5
+
 struct vga_console_devicedata {
     struct device* vga_device;
     uint16_t vga_console_x_width;

@@ -8,7 +8,6 @@
 #include <dev/ramdisk/ramdisk.h>
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
-#include <sys/console/drivers/drivers.h>
 #include <sys/deviceapi/deviceapi_cpu.h>
 #include <sys/deviceapi/deviceapi_dsp.h>
 #include <sys/deviceapi/deviceapi_pit.h>
@@ -18,8 +17,6 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/i386/interrupts/idt.h>
 #include <sys/i386/process/gdt.h>
-#include <sys/i386/video/vga/vga.h>
-#include <sys/i386/video/video.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/sync/sync.h>
@@ -37,20 +34,20 @@ void CosmOS() {
     /*
      * start video
      */
-    video_init();
-    video_select_driver(VIDEO_DRIVER_VGA);
-    video_select_mode(VIDEO_MODE_TEXT);
+    //    video_init();
+    //    video_select_driver(VIDEO_DRIVER_VGA);
+    //    video_select_mode(VIDEO_MODE_TEXT);
 
-    console_driver_interface_init();
+    //  console_driver_interface_init();
     /*
      * Put a hello message on the video, just so we know it's ok....
      */
-    console_select_driver(CONSOLE_DRIVER_VGA);
-    kprintf("Welcome to CosmOS 0.1\n");
+    //  console_select_driver(CONSOLE_DRIVER_VGA);
+    //  kprintf("Welcome to CosmOS 0.1\n");
     /*
      * ok, output to the serial console now
      */
-    console_select_driver(CONSOLE_DRIVER_SERIAL);
+    //   console_select_driver(CONSOLE_DRIVER_SERIAL);
 
     /*
      * Hello!
