@@ -21,6 +21,7 @@ const uint8_t GUID_PT_EFI_PART[] = {0x45, 0x46, 0x49, 0x20, 0x50, 0x41, 0x52, 0x
 
 uint8_t guid_pt_part_table_total_partitions(struct device* dev);
 uint64_t guid_pt_part_table_get_partition_lba(struct device* dev, uint8_t partition);
+uint64_t guid_part_table_get_sector_count_function(struct device* dev, uint8_t partition);
 
 struct guid_pt_devicedata {
     struct device* block_device;
@@ -58,7 +59,7 @@ void guid_pt_init(struct device* dev) {
      * mount partition devices
      */
     for (uint32_t i = 0; i < deviceData->num_partitions; i++) {
-        partition_attach(deviceData->block_device, guid_pt_part_table_get_partition_lba(dev, i));
+        partition_attach(deviceData->block_device, guid_pt_part_table_get_partition_lba(dev, i), guid_part_table_get_sector_count_function(dev, i));
     }
 }
 
@@ -80,6 +81,19 @@ void guid_pt_uninit(struct device* dev) {
 
     kfree(dev->api);
     kfree(dev->deviceData);
+}
+
+uint64_t guid_part_table_get_sector_count_function(struct device* dev, uint8_t partition) {
+    ASSERT(partition >= 0);
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    ASSERT(partition < deviceData->num_partitions);
+
+    struct guid_pt_header header;
+    guid_pt_read_guid_pt_header(deviceData->block_device, &header);
+
+    return 0;
 }
 
 uint64_t guid_pt_part_table_get_partition_lba(struct device* dev, uint8_t partition) {
@@ -134,6 +148,7 @@ struct device* guid_pt_attach(struct device* block_device) {
     api->partitions = &guid_pt_part_table_total_partitions;
     api->lba = &guid_pt_part_table_get_partition_lba;
     api->type = &guid_pt_part_table_get_partition_type;
+    api->sectors = &guid_part_table_get_sector_count_function;
     deviceinstance->api = api;
     /*
      * device data

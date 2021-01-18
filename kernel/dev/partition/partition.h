@@ -13,7 +13,7 @@
 struct device;
 struct device;
 
-struct device* partition_attach(struct device* block_device, uint64_t lba);
+struct device* partition_attach(struct device* block_device, uint64_t lba, uint32_t sector_count);
 void partition_detach(struct device* dev);
 
 #endif

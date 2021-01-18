@@ -22,6 +22,7 @@
 
 uint8_t mbr_pt_part_table_total_partitions(struct device* dev);
 uint64_t mbr_pt_part_table_get_partition_lba(struct device* dev, uint8_t partition);
+uint64_t mbr_part_table_get_sector_count_function(struct device* dev, uint8_t partition);
 
 struct mbr_pt_devicedata {
     struct device* block_device;
@@ -55,7 +56,7 @@ void mbr_pt_init(struct device* dev) {
      * mount partition devices
      */
     for (uint32_t i = 0; i < deviceData->num_partitions; i++) {
-        partition_attach(deviceData->block_device, mbr_pt_part_table_get_partition_lba(dev, i));
+        partition_attach(deviceData->block_device, mbr_pt_part_table_get_partition_lba(dev, i), mbr_part_table_get_sector_count_function(dev, i));
     }
 }
 
@@ -88,6 +89,17 @@ uint64_t mbr_pt_part_table_get_partition_lba(struct device* dev, uint8_t partiti
     struct mbr_pt_header header;
     mbr_pt_read_mbr_pt_header(deviceData->block_device, &header);
     return header.partitions[partition].lba_start;
+}
+
+uint64_t mbr_part_table_get_sector_count_function(struct device* dev, uint8_t partition) {
+    ASSERT(partition >= 0);
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
+    ASSERT(partition < deviceData->num_partitions);
+    struct mbr_pt_header header;
+    mbr_pt_read_mbr_pt_header(deviceData->block_device, &header);
+    return header.partitions[partition].total_sectors;
 }
 
 uint64_t mbr_pt_part_table_get_partition_type(struct device* dev, uint8_t partition) {
@@ -135,6 +147,7 @@ struct device* mbr_pt_attach(struct device* block_device) {
     api->partitions = &mbr_pt_part_table_total_partitions;
     api->lba = &mbr_pt_part_table_get_partition_lba;
     api->type = &mbr_pt_part_table_get_partition_type;
+    api->sectors = &mbr_part_table_get_sector_count_function;
     deviceinstance->api = api;
     /*
      * device data
