@@ -5,9 +5,12 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#include <dev/console/serial_console.h>
+#include <dev/console/vga_console.h>
 #include <dev/ramdisk/ramdisk.h>
 #include <sys/asm/asm.h>
 #include <sys/console/console.h>
+#include <sys/deviceapi/deviceapi_console.h>
 #include <sys/deviceapi/deviceapi_cpu.h>
 #include <sys/deviceapi/deviceapi_dsp.h>
 #include <sys/deviceapi/deviceapi_pit.h>
@@ -25,29 +28,14 @@
 
 void dev_tests();
 void mount_ramdisks();
+void create_consoles();
+void video_write(const uint8_t* s);
 
 void CosmOS() {
     /*
      * switch to new GDT.  this is in place bug seems to cause crashes....
      */
     //  gdt_install();
-    /*
-     * start video
-     */
-    //    video_init();
-    //    video_select_driver(VIDEO_DRIVER_VGA);
-    //    video_select_mode(VIDEO_MODE_TEXT);
-
-    //  console_driver_interface_init();
-    /*
-     * Put a hello message on the video, just so we know it's ok....
-     */
-    //  console_select_driver(CONSOLE_DRIVER_VGA);
-    //  kprintf("Welcome to CosmOS 0.1\n");
-    /*
-     * ok, output to the serial console now
-     */
-    //   console_select_driver(CONSOLE_DRIVER_SERIAL);
 
     /*
      * Hello!
@@ -96,6 +84,16 @@ void CosmOS() {
      */
     mount_ramdisks();
 
+    /*
+     * create consoles
+     */
+    create_consoles();
+
+    /*
+     * say hi on the VGA console
+     */
+    video_write("Welcome to Cosmos");
+
     kprintf("\n");
     kprintf("************************************\n");
     kprintf("** Kernel Initialization Complete **\n");
@@ -125,14 +123,29 @@ void CosmOS() {
     kprintf("************************************\n");
     kprintf("\n");
 
+    // any dev tests we want to run
     dev_tests();
-    /*
-     * run various functions to show that things work....
-     */
-    // testFunctions();
 
     while (1) {
         asm_hlt();
+    }
+}
+
+/*
+ * create consoles (devices which implement deviceapi_console). a vga_console on device vga0 and a serial_console on serial0
+ */
+void create_consoles() {
+    // video
+    struct device* vga = devicemgr_find_device("vga0");
+    if (0 != vga) {
+        // this makes "console0"
+        vga_console_attach(vga);
+    }
+    // serial
+    struct device* serial = devicemgr_find_device("serial0");
+    if (0 != serial) {
+        // this makes "console1"
+        serial_console_attach(serial);
     }
 }
 
@@ -142,6 +155,15 @@ void mount_ramdisks() {
     ramdisk_attach(sector_size, sector_count1);
     const uint16_t sector_count2 = 100;
     ramdisk_attach(sector_size, sector_count2);
+}
+
+/*
+ * write to vga console which we created earlier (will be console0)
+ */
+void video_write(const uint8_t* s) {
+    struct device* vga_console = devicemgr_find_device("console0");
+    struct deviceapi_console* console0_api = (struct deviceapi_console*)vga_console->api;
+    (*console0_api->write)(vga_console, s);
 }
 
 void dev_tests() {
@@ -163,6 +185,6 @@ void dev_tests() {
     //   test_ramdisk();
     //  test_swap();
     //    test_serial_console_dev();
-    test_vga_console_dev();
+    // test_vga_console_dev();
     // test_display();
 }
