@@ -9,6 +9,7 @@
 #include <dev/i386/serial/serial.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_console.h>
+#include <sys/deviceapi/deviceapi_serial.h>
 #include <sys/kmalloc/kmalloc.h>
 
 struct serial_console_devicedata {
@@ -45,10 +46,10 @@ uint8_t serial_console_setpos(struct device* dev, uint8_t x, uint8_t y) {
 uint8_t serial_console_dev_write(struct device* dev, const char* s) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
+    struct serial_console_devicedata* deviceData = (struct serial_console_devicedata*)dev->deviceData;
 
-    // TODO
-    // for now just write to com1
-    serial_write_string(s);
+    struct deviceapi_serial* serial_api = (struct deviceapi_serial*)deviceData->serial_device->api;
+    (*serial_api->write)(deviceData->serial_device, s);
 }
 
 struct device* serial_console_attach(struct device* serial_device) {

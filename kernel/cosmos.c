@@ -184,7 +184,7 @@ void dev_tests() {
     // test_gpt();
     //   test_ramdisk();
     //  test_swap();
-    //    test_serial_console_dev();
+    // test_serial_console_dev();
     // test_vga_console_dev();
     // test_display();
 }
