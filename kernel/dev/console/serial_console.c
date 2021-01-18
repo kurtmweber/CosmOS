@@ -14,7 +14,7 @@
 
 struct serial_console_devicedata {
     struct device* serial_device;
-} __attribute__((packed));
+};
 
 /*
  * perform device instance specific init here
