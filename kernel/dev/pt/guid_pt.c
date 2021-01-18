@@ -33,7 +33,7 @@ void guid_pt_read_guid_pt_header(struct device* dev, struct guid_pt_header* head
     ASSERT_NOT_NULL(header);
     uint16_t buffer_size = block_get_sector_size(dev);
     uint8_t buffer[buffer_size];
-    block_read(dev, GUID_PT_HEADER_LBA, buffer, 1);
+    block_read(dev, GUID_PT_HEADER_LBA, buffer);
     memcpy((uint8_t*)header, buffer, sizeof(struct guid_pt_header));
     ASSERT(header->magic[0] == GUID_PT_EFI_PART[0]);
     ASSERT(header->magic[1] == GUID_PT_EFI_PART[1]);

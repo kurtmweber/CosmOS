@@ -16,13 +16,13 @@ uint16_t block_get_sector_count(struct device* dev);
 uint32_t block_get_total_size(struct device* dev);
 
 /*
- * read "count" sectors starting at lba "sector".  "data" is at least as big as count*sectot_size
+ * read "count" sectors starting at lba "sector".  "data" is at least as big as sector_size
  */
-void block_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count);
+void block_write(struct device* dev, uint32_t sector, uint8_t* data);
 /*
- * write "count" sectors starting at lba "sector".  "data" is at least as big as count*sectot_size
+ * write "count" sectors starting at lba "sector".  "data" is at least as big as sector_size
  */
 
-void block_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count);
+void block_read(struct device* dev, uint32_t sector, uint8_t* data);
 
 #endif

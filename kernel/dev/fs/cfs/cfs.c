@@ -92,7 +92,7 @@ uint32_t cfs_total_sectormap_sectors(struct device* dev) {
 void cfs_read_superblock(struct device* dev, struct cfs_superblock* superblock) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(superblock);
-    block_read(dev, 0, (uint8_t*)superblock, 1);
+    block_read(dev, 0, (uint8_t*)superblock);
 }
 
 /*
@@ -101,7 +101,7 @@ void cfs_read_superblock(struct device* dev, struct cfs_superblock* superblock) 
 void cfs_write_superblock(struct device* dev, struct cfs_superblock* superblock) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(superblock);
-    block_write(dev, 0, (uint8_t*)superblock, 1);
+    block_write(dev, 0, (uint8_t*)superblock);
 }
 
 /*
@@ -110,7 +110,7 @@ void cfs_write_superblock(struct device* dev, struct cfs_superblock* superblock)
 void cfs_write_blockmap(struct device* dev, struct cfs_blockmap* blockmap, uint32_t sector) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(blockmap);
-    block_write(dev, sector, (uint8_t*)blockmap, 1);
+    block_write(dev, sector, (uint8_t*)blockmap);
 }
 
 /*
@@ -119,7 +119,7 @@ void cfs_write_blockmap(struct device* dev, struct cfs_blockmap* blockmap, uint3
 void cfs_read_blockmap(struct device* dev, struct cfs_blockmap* blockmap, uint32_t sector) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(blockmap);
-    block_read(dev, sector, (uint8_t*)blockmap, 1);
+    block_read(dev, sector, (uint8_t*)blockmap);
 }
 
 /*

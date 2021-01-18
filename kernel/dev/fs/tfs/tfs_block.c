@@ -20,7 +20,7 @@
 void tfs_read_superblock(struct device* dev, struct tfs_superblock_block* superblock) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(superblock);
-    block_read(dev, 0, (uint8_t*)superblock, 1);
+    block_read(dev, 0, (uint8_t*)superblock);
 }
 
 /*
@@ -29,7 +29,7 @@ void tfs_read_superblock(struct device* dev, struct tfs_superblock_block* superb
 void tfs_write_superblock(struct device* dev, struct tfs_superblock_block* superblock) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(superblock);
-    block_write(dev, 0, (uint8_t*)superblock, 1);
+    block_write(dev, 0, (uint8_t*)superblock);
 }
 
 /*
@@ -38,7 +38,7 @@ void tfs_write_superblock(struct device* dev, struct tfs_superblock_block* super
 void tfs_write_dir_block(struct device* dev, struct tfs_dir_block* dir_block, uint64_t lba) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dir_block);
-    block_write(dev, lba, (uint8_t*)dir_block, 1);
+    block_write(dev, lba, (uint8_t*)dir_block);
 }
 
 /*
@@ -47,29 +47,29 @@ void tfs_write_dir_block(struct device* dev, struct tfs_dir_block* dir_block, ui
 void tfs_read_dir_block(struct device* dev, struct tfs_dir_block* dir_block, uint64_t lba) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dir_block);
-    block_read(dev, lba, (uint8_t*)dir_block, 1);
+    block_read(dev, lba, (uint8_t*)dir_block);
 }
 
 void tfs_write_map_block(struct device* dev, struct tfs_map_block* map_block, uint64_t lba) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(map_block);
-    block_write(dev, lba, (uint8_t*)map_block, 1);
+    block_write(dev, lba, (uint8_t*)map_block);
 }
 
 void tfs_read_map_block(struct device* dev, struct tfs_map_block* map_block, uint64_t lba) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(map_block);
-    block_read(dev, lba, (uint8_t*)map_block, 1);
+    block_read(dev, lba, (uint8_t*)map_block);
 }
 
 void tfs_write_file_block(struct device* dev, struct tfs_file_block* file_block, uint64_t lba) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(file_block);
-    block_write(dev, lba, (uint8_t*)file_block, 1);
+    block_write(dev, lba, (uint8_t*)file_block);
 }
 
 void tfs_read_file_block(struct device* dev, struct tfs_file_block* file_block, uint64_t lba) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(file_block);
-    block_read(dev, lba, (uint8_t*)file_block, 1);
+    block_read(dev, lba, (uint8_t*)file_block);
 }

@@ -122,7 +122,7 @@ bool sfs_is_valid_superblock(struct sfs_superblock* superblock) {
 
 void sfs_read_superblock(struct device* dev, struct sfs_superblock* superblock) {
     ASSERT_NOT_NULL(dev);
-    block_read(dev, 0, (uint8_t*)superblock, 1);
+    block_read(dev, 0, (uint8_t*)superblock);
 }
 
 void sfs_format(struct device* dev) {
@@ -150,7 +150,7 @@ void sfs_format(struct device* dev) {
     superblock.block_size = (sector_size / 512) + 1;
 
     // write superblock
-    block_write(deviceData->block_device, 0, (uint8_t*)&superblock, 1);
+    block_write(deviceData->block_device, 0, (uint8_t*)&superblock);
 }
 
 /*

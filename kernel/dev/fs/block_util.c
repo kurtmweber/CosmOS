@@ -30,22 +30,22 @@ uint32_t block_get_total_size(struct device* dev) {
     return (*block_api->total_size)(dev);
 }
 
-void block_write(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
+void block_write(struct device* dev, uint32_t sector, uint8_t* data) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
     struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
     ASSERT_NOT_NULL(block_api);
 
-    (*block_api->write)(dev, sector, data, count);
+    (*block_api->write)(dev, sector, data, 1);
 }
 
 /*
-* reads 
-*/
-void block_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
+ * reads
+ */
+void block_read(struct device* dev, uint32_t sector, uint8_t* data) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
     struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
     ASSERT_NOT_NULL(block_api);
-    (*block_api->read)(dev, sector, data, count);
+    (*block_api->read)(dev, sector, data, 1);
 }

@@ -27,7 +27,6 @@ uint64_t mbr_part_table_get_sector_count_function(struct device* dev, uint8_t pa
 struct mbr_pt_devicedata {
     struct device* block_device;
     uint32_t num_partitions;
-
 } __attribute__((packed));
 
 void mbr_pt_read_mbr_pt_header(struct device* dev, struct mbr_pt_header* header) {
@@ -35,7 +34,7 @@ void mbr_pt_read_mbr_pt_header(struct device* dev, struct mbr_pt_header* header)
     ASSERT_NOT_NULL(header);
     uint16_t buffer_size = block_get_sector_size(dev);
     uint8_t buffer[buffer_size];
-    block_read(dev, MBR_HEADER_LBA, buffer, 1);
+    block_read(dev, MBR_HEADER_LBA, buffer);
     memcpy((uint8_t*)header, buffer, sizeof(struct mbr_pt_header));
     ASSERT(header->signature[0] == 0x55);
     ASSERT(header->signature[1] == 0xAA);
