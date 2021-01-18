@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <dev/fs/sfs/sfs.h>
-#include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <sys/kprintf/kprintf.h>
 #include <tests/fs/test_sfs.h>
 
 void test_sfs() {

@@ -7,10 +7,10 @@
 
 #include <dev/i386/cpu/cpu.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_cpu.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <sys/kprintf/kprintf.h>
 
 void cpu_manufacturer_id(uint8_t* cpuid);
 

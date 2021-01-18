@@ -7,11 +7,11 @@
 
 #include <dev/fs/block_util.h>
 #include <dev/swap/swap.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_swap.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/string/mem.h>
 #include <types.h>
 

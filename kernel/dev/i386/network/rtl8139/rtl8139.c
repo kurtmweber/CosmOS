@@ -11,13 +11,13 @@
 #include <dev/i386/network/rtl8139/rtl8139_io.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_ethernet.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/sleep/sleep.h>
 
 #define RTL8139_REGISTER_MAC0_5 0x00

@@ -8,7 +8,7 @@
 #ifndef _ASSERT_H
 #define _ASSERT_H
 
-#include <sys/console/console.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/panic/panic.h>
 
 // assertion macros to make life easier

@@ -5,8 +5,8 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _CONSOLE_H
-#define _CONSOLE_H
+#ifndef _KPRINTF_H
+#define _KPRINTF_H
 
 #include <types.h>
 

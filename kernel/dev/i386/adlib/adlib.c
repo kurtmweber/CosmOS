@@ -8,11 +8,11 @@
 #include <dev/i386/adlib/adlib.h>
 #include <sys/asm/asm.h>
 #include <sys/collection/arraylist/arraylist.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_dsp.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
 
 void adlib_handle_irq(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);

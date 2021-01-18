@@ -6,10 +6,10 @@
 // ****************************************************************
 
 #include <dev/swap/swap.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_swap.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
 #include <tests/dev/test_ramdisk.h>

@@ -9,10 +9,10 @@
 #include <dev/i386/pci/pci.h>
 #include <dev/i386/usb_ehci/usb_ehci.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
 
 struct usbcontroller_devicedata {
     uint64_t base;

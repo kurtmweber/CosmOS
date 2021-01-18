@@ -10,12 +10,12 @@
 #include <dev/fs/tfs/tfs_block.h>
 #include <dev/fs/tfs/tfs_dir.h>
 #include <dev/fs/tfs/tfs_map.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/deviceapi/deviceapi_filesystem.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/string/mem.h>
 #include <sys/string/string.h>
 

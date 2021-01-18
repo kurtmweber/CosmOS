@@ -6,9 +6,9 @@
  *****************************************************************/
 
 #include <sys/asm/misc.h>
-#include <sys/console/console.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/i386/mm/pagetables.h>
+#include <sys/kprintf/kprintf.h>
 #include <types.h>
 
 void page_fault_handler(uint64_t error, void *cr2, pttentry cr3) {

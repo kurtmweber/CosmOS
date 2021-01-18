@@ -6,11 +6,11 @@
 // ****************************************************************
 
 #include <dev/ramdisk/ramdisk.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/string/mem.h>
 #include <types.h>
 

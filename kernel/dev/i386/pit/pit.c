@@ -8,11 +8,11 @@
 #include <dev/i386/pit/pit.h>
 #include <sys/asm/asm.h>
 #include <sys/collection/arraylist/arraylist.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_pit.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
 
 // https://wiki.osdev.org/Programmable_Interval_Timer
 // http://www.osdever.net/bkerndev/Docs/pit.htm

@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <sys/collection/kernelstring/kernelstring.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 
 struct kernelstring* string_new() {
     struct kernelstring* ret = (struct kernelstring*)kmalloc(sizeof(struct kernelstring));

@@ -8,8 +8,8 @@
 #include <dev/fs/block_util.h>
 #include <dev/fs/tfs/tfs_block.h>
 #include <dev/fs/tfs/tfs_map.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
+#include <sys/kprintf/kprintf.h>
 
 /*
  * find the block for the map entry for a block (indexed to first map block)

@@ -9,10 +9,10 @@
 #include <dev/i386/ata/ata_disk.h>
 #include <dev/i386/ata/ata_util.h>
 #include <sys/asm/byte.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/sleep/sleep.h>
 
 // https://wiki.osdev.org/PCI_IDE_Controller

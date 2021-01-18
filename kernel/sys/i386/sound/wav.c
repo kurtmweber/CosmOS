@@ -5,9 +5,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/i386/sound/wav.h>
+#include <sys/kprintf/kprintf.h>
 
 uint8_t* wav_pcm_start(struct wav_header* header) {
     ASSERT_NOT_NULL(header);

@@ -10,9 +10,9 @@
 #include <dev/i386/bridge/inteli440fx/inteli440fx.h>
 #include <dev/i386/bridge/intelpciisa/intelpciisa.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
 
 /**
  * find all bridge devices and register them

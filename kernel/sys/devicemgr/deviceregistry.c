@@ -6,10 +6,10 @@
 // ****************************************************************
 
 #include <sys/collection/arraylist/arraylist.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/deviceregistry.h>
 #include <sys/devicemgr/devicetypes.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/string/string.h>
 
 void deviceregistry_init() {

@@ -6,8 +6,8 @@
 // ****************************************************************
 
 #include <dev/pt/guid_pt.h>
-#include <sys/console/console.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <sys/kprintf/kprintf.h>
 #include <tests/fs/test_gpt.h>
 
 void test_gpt() {
@@ -15,7 +15,7 @@ void test_gpt() {
 
     struct device* dsk = devicemgr_find_device(devicename);
     if (0 != dsk) {
-      struct device* dev =     guid_pt_attach(dsk);
+        struct device* dev = guid_pt_attach(dsk);
         guid_pt_detach(dev);
     } else {
         kprintf("Unable to find %s\n", devicename);

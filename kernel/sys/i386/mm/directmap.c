@@ -6,8 +6,8 @@
  *****************************************************************/
 
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/i386/mm/pagetables.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/panic/panic.h>
 #include <sys/string/mem.h>
 #include <types.h>

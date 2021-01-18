@@ -8,9 +8,9 @@
 #include <dev/i386/isadma/isadma.h>
 #include <dev/virtio/virtqueue.h>
 #include <sys/asm/misc.h>
-#include <sys/console/console.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/i386/mm/pagetables.h>
+#include <sys/kprintf/kprintf.h>
 #include <types.h>
 
 uint64_t future_pt_expansion[3];

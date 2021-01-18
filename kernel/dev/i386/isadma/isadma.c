@@ -10,9 +10,9 @@
 #include <dev/i386/isadma/isadma.h>
 #include <dev/i386/isadma/isadma_page.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <sys/kprintf/kprintf.h>
 
 // https://wiki.osdev.org/DMA
 // http://www.osdever.net/documents/dmaprogramming.pdf

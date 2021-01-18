@@ -7,10 +7,10 @@
 
 #include <dev/i386/cmos/cmos.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_cmos.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <sys/kprintf/kprintf.h>
 
 void cmos_write_register(uint8_t reg, uint8_t val) {
     uint8_t pv;

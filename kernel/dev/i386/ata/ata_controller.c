@@ -12,10 +12,10 @@
 #include <dev/i386/ata/ata_util.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/sleep/sleep.h>
 #include <sys/string/string.h>
 #include <types.h>

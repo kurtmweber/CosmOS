@@ -6,8 +6,8 @@
 // ****************************************************************
 
 #include <sys/collection/kernelstring/kernelstring.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/string/string.h>
 #include <tests/sys/test_string.h>
 

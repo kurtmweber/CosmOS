@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <dev/fs/fat/fat.h>
-#include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <sys/kprintf/kprintf.h>
 #include <tests/fs/test_fat.h>
 
 void test_fat() {

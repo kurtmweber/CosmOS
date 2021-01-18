@@ -7,11 +7,11 @@
 
 #include <dev/fs/block_util.h>
 #include <dev/fs/tfs/tfs_block.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_block.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/string/mem.h>
 
 /*

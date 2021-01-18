@@ -8,10 +8,10 @@
 #include <dev/i386/bridge/inteli440fx/inteli440fx.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
 
 struct intel440fx_deviceddata {
     uint64_t base;

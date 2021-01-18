@@ -5,9 +5,9 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/i386/mm/mm.h>
+#include <sys/kprintf/kprintf.h>
 #include <types.h>
 
 mem_block *find_containing_block(void *addr, mem_block *list) {

@@ -5,8 +5,8 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/console/console.h>
 #include <sys/deviceapi/deviceapi_parallel.h>
+#include <sys/kprintf/kprintf.h>
 #include <tests/dev/test_parallel.h>
 
 void test_parallel() {

@@ -8,9 +8,9 @@
 #include <dev/i386/bda/bda.h>
 #include <dev/i386/ebda/acpi.h>
 #include <dev/i386/ebda/ebda.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
+#include <sys/kprintf/kprintf.h>
 #include <tests/dev/test_bda.h>
 
 void test_bda() {

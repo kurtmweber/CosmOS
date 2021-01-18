@@ -6,8 +6,8 @@
 // ****************************************************************
 
 #include <sys/collection/array/array.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
+#include <sys/kprintf/kprintf.h>
 #include <tests/sys/test_array.h>
 
 #define TEST_ARRAY_SIZE 32

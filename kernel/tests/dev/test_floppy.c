@@ -5,9 +5,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/console/console.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_floppy.h>
+#include <sys/kprintf/kprintf.h>
 #include <tests/dev/test_floppy.h>
 
 void floppyread() {

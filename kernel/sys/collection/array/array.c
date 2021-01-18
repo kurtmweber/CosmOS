@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <sys/collection/array/array.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 
 struct array* array_new(uint32_t size) {
     struct array* ret = (struct array*)kmalloc(sizeof(struct array));

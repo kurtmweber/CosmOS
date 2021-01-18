@@ -7,9 +7,9 @@
 
 #include <dev/i386/pic/pic.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <sys/kprintf/kprintf.h>
 
 // I/O ports
 #define PIC_PRIMARY_COMMAND 0x20

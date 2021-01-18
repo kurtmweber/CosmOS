@@ -7,10 +7,10 @@
 
 #include <dev/i386/speaker/speaker.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_speaker.h>
 #include <sys/devicemgr/devicemgr.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/sleep/sleep.h>
 
 // https://wiki.osdev.org/PC_Speaker

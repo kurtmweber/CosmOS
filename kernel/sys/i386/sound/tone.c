@@ -6,11 +6,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/i386/rawdata/rawdata.h>
 #include <sys/i386/sound/tone.h>
 #include <sys/i386/sound/wav.h>
+#include <sys/kprintf/kprintf.h>
 
 struct wav_header* sound_get_tone() {
     uint64_t start = (uint64_t)&_tone_s;

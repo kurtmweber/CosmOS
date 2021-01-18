@@ -11,11 +11,11 @@
 #include <dev/i386/network/ne2000isa/ne2000isa.h>
 #include <sys/asm/asm.h>
 #include <sys/asm/io.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_ethernet.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/sleep/sleep.h>
 #include <types.h>
 

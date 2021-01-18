@@ -10,10 +10,10 @@
 #include <dev/i386/pci_ehci/pci_ehci.h>
 #include <sys/asm/asm.h>
 #include <sys/collection/arraylist/arraylist.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
 
 // https://wiki.osdev.org/Enhanced_Host_Controller_Interface
 

@@ -6,8 +6,8 @@
 // ****************************************************************
 
 #include <dev/fs/cfs/cfs.h>
-#include <sys/console/console.h>
 #include <sys/deviceapi/deviceapi_block.h>
+#include <sys/kprintf/kprintf.h>
 #include <tests/fs/test_cfs.h>
 
 void test_cfs() {

@@ -5,8 +5,8 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/console/console.h>
 #include <sys/deviceapi/deviceapi_vga.h>
+#include <sys/kprintf/kprintf.h>
 #include <tests/dev/test_display.h>
 
 void test_display() {

@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <dev/virtio/virtqueue.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 
 // https://docs.oasis-open.org/virtio/virtio/v1.1/virtio-v1.1.pdf
 

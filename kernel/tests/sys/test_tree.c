@@ -6,8 +6,8 @@
 // ****************************************************************
 
 #include <sys/collection/tree/tree.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/string/string.h>
 
 char G_A[] = {"A"};

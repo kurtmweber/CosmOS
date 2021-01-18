@@ -7,11 +7,11 @@
 
 #include <dev/dev.h>
 #include <sys/collection/arraylist/arraylist.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/devicemgr/deviceregistry.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/string/string.h>
 
 #define MAX_DEVICE_NAME_LENGTH 64

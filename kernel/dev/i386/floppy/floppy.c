@@ -9,11 +9,11 @@
 #include <dev/i386/floppy/floppy.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_floppy.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/sleep/sleep.h>
 
 #define FLOPPY_IRQ_NUMBER 6

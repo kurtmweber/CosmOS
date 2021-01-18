@@ -9,11 +9,11 @@
 #include <dev/i386/keyboard/keyboard.h>
 #include <sys/asm/asm.h>
 #include <sys/collection/ringbuffer/ringbuffer.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_keyboard.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
 #include <types.h>
 
 #define KB_IRQ_NUMBER 1

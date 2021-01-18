@@ -9,7 +9,6 @@
 #include <dev/console/vga_console.h>
 #include <dev/ramdisk/ramdisk.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/deviceapi/deviceapi_console.h>
 #include <sys/deviceapi/deviceapi_cpu.h>
 #include <sys/deviceapi/deviceapi_dsp.h>
@@ -22,6 +21,7 @@
 #include <sys/i386/process/gdt.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <sys/sync/sync.h>
 #include <tests/tests.h>
 #include <types.h>

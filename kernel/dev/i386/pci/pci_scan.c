@@ -8,8 +8,8 @@
 #include <dev/i386/pci/devicetree.h>
 #include <dev/i386/pci/pci.h>
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
 #include <sys/debug/assert.h>
+#include <sys/kprintf/kprintf.h>
 #include <types.h>
 
 #define PCI_MAX_BUSSES 256
