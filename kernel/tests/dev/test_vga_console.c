@@ -5,31 +5,30 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/console/serial_console.h>
+#include <dev/console/vga_console.h>
 #include <sys/console/console.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_console.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <tests/dev/test_bda.h>
 
-void test_console_dev() {
-    uint8_t devicename[] = {"serial0"};
+void test_vga_console_dev() {
+    uint8_t devicename[] = {"vga0"};
 
     /*
      * find the physical disk
      */
-    struct device* serial = devicemgr_find_device(devicename);
-    if (0 != serial) {
+    struct device* vga = devicemgr_find_device(devicename);
+    if (0 != vga) {
         // attach the console
-        struct device* console_device = serial_console_attach(serial);
+        struct device* console_device = vga_console_attach(vga);
 
         struct deviceapi_console* console_api = (struct deviceapi_console*)console_device->api;
 
         (*console_api->write)(console_device, "Console test\n");
 
         // detach the console
-        serial_console_detach(console_device);
+        vga_console_detach(console_device);
     } else {
         kprintf("Unable to find %s\n", devicename);
     }
