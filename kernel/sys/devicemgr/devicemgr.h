@@ -48,7 +48,8 @@ typedef enum deviceType {
     SWAP = 0x19,             // swap0, deviceapi_swap
     FILESYSTEM = 0x1A,       // fs0, deviceapi_filesytem
     PARTITION_TABLE = 0x1B,  // pt0, deviceapi_part_table
-    CONSOLE = 0x1C           // console0, deviceapi_console
+    CONSOLE = 0x1C,          // console0, deviceapi_console
+    PARTITION = 0x1D         // parition0, deviceapi_parition
 } deviceType;
 
 /*
