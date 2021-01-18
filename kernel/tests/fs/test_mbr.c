@@ -20,8 +20,13 @@ void test_mbr() {
 
         struct deviceapi_part_table* api = (struct deviceapi_part_table*)dev->api;
 
-        uint8_t number_partitions = (*api->parititions)(dev);
+        uint8_t number_partitions = (*api->partitions)(dev);
         kprintf("number_partitions %llu\n", number_partitions);
+
+        uint64_t lba = (*api->lba)(dev, 0);
+        uint64_t type = (*api->type)(dev, 0);
+        kprintf("partition 0 type %llu lba %llu\n", type, lba);
+
         mbr_pt_detach(dev);
     } else {
         kprintf("Unable to find %s\n", devicename);

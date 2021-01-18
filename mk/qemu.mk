@@ -14,7 +14,7 @@ QEMUARGS=                                                 \
   -serial stdio                                           \
   -audiodev coreaudio,id=audio0                           \
   -monitor telnet::45454,server,nowait                    \
-  -drive file=Dos622-1.img,index=1,format=raw           \
+  -drive file=mbr_fat.img,index=1,format=raw           \
   -drive file=blank.img,index=2,format=raw          \
   -D qemu.log                  
 
