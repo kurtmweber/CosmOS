@@ -28,6 +28,7 @@
 #include <tests/fs/test_cfs.h>
 #include <tests/fs/test_fat.h>
 #include <tests/fs/test_gpt.h>
+#include <tests/fs/test_mbr.h>
 #include <tests/fs/test_sfs.h>
 #include <tests/fs/test_tfs.h>
 #include <tests/sys/test_array.h>

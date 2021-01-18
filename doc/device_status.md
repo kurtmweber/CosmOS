@@ -19,6 +19,8 @@
 * VGA Console
 * RAM Disk
 * BDA (Bios Data Area)
+* Parallel port
+
 
 ## In Development
 
@@ -39,3 +41,5 @@
 * CFS filesystem
 * SFS filesystem
 * Swap device
+* GUID partition table
+* MBR partition table

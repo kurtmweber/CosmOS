@@ -187,4 +187,5 @@ void dev_tests() {
     // test_serial_console_dev();
     // test_vga_console_dev();
     // test_display();
+    test_mbr();
 }
