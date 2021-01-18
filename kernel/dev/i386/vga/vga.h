@@ -5,11 +5,11 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#ifndef _DISPLAY_H
-#define _DISPLAY_H
+#ifndef _VGA_H
+#define _VGA_H
 
 #include <types.h>
 
-void display_devicemgr_register_devices();
+void vga_devicemgr_register_devices();
 
 #endif

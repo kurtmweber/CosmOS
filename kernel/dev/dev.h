@@ -21,7 +21,6 @@
 #include <dev/i386/bridge/bridge.h>
 #include <dev/i386/cmos/cmos.h>
 #include <dev/i386/cpu/cpu.h>
-#include <dev/i386/display/display.h>
 #include <dev/i386/ebda/ebda.h>
 #include <dev/i386/floppy/floppy.h>
 #include <dev/i386/isadma/isadma.h>
@@ -38,6 +37,7 @@
 #include <dev/i386/serial/serial.h>
 #include <dev/i386/speaker/speaker.h>
 #include <dev/i386/usb_ehci/usb_ehci.h>
+#include <dev/i386/vga/vga.h>
 #else
 
 #include <dev/arm/pl101/pl101.h>

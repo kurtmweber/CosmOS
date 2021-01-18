@@ -203,7 +203,7 @@ void devicemgr_register_devices() {
     //   swap_devicemgr_register_devices();
     rtc_devicemgr_register_devices();
     keyboard_devicemgr_register_devices();
-    display_devicemgr_register_devices();
+    vga_devicemgr_register_devices();
     usb_ehci_devicemgr_register_devices();
     network_devicemgr_register_devices();
     bridge_devicemgr_register_devices();
