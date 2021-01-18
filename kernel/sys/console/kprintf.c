@@ -8,6 +8,7 @@
 #ifndef _KPRINTF_C
 #define _KPRINTF_C
 
+#include <dev/i386/serial/serial.h>
 #include <sys/console/console.h>
 #include <sys/console/drivers/drivers.h>
 #include <sys/string/string.h>
@@ -36,7 +37,7 @@ uint64_t kprintf(const char *s, ...) {
                     chars_written += idx_out;
                     out_str[idx_out] = '\0';
                     idx_out = 0;
-                    console_write(out_str);
+                    serial_write_string(out_str);
 
                     idx_in += kprintf_proc_format_string(&s[idx_in + 1], &chars_written, ap);
                     break;
@@ -47,7 +48,7 @@ uint64_t kprintf(const char *s, ...) {
 
         if (idx_out == 63) {
             out_str[63] = '\0';
-            console_write(out_str);
+            serial_write_string(out_str);
             idx_out = 0;
             chars_written += 63;
         }
@@ -57,7 +58,7 @@ uint64_t kprintf(const char *s, ...) {
 
     chars_written += idx_out;
     out_str[idx_out] = '\0';
-    console_write(out_str);
+    serial_write_string(out_str);
 
     return chars_written;
 }
@@ -80,7 +81,7 @@ uint64_t kprintf_do_uint(uint8_t width, char *output, uint8_t base, __builtin_va
             uitoa3(conv_ulong, output, 66, base);
             break;
     }
-    console_write(output);
+    serial_write_string(output);
     return strlen(output);
 }
 
@@ -107,7 +108,7 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
             case 'c':
                 output[0] = __builtin_va_arg(ap, int);
                 output[1] = '\0';
-                console_write(output);
+                serial_write_string(output);
                 (*chars_written)++;
                 return consumed;
             case 'h':
@@ -122,7 +123,7 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
                 break;
             case 's':
                 conv_str = __builtin_va_arg(ap, const char *);
-                console_write(conv_str);
+                serial_write_string(conv_str);
                 *chars_written += strlen(conv_str);
                 return consumed;
             case 'u':
@@ -136,7 +137,7 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
                     width = 16;
                 }
                 if (hex_prefix) {
-                    console_write("0x");
+                    serial_write_string("0x");
                     *chars_written += 2;
                 }
 

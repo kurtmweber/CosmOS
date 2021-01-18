@@ -83,7 +83,7 @@ uint8_t vga_console_write(const char *c) {
 
         s[0] = c[i];
 
-        video_write_text(s, vga_console_ypos, vga_console_xpos, NULL, VIDEO_TEXT_WHITE, VIDEO_TEXT_BLACK);
+        video_write_text(s, vga_console_ypos, vga_console_xpos, NULL, VGA_TEXT_WHITE, VGA_TEXT_BLACK);
 
         vga_console_xpos++;
         i++;

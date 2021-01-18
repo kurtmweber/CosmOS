@@ -9,11 +9,16 @@
 #include <dev/i386/serial/serial.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_console.h>
+#include <sys/deviceapi/deviceapi_vga.h>
 #include <sys/kmalloc/kmalloc.h>
 
 struct vga_console_devicedata {
     struct device* vga_device;
-} __attribute__((packed));
+    uint16_t vga_console_x_width;
+    uint16_t vga_console_y_height;
+    uint8_t vga_console_xpos;
+    uint8_t vga_console_ypos;
+};
 
 /*
  * perform device instance specific init here
@@ -23,6 +28,14 @@ void vga_console_dev_init(struct device* dev) {
     ASSERT_NOT_NULL(dev->deviceData);
     struct vga_console_devicedata* deviceData = (struct vga_console_devicedata*)dev->deviceData;
     kprintf("Init %s on %s (%s)\n", dev->description, deviceData->vga_device->name, dev->name);
+
+    deviceData->vga_console_xpos = 0;
+    deviceData->vga_console_ypos = 0;
+
+    struct deviceapi_vga* vga_api = (struct deviceapi_vga*)deviceData->vga_device->api;
+    ASSERT_NOT_NULL(vga_api);
+
+    (*vga_api->query_resolution)(deviceData->vga_device, &(deviceData->vga_console_x_width), &(deviceData->vga_console_y_height));
 }
 
 /*
@@ -39,16 +52,77 @@ void vga_console_uninit(struct device* dev) {
 }
 
 uint8_t vga_console_dev_setpos(struct device* dev, uint8_t x, uint8_t y) {
-    // do nothing
-    return 0;
-}
-uint8_t vga_console_dev_write(struct device* dev, const char* s) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
+    struct vga_console_devicedata* deviceData = (struct vga_console_devicedata*)dev->deviceData;
+    struct deviceapi_vga* vga_api = (struct deviceapi_vga*)deviceData->vga_device->api;
+    ASSERT_NOT_NULL(vga_api);
 
-    // TODO
-    // for now just write to com1
-    serial_write_string(s);
+    // error if position is out of range
+    if ((x >= deviceData->vga_console_x_width) || (y >= deviceData->vga_console_y_height)) {
+        return 0;
+    }
+
+    deviceData->vga_console_xpos = x;
+    deviceData->vga_console_ypos = y;
+
+    return 1;
+}
+
+uint8_t vga_console_dev_write(struct device* dev, const char* c) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct vga_console_devicedata* deviceData = (struct vga_console_devicedata*)dev->deviceData;
+    struct deviceapi_vga* vga_api = (struct deviceapi_vga*)deviceData->vga_device->api;
+    ASSERT_NOT_NULL(vga_api);
+
+    uint64_t i = 0;  // just in case...it's on the stack anyway, so it's a single-digit # of extra bytes that's gone once we return
+    char s[2];
+
+    s[1] = '\0';
+
+    while (c[i]) {
+        if (c[i] == '\n') {
+            deviceData->vga_console_xpos = 0;
+            deviceData->vga_console_ypos++;
+            i++;
+
+            continue;
+        } else if (c[i] == '\t') {
+            deviceData->vga_console_xpos += (CONSOLE_TAB_WIDTH - (deviceData->vga_console_xpos % CONSOLE_TAB_WIDTH));
+
+            if (deviceData->vga_console_xpos >= deviceData->vga_console_x_width) {
+                deviceData->vga_console_xpos = 0;
+                deviceData->vga_console_ypos++;
+            }
+
+            i++;
+
+            continue;
+        }
+
+        if ((deviceData->vga_console_xpos >= deviceData->vga_console_x_width)) {  // width is 1-based, pos is 0-based, so if pos = width then we're past the last column
+            deviceData->vga_console_xpos = 0;
+            deviceData->vga_console_ypos++;
+        }
+
+        if (deviceData->vga_console_ypos >= deviceData->vga_console_y_height) {
+            // video_scroll_text();
+            (*vga_api->scroll_text)(deviceData->vga_device);
+
+            deviceData->vga_console_ypos = (deviceData->vga_console_y_height - 1);  // again, ypos is a 0-based index, while height is a quantity
+        }
+
+        s[0] = c[i];
+
+        //  video_write_text(s, deviceData->vga_console_ypos, deviceData->vga_console_xpos, NULL, VGA_TEXT_WHITE, VGA_TEXT_BLACK);
+        (*vga_api->write_text)(deviceData->vga_device, s, deviceData->vga_console_ypos, deviceData->vga_console_xpos, NULL, VGA_TEXT_WHITE, VGA_TEXT_BLACK);
+
+        deviceData->vga_console_xpos++;
+        i++;
+    }
+
+    return 1;
 }
 
 struct device* vga_console_attach(struct device* serial_device) {
