@@ -394,7 +394,7 @@ void isadma_device_init(struct device* dev) {
      * show DMA mem
      */
     uint64_t end_dma_area = (uint64_t)isadma_buf + ISA_DMA_BUFSIZ;
-    ASSERT((end_dma_area >= ISA_DMA_64M));
+    ASSERT((end_dma_area <= ISA_DMA_64M));
     kprintf("   DMA area is %#X-%#X\n", isadma_buf, end_dma_area - 1);
     /*
      * show DMA parameters

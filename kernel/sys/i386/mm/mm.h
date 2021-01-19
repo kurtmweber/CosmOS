@@ -41,8 +41,13 @@
 extern uint64_t _end;
 
 // straight typedefs
-
 typedef uint64_t pttentry;
+
+// space to reserve for IO
+#define IO_SPACE_SIZE 0x20000
+
+// variable to in pagedirectory.c to inform where the IO buffers are
+extern uint64_t io_buf;
 
 // enums
 

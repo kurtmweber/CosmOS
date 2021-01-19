@@ -8,13 +8,12 @@
 #ifndef _IOBUFFERS_H
 #define _IOBUFFERS_H
 
+#include <sys/i386/mm/mm.h>
+#include <types.h>
+
 #define IOBUFFERS_ALIGNMENT 0x10000   // 64k
 #define IOBUFFERS_BUFFER_SIZE 0x1000  // 4k
-#define IOBUFFERS_NUMBER 0x40         // 64
-
-#define IOBUFFERS_TOTAL_SIZE IOBUFFERS_BUFFER_SIZE* IOBUFFERS_NUMBER
-
-#include <types.h>
+#define IOBUFFERS_NUMBER (IO_SPACE_SIZE / IOBUFFERS_BUFFER_SIZE)
 
 void iobuffers_init();
 void* iobuffers_request_buffer(uint32_t size);
@@ -23,6 +22,6 @@ uint32_t iobuffers_total_pages();
 uint32_t iobuffers_used_pages();
 
 // this set up by mm
-extern void* io_buf;
+extern uint64_t io_buf;
 
 #endif

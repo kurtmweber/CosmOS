@@ -132,14 +132,30 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
      * And now we update the system-reserved pages, starting with the ID-mapped
      * first megabyte.
      */
+    /*
+     * the 1st 1 MB is identity mapped.  We need some space for IO buffers, so we'll just grab some here
+     */
+    const uint64_t ONE_MEGABYTE = (1024 * 1024) - 1;
+    const uint64_t PAGES_TO_MAP = ONE_MEGABYTE / PAGE_SIZE;     // 255 pages
+    const uint64_t IO_SPACE_PAGES = IO_SPACE_SIZE / PAGE_SIZE;  // 32 pages
 
-    for (i = 0; i < (1048576 / PAGE_SIZE); i++) {
+    io_buf = (uint64_t)(PAGES_TO_MAP - IO_SPACE_PAGES) * PAGE_SIZE;
+    kprintf("    IO space of size %#llX at page index %llu (%#llX)\n", IO_SPACE_SIZE, (PAGES_TO_MAP - IO_SPACE_PAGES), io_buf);
+
+    for (i = 0; i < PAGES_TO_MAP; i++) {
         /*
          * If a page is hardware-reserved, bad, or a hole, we don't mark it as
          * system-reserved.
          */
         if (page_directory[i].type == PDT_PHYS_AVAIL) {
-            page_directory[i].type = PDT_SYSTEM_RESERVED;
+            /*
+             * the lower pages reserved, and the last IO_SPACE_PAGES mark as IO
+             */
+            if (i < (PAGES_TO_MAP - IO_SPACE_PAGES)) {
+                page_directory[i].type = PDT_SYSTEM_RESERVED;
+            } else {
+                page_directory[i].type = PDT_SYSTEM_IO;
+            }
         }
 
         // But we increment its refcount regardless

@@ -57,6 +57,7 @@ typedef enum page_directory_types {
     PDT_HOLE,                             // Hole in memory map - NEVER ALLOCATE
     PDT_BAD,                              // Flagged as bad by BIOS - NEVER ALLOCATE
     PDT_INUSE,                            // generic in-use flag
+    PDT_SYSTEM_IO,                        // IO buffers
     PDT_MAX_PD_TYPE = 0xFFFFFFFFFFFFFFFF  // to force enum to 64 bits
 } page_directory_types;
 
