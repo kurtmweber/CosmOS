@@ -54,6 +54,22 @@ struct device* partition_device(struct device* dev) {
     return deviceData->block_device;
 }
 
+void partition_read_sector(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(data);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
+    return block_read_sectors(deviceData->block_device, deviceData->lba + sector, data, count);
+}
+
+void partition_write_sector(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(data);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
+    return block_write_sectors(deviceData->block_device, deviceData->lba + sector, data, count);
+}
+
 struct device* partition_attach(struct device* block_device, uint64_t lba, uint32_t sector_count) {
     /*
      * register device
@@ -68,8 +84,10 @@ struct device* partition_attach(struct device* block_device, uint64_t lba, uint3
      * the device api
      */
     struct deviceapi_partition* api = (struct deviceapi_partition*)kmalloc(sizeof(struct deviceapi_partition));
-    api->device = partition_device;
-    api->lba = partition_lba;
+    api->device = &partition_device;
+    api->lba = &partition_lba;
+    api->read = &partition_read_sector;
+    api->write = &partition_write_sector;
     deviceinstance->api = api;
     /*
      * device data

@@ -15,10 +15,17 @@
 
 typedef uint64_t (*partition_lba_function)(struct device* dev);
 typedef struct device* (*partition_device_function)(struct device* dev);
+/*
+ * count is the numvber of *sectors* to read.  it is assumed that data is at least as big as count*sector_size
+ */
+typedef void (*parition_read_sector_function)(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count);
+typedef void (*parition_write_sector_function)(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count);
 
 struct deviceapi_partition {
     partition_lba_function lba;
     partition_device_function device;
+    parition_read_sector_function read;
+    parition_write_sector_function write;
 };
 
 #endif
