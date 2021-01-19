@@ -8,6 +8,7 @@
 #include <sys/collection/arraylist/arraylist.h>
 #include <sys/collection/bitmap/bitmap.h>
 #include <sys/debug/assert.h>
+#include <sys/i386/mm/mm.h>
 #include <sys/iobuffers/iobuffers.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/panic/panic.h>
@@ -22,15 +23,21 @@ struct bitmap* map = 0;
 struct iobuffers_buffer {
     uint64_t start_page;
     uint64_t num_pages;
-    void* address;
+    void* virtual_address;
+    void* physical_address;
 };
+
+void* iobuffers_physical_address(void* virtual_address) {
+    return vaddr_to_physical(virtual_address, system_cr3);
+}
 
 void iobuffers_init() {
     ASSERT_NOT_NULL(io_buf);
     // io_buf in lower 64MB ram
     uint64_t end_of_buffers = (uint64_t)iobuffers_buffer_end_adddress(0, IOBUFFERS_NUMBER);
 
-    kprintf("   IO Buffers has %llu pages of size %#llX at address %#llX-%#llX\n", IOBUFFERS_NUMBER, IOBUFFERS_BUFFER_SIZE, io_buf, end_of_buffers);
+    kprintf("   IO Buffers has %llu pages of size %#llX at virtual address %#llX-%#llX physical address %#llX-%#llX\n", IOBUFFERS_NUMBER, IOBUFFERS_BUFFER_SIZE, io_buf, end_of_buffers, iobuffers_physical_address(io_buf), iobuffers_physical_address((void*)end_of_buffers));
+
     //   kprintf("%llu %llu\n", end_of_buffers, (uint64_t)0x4000000);
 
     //    ASSERT(end_of_buffers < (uint64_t)0x4000000);
@@ -122,11 +129,12 @@ void* iobuffers_request_buffer(uint32_t size) {
             struct iobuffers_buffer* b = (struct iobuffers_buffer*)kmalloc(sizeof(struct iobuffers_buffer));
             b->start_page = i;
             b->num_pages = page_count;
-            b->address = iobuffers_address(i);
+            b->virtual_address = iobuffers_address(i);
+            b->physical_address = iobuffers_physical_address(b->virtual_address);
             arraylist_add(buffer_list, b);
 
             //    kprintf("   iobuffers_request_buffer found free pages at index %llu, address %#hX-%#hX for base address %#hX\n", i, b->address, iobuffers_buffer_end_adddress(b->start_page, b->num_pages), io_buf);
-            return b->address;
+            return b->virtual_address;
         }
     }
 }
@@ -141,7 +149,7 @@ void iobuffers_release_buffer(void* buffer) {
     for (uint32_t i = 0; i < arraylist_count(buffer_list); i++) {
         struct iobuffers_buffer* buffer_record = (struct iobuffers_buffer*)arraylist_get(buffer_list, i);
         ASSERT_NOT_NULL(buffer_record);
-        if (buffer_record->address == buffer) {
+        if (buffer_record->virtual_address == buffer) {
             // mark free
             iobuffers_mark_pages_free(buffer_record->start_page, buffer_record->num_pages);
             // remove record
