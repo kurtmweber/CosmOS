@@ -27,7 +27,14 @@ struct iobuffers_buffer {
 
 void iobuffers_init() {
     ASSERT_NOT_NULL(io_buf);
-    kprintf("   IO Buffers has %llu pages of size %#hX at address %#hX-%#hX\n", IOBUFFERS_NUMBER, IOBUFFERS_BUFFER_SIZE, io_buf, iobuffers_buffer_end_adddress(0, IOBUFFERS_NUMBER));
+    // io_buf in lower 64MB ram
+    uint64_t end_of_buffers = (uint64_t)iobuffers_buffer_end_adddress(0, IOBUFFERS_NUMBER);
+
+    kprintf("   IO Buffers has %llu pages of size %#llX at address %#llX-%#llX\n", IOBUFFERS_NUMBER, IOBUFFERS_BUFFER_SIZE, io_buf, end_of_buffers);
+    //   kprintf("%llu %llu\n", end_of_buffers, (uint64_t)0x4000000);
+
+    //    ASSERT(end_of_buffers < (uint64_t)0x4000000);
+
     buffer_list = arraylist_new(IOBUFFERS_NUMBER);
     map = bitmap_new(IOBUFFERS_NUMBER);
 }

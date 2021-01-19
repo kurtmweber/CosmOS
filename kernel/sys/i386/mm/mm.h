@@ -37,6 +37,7 @@
 #define PFE_ERROR_WRITE_R 8
 #define PFE_ERROR_FETCH_INS 16
 
+// defined in cosmos.ld
 extern uint64_t _end;
 
 // straight typedefs

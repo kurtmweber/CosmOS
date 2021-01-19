@@ -22,6 +22,7 @@ void mmu_init() {
     page_directory_t *page_directory_start;
 
     brk = &_end;
+    kprintf("   brk: 0x%llX\n", (uint64_t)brk);
 
     system_cr3 = asm_cr3_read();
 
@@ -29,8 +30,7 @@ void mmu_init() {
      * ISA DMA buffers need to be in lower 64MB of RAM and page aligned
      */
     io_buf = find_aligned_after(brk, IOBUFFERS_ALIGNMENT);
-    kprintf("   IO buf: 0x%llX", (uint64_t)io_buf);
-    kprintf("   Reserved IO memory of size %#hX at %#hX\n", IOBUFFERS_TOTAL_SIZE, io_buf);
+    kprintf("   Reserved IO memory of size %#hX at %#llX\n", IOBUFFERS_TOTAL_SIZE, io_buf);
     brk = io_buf + IOBUFFERS_TOTAL_SIZE;
 
     kmalloc_init();
