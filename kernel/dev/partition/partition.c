@@ -8,7 +8,7 @@
 #include <dev/fs/block_util.h>
 #include <dev/partition/partition.h>
 #include <sys/debug/assert.h>
-#include <sys/deviceapi/deviceapi_partition.h>
+#include <sys/deviceapi/deviceapi_block.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 
@@ -40,18 +40,18 @@ void partition_uninit(struct device* dev) {
     kfree(dev->deviceData);
 }
 
-uint64_t partition_lba(struct device* dev) {
+uint16_t partition_sector_size(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
-    return deviceData->lba;
+    return block_get_sector_size(deviceData->block_device);
 }
 
-struct device* partition_device(struct device* dev) {
+uint32_t partition_total_size(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
-    return deviceData->block_device;
+    return block_get_total_size(deviceData->block_device);
 }
 
 void partition_read_sector(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
@@ -83,9 +83,9 @@ struct device* partition_attach(struct device* block_device, uint64_t lba, uint3
     /*
      * the device api
      */
-    struct deviceapi_partition* api = (struct deviceapi_partition*)kmalloc(sizeof(struct deviceapi_partition));
-    api->device = &partition_device;
-    api->lba = &partition_lba;
+    struct deviceapi_block* api = (struct deviceapi_block*)kmalloc(sizeof(struct deviceapi_block));
+    api->sector_size = &partition_sector_size;
+    api->total_size = &partition_total_size;
     api->read = &partition_read_sector;
     api->write = &partition_write_sector;
     deviceinstance->api = api;
