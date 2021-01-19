@@ -20,6 +20,7 @@
 #include <sys/i386/interrupts/idt.h>
 #include <sys/i386/process/gdt.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/iobuffers/iobuffers.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/sync/sync.h>
@@ -54,6 +55,8 @@ void CosmOS() {
     kprintf("Initializing Interrupt Routing...\n");
     interrupt_router_init();
 
+    kprintf("Initializing IO buffers...\n");
+    iobuffers_init();
     /*
      * init the device registry
      */

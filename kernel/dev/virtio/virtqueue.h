@@ -67,9 +67,4 @@ uint16_t virtq_get_available_idx(struct virtq* queue);
 // used
 uint16_t virtq_get_used_idx(struct virtq* queue);
 
-/*
- * location of the virtqueue buffers, set by the MM
- */
-extern void* virtqueue_buf;
-
 #endif

@@ -5,11 +5,10 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <dev/i386/isadma/isadma.h>
-#include <dev/virtio/virtqueue.h>
 #include <sys/asm/misc.h>
 #include <sys/i386/mm/mm.h>
 #include <sys/i386/mm/pagetables.h>
+#include <sys/iobuffers/iobuffers.h>
 #include <sys/kprintf/kprintf.h>
 #include <types.h>
 
@@ -29,17 +28,10 @@ void mmu_init() {
     /*
      * ISA DMA buffers need to be in lower 64MB of RAM and page aligned
      */
-    isadma_buf = find_aligned_after(brk, ISA_DMA_ALIGNMENT);
-    kprintf("   ISADMA buf: 0x%llX", (uint64_t)isadma_buf);
-    kprintf(" Reserved ISA DMA memory of size %#hX at %#hX\n", ISA_DMA_BUFSIZ, isadma_buf);
-    brk = isadma_buf + ISA_DMA_BUFSIZ;
-
-    /*
-     * virtq buffers can be anywhere in RAM but do need to be page aligned
-     */
-    virtqueue_buf = find_aligned_after(brk, VIRTQUEUE_ALIGNMENT);
-    kprintf("   Reserved Virtqueue memory of size %#hX at %#hX\n", VIRTQUEUE_BUFSIZ, virtqueue_buf);
-    brk = virtqueue_buf + VIRTQUEUE_BUFSIZ;
+    io_buf = find_aligned_after(brk, IOBUFFERS_ALIGNMENT);
+    kprintf("   IO buf: 0x%llX", (uint64_t)io_buf);
+    kprintf("   Reserved IO memory of size %#hX at %#hX\n", IOBUFFERS_TOTAL_SIZE, io_buf);
+    brk = io_buf + IOBUFFERS_TOTAL_SIZE;
 
     kmalloc_init();
 

@@ -28,4 +28,8 @@ void tests_run() {
     test_tree();
     // always run the string tests
     //  test_string();
+
+    test_bitmap();
+
+    test_iobuffers();
 }

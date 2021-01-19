@@ -1,0 +1,8 @@
+A very simple memory manager that manages iobuffers.  
+The IO buffers are aligned on 64kb boundaries and reside below 64MB RAM
+
+iobuffers are used by 
+
+* isadma
+* network cards
+* virtq

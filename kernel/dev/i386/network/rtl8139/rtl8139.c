@@ -16,6 +16,7 @@
 #include <sys/deviceapi/deviceapi_ethernet.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
+#include <sys/iobuffers/iobuffers.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/sleep/sleep.h>
@@ -81,7 +82,9 @@ void rtl8139_reset(struct device *dev) {
 void rtl8139_set_rx_buffer(struct device *dev, uint8_t *buffer) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(buffer);
-    rtl8139_write_dword(dev, RTL8139_REGISTER_RBSTART, (uint32_t)*buffer);
+
+    // 32 bit address
+    rtl8139_write_dword(dev, RTL8139_REGISTER_RBSTART, (uint32_t)(uint64_t)buffer);
 }
 
 void rtl8139_configure_rcr(struct device *dev) {
@@ -126,7 +129,12 @@ void rtl8139_init(struct device *dev) {
     /*
      * allocate rx buffer
      */
-    devicedata->rx_buffer = kmalloc(RTL8139_RX_BUFFERSIZE);
+    extern void *isadma_buf;
+    devicedata->rx_buffer = iobuffers_request_buffer(RTL8139_RX_BUFFERSIZE);
+    kprintf("   RX buffer %#hX\n", devicedata->rx_buffer);
+    // check that rxbuffer is in lower 2^32 bytes of RAM
+    uint64_t rx_buffer_address = (uint64_t)devicedata->rx_buffer;
+    //  ASSERT((rx_buffer_address & 0xFFFFFFFF) == rx_buffer_address);
     /*
      * register interrupt
      */

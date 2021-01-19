@@ -7,6 +7,7 @@
 
 #include <dev/virtio/virtqueue.h>
 #include <sys/debug/assert.h>
+#include <sys/iobuffers/iobuffers.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
 
@@ -23,16 +24,11 @@
 #define VIRTQ_USED_F_NO_NOTIFY 1
 
 /*
- * this variable is set up by the MM
- */
-void* virtqueue_buf;
-
-/*
  * create virtq
  */
 struct virtq* virtq_new(uint16_t size) {
     //    struct virtq* ret = kmalloc(sizeof(struct virtq));
-    struct virtq* ret = (struct virtq*)virtqueue_buf;
+    struct virtq* ret = (struct virtq*)iobuffers_request_buffer(sizeof(struct virtq));
     //   kprintf("VirtQ at %#hX\n", ret);
     /*
      * size
