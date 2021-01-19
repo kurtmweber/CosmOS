@@ -14,7 +14,7 @@ QEMUARGS=                                                 \
   -monitor telnet::45454,server,nowait                    \
   -device sb16,audiodev=audio0                            \
   -nic user,model=virtio-net-pci                          \
-  -drive if=virtio,file=hda.img,format=raw                \
+  -drive if=virtio,file=hda.img,format=raw,file.locking=off \
   
  #  -device usb-ehci                                        \
 
