@@ -132,38 +132,42 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
      * And now we update the system-reserved pages, starting with the ID-mapped
      * first megabyte.
      */
-    /*
-     * the 1st 1 MB is identity mapped.  We need some space for IO buffers, so we'll just grab some here
-     */
     const uint64_t ONE_MEGABYTE = (1024 * 1024) - 1;
-    const uint64_t PAGES_TO_MAP = ONE_MEGABYTE / PAGE_SIZE;     // 255 pages
-    const uint64_t IO_SPACE_PAGES = IO_SPACE_SIZE / PAGE_SIZE;  // 32 pages
-
-    io_buf = (uint64_t)(PAGES_TO_MAP - IO_SPACE_PAGES) * PAGE_SIZE;
-    kprintf("    IO space of size %#llX at page index %llu (%#llX)\n", IO_SPACE_SIZE, (PAGES_TO_MAP - IO_SPACE_PAGES), io_buf);
-
-    for (i = 0; i < PAGES_TO_MAP; i++) {
+    uint64_t current_page = 0;
+    for (i = 0; i < (ONE_MEGABYTE / PAGE_SIZE); i++) {
         /*
          * If a page is hardware-reserved, bad, or a hole, we don't mark it as
          * system-reserved.
          */
         if (page_directory[i].type == PDT_PHYS_AVAIL) {
-            /*
-             * the lower pages reserved, and the last IO_SPACE_PAGES mark as IO
-             */
-            if (i < (PAGES_TO_MAP - IO_SPACE_PAGES)) {
-                page_directory[i].type = PDT_SYSTEM_RESERVED;
-            } else {
-                page_directory[i].type = PDT_SYSTEM_IO;
-            }
+            page_directory[i].type = PDT_SYSTEM_RESERVED;
         }
 
         // But we increment its refcount regardless
         page_directory[i].ref_count++;
     }
+    current_page = (ONE_MEGABYTE / PAGE_SIZE) - 1;
+    const uint64_t IO_SPACE_PAGES = IO_SPACE_SIZE / PAGE_SIZE;
+
+    /*
+     * IO space
+     */
+    for (i = current_page; i < (current_page + IO_SPACE_PAGES); i++) {
+        if (page_directory[i].type == PDT_PHYS_AVAIL) {
+            page_directory[i].type = PDT_SYSTEM_IO;
+        }
+        page_directory[i].ref_count++;
+    }
+    current_page = current_page + IO_SPACE_PAGES;
+
+    /*
+     * set the IO buffer
+     */
+    io_buf = (uint64_t)i * PAGE_SIZE;
+    kprintf("   io_buf 0x%llX\n", io_buf);
 
     // Now the kernel text, heap, and stack space
-    for (i = (1048576 / PAGE_SIZE); i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
+    for (i = current_page; i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
         if (page_directory[i].type == PDT_PHYS_AVAIL) {
             page_directory[i].type = PDT_SYSTEM_RESERVED;
         }
