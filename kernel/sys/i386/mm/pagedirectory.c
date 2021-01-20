@@ -132,8 +132,8 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
      * And now we update the system-reserved pages, starting with the ID-mapped
      * first megabyte.
      */
-
-    for (i = 0; i < (1048576 / PAGE_SIZE); i++) {
+    const uint64_t ONE_MB = (1024 * 1024) - 1;
+    for (i = 0; i < (ONE_MB / PAGE_SIZE); i++) {
         /*
          * If a page is hardware-reserved, bad, or a hole, we don't mark it as
          * system-reserved.
@@ -146,8 +146,22 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
         page_directory[i].ref_count++;
     }
 
+    /*
+     * there is free RAM b/t 0x7E00-0x7FFFF, mark those pages as IO space (480k which is 120 pages)
+     */
+    uint64_t io_space_start = 0x71000;  // start on a 64k boundary
+    uint64_t io_space_end = 0x7FFFF;
+    kprintf("   IO space is %#llX-%#llX\n", io_space_start, io_space_end);
+
+    for (i = (io_space_start / PAGE_SIZE); i < (io_space_end / PAGE_SIZE); i++) {
+        page_directory[i].type = PDT_SYSTEM_IO;
+    }
+
+    io_buf_bytes = io_space_end - io_space_start;
+    io_buf = io_space_start;
+
     // Now the kernel text, heap, and stack space
-    for (i = (1048576 / PAGE_SIZE); i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
+    for (i = (ONE_MB / PAGE_SIZE); i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
         if (page_directory[i].type == PDT_PHYS_AVAIL) {
             page_directory[i].type = PDT_SYSTEM_RESERVED;
         }

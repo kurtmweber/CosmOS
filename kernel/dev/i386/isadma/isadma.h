@@ -12,7 +12,7 @@
 
 #define ISA_DMA_64M 0x4000000                                       // DMA chips can only use first 64M RAM
 #define ISA_DMA_NUM_BUFFERS (uint32_t)0x08                          // There are 8 channels
-#define ISA_DMA_BUFFER_SIZE (uint32_t)0x2000                        // 8k blocks
+#define ISA_DMA_BUFFER_SIZE (uint32_t)0x1000                        // 4k blocks
 #define ISA_DMA_ALIGNMENT (uint32_t)0x10000                         // channels must be 64k aligned
 #define ISA_DMA_BUFSIZ (ISA_DMA_NUM_BUFFERS * ISA_DMA_BUFFER_SIZE)  // this is used by mm to reserve space
 

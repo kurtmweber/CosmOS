@@ -25,5 +25,6 @@ uint32_t iobuffers_used_pages();
 
 // this set up by mm
 extern uint64_t io_buf;
+extern uint64_t io_buf_bytes;
 
 #endif

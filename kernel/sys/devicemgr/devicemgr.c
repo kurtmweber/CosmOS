@@ -196,7 +196,7 @@ void devicemgr_register_devices() {
     /*
      * ISA DMA Controller
      */
-    //  isadma_devicemgr_register_devices();
+    isadma_devicemgr_register_devices();
     /*
      * rest of this stuff can really happen in any order
      */

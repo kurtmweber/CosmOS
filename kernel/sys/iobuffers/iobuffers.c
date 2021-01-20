@@ -16,7 +16,18 @@
 
 void* iobuffers_buffer_end_adddress(uint32_t start, uint32_t count);
 
+/*
+ * IO buffer location
+ */
 uint64_t io_buf = 0;
+/*
+ * IO buffer size
+ */
+uint64_t io_buf_bytes = 0;
+/*
+ * number of io_buffers
+ */
+uint64_t number_io_buffers = 0;
 
 struct arraylist* buffer_list = 0;
 struct bitmap* map = 0;
@@ -28,18 +39,18 @@ struct iobuffers_buffer {
 };
 
 void iobuffers_init() {
-    if (0 == io_buf) {
-        kprintf("   io_buf is null, no IO Buffer consfigured\n");
-        return;
-    }
     ASSERT_NOT_NULL(io_buf);
-    uint64_t end_of_buffers = (uint64_t)iobuffers_buffer_end_adddress(0, IOBUFFERS_NUMBER);
+    kprintf("   IO space size: %llu\n", io_buf_bytes);
 
-    kprintf("   IO Buffers has %llu pages of size %#llX at virtual address %#llX-%#llX\n", IOBUFFERS_NUMBER, IOBUFFERS_BUFFER_SIZE, io_buf, end_of_buffers);
+    number_io_buffers = io_buf_bytes / IOBUFFERS_BUFFER_SIZE;
+
+    uint64_t end_of_buffers = (uint64_t)iobuffers_buffer_end_adddress(0, number_io_buffers);
+
+    kprintf("   IO Buffers has %llu pages of size %#llX at virtual address %#llX-%#llX\n", number_io_buffers, IOBUFFERS_BUFFER_SIZE, io_buf, end_of_buffers);
     ASSERT(end_of_buffers < (uint64_t)SIXTY_FOUR_MEGA_BYTES);
 
-    buffer_list = arraylist_new(IOBUFFERS_NUMBER);
-    map = bitmap_new(IOBUFFERS_NUMBER);
+    buffer_list = arraylist_new(number_io_buffers);
+    map = bitmap_new(number_io_buffers);
 }
 
 /*
@@ -55,7 +66,7 @@ uint8_t iobuffers_is_free_pages(uint32_t start, uint32_t count) {
 
     for (uint32_t i = 0; i < count; i++) {
         // indexed off the end
-        if ((start + i) > IOBUFFERS_NUMBER) {
+        if ((start + i) > number_io_buffers) {
             return 0;
         }
         // check if used
@@ -117,7 +128,7 @@ void* iobuffers_request_buffer(uint32_t size) {
     uint32_t page_count = iobuffers_calc_num_pages(size);
     //   kprintf("   iobuffers_request_buffer for size %llu requires %llu pages of size %#hX \n", size, page_count, IOBUFFERS_BUFFER_SIZE);
 
-    for (uint32_t i = 0; i < (IOBUFFERS_NUMBER - page_count); i++) {
+    for (uint32_t i = 0; i < (number_io_buffers - page_count); i++) {
         if (iobuffers_is_free_pages(i, page_count)) {
             // mark used
             iobuffers_mark_pages_used(i, page_count);
@@ -157,7 +168,7 @@ void iobuffers_release_buffer(void* buffer) {
 }
 
 uint32_t iobuffers_total_pages() {
-    return IOBUFFERS_NUMBER;
+    return number_io_buffers;
 }
 
 uint32_t iobuffers_used_pages() {

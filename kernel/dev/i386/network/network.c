@@ -7,8 +7,8 @@
 #include <dev/i386/network/network.h>
 
 void network_devicemgr_register_devices() {
-    //  rtl8139_devicemgr_register_devices();
-    ne2000pci_devicemgr_register_devices();
+    rtl8139_devicemgr_register_devices();
+    // ne2000pci_devicemgr_register_devices();
     //   ne2000isa_devicemgr_register_devices();
     //  e1000_devicemgr_register_devices();
     //   vnic_devicemgr_register_devices();
