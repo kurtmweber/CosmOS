@@ -28,6 +28,10 @@ struct iobuffers_buffer {
 };
 
 void iobuffers_init() {
+    if (0 == io_buf) {
+        kprintf("   io_buf is null, no IO Buffer consfigured\n");
+        return;
+    }
     ASSERT_NOT_NULL(io_buf);
     uint64_t end_of_buffers = (uint64_t)iobuffers_buffer_end_adddress(0, IOBUFFERS_NUMBER);
 

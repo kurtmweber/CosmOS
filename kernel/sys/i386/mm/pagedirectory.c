@@ -122,7 +122,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
     void *last_phys_addr;
     uint64_t size;
 
-    kprintf("Setting up Physical Page Directory...\n");
+    kprintf("Setting up physical page directory...\n");
 
     page_directory = start;
 
@@ -132,9 +132,8 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
      * And now we update the system-reserved pages, starting with the ID-mapped
      * first megabyte.
      */
-    const uint64_t ONE_MEGABYTE = (1024 * 1024) - 1;
-    uint64_t current_page = 0;
-    for (i = 0; i < (ONE_MEGABYTE / PAGE_SIZE); i++) {
+
+    for (i = 0; i < (1048576 / PAGE_SIZE); i++) {
         /*
          * If a page is hardware-reserved, bad, or a hole, we don't mark it as
          * system-reserved.
@@ -146,28 +145,9 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
         // But we increment its refcount regardless
         page_directory[i].ref_count++;
     }
-    current_page = (ONE_MEGABYTE / PAGE_SIZE) + 1;
-    const uint64_t IO_SPACE_PAGES = IO_SPACE_SIZE / PAGE_SIZE;
-
-    /*
-     * set the IO buffer
-     */
-    io_buf = (uint64_t)current_page * PAGE_SIZE;
-    //   kprintf("   io_buf 0x%llX\n", io_buf);
-
-    /*
-     * IO space
-     */
-    for (i = current_page; i < (current_page + IO_SPACE_PAGES); i++) {
-        if (page_directory[i].type == PDT_PHYS_AVAIL) {
-            page_directory[i].type = PDT_SYSTEM_IO;
-        }
-        page_directory[i].ref_count++;
-    }
-    current_page = current_page + IO_SPACE_PAGES;
 
     // Now the kernel text, heap, and stack space
-    for (i = current_page; i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
+    for (i = (1048576 / PAGE_SIZE); i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
         if (page_directory[i].type == PDT_PHYS_AVAIL) {
             page_directory[i].type = PDT_SYSTEM_RESERVED;
         }

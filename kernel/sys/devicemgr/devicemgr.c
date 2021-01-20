@@ -196,7 +196,7 @@ void devicemgr_register_devices() {
     /*
      * ISA DMA Controller
      */
-    isadma_devicemgr_register_devices();
+    //  isadma_devicemgr_register_devices();
     /*
      * rest of this stuff can really happen in any order
      */
@@ -215,7 +215,7 @@ void devicemgr_register_devices() {
     //	ac97_devicemgr_register_devices();
     //	adlib_devicemgr_register_devices();
     cpu_devicemgr_register_devices();
-    virtio_devicemgr_register_devices();
+    //  virtio_devicemgr_register_devices();
     //  ramdisk_devicemgr_register_devices();
     pci_ehci_devicemgr_register_devices();
     parallel_devicemgr_register_devices();
