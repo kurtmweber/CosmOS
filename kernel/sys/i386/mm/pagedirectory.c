@@ -146,8 +146,14 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
         // But we increment its refcount regardless
         page_directory[i].ref_count++;
     }
-    current_page = (ONE_MEGABYTE / PAGE_SIZE) - 1;
+    current_page = (ONE_MEGABYTE / PAGE_SIZE) + 1;
     const uint64_t IO_SPACE_PAGES = IO_SPACE_SIZE / PAGE_SIZE;
+
+    /*
+     * set the IO buffer
+     */
+    io_buf = (uint64_t)current_page * PAGE_SIZE;
+    //   kprintf("   io_buf 0x%llX\n", io_buf);
 
     /*
      * IO space
@@ -159,12 +165,6 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
         page_directory[i].ref_count++;
     }
     current_page = current_page + IO_SPACE_PAGES;
-
-    /*
-     * set the IO buffer
-     */
-    io_buf = (uint64_t)i * PAGE_SIZE;
-    //   kprintf("   io_buf 0x%llX\n", io_buf);
 
     // Now the kernel text, heap, and stack space
     for (i = current_page; i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
