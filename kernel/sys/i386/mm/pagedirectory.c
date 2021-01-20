@@ -122,7 +122,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
     void *last_phys_addr;
     uint64_t size;
 
-    kprintf("Setting up physical page directory...\n");
+    kprintf("Setting up Physical Page Directory...\n");
 
     page_directory = start;
 
@@ -164,7 +164,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
      * set the IO buffer
      */
     io_buf = (uint64_t)i * PAGE_SIZE;
-    kprintf("   io_buf 0x%llX\n", io_buf);
+    //   kprintf("   io_buf 0x%llX\n", io_buf);
 
     // Now the kernel text, heap, and stack space
     for (i = current_page; i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {

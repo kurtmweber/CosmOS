@@ -160,7 +160,7 @@ void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks) {
     pttentry *pml4, *pdp, *pd, *pt;
     void *dmap_start = 0;
 
-    kprintf("Initializing direct map...\n");
+    kprintf("Initializing Direct Map...\n");
 
     last_phys_addr = find_last_phys_addr(phys_map, num_blocks);
 
