@@ -13,6 +13,8 @@
 
 #define IOBUFFERS_ALIGNMENT 0x10000   // 64k
 #define IOBUFFERS_BUFFER_SIZE 0x1000  // 4k
+
+// IO_SPACE_SIZE is defined in mm.h
 #define IOBUFFERS_NUMBER (IO_SPACE_SIZE / IOBUFFERS_BUFFER_SIZE)
 
 void iobuffers_init();
