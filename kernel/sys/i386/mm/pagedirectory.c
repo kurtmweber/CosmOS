@@ -149,7 +149,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
     /*
      * there is free RAM b/t 0x7E00-0x7FFFF, mark those pages as IO space (480k which is 120 pages)
      */
-    uint64_t io_space_start = 0x71000;  // start on a 64k boundary
+    uint64_t io_space_start = 0x10000;  // start on a 64k boundary
     uint64_t io_space_end = 0x7FFFF;
     kprintf("   IO space is %#llX-%#llX\n", io_space_start, io_space_end);
 

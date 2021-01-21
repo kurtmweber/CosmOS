@@ -89,7 +89,7 @@ void pci_scan() {
                             device_id = (uint16_t)(register_dword >> 16);
 
                             if (vendor_id != 0xFFFF){
-                                    kprintf("PCI device found at %#hX:%#hX:%#hX, vendor %#X, device %#X\n", bus, device, function, vendor_id, device_id);
+                                    kprintf("PCI device found at %#hX:%#hX:%#hX, vendor %#llX, device %#llX\n", bus, device, function, vendor_id, device_id);
                                     asm_out_d(PCI_CONFIG_ADDRESS_PORT, pci_config_address_build(bus, device, function, 0x08, 1));
                                     register_dword = asm_in_d(PCI_CONFIG_DATA_PORT);
 

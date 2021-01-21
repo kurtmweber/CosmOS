@@ -20,6 +20,7 @@
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/sleep/sleep.h>
+#include <sys/string/mem.h>
 
 #define RTL8139_REGISTER_MAC0_5 0x00
 #define RTL8139_REGISTER_MAR0_7 0x08
@@ -34,19 +35,29 @@
 
 #define RTL8139_DESCRIPTION "Realtek RTL8139 10/100 NIC"
 
+#define RTL8139_RECEIVE 0x01
+
 void rtl8139_clear_interrupt(struct device *dev);
+uint16_t rtl8139_get_isr_status(struct device *dev);
 
 void rtl8139_irq_handler_for_device(struct device *dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
 
-    debug_show_memblock(devicedata->rx_buffer, 32);
-
+    kprintf("@\n");
+    uint16_t isr_status = rtl8139_get_isr_status(dev);
+    if (RTL8139_RECEIVE & isr_status) {
+        debug_show_memblock(devicedata->rx_buffer, 64);
+        kprintf("\n");
+    }
     // TODO check if there is an interrupt set before we clear it!
     rtl8139_clear_interrupt(dev);
+}
 
-    kprintf("@");
+uint16_t rtl8139_get_isr_status(struct device *dev) {
+    ASSERT_NOT_NULL(dev);
+    return rtl8139_read_word(dev, RTL8139_REGISTER_ISR);
 }
 
 void rtl8139_irq_handler(stackFrame *frame) {
@@ -84,7 +95,8 @@ void rtl8139_set_rx_buffer(struct device *dev, uint8_t *buffer) {
     ASSERT_NOT_NULL(buffer);
 
     // 32 bit address
-    rtl8139_write_dword(dev, RTL8139_REGISTER_RBSTART, (uint32_t)(uint64_t)buffer);
+    uint32_t add = LOW_OF_QWORD((uint64_t)buffer);
+    rtl8139_write_dword(dev, RTL8139_REGISTER_RBSTART, add);
 }
 
 void rtl8139_configure_rcr(struct device *dev) {
@@ -131,10 +143,11 @@ void rtl8139_init(struct device *dev) {
      */
     extern void *isadma_buf;
     devicedata->rx_buffer = iobuffers_request_buffer(RTL8139_RX_BUFFERSIZE);
-    kprintf("   RX buffer %#hX\n", devicedata->rx_buffer);
+    kprintf("   RX buffer %#hX-%#llX\n", devicedata->rx_buffer, RTL8139_RX_BUFFERSIZE + devicedata->rx_buffer);
     // check that rxbuffer is in lower 2^32 bytes of RAM
     uint64_t rx_buffer_address = (uint64_t)devicedata->rx_buffer;
-    //  ASSERT((rx_buffer_address & 0xFFFFFFFF) == rx_buffer_address);
+    memset((uint8_t *)rx_buffer_address, 0, RTL8139_RX_BUFFERSIZE);
+    ASSERT((rx_buffer_address & 0xFFFFFFFF) == rx_buffer_address);
     /*
      * register interrupt
      */

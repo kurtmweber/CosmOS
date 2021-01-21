@@ -18,6 +18,6 @@ void test_bda() {
     // debug_show_memblock(rsdp, 32);
 
     struct acpi_sdt_header* acpi = rsdp_get_acpi_header(rsdp);
-    kprintf("ACPI %#X\n", acpi);
+    kprintf("ACPI %#llX\n", acpi);
     // debug_show_memblock(acpi, 32);
 }

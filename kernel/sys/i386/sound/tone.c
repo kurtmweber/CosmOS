@@ -18,7 +18,7 @@ struct wav_header* sound_get_tone() {
     uint64_t size = (uint64_t)&_tone_e - (uint64_t)&_tone_s;
 
     // show the tone data.  byte size should be the same as tone.wav
-    kprintf("Data for tone.wav is from %#X to %#X with byte size %llu\n", start, end, size);
+    kprintf("Data for tone.wav is from %#llX to %#llX with byte size %llu\n", start, end, size);
 
     struct wav_header* ret = (struct wav_header*)(uint64_t)&_tone_s;
 

@@ -31,8 +31,8 @@ uint8_t ebda_matches_EBDA_RSD_PTR(uint8_t* x) {
         }
     }
     return 1;
-    //    kprintf("x: %#X %#X %#X %#X %#X %#X %#X %#X\n", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
-    //    kprintf("EBDA_RSD_PTR: %#X %#X %#X %#X %#X %#X %#X %#X\n", EBDA_RSD_PTR[0], EBDA_RSD_PTR[1], EBDA_RSD_PTR[2], EBDA_RSD_PTR[3], EBDA_RSD_PTR[4], EBDA_RSD_PTR[5], EBDA_RSD_PTR[6], EBDA_RSD_PTR[7]);
+    //    kprintf("x: %#llX %#llX %#llX %#llX %#llX %#llX %#llX %#llX\n", x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
+    //    kprintf("EBDA_RSD_PTR: %#llX %#llX %#llX %#llX %#llX %#llX %#llX %#llX\n", EBDA_RSD_PTR[0], EBDA_RSD_PTR[1], EBDA_RSD_PTR[2], EBDA_RSD_PTR[3], EBDA_RSD_PTR[4], EBDA_RSD_PTR[5], EBDA_RSD_PTR[6], EBDA_RSD_PTR[7]);
 }
 
 uint64_t ebda_get_rsdp_top() {
@@ -63,7 +63,7 @@ struct rsdp_descriptor_2* ebda_get_rsdp() {
     uint64_t loc = ebda_get_rsdp_ebda();
     if (0 == loc) {
         loc = ebda_get_rsdp_top();
-        // kprintf("%#X\n", loc);
+        // kprintf("%#llX\n", loc);
         // debug_show_memblock((uint8_t*)loc, 64);
     }
     return (struct rsdp_descriptor_2*)loc;

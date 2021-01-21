@@ -86,7 +86,7 @@ void sb16_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct sb16_devicedata* sb16_data = (struct sb16_devicedata*)dev->deviceData;
     ASSERT_NOT_NULL(sb16_data);
-    kprintf("Init %s at IRQ %llu Port %#X (%s)\n", dev->description, sb16_data->irq, sb16_data->port, dev->name);
+    kprintf("Init %s at IRQ %llu Port %#llX (%s)\n", dev->description, sb16_data->irq, sb16_data->port, dev->name);
     interrupt_router_register_interrupt_handler(sb16_data->irq, &sb16_handle_irq);
     sb16_data->dsp_version = sb16_get_dsp_version(dev);
     kprintf("   DSP Version: %llu\n", sb16_data->dsp_version);
@@ -212,10 +212,10 @@ void sb16_start_transfer_size(struct device* dev, uint16_t size, uint8_t command
     asm_out_b(sb16_data->port + SB16_PORT_WRITE, mode);
 
     // calc
-    uint8_t low = LOW_OF_W(size);
-    uint8_t high = HIGH_OF_W(size);
+    uint8_t low = LOW_OF_WORD(size);
+    uint8_t high = HIGH_OF_WORD(size);
 
-    kprintf("   Transfer size %#X %#X\n", high, low);
+    kprintf("   Transfer size %#llX %#llX\n", high, low);
     asm_out_b(sb16_data->port + SB16_PORT_WRITE, low);
     asm_out_b(sb16_data->port + SB16_PORT_WRITE, high);
 }
@@ -262,7 +262,7 @@ void sb16_play(struct device* dev, uint8_t* buffer, uint16_t rate, uint8_t depth
     struct sb16_devicedata* sb16_data = (struct sb16_devicedata*)dev->deviceData;
     ASSERT_NOT_NULL(sb16_data);
 
-    kprintf("Incoming buffer %#X\n", buffer);
+    kprintf("Incoming buffer %#llX\n", buffer);
     kprintf("Channels %llu\n", channels);
     kprintf("Sample rate %llu\n", rate);
     kprintf("Sample depth %llu\n", depth);
@@ -271,13 +271,13 @@ void sb16_play(struct device* dev, uint8_t* buffer, uint16_t rate, uint8_t depth
     debug_show_memblock(buffer, 16);
 
     uint32_t chunks = len / ISA_DMA_BUFFER_SIZE;
-    kprintf("Chunks: %#X data len: %#X dma size: %#X\n", chunks, len, ISA_DMA_BUFFER_SIZE);
+    kprintf("Chunks: %#llX data len: %#llX dma size: %#llX\n", chunks, len, ISA_DMA_BUFFER_SIZE);
 
     uint8_t* dma_block_address = (uint8_t*)isadma_get_dma_block(1, ISA_DMA_BUFFER_SIZE);
-    kprintf("DMA block for SB16 dma %#X\n", dma_block_address);
+    kprintf("DMA block for SB16 dma %#llX\n", dma_block_address);
 
     memcpy(dma_block_address, buffer, ISA_DMA_BUFFER_SIZE);
-    kprintf("DMA buffer %#X\n", dma_block_address);
+    kprintf("DMA buffer %#llX\n", dma_block_address);
     debug_show_memblock(dma_block_address, 16);
 
     sb16_reset(dev);
@@ -343,11 +343,11 @@ void sb16_play(struct device* dev, uint8_t* buffer, uint16_t rate, uint8_t depth
     //	asm_out_b(sb16_data->port+SB16_PORT_WRITE, 0x14);
 
     // COUNT LOW BYTE - COUNT LENGTH-1
-    //	kprintf("Low %#X\n",LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
+    //	kprintf("Low %#llX\n",LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
     //	asm_out_b(sb16_data->port+SB16_PORT_WRITE, LOW_OF_W(ISA_DMA_BUFFER_SIZE-1));
 
     // COUNT HIGH BYTE - COUNT LENGTH-1
-    //	kprintf("High %#X\n",HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
+    //	kprintf("High %#llX\n",HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
     //	asm_out_b(sb16_data->port+SB16_PORT_WRITE, HIGH_OF_W(ISA_DMA_BUFFER_SIZE-1));
 }
 

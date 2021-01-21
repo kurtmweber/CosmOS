@@ -12,6 +12,6 @@
 uint8_t* wav_pcm_start(struct wav_header* header) {
     ASSERT_NOT_NULL(header);
     uint8_t* ret = (uint8_t*)((uint64_t)header) + sizeof(struct wav_header);
-    kprintf("PCM start %#X\n", (uint64_t)ret);
+    kprintf("PCM start %#llX\n", (uint64_t)ret);
     return ret;
 }

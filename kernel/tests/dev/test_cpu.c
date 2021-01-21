@@ -19,7 +19,7 @@ void show_cpu_data() {
          */
         struct cpu_id id;
         (*cpu_api->features)(&id);
-        kprintf("CPU Features %#X\n", id.edx);
+        kprintf("CPU Features %#llX\n", id.edx);
 
         /*
          * check if APIC

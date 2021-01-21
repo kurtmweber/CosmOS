@@ -22,7 +22,7 @@ void test_iobuffers() {
 
     // allocate 8k
     void* m = iobuffers_request_buffer(1024 * 8);
-    ASSERT(iobuffers_used_pages() == used + (1024 * 8 / IOBUFFERS_BUFFER_SIZE));
+    ASSERT(iobuffers_used_pages() > used);
     iobuffers_release_buffer(m);
     ASSERT(iobuffers_used_pages() == used);
 }

@@ -122,18 +122,18 @@ struct isa_dma_channel_parameters {
 };
 
 void isadma_show_dma_parameters(struct isa_dma_channel_parameters* parameters) {
-    kprintf("   DMA channel %#X, IO Block %#X\n", parameters->channel, parameters->DMABlock);
+    kprintf("   DMA channel %#llX, IO Block %#llX\n", parameters->channel, parameters->DMABlock);
     uint16_t page = isadma_address_to_page(parameters->DMABlock);
     uint16_t buffer = isadma_address_to_buffer(parameters->DMABlock);
-    kprintf("   DMA page %#X, buffer %#X\n", page, buffer);
-    kprintf("   DMAAddressPort %#X\n", parameters->DMAAddressPort);
-    kprintf("   DMACountPort %#X\n", parameters->DMACountPort);
-    kprintf("   DMAPagePort %#X\n", parameters->DMAPagePort);
-    kprintf("   DMAMaskReg %#X\n", parameters->DMAMaskReg);
-    kprintf("   DMAClearReg %#X\n", parameters->DMAClearReg);
-    kprintf("   DMAModeReg %#X\n", parameters->DMAModeReg);
-    kprintf("   DMAChannelFlags %#X\n", parameters->DMAChannelFlags);
-    kprintf("   8-bit %#X\n", parameters->eightbit);
+    kprintf("   DMA page %#llX, buffer %#llX\n", page, buffer);
+    kprintf("   DMAAddressPort %#llX\n", parameters->DMAAddressPort);
+    kprintf("   DMACountPort %#llX\n", parameters->DMACountPort);
+    kprintf("   DMAPagePort %#llX\n", parameters->DMAPagePort);
+    kprintf("   DMAMaskReg %#llX\n", parameters->DMAMaskReg);
+    kprintf("   DMAClearReg %#llX\n", parameters->DMAClearReg);
+    kprintf("   DMAModeReg %#llX\n", parameters->DMAModeReg);
+    kprintf("   DMAChannelFlags %#llX\n", parameters->DMAChannelFlags);
+    kprintf("   8-bit %#llX\n", parameters->eightbit);
 }
 
 /*
@@ -265,9 +265,9 @@ void isadma_reset_flipflop(struct isa_dma_channel_parameters* channel_parameters
  */
 void isadma_set_transfer_size(struct isa_dma_channel_parameters* channel_parameters, uint16_t len) {
     isadma_reset_flipflop(channel_parameters);
-    uint8_t count_low = LOW_OF_W(len - 1);
-    uint8_t count_high = HIGH_OF_W(len - 1);
-    kprintf("   Count %#X %#X\n", count_high, count_low);
+    uint8_t count_low = LOW_OF_WORD(len - 1);
+    uint8_t count_high = HIGH_OF_WORD(len - 1);
+    kprintf("   Count %#llX %#llX\n", count_high, count_low);
 
     asm_out_b(channel_parameters->DMACountPort, count_low);
     asm_out_b(channel_parameters->DMACountPort, count_high);
@@ -283,12 +283,12 @@ void isadma_set_buffer_address(struct isa_dma_channel_parameters* channel_parame
 
     // page
     asm_out_b(channel_parameters->DMAPagePort, page);
-    kprintf("   Page %#X\n", page);
+    kprintf("   Page %#llX\n", page);
 
     // buffer
-    uint8_t position_low = LOW_OF_W(buffer);
-    uint8_t position_high = HIGH_OF_W(buffer);
-    kprintf("   Position %#X %#X\n", position_high, position_low);
+    uint8_t position_low = LOW_OF_WORD(buffer);
+    uint8_t position_high = HIGH_OF_WORD(buffer);
+    kprintf("   Position %#llX %#llX\n", position_high, position_low);
 
     asm_out_b(channel_parameters->DMAAddressPort, position_low);
     asm_out_b(channel_parameters->DMAAddressPort, position_high);
@@ -313,7 +313,7 @@ void isadma_unmask_channel(struct isa_dma_channel_parameters* channel_parameters
  */
 void isadma_set_transfer_mode(struct isa_dma_channel_parameters* channel_parameters, uint8_t mode) {
     asm_out_b(channel_parameters->DMAModeReg, mode);
-    kprintf("   Transfer Mode %#X\n", mode);
+    kprintf("   Transfer Mode %#llX\n", mode);
 }
 
 /*
@@ -325,7 +325,7 @@ void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
     ASSERT(channel != 0);
     ASSERT(channel != 4);
 
-    kprintf("DMA init for channel %#X with len %#X\n", channel, len);
+    kprintf("DMA init for channel %#llX with len %#llX\n", channel, len);
 
     /*
      * get the channel parameters
@@ -395,7 +395,7 @@ void isadma_device_init(struct device* dev) {
      */
     uint64_t end_dma_area = (uint64_t)isadma_buf + ISA_DMA_BUFSIZ;
     ASSERT((end_dma_area <= ISA_DMA_64M));
-    kprintf("   DMA area is %#X-%#X\n", isadma_buf, end_dma_area - 1);
+    kprintf("   DMA area is %#llX-%#llX\n", isadma_buf, end_dma_area - 1);
     /*
      * show DMA parameters
      */

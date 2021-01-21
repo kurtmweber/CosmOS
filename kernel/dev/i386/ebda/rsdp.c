@@ -30,6 +30,6 @@ uint8_t rsdp_get_acpi_version(struct rsdp_descriptor_2* rsdp) {
 
 struct acpi_sdt_header* rsdp_get_acpi_header(struct rsdp_descriptor_2* rsdp) {
     ASSERT_NOT_NULL(rsdp);
-    //    kprintf("RADT %#X\n", rsdp->firstPart.rsdt_address);
+    //    kprintf("RADT %#llX\n", rsdp->firstPart.rsdt_address);
     return (struct acpi_sdt_header*)(uint64_t)rsdp->firstPart.rsdt_address;
 }
