@@ -36,8 +36,29 @@ extern int irq15();
 
 void idt_init() {
     idtr idtr;
+
+    // Processor
     idt_add_ISR(isrDE, DE);
     idt_add_ISR(isrPFE, PFE);
+    idt_add_ISR(isrDebug, DEBUG);
+    idt_add_ISR(isrGeneric, NMI);
+    idt_add_ISR(isrBreakpoint, BREAKPOINT);
+    idt_add_ISR(isrGeneric, OVERFLOW);
+    idt_add_ISR(isrGeneric, BOUND_RANGE_EXCEEDED);
+    idt_add_ISR(isrGeneric, INVALID_OPCODE);
+    idt_add_ISR(isrGeneric, DEVICE_NOT_AVAILABLE);
+    idt_add_ISR(isrGeneric, DOUBLE_FAULT);
+    idt_add_ISR(isrGeneric, COPROCESSOR_SEGMENT_OVERRUN);
+    idt_add_ISR(isrGeneric, INVALID_TSS);
+    idt_add_ISR(isrGeneric, SEGMENT_NOT_PRESENT);
+    idt_add_ISR(isrGeneric, STACK_SEGMENT_FAULT);
+    idt_add_ISR(isrGPF, GPF);
+    idt_add_ISR(isrGeneric, X87_FPE);
+    idt_add_ISR(isrGeneric, ALIGNMENT_CHECK);
+    idt_add_ISR(isrGeneric, MACHINE_CHECK);
+    idt_add_ISR(isrGeneric, SIMD_FPE);
+    idt_add_ISR(isrGeneric, VIRTUALIZATION);
+    idt_add_ISR(isrGeneric, SECURITY);
 
     // IRQs
     idt_add_ISR(irq0, IRQ0);

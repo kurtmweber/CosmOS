@@ -181,4 +181,5 @@ void dev_tests() {
     // test_vga_console_dev();
     // test_display();
     //  test_mbr();
+    // test_trap();
 }

@@ -55,6 +55,10 @@ global irq15;
 
 global isrDE;
 global isrPFE;
+global isrGeneric;
+global isrGPF;
+global isrDebug;
+global isrBreakpoint;
 
 extern irq0_handler
 extern irq1_handler
@@ -75,6 +79,10 @@ extern irq15_handler
  
 extern isrDE_handler
 extern isrPFE_handler
+extern isrGeneric_handler
+extern isrDebug_handler;
+extern isrGPF_handler;
+extern isrBreakpoint_handler;
 
 irq0:
     cli
@@ -309,4 +317,55 @@ isrPFE:
     call isrPFE_handler
     popaq
     iretq
-    
+
+isrDebug:
+    cli
+    pushaq
+    xor ax, ax
+    mov es, ax
+    mov ds, ax
+    cld
+    xor rax, rax
+    mov rdi, rsp
+    call isrDebug_handler
+    popaq
+    iretq
+
+isrGPF:
+    cli
+    pushaq
+    xor ax, ax
+    mov es, ax
+    mov ds, ax
+    cld
+    xor rax, rax
+    mov rdi, rsp
+    call isrGPF_handler
+    popaq
+    iretq
+
+isrBreakpoint:
+    cli
+    pushaq
+    xor ax, ax
+    mov es, ax
+    mov ds, ax
+    cld
+    xor rax, rax
+    mov rdi, rsp
+    call isrBreakpoint_handler
+    popaq
+    iretq
+
+isrGeneric:
+    cli
+    pushaq
+    xor ax, ax
+    mov es, ax
+    mov ds, ax
+    cld
+    xor rax, rax
+    mov rdi, rsp
+    call isrGeneric_handler
+    popaq
+    iretq
