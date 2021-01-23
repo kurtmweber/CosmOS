@@ -10,7 +10,7 @@
 #include <dev/i386/sound/sound.h>
 
 void sound_devicemgr_register_devices() {
-    ac97_devicemgr_register_devices();
-    sb16_devicemgr_register_devices();
-    adlib_devicemgr_register_devices();
+    //  ac97_devicemgr_register_devices();
+    //   sb16_devicemgr_register_devices();
+    //   adlib_devicemgr_register_devices();
 }
