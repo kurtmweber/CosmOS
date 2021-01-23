@@ -34,17 +34,17 @@ void video_write(const uint8_t* s);
 
 void CosmOS() {
     /*
-     * switch to new GDT.  this is in place bug seems to cause crashes....
-     */
-    //  gdt_install();
-
-    /*
      * Hello!
      */
     kprintf("Loading CosmOS 0.1\n");
 
     kprintf("Initializing IDT...\n");
     idt_init();
+
+    /*
+     * switch to new GDT.  this is in place bug seems to cause crashes....
+     */
+    //  gdt_install();
 
     kprintf("Initializing Spinlocks...\n");
     spinlocks_init();

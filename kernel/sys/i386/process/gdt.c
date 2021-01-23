@@ -47,13 +47,24 @@ void gdt_set_gate(uint8_t num, uint64_t base, uint64_t limit, uint8_t access, ui
      * Setup the descriptor limits
      */
     gdt[num].limit_low = (limit & 0xFFFF);
-    gdt[num].granularity = ((limit >> 16) & 0x0F);
+    gdt[num].granularity = gran;
 
     /*
      * Finally, set up the granularity and access flags
      */
-    gdt[num].granularity |= (gran & 0xF0);
+    //  gdt[num].granularity |= (gran & 0xF0);
     gdt[num].access = access;
+}
+
+void gdt_dump() {
+    kprintf("Pointer Base: 0x%llX Limit: 0x%llX\n", gdt_pointer.base, gdt_pointer.limit);
+    for (uint8_t i = 0; i < GDT_SIZE; i++) {
+        kprintf("Entry 0x%llX\n", i);
+        kprintf("   Base Low 0x%llX Middle 0x%llX High 0x%llX\n", gdt[i].base_low, gdt[i].base_middle, gdt[i].base_high);
+        kprintf("   Limit Low 0x%llX\n", gdt[i].limit_low);
+        kprintf("   Granularity 0x%llX\n", gdt[i].granularity);
+        kprintf("   Access 0x%llX\n", gdt[i].access);
+    }
 }
 
 void gdt_install() {
@@ -66,14 +77,14 @@ void gdt_install() {
     /*
      * Our NULL descriptor
      */
-    gdt_set_gate(0, 0, 0xFFFF, 0, 1);
+    gdt_set_gate(0, 0, 0xFFFFFFFF, 0, 1);
 
     /*
      * code segment
      */
     // 10011010 = 0x9A
     // 10101111 = 0xAF
-    gdt_set_gate(1, 0, 0xFFFF, 0x9A, 0xAF);
+    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xAF);
 
     /*
      * data segment
@@ -96,6 +107,8 @@ void gdt_install() {
     /*
      * Flush our the old GDT / TSS and install the new changes!
      */
+    kprintf("Flushing GDT\n");
+    gdt_dump();
     gdt_flush();
     //   _tss_flush();
 }
