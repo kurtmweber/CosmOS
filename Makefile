@@ -33,3 +33,6 @@ boot-clean:
 
 qemu: bootimage
 	$(QEMU) $(QEMUARGS)
+
+qemu-debug: bootimage
+	$(QEMU) $(QEMUARGS) $(QEMUDEBUGARGS)

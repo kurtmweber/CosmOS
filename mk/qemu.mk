@@ -17,7 +17,11 @@ QEMUARGS=                                                 \
   -monitor telnet::45454,server,nowait                    \
   -drive file=mbr_fat.img,index=1,format=raw           \
   -drive file=blank.img,index=2,format=raw          \
-  -D qemu.log                  
+  -D qemu.log
+
+QEMUDEBUGARGS=                                            \
+  -gdb tcp::1234                                          \
+  -S
 
  #  -device usb-ehci                                        \
 
