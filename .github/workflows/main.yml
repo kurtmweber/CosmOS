@@ -21,7 +21,7 @@ jobs:
       run: make
 
   build-osx:
-    runs-on: macos-11.0
+    runs-on: macos-10.15
     strategy:
       fail-fast: false
 
