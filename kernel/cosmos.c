@@ -129,11 +129,11 @@ void CosmOS() {
  */
 void create_consoles() {
     // video
-    struct device* vga = devicemgr_find_device("vga0");
-    if (0 != vga) {
-        // this makes "console0"
-        vga_console_attach(vga);
-    }
+    //   struct device* vga = devicemgr_find_device("vga0");
+    //   if (0 != vga) {
+    // this makes "console0"
+    // vga_console_attach(vga);
+    //  }
     // serial
     struct device* serial = devicemgr_find_device("serial0");
     if (0 != serial) {
