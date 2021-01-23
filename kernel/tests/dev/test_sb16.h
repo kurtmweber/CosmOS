@@ -8,6 +8,6 @@
 #ifndef __TEST_SB16_H
 #define __TEST_SB16_H
 
-void playsb16();
+void test_sb16();
 
 #endif

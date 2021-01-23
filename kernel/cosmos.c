@@ -160,7 +160,6 @@ void video_write(const uint8_t* s) {
 }
 
 void dev_tests() {
-    //	playsb16();
     //	floppyread();
     //	test_ata();
     //	test_vblock();
@@ -182,4 +181,5 @@ void dev_tests() {
     // test_display();
     //  test_mbr();
     // test_trap();
+    //  test_sb16();
 }

@@ -126,7 +126,7 @@ void* iobuffers_request_buffer(uint32_t size) {
     ASSERT_NOT_NULL(buffer_list);
 
     uint32_t page_count = iobuffers_calc_num_pages(size);
-    kprintf("   iobuffers_request_buffer for size %llu requires %llu pages of size %#hX \n", size, page_count, IOBUFFERS_BUFFER_SIZE);
+    //   kprintf("   iobuffers_request_buffer for size %llu requires %llu pages of size %#hX \n", size, page_count, IOBUFFERS_BUFFER_SIZE);
 
     for (uint32_t i = 0; i < (number_io_buffers - page_count); i++) {
         if (iobuffers_is_free_pages(i, page_count)) {

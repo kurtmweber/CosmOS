@@ -13,6 +13,7 @@ QEMUARGS=                                                 \
   -object filter-dump,id=f1,netdev=n0,file=dump.dat      \
   -serial stdio                                           \
   -audiodev coreaudio,id=audio0                           \
+  -device sb16,audiodev=audio0                          \
   -monitor telnet::45454,server,nowait                    \
   -drive file=mbr_fat.img,index=1,format=raw           \
   -drive file=blank.img,index=2,format=raw          \
