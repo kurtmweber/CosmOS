@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <dev/i386/isadma/isadma.h>
-#include <dev/i386/sb16/sb16.h>
+#include <dev/i386/sound/sb16/sb16.h>
 #include <sys/asm/asm.h>
 #include <sys/collection/arraylist/arraylist.h>
 #include <sys/debug/assert.h>

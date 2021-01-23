@@ -14,8 +14,6 @@
 
 #ifdef TARGET_PLATFORM_i386
 
-#include <dev/i386/ac97/ac97.h>
-#include <dev/i386/adlib/adlib.h>
 #include <dev/i386/ata/ata_controller.h>
 #include <dev/i386/bda/bda.h>
 #include <dev/i386/bridge/bridge.h>
@@ -33,8 +31,8 @@
 #include <dev/i386/pic/pic.h>
 #include <dev/i386/pit/pit.h>
 #include <dev/i386/rtc/rtc.h>
-#include <dev/i386/sb16/sb16.h>
 #include <dev/i386/serial/serial.h>
+#include <dev/i386/sound/sound.h>
 #include <dev/i386/speaker/speaker.h>
 #include <dev/i386/usb_ehci/usb_ehci.h>
 #include <dev/i386/vga/vga.h>

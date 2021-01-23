@@ -211,9 +211,7 @@ void devicemgr_register_devices() {
     mouse_devicemgr_register_devices();
     // floppy_devicemgr_register_devices();
     speaker_devicemgr_register_devices();
-    sb16_devicemgr_register_devices();
-    //	ac97_devicemgr_register_devices();
-    //	adlib_devicemgr_register_devices();
+    sound_devicemgr_register_devices();
     cpu_devicemgr_register_devices();
     //  virtio_devicemgr_register_devices();
     //  ramdisk_devicemgr_register_devices();

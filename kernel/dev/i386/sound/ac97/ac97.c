@@ -5,8 +5,8 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <dev/i386/ac97/ac97.h>
 #include <dev/i386/pci/pci.h>
+#include <dev/i386/sound/ac97/ac97.h>
 #include <sys/asm/asm.h>
 #include <sys/collection/arraylist/arraylist.h>
 #include <sys/debug/assert.h>
