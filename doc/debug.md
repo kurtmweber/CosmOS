@@ -43,7 +43,10 @@ Backtrace stopped: previous frame inner to this frame (corrupt stack?)
 ```
 
 ## VSCode debugging
-If you prefer VSCode, configure `launch.json` like so:
+If you prefer VSCode, you need two things:
+
+1. Install the [Native Debug](https://github.com/WebFreak001/code-debug) plugin from Webfreak. 
+2. configure `launch.json` like so:
 
 ```json
 {
