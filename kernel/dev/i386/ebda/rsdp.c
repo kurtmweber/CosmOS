@@ -6,6 +6,7 @@
 // ****************************************************************
 
 #include <dev/i386/ebda/rsdp.h>
+#include <sys/asm/byte.h>
 #include <sys/debug/assert.h>
 #include <sys/string/mem.h>
 
@@ -30,6 +31,21 @@ uint8_t rsdp_get_acpi_version(struct rsdp_descriptor_2* rsdp) {
 
 struct acpi_sdt_header* rsdp_get_acpi_header(struct rsdp_descriptor_2* rsdp) {
     ASSERT_NOT_NULL(rsdp);
+    // not implemented
+    ASSERT(0);
+    // this returns a PHYSICAL address, which happens to not be in
+    // the lower 1MB which is identity mapped.  Therefore we need to
+    // map it into our virtual memory space
     //    kprintf("RADT %#llX\n", rsdp->firstPart.rsdt_address);
     return (struct acpi_sdt_header*)(uint64_t)rsdp->firstPart.rsdt_address;
+}
+
+uint8_t rsdp_is_valid(struct rsdp_descriptor_2* rsdp) {
+    uint32_t sum = 0;
+    uint8_t* fp = (uint8_t*)&(rsdp->firstPart);
+    for (uint16_t i = 0; i < sizeof(rsdp->firstPart); i++) {
+        sum = sum + fp[i];
+    }
+    ASSERT(0 == LOW_OF_WORD(sum));
+    return (0 == LOW_OF_WORD(sum));
 }

@@ -11,5 +11,5 @@
 
 void isrGPF_handler(stackFrame *frame) {
     ASSERT_NOT_NULL(frame);
-    panic("GPF Exception");
+    panic("GPF Exception\n");
 }

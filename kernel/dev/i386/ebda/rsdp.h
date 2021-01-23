@@ -33,6 +33,7 @@ struct rsdp_descriptor_2 {
 void rsdp_get_signature(struct rsdp_descriptor_2* rsdp, uint8_t* buffer);
 void rsdp_get_oem_id(struct rsdp_descriptor_2* rsdp, uint8_t* buffer);
 uint8_t rsdp_get_acpi_version(struct rsdp_descriptor_2* rsdp);
+uint8_t rsdp_is_valid(struct rsdp_descriptor_2* rsdp);
 
 struct acpi_sdt_header* rsdp_get_acpi_header(struct rsdp_descriptor_2* rsdp);
 #endif
