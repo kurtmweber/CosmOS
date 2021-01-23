@@ -20,7 +20,8 @@
 * RAM Disk
 * BDA (Bios Data Area)
 * Parallel port
-
+* Swap device
+* MBR partition table and paritions
 
 ## In Development
 
@@ -39,7 +40,6 @@
 * TFS filesystem
 * FAT filesystem
 * CFS filesystem
-* SFS filesystem
-* Swap device
+* SFS filesystem 
 * GUID partition table
-* MBR partition table
+* ACPI.  We can get the physical address of the ACPI table but cant translate it to virtual address yet
