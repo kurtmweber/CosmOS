@@ -23,7 +23,7 @@
 * [Memory Map](memory_map.md)
 * [Collections](Collections.md)
 * [Assertions](assertions.md)
-* [Sevices](Devices.md)
+* [Devices](Devices.md)
 * [kprintf](KPrintfConversionSpecifiers.txt)
 * [Interrupts](interrupts.md)
 * [Console](KernelTerminalConsole.txt)
@@ -31,4 +31,3 @@
 * [Keyboard](Keyboard.txt)
 * [Trivial File System (TFS)](tfs.md)
 * [IO Buffers](io_buffers.md)
-
