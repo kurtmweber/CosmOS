@@ -18,16 +18,20 @@
 
 ## Developer Documentation
 
+* [Devices](Devices.md)
 * [Device Status](device_status.md)
 * [Block Devices](block_devices.md)
+* [VFS](cosmos_vfs.md)
 * [Memory Map](memory_map.md)
 * [Collections](Collections.md)
 * [Assertions](assertions.md)
-* [Devices](Devices.md)
 * [kprintf](KPrintfConversionSpecifiers.txt)
 * [Interrupts](interrupts.md)
 * [Console](KernelTerminalConsole.txt)
-* [Cosmos File System (CFS) Disk Format](CosmOSDiskFormat.txt)
 * [Keyboard](Keyboard.txt)
-* [Trivial File System (TFS)](tfs.md)
 * [IO Buffers](io_buffers.md)
+
+### File Systems
+
+* [Trivial File System (TFS)](tfs.md)
+* [Cosmos File System (CFS) Disk Format](CosmOSDiskFormat.txt)
