@@ -6,7 +6,7 @@ QEMUARGS=                                                 \
   -cpu core2duo                                           \
   -m 4096                                                \
   -no-reboot                                              \
-  -drive format=raw,file=img/hda.img                          \
+  -drive file=img/hda.img,index=0,format=raw              \
   -smp 1                                                  \
   -netdev user,id=n0,hostfwd=tcp::8080-:80  \
   -device rtl8139,netdev=n0       \
@@ -16,7 +16,8 @@ QEMUARGS=                                                 \
   -device adlib,audiodev=audio0                          \
   -monitor telnet::45454,server,nowait                    \
   -drive file=img/mbr_fat.img,index=1,format=raw           \
-  -drive file=img/blank.img,index=2,format=raw          \
+  -drive file=img/gpt_fat.img,index=2,format=raw          \
+  -drive file=img/blank.img,index=3,format=raw          \
   -D qemu.log
 
 QEMUDEBUGARGS=                                            \
