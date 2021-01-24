@@ -1,4 +1,4 @@
-name: DockerBuildEnv
+name: DockerBuild
 
 on:
   workflow_dispatch:
@@ -16,5 +16,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: {{ github.repository }}
+          repository: cosmos/dockerbuild
           tag_with_ref: true
