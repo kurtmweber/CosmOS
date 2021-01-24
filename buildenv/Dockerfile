@@ -8,7 +8,8 @@ RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y wget gcc libgmp3-dev libmpfr-dev libisl-dev \
 		libcloog-isl-dev libmpc-dev texinfo bison flex make bzip2 patch \
-		build-essential
+		build-essential \
+  && rm -rf /var/lib/apt/lists/*
 
 # Pull binutils and gcc source code
 RUN set -x \

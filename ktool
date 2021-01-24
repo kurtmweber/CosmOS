@@ -5,7 +5,8 @@ IMAGE=docker.pkg.github.com/jschnurr/cosmos/dockerbuild:latest
 export UID=$(id -u)
 export GID=$(id -g)
 
-# docker build -t $IMAGE . && \
+# Uncomment this to build the image (one-time)
+# docker build -t $IMAGE -f buildenv/Dockerfile . && \
 docker run --rm \
     --user $UID:$GID \
     --tty \
