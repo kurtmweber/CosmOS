@@ -55,3 +55,11 @@ From the root directory:
 
 The command `make qemu` will start QEMU and boot the image.  The QEMU monitor is exposed on port 45454 and can be connected to with `telnet localhost:45454`
 
+# Optional - Building with Docker (ktool)
+
+As an alternative to installing the build tools (gcc, binutils, nasm) on your local machine, you can use Docker. Simply prefix any build-related command with `./ktool` to run the command inside the docker context. Scripts run in the working directory on the host, and the container is immediately destroyed after use.
+
+For example: 
+`$ ./ktool make clean;make`
+
+

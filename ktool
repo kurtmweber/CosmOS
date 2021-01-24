@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+IMAGE=ghcr.io/jschnurr/cosmos-buildenv:v1
+
+export UID=$(id -u)
+export GID=$(id -g)
+
+# Uncomment this to build the image (one-time)
+# docker build -t $IMAGE -f buildenv/Dockerfile . && \
+docker run --rm \
+    --user $UID:$GID \
+    --tty \
+    --interactive \
+    --volume "${PWD}":/work \
+    $IMAGE "$@"
