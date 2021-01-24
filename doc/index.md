@@ -3,6 +3,7 @@
 
 ## Introduction
 
+* [What is CosmOS?](what_is_cosmos.md)
 * [Building and Running CosmOS](build.md)
 
 ## Contributing
