@@ -12,7 +12,7 @@
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 
-struct parition_devicedata {
+struct partition_devicedata {
     struct device* block_device;
     uint32_t lba;
     uint32_t sector_count;
@@ -24,7 +24,7 @@ struct parition_devicedata {
 void partition_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
+    struct partition_devicedata* deviceData = (struct partition_devicedata*)dev->deviceData;
     kprintf("Init %s on %s at lba %llu with %llu sectors (%s)\n", dev->description, deviceData->block_device->name, deviceData->lba, deviceData->sector_count, dev->name);
 }
 
@@ -34,7 +34,7 @@ void partition_init(struct device* dev) {
 void partition_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
+    struct partition_devicedata* deviceData = (struct partition_devicedata*)dev->deviceData;
     kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
     kfree(dev->deviceData);
@@ -43,14 +43,14 @@ void partition_uninit(struct device* dev) {
 uint16_t partition_sector_size(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
+    struct partition_devicedata* deviceData = (struct partition_devicedata*)dev->deviceData;
     return block_get_sector_size(deviceData->block_device);
 }
 
 uint32_t partition_total_size(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
+    struct partition_devicedata* deviceData = (struct partition_devicedata*)dev->deviceData;
     return block_get_total_size(deviceData->block_device);
 }
 
@@ -58,7 +58,7 @@ void partition_read_sector(struct device* dev, uint32_t sector, uint8_t* data, u
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
+    struct partition_devicedata* deviceData = (struct partition_devicedata*)dev->deviceData;
     return block_read_sectors(deviceData->block_device, deviceData->lba + sector, data, count);
 }
 
@@ -66,7 +66,7 @@ void partition_write_sector(struct device* dev, uint32_t sector, uint8_t* data, 
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct parition_devicedata* deviceData = (struct parition_devicedata*)dev->deviceData;
+    struct partition_devicedata* deviceData = (struct partition_devicedata*)dev->deviceData;
     return block_write_sectors(deviceData->block_device, deviceData->lba + sector, data, count);
 }
 
@@ -92,7 +92,7 @@ struct device* partition_attach(struct device* block_device, uint64_t lba, uint3
     /*
      * device data
      */
-    struct parition_devicedata* deviceData = (struct parition_devicedata*)kmalloc(sizeof(struct parition_devicedata));
+    struct partition_devicedata* deviceData = (struct partition_devicedata*)kmalloc(sizeof(struct partition_devicedata));
     deviceData->block_device = block_device;
     deviceData->lba = lba;
     deviceData->sector_count = sector_count;
