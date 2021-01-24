@@ -26,8 +26,12 @@ void tests_run() {
 
     // always run the tree tests
     test_tree();
+
+    // kernel string
+    //  test_kernel_string();
+
     // always run the string tests
-    //  test_string();
+    test_string();
 
     test_bitmap();
 

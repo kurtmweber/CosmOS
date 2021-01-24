@@ -35,7 +35,7 @@ void test_swap() {
         // write the string
         uint8_t write_buffer[512];
         memset(write_buffer, 0, 512);
-        strcpy(write_buffer, SWAP_TEST_STRING);
+        strncpy(write_buffer, SWAP_TEST_STRING, 512);
         kprintf("Str: %s\n", write_buffer);
 
         (*swap_api->write)(swap_device, write_buffer, 0);

@@ -16,7 +16,10 @@
 
 #define MAX_DEVICE_NAME_LENGTH 64
 
-int8_t* DeviceTypeNames[] = {"None", "serial", "vga", "rtc", "keyboard", "nic", "bridge", "usb", "ata", "pic", "mouse", "floppy", "speaker", "pit", "dsp", "cmos", "dma", "cpu", "rd", "vnic", "vblock", "disk", "par", "bda", "ebda", "swap", "fs", "pt", "console", "part"};
+int8_t* DeviceTypeNames[] = {"None", "serial", "vga",   "rtc",    "keyboard", "nic",  "bridge", "usb",
+                             "ata",  "pic",    "mouse", "floppy", "speaker",  "pit",  "dsp",    "cmos",
+                             "dma",  "cpu",    "rd",    "vnic",   "vblock",   "disk", "par",    "bda",
+                             "ebda", "swap",   "fs",    "pt",     "console",  "part"};
 
 void devicemgr_init() {
     deviceregistry_init();
@@ -28,7 +31,7 @@ int8_t* createDeviceName(struct device* dev) {
     int8_t nn[32];
     int8_t* ret = kmalloc(MAX_DEVICE_NAME_LENGTH);
     ASSERT_NOT_NULL(DeviceTypeNames[dev->devicetype]);
-    strcpy(ret, DeviceTypeNames[dev->devicetype]);
+    strncpy(ret, DeviceTypeNames[dev->devicetype], MAX_DEVICE_NAME_LENGTH);
     uitoa3(dev->type_index, nn, 32, 10);
     ret = strcat(ret, nn);
     return ret;
@@ -154,7 +157,7 @@ void devicemgr_set_device_description(struct device* dev, const uint8_t* descrip
     ASSERT(strlen(description) < DEVICEMGR_MAX_DESCRIPTION);
     ASSERT(strlen(description) > 0);
 
-    strcpy(dev->description, description);
+    strncpy(dev->description, description, DEVICEMGR_MAX_DESCRIPTION);
 
     //    kprintf("%s\n", dev->description);
 }
