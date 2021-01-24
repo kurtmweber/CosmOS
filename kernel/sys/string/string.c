@@ -13,11 +13,9 @@
 uint64_t strlen(const uint8_t* s) {
     ASSERT_NOT_NULL(s);
     uint64_t i = 0;
-
     while (s[i]) {
         i++;
     }
-
     return i;
 }
 
@@ -25,24 +23,20 @@ uint8_t* strtrim(const uint8_t* s) {
     ASSERT_NOT_NULL(s);
     uint64_t i = 0;
     uint64_t j;
-
     uint8_t* tgt;
 
     i = strlen(s);
-
     j = i - 1;
-
     while ((s[j] == ' ') || (s[j] == '\t')) {
         j--;
     }
-
     tgt = kmalloc((j + 2) * sizeof(uint8_t));  // +1 for the fact that it's a zero-based index, +1 for the terminator
 
     for (i = 0; i <= j; i++) {
         tgt[i] = s[i];
     }
 
-    tgt[j + 1] = '\0';
+    tgt[j + 1] = 0;
     return tgt;
 }
 
@@ -85,7 +79,7 @@ uint8_t strcmp(const uint8_t* str1, const uint8_t* str2) {
         if (str1[i] != str2[i]) {
             return str1[i] < str2[i] ? -1 : 1;
         }
-        if (str1[i] == '\0') {
+        if (str1[i] == 0) {
             return 0;
         }
     }
