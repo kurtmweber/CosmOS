@@ -8,7 +8,7 @@
 ## Contributing
 
 * [CosmOS coding standards](CodingStandards.md)
-* [Operating System Development Resources](osdev resources.md)
+* [Operating System Development Resources](osdev_resources.md)
 
 # Debugging
 
@@ -17,6 +17,7 @@
 ## Developer Documentation
 
 * [Device Status](device_status.md)
+* [Block Devices](block_devices.md)
 * [Memory Map](memory_map.md)
 * [Collections](Collections.md)
 * [Assertions](assertions.md)
@@ -27,4 +28,5 @@
 * [Cosmos File System (CFS) Disk Format](CosmOSDiskFormat.txt)
 * [Keyboard](Keyboard.txt)
 * [Trivial File System (TFS)](tfs.md)
+* [IO Buffers](io_buffers.md)
 
