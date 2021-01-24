@@ -25,6 +25,6 @@ struct ip_header {
     uint32_t daddr;
 } __attribute__((packed));
 
-uint16_t ip_checksum(uint16_t *addr, int count);
+uint16_t ip_checksum(uint16_t* addr, int count);
 
 #endif

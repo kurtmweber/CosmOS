@@ -155,10 +155,14 @@ void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param)
     param->sectors_per_cluster = fat_boot->sectors_per_cluster;
     param->total_sectors = (fat_boot->total_sectors_16 == 0) ? fat_boot->total_sectors_32 : fat_boot->total_sectors_16;
     param->fat_size = (fat_boot->table_size_16 == 0) ? fat_boot_ext_32->table_size_32 : fat_boot->table_size_16;
-    param->root_dir_sectors = ((fat_boot->root_entry_count * 32) + (fat_boot->bytes_per_sector - 1)) / fat_boot->bytes_per_sector;
-    param->first_data_sector = fat_boot->reserved_sector_count + (fat_boot->table_count * param->fat_size) + param->root_dir_sectors;
+    param->root_dir_sectors =
+        ((fat_boot->root_entry_count * 32) + (fat_boot->bytes_per_sector - 1)) / fat_boot->bytes_per_sector;
+    param->first_data_sector =
+        fat_boot->reserved_sector_count + (fat_boot->table_count * param->fat_size) + param->root_dir_sectors;
     param->first_fat_sector = fat_boot->reserved_sector_count;
-    param->data_sectors = fat_boot->total_sectors_16 - (fat_boot->reserved_sector_count + (fat_boot->table_count * param->fat_size) + param->root_dir_sectors);
+    param->data_sectors =
+        fat_boot->total_sectors_16 -
+        (fat_boot->reserved_sector_count + (fat_boot->table_count * param->fat_size) + param->root_dir_sectors);
     param->total_clusters = param->data_sectors / fat_boot->sectors_per_cluster;
     param->first_root_dir_sector = param->first_data_sector - param->root_dir_sectors;
     param->root_cluster_32 = fat_boot_ext_32->root_cluster;

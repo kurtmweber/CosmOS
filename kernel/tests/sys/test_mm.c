@@ -12,7 +12,7 @@
 #include <tests/sys/test_mm.h>
 
 void test_mm() {
-    mem_block *tmp;
+    mem_block* tmp;
     tmp = usable_phys_blocks;
 
     do {
@@ -20,5 +20,4 @@ void test_mm() {
     } while ((tmp = tmp->next));
 }
 
-void test_pagetables() {
-}
+void test_pagetables() {}

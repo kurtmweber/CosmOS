@@ -17,8 +17,7 @@
 #define RAMDISK_SECTOR_SIZE 512
 #define RAMDISK_TOTAL_SECTORS 1000
 
-uint8_t* testdata =
-    "We were very tired, we were very merry, \
+uint8_t* testdata = "We were very tired, we were very merry, \
 We had gone back and forth all night on the ferry. \
 We hailed, Good morrow, mother! to a shawl-covered head, \
 And bought a morning paper, which neither of us read; \

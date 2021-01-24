@@ -31,7 +31,8 @@ void ramdisk_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct ramdisk_devicedata* deviceData = (struct ramdisk_devicedata*)dev->deviceData;
-    kprintf("Init %s of size %llu MB at %#hX (%s)\n", dev->description, (deviceData->size) / 1024, deviceData->data, dev->name);
+    kprintf("Init %s of size %llu MB at %#hX (%s)\n", dev->description, (deviceData->size) / 1024, deviceData->data,
+            dev->name);
     memset(deviceData->data, 0, deviceData->size);
 }
 

@@ -59,7 +59,8 @@ void guid_pt_init(struct device* dev) {
      * mount partition devices
      */
     for (uint32_t i = 0; i < deviceData->num_partitions; i++) {
-        partition_attach(deviceData->block_device, guid_pt_part_table_get_partition_lba(dev, i), guid_part_table_get_sector_count_function(dev, i));
+        partition_attach(deviceData->block_device, guid_pt_part_table_get_partition_lba(dev, i),
+                         guid_part_table_get_sector_count_function(dev, i));
     }
 }
 

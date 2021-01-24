@@ -12,11 +12,11 @@
 #include <sys/i386/interrupts/irq.h>
 #include <types.h>
 
-void isrDE(stackFrame *frame);
-void isrPFE(stackFrame *frame, uint64_t error);
-void isrGeneric(stackFrame *frame);
-void isrGPF(stackFrame *frame);
-void isrDebug(stackFrame *frame);
-void isrBreakpoint(stackFrame *frame);
+void isrDE(stackFrame* frame);
+void isrPFE(stackFrame* frame, uint64_t error);
+void isrGeneric(stackFrame* frame);
+void isrGPF(stackFrame* frame);
+void isrDebug(stackFrame* frame);
+void isrBreakpoint(stackFrame* frame);
 
 #endif

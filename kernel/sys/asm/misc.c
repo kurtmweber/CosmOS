@@ -22,8 +22,8 @@ void asm_cli() {
     return;
 }
 
-void *asm_cr2_read() {
-    void *ret;
+void* asm_cr2_read() {
+    void* ret;
 
     asm volatile("mov %%cr2, %0" : "=r"(ret));
 
@@ -39,12 +39,11 @@ pttentry asm_cr3_read() {
 }
 
 void asm_cr3_reload() {
-    asm volatile(
-        "mov %%cr3, %%rax\n"
-        "mov %%rax, %%cr3"
-        :
-        :
-        : "%eax");
+    asm volatile("mov %%cr3, %%rax\n"
+                 "mov %%rax, %%cr3"
+                 :
+                 :
+                 : "%eax");
 
     return;
 }

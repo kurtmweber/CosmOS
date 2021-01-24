@@ -28,9 +28,11 @@ struct arp {
     uint8_t plen;                       // Protocol address length (IPv4 = 4)
     uint16_t opcode;                    // ARP Operation Code
     uint8_t source_hardware[ARP_HLEN];  // Source hardware address - hlen bytes (see above)
-    uint8_t source_protocol[ARP_PLEN];  // Source protocol address - plen bytes (see above). If IPv4 can just be a "u32" type.
-    uint8_t dest_hardware[ARP_HLEN];    // Destination hardware address - hlen bytes (see above)
-    uint8_t dest_protocol[ARP_PLEN];    // Destination protocol address - plen bytes (see above). If IPv4 can just be a "u32" type.
+    uint8_t source_protocol
+        [ARP_PLEN];  // Source protocol address - plen bytes (see above). If IPv4 can just be a "u32" type.
+    uint8_t dest_hardware[ARP_HLEN];  // Destination hardware address - hlen bytes (see above)
+    uint8_t dest_protocol
+        [ARP_PLEN];  // Destination protocol address - plen bytes (see above). If IPv4 can just be a "u32" type.
 };
 
 struct arp* arp_new(uint16_t opcode);

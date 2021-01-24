@@ -15,11 +15,11 @@
 uint64_t future_pt_expansion[3];
 
 void mmu_init() {
-    int_15_map *map;
+    int_15_map* map;
     uint8_t num_blocks, lrg_block;
     uint8_t i;
-    mem_block *b;
-    page_directory_t *page_directory_start;
+    mem_block* b;
+    page_directory_t* page_directory_start;
 
     brk = &_end;
     //   kprintf("   brk: 0x%llX\n", (uint64_t)brk);
@@ -37,7 +37,7 @@ void mmu_init() {
 
     map = read_int_15_map(&num_blocks, &lrg_block);
 
-    page_directory_start = (page_directory_t *)setup_direct_map(map, num_blocks);
+    page_directory_start = (page_directory_t*)setup_direct_map(map, num_blocks);
 
     setup_page_directory(page_directory_start, map, num_blocks);
 

@@ -11,14 +11,14 @@
 
 #include <sys/net/ip.h>
 
-uint16_t ip_checksum(uint16_t *addr, int count) {
+uint16_t ip_checksum(uint16_t* addr, int count) {
     uint32_t ret = 0;
     while (count > 1) {
         ret += *addr++;
         count -= 2;
     }
     if (count > 0) {
-        ret += *(uint8_t *)addr;
+        ret += *(uint8_t*)addr;
     }
     while (ret >> 16) {
         ret = (ret & 0xffff) + (ret >> 16);

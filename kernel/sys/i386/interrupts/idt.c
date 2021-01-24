@@ -86,7 +86,7 @@ void idt_init() {
     // asm_sti()
 }
 
-void idt_add_ISR(void *func, intVectors vector) {
+void idt_add_ISR(void* func, intVectors vector) {
     ASSERT_NOT_NULL(func);
     idt[vector].offsetWordLow = (uint16_t)((uint64_t)func & 0xFFFF);
     idt[vector].selector = 8;

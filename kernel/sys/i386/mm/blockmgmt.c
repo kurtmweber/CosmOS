@@ -10,11 +10,11 @@
 #include <sys/kprintf/kprintf.h>
 #include <types.h>
 
-mem_block *find_containing_block(void *addr, mem_block *list) {
+mem_block* find_containing_block(void* addr, mem_block* list) {
     ASSERT_NOT_NULL(addr);
 
     // returns NULL if the requested address is not found within a block in the list
-    mem_block *tmp;
+    mem_block* tmp;
 
     tmp = list;
 
@@ -30,14 +30,14 @@ mem_block *find_containing_block(void *addr, mem_block *list) {
 
 const uint16_t map_base_addr = 0x500;
 
-int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block) {
+int_15_map* read_int_15_map(uint8_t* num_blocks, uint8_t* lrg_block) {
     ASSERT_NOT_NULL(num_blocks);
     ASSERT_NOT_NULL(lrg_block);
 
-    int_15_map *map;
+    int_15_map* map;
     uint8_t i = 0;
 
-    map = (int_15_map *)((uint64_t)map_base_addr);
+    map = (int_15_map*)((uint64_t)map_base_addr);
 
     *lrg_block = 0;  // don't assume it's initialized by caller
 
