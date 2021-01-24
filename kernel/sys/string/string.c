@@ -58,20 +58,23 @@ uint8_t* strncpy(uint8_t* dest, const uint8_t* src, uint64_t len) {
     return dest;
 }
 
-uint8_t* strcat(uint8_t* dest, const uint8_t* src) {
+uint8_t* strncat(uint8_t* dest, const uint8_t* src, uint64_t len) {
     ASSERT_NOT_NULL(dest);
     ASSERT_NOT_NULL(src);
+    ASSERT(len > 0);
 
+    // walk to end of dest
     uint16_t i = 0;
     while (dest[i] != 0) {
         i++;
     }
+
     uint16_t j = 0;
-    while (src[j] != 0) {
+    while (((i + j) < (len - 1)) && (src[j] != 0)) {
         dest[i + j] = src[j];
         j++;
     }
-    dest[i + j + 1] = 0;
+    dest[i + j] = 0;
     return dest;
 }
 

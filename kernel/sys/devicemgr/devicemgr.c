@@ -33,7 +33,7 @@ int8_t* createDeviceName(struct device* dev) {
     ASSERT_NOT_NULL(DeviceTypeNames[dev->devicetype]);
     strncpy(ret, DeviceTypeNames[dev->devicetype], MAX_DEVICE_NAME_LENGTH);
     uitoa3(dev->type_index, nn, 32, 10);
-    ret = strcat(ret, nn);
+    ret = strncat(ret, nn, MAX_DEVICE_NAME_LENGTH);
     return ret;
 }
 

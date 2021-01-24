@@ -64,9 +64,11 @@ void debug_show_memblock(uint8_t* block, uint16_t size) {
              * ok we added the hex bytes, now add the ascii
              */
             out_bytes[line_count++] = ' ';
-            for (uint16_t i = 0; i < DEBUG_LINE_WIDTH; i++) {
-                if ((block[i] >= ASCII_MIN) && (block[i] <= ASCII_MAX)) {
-                    out_bytes[line_count++] = block[i];
+            for (uint32_t j = 0; j < DEBUG_LINE_WIDTH; j++) {
+                uint32_t idx = (i - (DEBUG_LINE_WIDTH - 1)) + j;
+                //     kprintf("idx %llu\n", idx);
+                if ((block[idx] >= ASCII_MIN) && (block[idx] <= ASCII_MAX)) {
+                    out_bytes[line_count++] = block[idx];
                 } else {
                     out_bytes[line_count++] = '.';
                 }
