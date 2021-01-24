@@ -15,15 +15,15 @@ CosmOS requires:
 
 [HomeBrew](https://brew.sh/) can be used on OS X to install the prerequisites
 
-`sudo brew install x86_64-elf-binutils`
+`brew install x86_64-elf-binutils`
 
-`sudo brew install x86_64-elf-gcc`
+`brew install x86_64-elf-gcc`
 
-`sudo brew install nasm`
+`brew install nasm`
 
-`sudo brew install qemu`
+`brew install qemu`
 
-`sudo brew install clang-format`
+`brew install clang-format`
 
 OS X includes Clang.
 

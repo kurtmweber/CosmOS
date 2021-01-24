@@ -1,17 +1,30 @@
 
-## Welcome to the CosmOS kernel documentation
+# Welcome to the CosmOS kernel documentation
+
+## Introduction
 
 * [Building and Running CosmOS](build.md)
-* [Debugging the kernel](debug.md)
-* [CosmOS Device Status](device_status.md)
-* [CosmOS Memory Map](memory_map.md)
+
+## Contributing
+
 * [CosmOS coding standards](CodingStandards.md)
-* [CosmOS collections](Collections.md)
-* [CosmOS assertions](assertions.md)
-* [CosmOS devices](Devices.md)
-* [CosmOS kprintf](KPrintfConversionSpecifiers.txt)
-* [CosmOS interrupts](interrupts.md)
-* [CosmOS Console](KernelTerminalConsole.txt)
-* [CosmOS Disk Format](CosmOSDiskFormat.txt)
-* [CosmOS Keyboard](Keyboard.txt)
+* [Operating System Development Resources](osdev resources.md)
+
+# Debugging
+
+* [Debugging the kernel](debug.md)
+
+## Developer Documentation
+
+* [Device Status](device_status.md)
+* [Memory Map](memory_map.md)
+* [Collections](Collections.md)
+* [Assertions](assertions.md)
+* [Sevices](Devices.md)
+* [kprintf](KPrintfConversionSpecifiers.txt)
+* [Interrupts](interrupts.md)
+* [Console](KernelTerminalConsole.txt)
+* [Cosmos File System (CFS) Disk Format](CosmOSDiskFormat.txt)
+* [Keyboard](Keyboard.txt)
+* [Trivial File System (TFS)](tfs.md)
 
