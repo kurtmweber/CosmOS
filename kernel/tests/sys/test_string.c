@@ -11,6 +11,13 @@
 #include <sys/string/string.h>
 #include <tests/sys/test_string.h>
 
+void test_strtrim() {
+    uint8_t source1[] = {"england expects   "};
+    uint8_t* trimmed1 = strtrim(source1);
+    ASSERT_NOT_NULL(trimmed1);
+    ASSERT(strcmp(trimmed1, "england expects") == 0);
+}
+
 void test_strncpy() {
     uint8_t source[] = {"this is a test"};
     //   kprintf("source %llu\n", strlen(source));
@@ -66,4 +73,5 @@ void test_string() {
     kprintf("Testing string\n");
     test_strncpy();
     test_strncat();
+    test_strtrim();
 }

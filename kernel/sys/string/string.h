@@ -15,6 +15,8 @@ void uitoa3(uint64_t n, char* s, uint16_t len, uint8_t base);
 
 // string.c
 uint64_t strlen(const uint8_t* s);
+
+// note that this allocates a new string!
 uint8_t* strtrim(const uint8_t* s);
 
 // len is the byte size of the dest buffer
