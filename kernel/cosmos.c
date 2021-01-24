@@ -91,7 +91,7 @@ void CosmOS() {
     /*
      * say hi on the VGA console
      */
-    video_write("Welcome to Cosmos");
+    //  video_write("Welcome to Cosmos");
 
     kprintf("\n");
     kprintf("***** Kernel Initialization Complete *****\n");
