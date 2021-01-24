@@ -58,12 +58,12 @@ uint8_t* strncat(uint8_t* dest, const uint8_t* src, uint64_t len) {
     ASSERT(len > 0);
 
     // walk to end of dest
-    uint16_t i = 0;
+    uint64_t i = 0;
     while (dest[i] != 0) {
         i++;
     }
 
-    uint16_t j = 0;
+    uint64_t j = 0;
     while (((i + j) < (len - 1)) && (src[j] != 0)) {
         dest[i + j] = src[j];
         j++;
@@ -75,7 +75,7 @@ uint8_t* strncat(uint8_t* dest, const uint8_t* src, uint64_t len) {
 uint8_t strcmp(const uint8_t* str1, const uint8_t* str2) {
     ASSERT_NOT_NULL(str1);
     ASSERT_NOT_NULL(str2);
-    for (int i = 0;; i++) {
+    for (uint64_t i = 0;; i++) {
         if (str1[i] != str2[i]) {
             return str1[i] < str2[i] ? -1 : 1;
         }
