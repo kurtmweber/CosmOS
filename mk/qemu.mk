@@ -1,13 +1,22 @@
-
 # qemu
 QEMU=qemu-system-x86_64
+
+# debug args
+QEMUDEBUGARGS=                                            \
+  -gdb tcp::1234                                          \
+  -S
+
+# args
 QEMUARGS=                                                 \
   -accel tcg,thread=single                                \
   -cpu core2duo                                           \
   -m 4096                                                \
+  -smp 1                                                  \
   -no-reboot                                              \
   -drive file=img/hda.img,index=0,format=raw              \
-  -smp 1                                                  \
+  -drive file=img/mbr_fat.img,index=1,format=raw           \
+  -drive file=img/gpt_fat.img,index=2,format=raw          \
+  -drive file=img/blank.img,index=3,format=raw          \
   -netdev user,id=n0,hostfwd=tcp::8080-:80  \
   -device rtl8139,netdev=n0       \
   -object filter-dump,id=f1,netdev=n0,file=dump.dat      \
@@ -15,14 +24,7 @@ QEMUARGS=                                                 \
   -audiodev coreaudio,id=audio0                           \
   -device adlib,audiodev=audio0                          \
   -monitor telnet::45454,server,nowait                    \
-  -drive file=img/mbr_fat.img,index=1,format=raw           \
-  -drive file=img/gpt_fat.img,index=2,format=raw          \
-  -drive file=img/blank.img,index=3,format=raw          \
   -D qemu.log
-
-QEMUDEBUGARGS=                                            \
-  -gdb tcp::1234                                          \
-  -S
 
  #  -device usb-ehci                                        \
 
