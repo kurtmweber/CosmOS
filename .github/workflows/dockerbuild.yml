@@ -1,5 +1,7 @@
 name: DockerBuild
 
+# change to on: workflow_dispatch once this workflow is in main. Until then
+# github won't show it as an action. There is no point in building this every time.
 on:
   push:
     branches: '*'
@@ -17,5 +19,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: cosmos/dockerbuild
-          tag_with_ref: true
+          repository: jschnurr/cosmos/dockerbuild
+          tags: latest

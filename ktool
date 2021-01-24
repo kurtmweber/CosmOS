@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-IMAGE=cosmos/ktool:latest
+IMAGE=docker.pkg.github.com/jschnurr/cosmos/dockerbuild:latest
 export UID=$(id -u)
 export GID=$(id -g)
 
-docker build -t $IMAGE . && \
+# docker build -t $IMAGE . && \
 docker run --rm \
     --user $UID:$GID \
     --tty \
