@@ -1,17 +1,18 @@
 
-# Welcome to the CosmOS kernel documentation
+# CosmOS Documentation
 
 ## Introduction
 
 * [What is CosmOS?](what_is_cosmos.md)
 * [Building and Running CosmOS](build.md)
+* [License](LICENSE)
 
 ## Contributing
 
 * [CosmOS coding standards](CodingStandards.md)
 * [Operating System Development Resources](osdev_resources.md)
 
-# Debugging
+## Debugging
 
 * [Debugging the kernel](debug.md)
 
