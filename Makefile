@@ -2,6 +2,8 @@ include mk/build.mk
 
 BOOTIMAGE=hda.img
 BLANK_DISK=blank.img
+SRC_FILES=$(shell find . -type f \( -name "*.c" -o -name "*.h" \))
+
 all: subsystems
 
 bootimage: subsystems
@@ -36,3 +38,6 @@ qemu: bootimage
 
 qemu-debug: bootimage
 	$(QEMU) $(QEMUARGS) $(QEMUDEBUGARGS)
+
+lint:
+	clang-format -n -style=file $(SRC_FILES)
