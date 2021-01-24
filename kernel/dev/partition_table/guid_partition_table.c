@@ -132,6 +132,14 @@ uint8_t guid_pt_part_table_total_partitions(struct device* dev) {
     return header.num_partitions;
 }
 
+uint8_t guid_part_table_attachable(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+}
+
+uint8_t guid_part_table_detachable(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+}
+
 struct device* guid_pt_attach(struct device* block_device) {
     /*
      * register device
@@ -150,6 +158,8 @@ struct device* guid_pt_attach(struct device* block_device) {
     api->lba = &guid_pt_part_table_get_partition_lba;
     api->type = &guid_pt_part_table_get_partition_type;
     api->sectors = &guid_part_table_get_sector_count_function;
+    api->attachable = &guid_part_table_attachable;
+    api->detachable = &guid_part_table_detachable;
     deviceinstance->api = api;
     /*
      * device data

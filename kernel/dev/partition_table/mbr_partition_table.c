@@ -129,6 +129,14 @@ uint8_t mbr_pt_part_table_total_partitions(struct device* dev) {
     return ret;
 }
 
+uint8_t mbr_part_table_attachable(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+}
+
+uint8_t mbr_part_table_detachable(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+}
+
 struct device* mbr_pt_attach(struct device* block_device) {
     ASSERT(sizeof(struct mbr_pt_entry) == 16);
     /*
@@ -148,6 +156,8 @@ struct device* mbr_pt_attach(struct device* block_device) {
     api->lba = &mbr_pt_part_table_get_partition_lba;
     api->type = &mbr_pt_part_table_get_partition_type;
     api->sectors = &mbr_part_table_get_sector_count_function;
+    api->attachable = &mbr_part_table_attachable;
+    api->detachable = &mbr_part_table_detachable;
     deviceinstance->api = api;
     /*
      * device data
