@@ -25,7 +25,7 @@ RUN set -x \
 	&& chmod -R o-w,g+w gcc-${GCC_VERSION}
 
 # Copy compile scripts
-COPY . /usr/local/src/
+COPY buildenv /usr/local/src/
 
 # Build and install binutils and the cross-compiler
 RUN set -x \

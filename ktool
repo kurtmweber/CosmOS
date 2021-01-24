@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+#TODO: point to primary repo once we're able to push to master
 IMAGE=docker.pkg.github.com/jschnurr/cosmos/dockerbuild:latest
 export UID=$(id -u)
 export GID=$(id -g)
