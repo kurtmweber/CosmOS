@@ -11,4 +11,6 @@
 
 [Bran's Tutorials Source Code](https://github.com/pisceseyes/bkerndev)
 
+[BrokenThorn](http://www.brokenthorn.com/Resources/OSDevIndex.html)
+
 [intermezzos](https://intermezzos.github.io/book/first-edition/preface.html)
