@@ -7,7 +7,10 @@
 *.obj
 *.elf
 *.bin
-*.img
+cosmos.img
+cosmos.elf
+cosmos.bin
+cosmos.map
 kernel/cosmos
 
 # Linker output
@@ -62,3 +65,5 @@ dkms.conf
 **/*.DS_Store
 /dump.dat
 /qemu.log
+/img/hda.img
+/img/Dos622-1.img

@@ -1,7 +1,7 @@
 include mk/build.mk
 
-BOOTIMAGE=hda.img
-BLANK_DISK=blank.img
+BOOTIMAGE=img/hda.img
+BLANK_DISK=img/blank.img
 SRC_FILES=$(shell find . -type f \( -name "*.c" -o -name "*.h" \))
 
 all: subsystems
