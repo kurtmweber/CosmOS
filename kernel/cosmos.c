@@ -42,9 +42,9 @@ void CosmOS() {
     idt_init();
 
     /*
-     * switch to new GDT.  this is in place bug seems to cause crashes....
+     * switch to new GDT.  causes GPF currently.....
      */
-    //  gdt_install();
+    // gdt_install();
 
     kprintf("Initializing Spinlocks...\n");
     spinlocks_init();
