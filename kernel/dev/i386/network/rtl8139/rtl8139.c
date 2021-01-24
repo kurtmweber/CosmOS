@@ -37,13 +37,13 @@
 
 #define RTL8139_RECEIVE 0x01
 
-void rtl8139_clear_interrupt(struct device *dev);
-uint16_t rtl8139_get_isr_status(struct device *dev);
+void rtl8139_clear_interrupt(struct device* dev);
+uint16_t rtl8139_get_isr_status(struct device* dev);
 
-void rtl8139_irq_handler_for_device(struct device *dev) {
+void rtl8139_irq_handler_for_device(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
+    struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*)dev->deviceData;
 
     kprintf("@\n");
     uint16_t isr_status = rtl8139_get_isr_status(dev);
@@ -55,34 +55,34 @@ void rtl8139_irq_handler_for_device(struct device *dev) {
     rtl8139_clear_interrupt(dev);
 }
 
-uint16_t rtl8139_get_isr_status(struct device *dev) {
+uint16_t rtl8139_get_isr_status(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     return rtl8139_read_word(dev, RTL8139_REGISTER_ISR);
 }
 
-void rtl8139_irq_handler(stackFrame *frame) {
+void rtl8139_irq_handler(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);
     devicemgr_find_devices_by_description(NIC, RTL8139_DESCRIPTION, &rtl8139_irq_handler_for_device);
 }
 
-void rtl8139_power_on(struct device *dev) {
+void rtl8139_power_on(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     rtl8139_write_byte(dev, RTL8139_REGISTER_CONFIG1, 0x00);
 }
 
-void rtl8139_enable_rx_tx_interrupts(struct device *dev) {
+void rtl8139_enable_rx_tx_interrupts(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     // Sets the TOK and ROK bits high
     rtl8139_write_word(dev, RTL8139_REGISTER_IMR, 0x0005);
 }
 
-void rtl8139_enable_rx_tx(struct device *dev) {
+void rtl8139_enable_rx_tx(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     // Sets the RE and TE bits high
     rtl8139_write_byte(dev, RTL8139_REGISTER_CMD, 0x0c);
 }
 
-void rtl8139_reset(struct device *dev) {
+void rtl8139_reset(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     rtl8139_write_byte(dev, RTL8139_REGISTER_CMD, 0x10);
     while ((rtl8139_read_byte(dev, RTL8139_REGISTER_CMD) & 0x10) != 0) {
@@ -90,7 +90,7 @@ void rtl8139_reset(struct device *dev) {
     }
 }
 
-void rtl8139_set_rx_buffer(struct device *dev, uint8_t *buffer) {
+void rtl8139_set_rx_buffer(struct device* dev, uint8_t* buffer) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(buffer);
 
@@ -99,21 +99,21 @@ void rtl8139_set_rx_buffer(struct device *dev, uint8_t *buffer) {
     rtl8139_write_dword(dev, RTL8139_REGISTER_RBSTART, add);
 }
 
-void rtl8139_configure_rcr(struct device *dev) {
+void rtl8139_configure_rcr(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     // accept everything, and do buffer wrap
     rtl8139_write_dword(dev, RTL8139_REGISTER_RCR, 0x0f | 1 << 7);
 }
 
-void rtl8139_clear_interrupt(struct device *dev) {
+void rtl8139_clear_interrupt(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     rtl8139_write_word(dev, RTL8139_REGISTER_ISR, 0x01);
 }
 
-void rtl8139_read_mac(struct device *dev) {
+void rtl8139_read_mac(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
+    struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*)dev->deviceData;
 
     devicedata->mac[0] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5);
     devicedata->mac[1] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5 + 1);
@@ -121,19 +121,21 @@ void rtl8139_read_mac(struct device *dev) {
     devicedata->mac[3] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5 + 3);
     devicedata->mac[4] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5 + 4);
     devicedata->mac[5] = rtl8139_read_byte(dev, RTL8139_REGISTER_MAC0_5 + 5);
-    kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n", devicedata->mac[0], devicedata->mac[1], devicedata->mac[2], devicedata->mac[3], devicedata->mac[4], devicedata->mac[5]);
+    kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n", devicedata->mac[0], devicedata->mac[1], devicedata->mac[2],
+            devicedata->mac[3], devicedata->mac[4], devicedata->mac[5]);
 }
 
 /*
  * perform device instance specific init here
  */
-void rtl8139_init(struct device *dev) {
+void rtl8139_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
+    struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*)dev->deviceData;
     devicedata->irq = dev->pci->irq;
     devicedata->base = pci_calcbar(dev->pci);
-    kprintf("Init %s at IRQ %llu Base %#hX Vendor %#hX Device %#hX (%s)\n", dev->description, devicedata->irq, devicedata->base, dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    kprintf("Init %s at IRQ %llu Base %#hX Vendor %#hX Device %#hX (%s)\n", dev->description, devicedata->irq,
+            devicedata->base, dev->pci->vendor_id, dev->pci->device_id, dev->name);
     /*
      * mac
      */
@@ -141,12 +143,12 @@ void rtl8139_init(struct device *dev) {
     /*
      * allocate rx buffer
      */
-    extern void *isadma_buf;
+    extern void* isadma_buf;
     devicedata->rx_buffer = iobuffers_request_buffer(RTL8139_RX_BUFFERSIZE);
     kprintf("   RX buffer %#hX-%#llX\n", devicedata->rx_buffer, RTL8139_RX_BUFFERSIZE + devicedata->rx_buffer);
     // check that rxbuffer is in lower 2^32 bytes of RAM
     uint64_t rx_buffer_address = (uint64_t)devicedata->rx_buffer;
-    memset((uint8_t *)rx_buffer_address, 0, RTL8139_RX_BUFFERSIZE);
+    memset((uint8_t*)rx_buffer_address, 0, RTL8139_RX_BUFFERSIZE);
     ASSERT((rx_buffer_address & 0xFFFFFFFF) == rx_buffer_address);
     /*
      * register interrupt
@@ -178,21 +180,21 @@ void rtl8139_init(struct device *dev) {
     rtl8139_enable_rx_tx(dev);
 }
 
-void rtl8139_ethernet_read(struct device *dev, uint8_t *data, uint16_t size) {
+void rtl8139_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
     ASSERT_NOT_NULL(dev->deviceData);
 
-    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
+    struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*)dev->deviceData;
 
     panic("Ethernet read not implemented yet");
 }
 
-void rtl8139_ethernet_write(struct device *dev, uint8_t *data, uint16_t size) {
+void rtl8139_ethernet_write(struct device* dev, uint8_t* data, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(data);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct rtl8139_devicedata *devicedata = (struct rtl8139_devicedata *)dev->deviceData;
+    struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*)dev->deviceData;
     // i dunno, some magic
     ASSERT(size < 1792);
 
@@ -234,11 +236,11 @@ void rtl8139_ethernet_write(struct device *dev, uint8_t *data, uint16_t size) {
     }
 }
 
-void rtl8139_search_cb(struct pci_device *dev) {
+void rtl8139_search_cb(struct pci_device* dev) {
     /*
      * register device
      */
-    struct device *deviceinstance = devicemgr_new_device();
+    struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init = &rtl8139_init;
     deviceinstance->pci = dev;
     deviceinstance->devicetype = NIC;
@@ -246,14 +248,14 @@ void rtl8139_search_cb(struct pci_device *dev) {
     /*
      * the device api
      */
-    struct deviceapi_ethernet *api = (struct deviceapi_ethernet *)kmalloc(sizeof(struct deviceapi_ethernet));
+    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*)kmalloc(sizeof(struct deviceapi_ethernet));
     api->write = &rtl8139_ethernet_read;
     api->read = &rtl8139_ethernet_write;
     deviceinstance->api = api;
     /*
      * the deviceData
      */
-    struct rtl8139_devicedata *deviceData = (struct rtl8139_devicedata *)kmalloc(sizeof(struct rtl8139_devicedata));
+    struct rtl8139_devicedata* deviceData = (struct rtl8139_devicedata*)kmalloc(sizeof(struct rtl8139_devicedata));
     deviceData->base = 0;
     deviceData->irq = 0;
     deviceinstance->deviceData = deviceData;

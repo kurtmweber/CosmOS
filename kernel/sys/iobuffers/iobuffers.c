@@ -46,7 +46,8 @@ void iobuffers_init() {
 
     uint64_t end_of_buffers = (uint64_t)iobuffers_buffer_end_adddress(0, number_io_buffers);
 
-    kprintf("   IO Buffers has %llu pages of size %#llX at virtual address %#llX-%#llX\n", number_io_buffers, IOBUFFERS_BUFFER_SIZE, io_buf, end_of_buffers);
+    kprintf("   IO Buffers has %llu pages of size %#llX at virtual address %#llX-%#llX\n", number_io_buffers,
+            IOBUFFERS_BUFFER_SIZE, io_buf, end_of_buffers);
     ASSERT(end_of_buffers < (uint64_t)SIXTY_FOUR_MEGA_BYTES);
 
     buffer_list = arraylist_new(number_io_buffers);

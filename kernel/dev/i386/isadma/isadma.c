@@ -341,7 +341,8 @@ void isadma_init_dma(uint8_t channel, uint32_t len, uint8_t rw_mode) {
     isadma_reset_flipflop(&channel_parameters);
 
     // transfer mode
-    uint8_t mode = ISA_DMA_SINGLE_MODE | ISA_DMA_ADDRESS_INCREMENT | ISA_DMA_SINGLE_CYCLE | rw_mode | channel_parameters.DMAChannelFlags;
+    uint8_t mode = ISA_DMA_SINGLE_MODE | ISA_DMA_ADDRESS_INCREMENT | ISA_DMA_SINGLE_CYCLE | rw_mode |
+                   channel_parameters.DMAChannelFlags;
     isadma_set_transfer_mode(&channel_parameters, mode);
 
     // buffer address

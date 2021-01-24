@@ -94,7 +94,8 @@ void vblock_init(struct device* dev) {
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vblock_irq_handler);
     deviceData->base = pci_calcbar(dev->pci);
 
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq, dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
+            dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
 
     // acknowledge device and set the driver loaded bit
     asm_out_b(deviceData->base + VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED);
@@ -238,5 +239,6 @@ void vblock_search_cb(struct pci_device* dev) {
  * find all virtio block devices and register them
  */
 void vblock_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE, PCI_MASS_STORAGE_SUBCLASS_SCSI, VIRTIO_PCI_MANUFACTURER, VIRTIO_PCI_DEVICED_BLOCK, &vblock_search_cb);
+    pci_devicemgr_search_device(PCI_CLASS_MASS_STORAGE, PCI_MASS_STORAGE_SUBCLASS_SCSI, VIRTIO_PCI_MANUFACTURER,
+                                VIRTIO_PCI_DEVICED_BLOCK, &vblock_search_cb);
 }

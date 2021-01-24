@@ -10,7 +10,7 @@
 #include <sys/kprintf/kprintf.h>
 #include <types.h>
 
-void isrDebug_handler(stackFrame *frame) {
+void isrDebug_handler(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);
     kprintf("Debug Exception\n");
 }

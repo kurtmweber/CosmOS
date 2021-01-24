@@ -29,5 +29,6 @@ void test_serial() {
     /*
      * exercise the uniform serial API
      */
-    serialMessage("This message brought to you by the uniform serial API, the letters R and S and the Digits 2, 3 and 2\n");
+    serialMessage(
+        "This message brought to you by the uniform serial API, the letters R and S and the Digits 2, 3 and 2\n");
 }

@@ -13,15 +13,15 @@
 
 // assertion macros to make life easier
 // in a RELEASE build these can just expand to nothing
-#define ASSERT(condition)                                                                           \
-    if (false == (condition)) {                                                                     \
-        kprintf("assertion '%s' failed in file %s at line %llu\n", #condition, __FILE__, __LINE__); \
-        panic("assertion failure");                                                                 \
+#define ASSERT(condition)                                                                                              \
+    if (false == (condition)) {                                                                                        \
+        kprintf("assertion '%s' failed in file %s at line %llu\n", #condition, __FILE__, __LINE__);                    \
+        panic("assertion failure");                                                                                    \
     }
-#define ASSERT_NOT_NULL(term)                                                                \
-    if (0 == (term)) {                                                                       \
-        kprintf("'%s' cannot be null in file %s at line %llu\n", #term, __FILE__, __LINE__); \
-        panic("assert not null failure");                                                    \
+#define ASSERT_NOT_NULL(term)                                                                                          \
+    if (0 == (term)) {                                                                                                 \
+        kprintf("'%s' cannot be null in file %s at line %llu\n", #term, __FILE__, __LINE__);                           \
+        panic("assert not null failure");                                                                              \
     }
 
 #endif

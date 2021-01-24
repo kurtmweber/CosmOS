@@ -18,7 +18,7 @@ void spinlocks_init() {
     return;
 }
 
-void spinlock_acquire(kernel_spinlock *lock) {
+void spinlock_acquire(kernel_spinlock* lock) {
     bool expected = false;
     bool desired = true;
 
@@ -37,7 +37,7 @@ void spinlock_acquire(kernel_spinlock *lock) {
     return;
 }
 
-void spinlock_release(kernel_spinlock *lock) {
+void spinlock_release(kernel_spinlock* lock) {
     *lock = false;
 
     return;

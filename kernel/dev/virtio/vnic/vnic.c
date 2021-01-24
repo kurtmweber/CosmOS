@@ -77,7 +77,8 @@ void VNICInit(struct device* dev) {
     struct vnic_devicedata* deviceData = (struct vnic_devicedata*)dev->deviceData;
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);
     deviceData->base = pci_calcbar(dev->pci);
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq, dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
+            dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
 
     // make the recieve queue
     struct virtq* recieve_q = virtq_new(VNIC_QUEUE_SIZE);
@@ -106,7 +107,8 @@ void VNICInit(struct device* dev) {
         panic("Unexpected virtio MAC address");
     }
 
-    kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n", virtio_mac[0], virtio_mac[1], virtio_mac[2], virtio_mac[3], virtio_mac[4], virtio_mac[5]);
+    kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n", virtio_mac[0], virtio_mac[1], virtio_mac[2], virtio_mac[3],
+            virtio_mac[4], virtio_mac[5]);
 }
 
 void vnic_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
@@ -154,5 +156,6 @@ void vnic_search_cb(struct pci_device* dev) {
  * find all virtio ethernet devices and register them
  */
 void vnic_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK, PCI_NETWORK_SUBCLASS_ETHERNET, VIRTIO_PCI_MANUFACTURER, VIRTIO_PCI_DEVICED_NETWORK, &vnic_search_cb);
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK, PCI_NETWORK_SUBCLASS_ETHERNET, VIRTIO_PCI_MANUFACTURER,
+                                VIRTIO_PCI_DEVICED_NETWORK, &vnic_search_cb);
 }

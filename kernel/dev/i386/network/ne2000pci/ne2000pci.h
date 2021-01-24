@@ -12,7 +12,7 @@
 
 void ne2000pci_devicemgr_register_devices();
 
-void ne2000pci_send(uint8_t *packet, uint16_t length);
-uint16_t ne2000pci_recieve(uint8_t *packet, uint16_t max_size);
+void ne2000pci_send(uint8_t* packet, uint16_t length);
+uint16_t ne2000pci_recieve(uint8_t* packet, uint16_t max_size);
 
 #endif

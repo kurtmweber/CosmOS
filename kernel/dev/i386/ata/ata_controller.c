@@ -64,7 +64,8 @@ void device_init_ata(struct device* dev) {
     ASSERT_NOT_NULL(dev->deviceData);
     struct ata_controller* controller = (struct ata_controller*)dev->deviceData;
 
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n", dev->description, dev->pci->irq, dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n", dev->description, dev->pci->irq, dev->pci->vendor_id,
+            dev->pci->device_id, dev->name);
 
     // set up selected devices
     controller->channels[ATA_PRIMARY].selected_device = ATA_DRIVE_SELECT_NONE;
@@ -73,8 +74,10 @@ void device_init_ata(struct device* dev) {
     // detect addresses
     ata_detect_addresses(dev);
 
-    kprintf("    Primary IDE I/O at %#llX, control at %#llX\n", controller->channels[ATA_PRIMARY].base_io, controller->channels[ATA_PRIMARY].base_io_ctrl);
-    kprintf("    Secondary IDE I/O at %#llX, control at %#llX\n", controller->channels[ATA_SECONDARY].base_io, controller->channels[ATA_SECONDARY].base_io_ctrl);
+    kprintf("    Primary IDE I/O at %#llX, control at %#llX\n", controller->channels[ATA_PRIMARY].base_io,
+            controller->channels[ATA_PRIMARY].base_io_ctrl);
+    kprintf("    Secondary IDE I/O at %#llX, control at %#llX\n", controller->channels[ATA_SECONDARY].base_io,
+            controller->channels[ATA_SECONDARY].base_io_ctrl);
 
     // if this doesn't set the IRQ then this is a parallel IDE, but we don't need to know that
     pci_header_set_irq(dev->pci->bus, dev->pci->device, dev->pci->function, IDE_SERIAL_IRQ);

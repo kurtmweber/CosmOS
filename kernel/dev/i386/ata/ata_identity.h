@@ -14,13 +14,13 @@
 
 struct ata_controller;
 
-uint32_t ata_detect_extract_dword(const char *identify_buf, ata_identify_offsets offset);
-uint64_t ata_detect_extract_qword(const char *identify_buf, ata_identify_offsets offset);
-uint16_t ata_detect_extract_word(const char *identify_buf, ata_identify_offsets offset);
-char *ata_detect_extract_string(const char *identify_buf, uint8_t len, ata_identify_offsets offset);
-uint32_t ata_detect_sector_size(const char *identify_buf);
-char *ata_detect_read_identify(struct ata_controller *controller, uint8_t channel);
+uint32_t ata_detect_extract_dword(const char* identify_buf, ata_identify_offsets offset);
+uint64_t ata_detect_extract_qword(const char* identify_buf, ata_identify_offsets offset);
+uint16_t ata_detect_extract_word(const char* identify_buf, ata_identify_offsets offset);
+char* ata_detect_extract_string(const char* identify_buf, uint8_t len, ata_identify_offsets offset);
+uint32_t ata_detect_sector_size(const char* identify_buf);
+char* ata_detect_read_identify(struct ata_controller* controller, uint8_t channel);
 
-void ata_extract_identity(const char *identity, struct ata_device *dev);
+void ata_extract_identity(const char* identity, struct ata_device* dev);
 
 #endif

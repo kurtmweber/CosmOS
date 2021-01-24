@@ -39,7 +39,8 @@ void* ringbuffer_consume(struct ringbuffer* buffer) {
         return 0;
     }
 
-    i = buffer->start;  // we need this so we can return keyboard_buffer[i] in case we reset keyboard_buffer_start and keyboard_buffer_end to 0 if we reach the end
+    i = buffer
+            ->start;  // we need this so we can return keyboard_buffer[i] in case we reset keyboard_buffer_start and keyboard_buffer_end to 0 if we reach the end
 
     if (buffer->start == RINGBUFFER_SIZE) {
         buffer->start = 0;

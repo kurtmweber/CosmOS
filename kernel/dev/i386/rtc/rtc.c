@@ -23,7 +23,19 @@
 
 struct arraylist* rtcEvents;
 
-typedef enum rtc_registers { RTC_REGISTER_SECOND = 0x00, RTC_REGISTER_MINUTE = 0x02, RTC_REGISTER_HOUR = 0x04, RTC_REGISTER_WEEKDAY = 0x06, RTC_REGISTER_MONTHDAY = 0x07, RTC_REGISTER_MONTH = 0x08, RTC_REGISTER_YEAR = 0x09, RTC_REGISTER_STATUS_A = 0x0A, RTC_REGISTER_STATUS_B = 0x0B, RTC_REGISTER_STATUS_C = 0x0C, RTC_REGISTER_CENTURY = 0x32 } rtc_registers;
+typedef enum rtc_registers {
+    RTC_REGISTER_SECOND = 0x00,
+    RTC_REGISTER_MINUTE = 0x02,
+    RTC_REGISTER_HOUR = 0x04,
+    RTC_REGISTER_WEEKDAY = 0x06,
+    RTC_REGISTER_MONTHDAY = 0x07,
+    RTC_REGISTER_MONTH = 0x08,
+    RTC_REGISTER_YEAR = 0x09,
+    RTC_REGISTER_STATUS_A = 0x0A,
+    RTC_REGISTER_STATUS_B = 0x0B,
+    RTC_REGISTER_STATUS_C = 0x0C,
+    RTC_REGISTER_CENTURY = 0x32
+} rtc_registers;
 
 void rtc_handle_irq(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);
@@ -51,7 +63,8 @@ void rtc_device_init(struct device* dev) {
     asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x8B);       // select register B, and disable NMI
     int8_t prev = asm_in_b(CMOS_REGISTER_DATA_PORT);  // read the current value of register B
     asm_out_b(CMOS_REGISTER_SELECT_PORT, 0x8B);       // set the index again (a read will reset the index to register D)
-    asm_out_b(CMOS_REGISTER_DATA_PORT, prev | 0x40);  // write the previous value ORed with 0x40. This turns on bit 6 of register B
+    asm_out_b(CMOS_REGISTER_DATA_PORT,
+              prev | 0x40);  // write the previous value ORed with 0x40. This turns on bit 6 of register B
 
     asm_sti();
 
@@ -80,7 +93,8 @@ rtc_time_t rtc_time(struct device* dev) {
     b.year = cmos_read_register(RTC_REGISTER_YEAR);
     b.century = cmos_read_register(RTC_REGISTER_CENTURY);
 
-    if ((a.second == b.second) && (a.minute == b.minute) && (a.hour == b.hour) && (a.weekday == b.weekday) && (a.monthday == b.monthday) && (a.month == b.month) && (a.year == b.year) && (a.century == b.century)) {
+    if ((a.second == b.second) && (a.minute == b.minute) && (a.hour == b.hour) && (a.weekday == b.weekday) &&
+        (a.monthday == b.monthday) && (a.month == b.month) && (a.year == b.year) && (a.century == b.century)) {
         return b;
     }
 
@@ -95,7 +109,8 @@ rtc_time_t rtc_time(struct device* dev) {
         b.month = cmos_read_register(RTC_REGISTER_MONTH);
         b.year = cmos_read_register(RTC_REGISTER_YEAR);
         b.century = cmos_read_register(RTC_REGISTER_CENTURY);
-    } while ((a.second != b.second) || (a.minute != b.minute) || (a.hour != b.hour) || (a.weekday != b.weekday) || (a.monthday != b.monthday) || (a.month != b.month) || (a.year != b.year) || (a.century != b.century));
+    } while ((a.second != b.second) || (a.minute != b.minute) || (a.hour != b.hour) || (a.weekday != b.weekday) ||
+             (a.monthday != b.monthday) || (a.month != b.month) || (a.year != b.year) || (a.century != b.century));
 
     return b;
 }

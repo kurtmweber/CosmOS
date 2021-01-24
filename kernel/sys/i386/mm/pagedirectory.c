@@ -12,13 +12,13 @@
 #include <types.h>
 
 uint64_t page_directory_size;
-page_directory_t *page_directory;
+page_directory_t* page_directory;
 
-uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_blocks);
-int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, uint8_t num_blocks);
-void init_page_directory(int_15_map *phys_map, uint8_t num_blocks);
+uint16_t find_page_bios_block(uint64_t page, int_15_map* phys_map, uint8_t num_blocks);
+int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map* phys_map, uint8_t num_blocks);
+void init_page_directory(int_15_map* phys_map, uint8_t num_blocks);
 
-uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_blocks) {
+uint16_t find_page_bios_block(uint64_t page, int_15_map* phys_map, uint8_t num_blocks) {
     uint16_t i;
 
     /*
@@ -40,7 +40,8 @@ uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_b
          * We subtract 1 from base + len because len is a 1-based quantity and base is
          * 0-based, so base=0 and len=5 means that the end of the block is 4.
          */
-        if (((uint64_t)phys_map[i].base <= (uint64_t)(page * PAGE_SIZE)) && ((uint64_t)(phys_map[i].base + phys_map[i].len - 1) >= (uint64_t)(page * PAGE_SIZE))) {
+        if (((uint64_t)phys_map[i].base <= (uint64_t)(page * PAGE_SIZE)) &&
+            ((uint64_t)(phys_map[i].base + phys_map[i].len - 1) >= (uint64_t)(page * PAGE_SIZE))) {
             return i + 1;
         }
     }
@@ -48,7 +49,7 @@ uint16_t find_page_bios_block(uint64_t page, int_15_map *phys_map, uint8_t num_b
     return 0;  // page is in a hole
 }
 
-int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, uint8_t num_blocks) {
+int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map* phys_map, uint8_t num_blocks) {
     uint16_t i;
 
     i = find_page_bios_block(page, phys_map, num_blocks);
@@ -60,7 +61,7 @@ int_15_map_region_type get_page_bios_type(uint64_t page, int_15_map *phys_map, u
     }
 }
 
-void init_page_directory(int_15_map *phys_map, uint8_t num_blocks) {
+void init_page_directory(int_15_map* phys_map, uint8_t num_blocks) {
     /*
      * This function creates blank page directory entries and fills them in with
      * the information we can glean from the BIOS memory map created at
@@ -70,7 +71,7 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks) {
      */
     uint64_t i;
     int_15_map_region_type bios_type;
-    void *last_phys_addr;
+    void* last_phys_addr;
     uint64_t num_phys_pages;
 
     last_phys_addr = find_last_phys_addr(phys_map, num_blocks);
@@ -114,12 +115,12 @@ void init_page_directory(int_15_map *phys_map, uint8_t num_blocks) {
     return;
 }
 
-void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks) {
+void setup_page_directory(void* start, int_15_map* phys_map, uint8_t num_blocks) {
     int_15_map best_block;
-    void *dmap_start;
+    void* dmap_start;
     uint64_t dmap_start_page;
     uint64_t i;
-    void *last_phys_addr;
+    void* last_phys_addr;
     uint64_t size;
 
     kprintf("Setting up physical page directory...\n");
@@ -185,7 +186,7 @@ void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks)
      * +1 because we need a 1-based size, not a 0-based address which is what
      * last_phys_addr is
      */
-    best_block = find_suitable_block(phys_map, num_blocks, (void *)BOOT_MAPPED_PHYS, (uint64_t)last_phys_addr + 1);
+    best_block = find_suitable_block(phys_map, num_blocks, (void*)BOOT_MAPPED_PHYS, (uint64_t)last_phys_addr + 1);
     dmap_start = best_block.base;
     size = (uint64_t)(CONV_DMAP_ADDR(start) - dmap_start);
 
