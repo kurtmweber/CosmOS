@@ -11,7 +11,7 @@
 
 #include <dev/fs/block_util.h>
 #include <dev/partition/partition.h>
-#include <dev/pt/mbr_pt.h>
+#include <dev/partition_table/mbr_partition_table.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/deviceapi/deviceapi_part_table.h>

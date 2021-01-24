@@ -9,7 +9,7 @@
 
 #include <dev/fs/block_util.h>
 #include <dev/partition/partition.h>
-#include <dev/pt/guid_pt.h>
+#include <dev/partition_table/guid_partition_table.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_part_table.h>
 #include <sys/kmalloc/kmalloc.h>

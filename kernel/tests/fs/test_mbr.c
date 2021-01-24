@@ -5,7 +5,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/pt/mbr_pt.h>
+#include <dev/partition_table/mbr_partition_table.h>
 #include <sys/deviceapi/deviceapi_part_table.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/kprintf/kprintf.h>
