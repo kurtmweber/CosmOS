@@ -13,16 +13,15 @@ Configure VSCode to use the `cLangFormat` formatter, and `file` for style option
 
 In `settings.json`:
 
-```json
+```json5
 {
-  // Coding style, currently supports: Visual Studio, LLVM, Google, Chromium, Mozilla, WebKit. Use "file" to load the style from a .clang-format file in the current or parent directory. Use {key: value, ...} to set specific parameters. For example, the "Visual Studio" style is similar to: { BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Allman, AllowShortIfStatementsOnASingleLine: false, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4, NamespaceIndentation: All }
-  "C_Cpp.clang_format_style": "file",
+  // Coding style. Use "file" to load the style from a .clang-format file in the current or parent directory.
+  'C_Cpp.clang_format_style': 'file',
 
-  // Configures the formatting engine
-  //  - clangFormat: clang-format will be used to format code.
-  "C_Cpp.formatting": "clangFormat",
+  // Configures the formatting engine for clangFormat.
+  'C_Cpp.formatting': 'clangFormat',
 
-  // Format a file on save. A formatter must be available, the file must not be saved after delay, and the editor must not be shutting down.
-  "editor.formatOnSave": true
+  // Format a file on save. Formatter must be available.
+  'editor.formatOnSave': true,
 }
 ```
