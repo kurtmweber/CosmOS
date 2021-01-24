@@ -26,8 +26,8 @@ The below code creates a partition table device for an MBR partition table on di
 * creating multiple part devices such as `part0`, `part1`, `part2` for each partition.
 
 ```java
-    struct device* dsk = devicemgr_find_device("disk0");
-    if (0 != dsk) {
+	struct device* dsk = devicemgr_find_device("disk0");
+	if (0 != dsk) {
     	struct device* dev = mbr_pt_attach(dsk);
     	struct deviceapi_part_table* api = (struct deviceapi_part_table*)dev->api;
 		mbr_pt_detach(dev);
