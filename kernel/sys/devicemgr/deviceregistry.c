@@ -141,6 +141,25 @@ void deviceregistry_find_devices_by_description(deviceType dt, const int8_t* des
     }
 }
 
+void deviceregistry_find_devices_by_devicetype(deviceType dt, deviceSearchCallback cb) {
+    ASSERT_NOT_NULL(cb);
+    if ((dt >= 0) && (dt < MAX_DEVICE_TYPES)) {
+        struct arraylist* lst = devicetypes_get_devicelist(dt);
+        if (0 != lst) {
+            for (uint16_t j = 0; j < arraylist_count(lst); j++) {
+                struct device* dev = (struct device*)arraylist_get(lst, j);
+                if (0 != dev) {
+                    (*cb)(dev);
+                } else {
+                    panic("null dev in deviceregistry_iterate");
+                }
+            }
+        }
+    } else {
+        panic("Invalid deviceType passed to devicemgr_find_devices_by_description");
+    }
+}
+
 /*
  * find device by name.  return zero if there is no such device
  */

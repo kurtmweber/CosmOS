@@ -36,8 +36,6 @@ void mbr_pt_read_mbr_pt_header(struct device* dev, struct mbr_pt_header* header)
     uint8_t buffer[buffer_size];
     block_read(dev, MBR_HEADER_LBA, buffer);
     memcpy((uint8_t*)header, buffer, sizeof(struct mbr_pt_header));
-    ASSERT(header->signature[0] == 0x55);
-    ASSERT(header->signature[1] == 0xAA);
 }
 
 /*
@@ -131,10 +129,17 @@ uint8_t mbr_pt_part_table_total_partitions(struct device* dev) {
 
 uint8_t mbr_part_table_attachable(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    struct mbr_pt_header header;
+    mbr_pt_read_mbr_pt_header(dev, &header);
+    if ((header.signature[0] == 0x55) && (header.signature[1] == 0xAA)) {
+        return 1;
+    }
+    return 0;
 }
 
 uint8_t mbr_part_table_detachable(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    // check the partitions TODO
 }
 
 struct device* mbr_pt_attach(struct device* block_device) {

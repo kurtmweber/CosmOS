@@ -35,14 +35,6 @@ void guid_pt_read_guid_pt_header(struct device* dev, struct guid_pt_header* head
     uint8_t buffer[buffer_size];
     block_read(dev, GUID_PT_HEADER_LBA, buffer);
     memcpy((uint8_t*)header, buffer, sizeof(struct guid_pt_header));
-    ASSERT(header->magic[0] == GUID_PT_EFI_PART[0]);
-    ASSERT(header->magic[1] == GUID_PT_EFI_PART[1]);
-    ASSERT(header->magic[2] == GUID_PT_EFI_PART[2]);
-    ASSERT(header->magic[3] == GUID_PT_EFI_PART[3]);
-    ASSERT(header->magic[4] == GUID_PT_EFI_PART[4]);
-    ASSERT(header->magic[5] == GUID_PT_EFI_PART[5]);
-    ASSERT(header->magic[6] == GUID_PT_EFI_PART[6]);
-    ASSERT(header->magic[7] == GUID_PT_EFI_PART[7]);
 }
 
 /*
@@ -134,10 +126,38 @@ uint8_t guid_pt_part_table_total_partitions(struct device* dev) {
 
 uint8_t guid_part_table_attachable(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    struct guid_pt_header header;
+    guid_pt_read_guid_pt_header(dev, &header);
+    if (header.magic[0] == GUID_PT_EFI_PART[0]) {
+        return 0;
+    }
+    if (header.magic[1] == GUID_PT_EFI_PART[1]) {
+        return 0;
+    }
+    if (header.magic[2] == GUID_PT_EFI_PART[2]) {
+        return 0;
+    }
+    if (header.magic[3] == GUID_PT_EFI_PART[3]) {
+        return 0;
+    }
+    if (header.magic[4] == GUID_PT_EFI_PART[4]) {
+        return 0;
+    }
+    if (header.magic[5] == GUID_PT_EFI_PART[5]) {
+        return 0;
+    }
+    if (header.magic[6] == GUID_PT_EFI_PART[6]) {
+        return 0;
+    }
+    if (header.magic[7] == GUID_PT_EFI_PART[7]) {
+        return 0;
+    }
+    return 1;
 }
 
 uint8_t guid_part_table_detachable(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    // check partitions TODO
 }
 
 struct device* guid_pt_attach(struct device* block_device) {

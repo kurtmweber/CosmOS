@@ -11,7 +11,7 @@ TARGET_PLATFORM=TARGET_PLATFORM_i386
 
 # cc (GCC tool chain)
 CC=x86_64-elf-gcc
-CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0  -D$(COMPILE_PLATFORM) -D$(TARGET_PLATFORM)
+CFLAGS=-c -m64 -mno-red-zone -ffreestanding -fPIC -O0 -D$(COMPILE_PLATFORM) -D$(TARGET_PLATFORM)
 
 # ld
 LD=x86_64-elf-ld 

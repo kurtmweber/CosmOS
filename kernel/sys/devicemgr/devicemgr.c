@@ -174,6 +174,12 @@ void devicemgr_find_devices_by_description(deviceType dt, const uint8_t* descrip
     deviceregistry_find_devices_by_description(dt, description, cb);
 }
 
+void devicemgr_find_devices_by_deviceType(deviceType dt, deviceSearchCallback cb) {
+    ASSERT_NOT_NULL(cb);
+    ASSERT_NOT_NULL(dt);
+    deviceregistry_find_devices_by_devicetype(dt, cb);
+}
+
 #ifdef TARGET_PLATFORM_i386
 void devicemgr_register_devices() {
     /*
