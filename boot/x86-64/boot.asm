@@ -8,11 +8,12 @@ ORG 0x7C00
 cli
 
 ; https://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
-;  https://en.wikipedia.org/wiki/VESA_BIOS_Extensions#Modes_defined_by_VESA
+; https://en.wikipedia.org/wiki/VESA_BIOS_Extensions#Modes_defined_by_VESA
 ; set video mode
 mov ah, 0x0
 ;mov al, 0x3 ; 80x25
 mov al, 277 ; 800x600, 24 bit color
+;mov al, 0x13 ; vga 320x200 256 bit color
 int 0x10 
 
 ; save boot drive

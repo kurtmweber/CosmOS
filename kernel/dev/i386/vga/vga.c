@@ -23,6 +23,7 @@
 #define CURSOR_LOCATION_LOBYTE 0x0F
 
 char* vga_vga_text_mem_base = (char*)0xB8000;
+char* vga_vga_graphic_mem_base = (char*)0xA0000;
 
 // x-width and y-height are either characters for text modes, or pixels for graphics modes
 struct vga_mode_params {
