@@ -9,6 +9,7 @@ CosmOS requires:
 * [NASM](http://nasm.us/)
 * [binutils](https://www.gnu.org/software/binutils/)
 * [QEMU](https://www.qemu.org/) 
+* [clang-format](https://clang.llvm.org/docs/ClangFormat.html) 
 
 ## OS X installation
 
@@ -21,6 +22,8 @@ CosmOS requires:
 `sudo brew install nasm`
 
 `sudo brew install qemu`
+
+`sudo brew install clang-format`
 
 OS X includes Clang.
 
@@ -37,6 +40,8 @@ On Ubuntu apt can be used on Linux to install the prerequisites
 `sudo apt install nasm`
 
 `sudo apt install qemu-system-x86`
+
+`sudo apt install clang-format`
 
 # Building
 
