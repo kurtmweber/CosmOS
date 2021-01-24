@@ -67,38 +67,39 @@ typedef enum ptt_levels { PML4 = 0, PDP, PD, PT } ptt_levels;
 // structs
 
 typedef struct int_15_map {
-    void *base;
+    void* base;
     uint64_t len;
-    uint32_t type;  // read this as int_15_map_region_type, but we store it as uint32_t in the struct to get the size right
+    uint32_t
+        type;  // read this as int_15_map_region_type, but we store it as uint32_t in the struct to get the size right
     uint32_t acpi;
 } __attribute__((packed)) int_15_map;
 
 // blockmgmt.c
-mem_block *find_containing_block(void *addr, mem_block *list);
-int_15_map *read_int_15_map(uint8_t *num_blocks, uint8_t *lrg_block);
+mem_block* find_containing_block(void* addr, mem_block* list);
+int_15_map* read_int_15_map(uint8_t* num_blocks, uint8_t* lrg_block);
 
 // init.c
 extern uint64_t future_pt_expansion[3];
 void mmu_init();
 
 // mm.c
-extern void *brk;
+extern void* brk;
 extern mem_block init_phys_block;
-extern mem_block *usable_phys_blocks;
+extern mem_block* usable_phys_blocks;
 extern pttentry system_cr3;
-void *find_aligned_after(void *address, uint64_t alignment);
-void *find_last_phys_addr(int_15_map *phys_map, uint8_t num_blocks);
+void* find_aligned_after(void* address, uint64_t alignment);
+void* find_last_phys_addr(int_15_map* phys_map, uint8_t num_blocks);
 
 // pagefault.c
-void page_fault_handler(uint64_t error, void *cr2, pttentry cr3);
+void page_fault_handler(uint64_t error, void* cr2, pttentry cr3);
 
 // pagetables.c
-bool is_page_aligned(void *address);
-bool is_page_allocated(void *address);
-pttentry *extract_cr3_base_address(pttentry entry);
-pttentry *extract_pttentry_base_address(pttentry entry);
-uint16_t vaddr_ptt_index(void *address, ptt_levels level);
-void *vaddr_to_physical(void *address, pttentry cr3);
+bool is_page_aligned(void* address);
+bool is_page_allocated(void* address);
+pttentry* extract_cr3_base_address(pttentry entry);
+pttentry* extract_pttentry_base_address(pttentry entry);
+uint16_t vaddr_ptt_index(void* address, ptt_levels level);
+void* vaddr_to_physical(void* address, pttentry cr3);
 
 // slab.c
 uint64_t slab_allocate(uint64_t pages, page_directory_types purpose);

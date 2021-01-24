@@ -14,13 +14,15 @@ uint8_t* memcpy(uint8_t* restrict dstptr, const uint8_t* restrict srcptr, uint64
     ASSERT_NOT_NULL(dstptr);
     ASSERT_NOT_NULL(srcptr);
 
-    for (uint64_t i = 0; i < size; i++) dstptr[i] = srcptr[i];
+    for (uint64_t i = 0; i < size; i++)
+        dstptr[i] = srcptr[i];
     return dstptr;
 }
 
 uint8_t* memset(uint8_t* bufptr, uint8_t value, uint64_t size) {
     ASSERT_NOT_NULL(bufptr);
 
-    for (uint64_t i = 0; i < size; i++) bufptr[i] = (unsigned char)value;
+    for (uint64_t i = 0; i < size; i++)
+        bufptr[i] = (unsigned char)value;
     return bufptr;
 }

@@ -13,7 +13,7 @@
 #include <sys/string/string.h>
 #include <types.h>
 
-uint64_t kprintf(const char *s, ...) {
+uint64_t kprintf(const char* s, ...) {
     __builtin_va_list ap;
     uint64_t idx_in = 0, idx_out = 0;
     uint64_t chars_written = 0;
@@ -62,7 +62,7 @@ uint64_t kprintf(const char *s, ...) {
     return chars_written;
 }
 
-uint64_t kprintf_do_uint(uint8_t width, char *output, uint8_t base, __builtin_va_list ap) {
+uint64_t kprintf_do_uint(uint8_t width, char* output, uint8_t base, __builtin_va_list ap) {
     // conversion variables
     unsigned int conv_uint;
     unsigned long conv_ulong;
@@ -84,7 +84,7 @@ uint64_t kprintf_do_uint(uint8_t width, char *output, uint8_t base, __builtin_va
     return strlen(output);
 }
 
-uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __builtin_va_list ap) {
+uint64_t kprintf_proc_format_string(const char* s, uint64_t* chars_written, __builtin_va_list ap) {
     // maximum length of an output string is 66 bytes:
     // 64 binary digits (for an unsigned 64-bit type) or 63 and a +/- sign (if signed)
     // possible "b" sigil at end
@@ -99,7 +99,7 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
     // conversion variables
     unsigned int conv_uint;
     unsigned long conv_ulong;
-    const char *conv_str;
+    const char* conv_str;
 
     while (s[i]) {
         consumed++;
@@ -121,7 +121,7 @@ uint64_t kprintf_proc_format_string(const char *s, uint64_t *chars_written, __bu
                 }
                 break;
             case 's':
-                conv_str = __builtin_va_arg(ap, const char *);
+                conv_str = __builtin_va_arg(ap, const char*);
                 serial_write_string(conv_str);
                 *chars_written += strlen(conv_str);
                 return consumed;

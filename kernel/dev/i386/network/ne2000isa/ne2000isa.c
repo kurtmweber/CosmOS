@@ -58,9 +58,10 @@
 #define PAR3 NE2000ISA_BASE_ADDRESS + 0x04
 #define PAR4 NE2000ISA_BASE_ADDRESS + 0x05
 #define PAR5 NE2000ISA_BASE_ADDRESS + 0x06
-#define CURR \
-    NE2000ISA_BASE_ADDRESS + 0x07           // Current Page Register (R/W)
-                                            // This register points to the page address of the first receive buffer page to be used for a packet reception.
+#define CURR                                                                                                           \
+    NE2000ISA_BASE_ADDRESS +                                                                                           \
+        0x07  // Current Page Register (R/W)                                                      \
+        // This register points to the page address of the first receive buffer page to be used for a packet reception.
 #define MAR0 NE2000ISA_BASE_ADDRESS + 0x08  // Multicast Register 0
 #define MAR1 NE2000ISA_BASE_ADDRESS + 0x09  // Multicast Register 1
 #define MAR2 NE2000ISA_BASE_ADDRESS + 0x0A  // Multicast Register 2
@@ -87,14 +88,15 @@
 // ISR Register Bits
 #define ISR_PRX 0x01  // indicates packet received with no errors
 #define ISR_PTX 0x02  // indicates packet transmitted with no error
-#define ISR_RXE 0x04  // set when a packet received with one or more of the following errors: CRC error, Frame alignment error, Missed packet
+#define ISR_RXE                                                                                                        \
+    0x04  // set when a packet received with one or more of the following errors: CRC error, Frame alignment error, Missed packet
 #define ISR_TXE 0x08  // set when a packet transmission is aborted due to excessive collisions
 #define ISR_OVW 0x10  // set when the receive buffer has been exhausted
 #define ISR_CNT 0x20  // Set when MSB of one or more of the network tally counters has been set
 #define ISR_RDC 0x40  // Set when remote DMA operation has been completed
-#define ISR_RST \
-    0x80  // set when NIC enters reset state and is cleared when a start command is issued to the CR
-          // It is also set when receive buffer overflows and is cleared when one or more packets have been read from the buffer
+#define ISR_RST                                                                                                        \
+    0x80  // set when NIC enters reset state and is cleared when a start command is issued to the CR                   \
+        // It is also set when receive buffer overflows and is cleared when one or more packets have been read from the buffer
 
 /* For the Data Control Register */
 #define DCR_BYTEDMA 0x00
@@ -206,7 +208,8 @@ void ne2000isa_init() {
     net_mac_isa[4] = asm_in_b(PAR4);
     net_mac_isa[5] = asm_in_b(PAR5);
 
-    kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n", net_mac_isa[0], net_mac_isa[1], net_mac_isa[2], net_mac_isa[3], net_mac_isa[4], net_mac_isa[5]);
+    kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n", net_mac_isa[0], net_mac_isa[1], net_mac_isa[2], net_mac_isa[3],
+            net_mac_isa[4], net_mac_isa[5]);
 
     asm_out_b(CR, (CR_PAGE0 | CR_NODMA | CR_STOP));
     asm_out_b(DCR, DCR_FIFO8 | DCR_NOLPBK | DCR_ARM);
@@ -265,7 +268,8 @@ uint16_t ne2000isa_recieve(uint8_t* packet, uint16_t max_size) {
     // read the boundary register pointing to the beginning of the packet
     bnry = asm_in_b(BNRY);
 
-    if (bnry == curr) return 0;
+    if (bnry == curr)
+        return 0;
 
     // if boundary pointer is invalid
     if ((bnry >= RXSTOP) || (bnry < RXSTART)) {

@@ -17,10 +17,10 @@
 #define MALLOC_MAGIC_4 'O'
 #define MALLOC_MAGIC_5 'S'
 
-kmalloc_block *kmalloc_block_list;
-kmalloc_block *kmalloc_block_list_end;
+kmalloc_block* kmalloc_block_list;
+kmalloc_block* kmalloc_block_list_end;
 
-uint8_t kmalloc_block_valid(kmalloc_block *b) {
+uint8_t kmalloc_block_valid(kmalloc_block* b) {
     ASSERT_NOT_NULL(b);
     if (b->start_magic[0] != MALLOC_MAGIC_0) {
         return false;
@@ -62,29 +62,29 @@ uint8_t kmalloc_block_valid(kmalloc_block *b) {
     return true;
 }
 
-kmalloc_block *kmalloc_block_from_address(void *ptr) {
+kmalloc_block* kmalloc_block_from_address(void* ptr) {
     ASSERT_NOT_NULL(ptr);
     // The following is arithmetic on a void pointer, which is not permitted per C standard.
     // However, per GCC documentation, as a nonstandard extension GCC permits pointer arithmetic
     // on void pointers with an assumption that the object size is 1.
     // At time of writing (2020-05-25), this is documented at https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
-    kmalloc_block *ret = ptr - sizeof(kmalloc_block);
+    kmalloc_block* ret = ptr - sizeof(kmalloc_block);
     ASSERT(kmalloc_block_valid(ret));
     return ret;
 }
 
-uint8_t kmalloc_pointer_valid(void *ptr) {
+uint8_t kmalloc_pointer_valid(void* ptr) {
     ASSERT_NOT_NULL(ptr);
-    kmalloc_block *block = kmalloc_block_from_address(ptr);
+    kmalloc_block* block = kmalloc_block_from_address(ptr);
     ASSERT_NOT_NULL(block);
     return kmalloc_block_valid(block);
 }
 
-kmalloc_block *find_avail_kmalloc_block_list(uint64_t size) {
+kmalloc_block* find_avail_kmalloc_block_list(uint64_t size) {
     ASSERT(0 != size);
-    kmalloc_block *cur_block;
-    kmalloc_block *best = 0;
-    kmalloc_block *last = 0;
+    kmalloc_block* cur_block;
+    kmalloc_block* best = 0;
+    kmalloc_block* last = 0;
     // Find the first block on the heap suitable for the size requested.
     // If we find an unused block of exactly the size requested, return it immediately.
     // Otherwise, we return the smallest unused block that is AT LEAST big enough to
@@ -142,9 +142,9 @@ kmalloc_block *find_avail_kmalloc_block_list(uint64_t size) {
     return new_kmalloc_block(last, size);
 }
 
-void kfree(void *ptr) {
+void kfree(void* ptr) {
     ASSERT_NOT_NULL(ptr);
-    kmalloc_block *b = kmalloc_block_from_address(ptr);
+    kmalloc_block* b = kmalloc_block_from_address(ptr);
 
     // double free check
     ASSERT(b->used = true);
@@ -167,9 +167,9 @@ void kfree(void *ptr) {
     return;
 }
 
-void *kmalloc(uint64_t size) {
+void* kmalloc(uint64_t size) {
     ASSERT(0 != size);
-    kmalloc_block *cur_block = 0;
+    kmalloc_block* cur_block = 0;
 
     // align size to KMALLOC_ALIGN_BYTES
     if (size % KMALLOC_ALIGN_BYTES) {
@@ -179,9 +179,9 @@ void *kmalloc(uint64_t size) {
     // check the block list
     if (!kmalloc_block_list) {
         if ((uint64_t)brk % KMALLOC_ALIGN_BYTES) {
-            cur_block = (kmalloc_block *)(brk + (KMALLOC_ALIGN_BYTES - ((uint64_t)brk % KMALLOC_ALIGN_BYTES)));
+            cur_block = (kmalloc_block*)(brk + (KMALLOC_ALIGN_BYTES - ((uint64_t)brk % KMALLOC_ALIGN_BYTES)));
         } else {
-            cur_block = (kmalloc_block *)brk;
+            cur_block = (kmalloc_block*)brk;
         }
         kmalloc_block_list = cur_block;
         cur_block = new_kmalloc_block(0, size);
@@ -207,12 +207,12 @@ void kmalloc_init() {
     kmalloc_block_list_end = 0;
 }
 
-kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
+kmalloc_block* new_kmalloc_block(kmalloc_block* last, uint64_t size) {
     ASSERT(0 != size);
     /*
      * last can be null here
      */
-    kmalloc_block *new = 0;
+    kmalloc_block* new = 0;
 
     if ((UINT64_T_MAX - (sizeof(kmalloc_block) + size - 1)) < (uint64_t)brk) {  // out of address space
         return 0;
@@ -224,7 +224,7 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
     // However, per GCC documentation, as a nonstandard extension GCC permits pointer arithmetic
     // on void pointers with an assumption that the object size is 1.
     // At time of writing (2020-05-25), this is documented at https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
-    new->base = (void *)((uint64_t) new + sizeof(kmalloc_block));
+    new->base = (void*)((uint64_t) new + sizeof(kmalloc_block));
     new->start_magic[0] = MALLOC_MAGIC_0;
     new->start_magic[1] = MALLOC_MAGIC_1;
     new->start_magic[2] = MALLOC_MAGIC_2;
@@ -257,14 +257,14 @@ kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size) {
     return new;
 }
 
-void *krealloc(void *ptr, uint64_t size) {
+void* krealloc(void* ptr, uint64_t size) {
     ASSERT(0 != size);
     ASSERT_NOT_NULL(ptr);
-    void *new_block = 0;
+    void* new_block = 0;
     BYTE *dest, *src;
     uint64_t i;
 
-    kmalloc_block *b = kmalloc_block_from_address(ptr);
+    kmalloc_block* b = kmalloc_block_from_address(ptr);
     // only realloc used blocks
     ASSERT(b->used == true);
 
@@ -288,8 +288,8 @@ void *krealloc(void *ptr, uint64_t size) {
 
     // otherwise we grab a new block of the requested size, copy over the data, and free the old one
     new_block = kmalloc(size);
-    src = (BYTE *)ptr;
-    dest = (BYTE *)new_block;
+    src = (BYTE*)ptr;
+    dest = (BYTE*)new_block;
     for (i = 0; i < b->len; i++) {
         *dest = *src;
         src++;

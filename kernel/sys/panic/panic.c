@@ -8,7 +8,7 @@
 #include <dev/i386/serial/serial.h>
 #include <sys/asm/asm.h>
 
-void panic(const char *s) {
+void panic(const char* s) {
     serial_write_string("!!!PANIC!!!\n");
     serial_write_string(s);
 

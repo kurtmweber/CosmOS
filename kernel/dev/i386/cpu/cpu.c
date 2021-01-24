@@ -23,7 +23,8 @@ void cpu_device_init(struct device* dev) {
 }
 
 // https://prodevsblog.com/questions/441449/checking-if-cpu-supports-rdrand/
-void invokeCPUID(unsigned int function, unsigned int subfunction, unsigned int* pEAX, unsigned int* pEBX, unsigned int* pECX, unsigned int* pEDX) {
+void invokeCPUID(unsigned int function, unsigned int subfunction, unsigned int* pEAX, unsigned int* pEBX,
+                 unsigned int* pECX, unsigned int* pEDX) {
     asm volatile("cpuid" : "=a"(*pEAX), "=b"(*pEBX), "=c"(*pECX), "=d"(*pEDX) : "a"(function), "c"(subfunction));
 }
 

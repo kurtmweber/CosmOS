@@ -37,7 +37,8 @@ void vga_console_dev_init(struct device* dev) {
     struct deviceapi_vga* vga_api = (struct deviceapi_vga*)deviceData->vga_device->api;
     ASSERT_NOT_NULL(vga_api);
 
-    (*vga_api->query_resolution)(deviceData->vga_device, &(deviceData->vga_console_x_width), &(deviceData->vga_console_y_height));
+    (*vga_api->query_resolution)(deviceData->vga_device, &(deviceData->vga_console_x_width),
+                                 &(deviceData->vga_console_y_height));
 }
 
 /*
@@ -78,7 +79,8 @@ uint8_t vga_console_dev_write(struct device* dev, const char* c) {
     struct deviceapi_vga* vga_api = (struct deviceapi_vga*)deviceData->vga_device->api;
     ASSERT_NOT_NULL(vga_api);
 
-    uint64_t i = 0;  // just in case...it's on the stack anyway, so it's a single-digit # of extra bytes that's gone once we return
+    uint64_t i =
+        0;  // just in case...it's on the stack anyway, so it's a single-digit # of extra bytes that's gone once we return
     char s[2];
 
     s[1] = '\0';
@@ -103,7 +105,9 @@ uint8_t vga_console_dev_write(struct device* dev, const char* c) {
             continue;
         }
 
-        if ((deviceData->vga_console_xpos >= deviceData->vga_console_x_width)) {  // width is 1-based, pos is 0-based, so if pos = width then we're past the last column
+        if ((deviceData->vga_console_xpos >=
+             deviceData
+                 ->vga_console_x_width)) {  // width is 1-based, pos is 0-based, so if pos = width then we're past the last column
             deviceData->vga_console_xpos = 0;
             deviceData->vga_console_ypos++;
         }
@@ -112,13 +116,15 @@ uint8_t vga_console_dev_write(struct device* dev, const char* c) {
             // video_scroll_text();
             (*vga_api->scroll_text)(deviceData->vga_device);
 
-            deviceData->vga_console_ypos = (deviceData->vga_console_y_height - 1);  // again, ypos is a 0-based index, while height is a quantity
+            deviceData->vga_console_ypos =
+                (deviceData->vga_console_y_height - 1);  // again, ypos is a 0-based index, while height is a quantity
         }
 
         s[0] = c[i];
 
         //  video_write_text(s, deviceData->vga_console_ypos, deviceData->vga_console_xpos, NULL, VGA_TEXT_WHITE, VGA_TEXT_BLACK);
-        (*vga_api->write_text)(deviceData->vga_device, s, deviceData->vga_console_ypos, deviceData->vga_console_xpos, NULL, VGA_TEXT_WHITE, VGA_TEXT_BLACK);
+        (*vga_api->write_text)(deviceData->vga_device, s, deviceData->vga_console_ypos, deviceData->vga_console_xpos,
+                               NULL, VGA_TEXT_WHITE, VGA_TEXT_BLACK);
 
         deviceData->vga_console_xpos++;
         i++;
@@ -147,7 +153,8 @@ struct device* vga_console_attach(struct device* serial_device) {
     /*
      * device data
      */
-    struct vga_console_devicedata* deviceData = (struct vga_console_devicedata*)kmalloc(sizeof(struct vga_console_devicedata));
+    struct vga_console_devicedata* deviceData =
+        (struct vga_console_devicedata*)kmalloc(sizeof(struct vga_console_devicedata));
     deviceData->vga_device = serial_device;
     deviceinstance->deviceData = deviceData;
     /*

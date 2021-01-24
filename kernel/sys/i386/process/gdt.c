@@ -60,7 +60,8 @@ void gdt_dump() {
     kprintf("Pointer Base: 0x%llX Limit: 0x%llX\n", gdt_pointer.base, gdt_pointer.limit);
     for (uint8_t i = 0; i < GDT_SIZE; i++) {
         kprintf("Entry 0x%llX\n", i);
-        kprintf("   Base Low 0x%llX Middle 0x%llX High 0x%llX\n", gdt[i].base_low, gdt[i].base_middle, gdt[i].base_high);
+        kprintf("   Base Low 0x%llX Middle 0x%llX High 0x%llX\n", gdt[i].base_low, gdt[i].base_middle,
+                gdt[i].base_high);
         kprintf("   Limit Low 0x%llX\n", gdt[i].limit_low);
         kprintf("   Granularity 0x%llX\n", gdt[i].granularity);
         kprintf("   Access 0x%llX\n", gdt[i].access);

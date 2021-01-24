@@ -31,11 +31,11 @@ typedef uint64_t ptt_t;  // page translation table
  * Given a physical address, add the necessary offset to make a virtual address
  * within the direct-map area.
  */
-#define PTT_ADJUST_BASE(x) (((uint64_t)x < MAX_ID_MAP) ? (void *)x : (void *)((uint64_t)x + DIRECT_MAP_OFFSET))
+#define PTT_ADJUST_BASE(x) (((uint64_t)x < MAX_ID_MAP) ? (void*)x : (void*)((uint64_t)x + DIRECT_MAP_OFFSET))
 #define CONV_PHYS_ADDR(x) PTT_ADJUST_BASE(x)
 
 // And vice-versa
-#define CONV_DMAP_ADDR(x) ((void *)((uint64_t)x - DIRECT_MAP_OFFSET))
+#define CONV_DMAP_ADDR(x) ((void*)((uint64_t)x - DIRECT_MAP_OFFSET))
 
 // Flags to set (or not) in PTT entries
 #define PTT_FLAG_PRESENT 1    // present in physical memory
@@ -45,8 +45,8 @@ typedef uint64_t ptt_t;  // page translation table
 #define PTT_FLAG_PWD 16       // 0 = cacheable, 1 = disable caching
 #define PTT_FLAG_ACCESSED 32  // has page been accessed?
 #define PTT_FLAG_DIRTY 64     // has it been written to?
-#define PTT_FLAG_PS \
-    128                      // page size - see AMD64 docs for information, for now we'll
+#define PTT_FLAG_PS                                                                                                    \
+    128                      // page size - see AMD64 docs for information, for now we'll                              \
                              // use 4-kb pages so it should always be 0
 #define PTT_FLAG_GLOBAL 256  // 1 for global page
 
@@ -69,8 +69,8 @@ enum ptt_levels;
 typedef enum ptt_levels ptt_levels;
 
 // use these as memos of what we're doing and when we need to convert
-typedef void *phys_addr;
-typedef void *virt_addr;
+typedef void* phys_addr;
+typedef void* virt_addr;
 
 typedef uint64_t pttentry;
 
@@ -78,27 +78,27 @@ typedef struct page_directory_t {
     uint64_t ref_count;
     union {
         uint64_t backing_handle;
-        void *backing_addr;
+        void* backing_addr;
     };
     page_directory_types type;
     uint64_t flags;
 } __attribute__((packed)) page_directory_t;
 
 // directmap.c
-void *setup_direct_map(int_15_map *phys_map, uint8_t num_blocks);
-int_15_map find_suitable_block(int_15_map *phys_map, uint8_t num_blocks, void *min, uint64_t space);
+void* setup_direct_map(int_15_map* phys_map, uint8_t num_blocks);
+int_15_map find_suitable_block(int_15_map* phys_map, uint8_t num_blocks, void* min, uint64_t space);
 uint64_t size_pd(uint64_t space);
 
 // pagedirectory.c
-extern page_directory_t *page_directory;
+extern page_directory_t* page_directory;
 extern uint64_t page_directory_size;  // number of ENTRIES, not number of bytes
-void setup_page_directory(void *start, int_15_map *phys_map, uint8_t num_blocks);
+void setup_page_directory(void* start, int_15_map* phys_map, uint8_t num_blocks);
 
 // pagetables.c
-void add_pt_page(virt_addr *vaddr, uint64_t page, pttentry parent_entry, bool user);
-void map_page_at(uint64_t page, void *vaddr, pttentry pml4_entry, bool user);
-pttentry obtain_ptt_entry(virt_addr *vaddr, pttentry parent_entry, ptt_levels level, bool user);
-pttentry ptt_entry_create(void *base_address, bool present, bool rw, bool user);
-void reserve_next_ptt(ptt_levels level, uint64_t *expansion);
+void add_pt_page(virt_addr* vaddr, uint64_t page, pttentry parent_entry, bool user);
+void map_page_at(uint64_t page, void* vaddr, pttentry pml4_entry, bool user);
+pttentry obtain_ptt_entry(virt_addr* vaddr, pttentry parent_entry, ptt_levels level, bool user);
+pttentry ptt_entry_create(void* base_address, bool present, bool rw, bool user);
+void reserve_next_ptt(ptt_levels level, uint64_t* expansion);
 
 #endif

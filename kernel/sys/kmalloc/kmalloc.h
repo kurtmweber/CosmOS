@@ -15,32 +15,32 @@
 /*
  * the single platform-dependent variable
  */
-extern void *brk;
+extern void* brk;
 
 typedef struct mem_block {
     uint8_t start_magic[6];
-    struct mem_block *prev;
-    void *base;
+    struct mem_block* prev;
+    void* base;
     uint64_t len;
     bool used;
     uint64_t owner;  // ignored for free blocks
-    struct mem_block *next;
+    struct mem_block* next;
     uint8_t end_magic[6];
 } __attribute__((aligned(8))) mem_block;
 
 typedef mem_block kmalloc_block;
 
 // kmalloc.c
-kmalloc_block *find_avail_kmalloc_block_list(uint64_t size);
-void kfree(void *ptr);
-void *kmalloc(uint64_t size);
-void *kmalloc_align_block_end(kmalloc_block *block, uint64_t alignment);
+kmalloc_block* find_avail_kmalloc_block_list(uint64_t size);
+void kfree(void* ptr);
+void* kmalloc(uint64_t size);
+void* kmalloc_align_block_end(kmalloc_block* block, uint64_t alignment);
 void kmalloc_init();
-void *krealloc(void *ptr, uint64_t size);
-kmalloc_block *new_kmalloc_block(kmalloc_block *last, uint64_t size);
-uint8_t kmalloc_block_valid(kmalloc_block *b);
-uint8_t kmalloc_pointer_valid(void *ptr);
+void* krealloc(void* ptr, uint64_t size);
+kmalloc_block* new_kmalloc_block(kmalloc_block* last, uint64_t size);
+uint8_t kmalloc_block_valid(kmalloc_block* b);
+uint8_t kmalloc_pointer_valid(void* ptr);
 
-kmalloc_block *kmalloc_block_from_address(void *ptr);
+kmalloc_block* kmalloc_block_from_address(void* ptr);
 
 #endif

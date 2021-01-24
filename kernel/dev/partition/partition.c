@@ -25,7 +25,8 @@ void partition_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct partition_devicedata* deviceData = (struct partition_devicedata*)dev->deviceData;
-    kprintf("Init %s on %s at lba %llu with %llu sectors (%s)\n", dev->description, deviceData->block_device->name, deviceData->lba, deviceData->sector_count, dev->name);
+    kprintf("Init %s on %s at lba %llu with %llu sectors (%s)\n", dev->description, deviceData->block_device->name,
+            deviceData->lba, deviceData->sector_count, dev->name);
 }
 
 /*
@@ -92,7 +93,8 @@ struct device* partition_attach(struct device* block_device, uint64_t lba, uint3
     /*
      * device data
      */
-    struct partition_devicedata* deviceData = (struct partition_devicedata*)kmalloc(sizeof(struct partition_devicedata));
+    struct partition_devicedata* deviceData =
+        (struct partition_devicedata*)kmalloc(sizeof(struct partition_devicedata));
     deviceData->block_device = block_device;
     deviceData->lba = lba;
     deviceData->sector_count = sector_count;

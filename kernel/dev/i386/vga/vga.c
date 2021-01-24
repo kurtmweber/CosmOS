@@ -44,7 +44,8 @@ void vga_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev->deviceData);
     struct vga_devicedata* deviceData = (struct vga_devicedata*)dev->deviceData;
 
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n", dev->description, dev->pci->irq, dev->pci->vendor_id, dev->pci->device_id, dev->name);
+    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n", dev->description, dev->pci->irq, dev->pci->vendor_id,
+            dev->pci->device_id, dev->name);
     deviceData->vga_modes[VIDEO_MODE_TEXT].x_width = 80;
     deviceData->vga_modes[VIDEO_MODE_TEXT].y_height = 25;
     deviceData->video_active_mode = VIDEO_MODE_TEXT;
@@ -75,7 +76,8 @@ void vga_device_scroll_text(struct device* dev) {
     uint16_t screen_size;
     uint16_t last_row_loc;
 
-    screen_size = (deviceData->vga_modes[VIDEO_MODE_TEXT].x_width * deviceData->vga_modes[VIDEO_MODE_TEXT].y_height * 2);
+    screen_size =
+        (deviceData->vga_modes[VIDEO_MODE_TEXT].x_width * deviceData->vga_modes[VIDEO_MODE_TEXT].y_height * 2);
 
     row_size = deviceData->vga_modes[VIDEO_MODE_TEXT].x_width * 2;
 
@@ -104,7 +106,8 @@ void vga_cursor_set_position(uint16_t loc) {
 }
 
 // api
-uint8_t vga_device_write_text(struct device* dev, const char* txt, uint8_t start_row, uint8_t start_col, uint8_t attrib, enum vga_text_color fg_color, enum vga_text_color bg_color) {
+uint8_t vga_device_write_text(struct device* dev, const char* txt, uint8_t start_row, uint8_t start_col, uint8_t attrib,
+                              enum vga_text_color fg_color, enum vga_text_color bg_color) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct vga_devicedata* deviceData = (struct vga_devicedata*)dev->deviceData;
@@ -113,11 +116,13 @@ uint8_t vga_device_write_text(struct device* dev, const char* txt, uint8_t start
     char* startpoint;
     uint64_t i = 0;  // I mean, it probably doesn't need to be 64 bits, but just to avoid unanticipated issues...
 
-    startpoint = (char*)vga_vga_text_mem_base + ((start_row * deviceData->vga_modes[VIDEO_MODE_TEXT].x_width * 2) + (start_col * 2));
+    startpoint = (char*)vga_vga_text_mem_base +
+                 ((start_row * deviceData->vga_modes[VIDEO_MODE_TEXT].x_width * 2) + (start_col * 2));
 
     while (txt[i]) {
         // make sure we don't write past the end of the vga text mode memory area
-        if (startpoint >= (vga_vga_text_mem_base + (deviceData->vga_modes[VIDEO_MODE_TEXT].x_width * deviceData->vga_modes[VIDEO_MODE_TEXT].y_height * 2))) {
+        if (startpoint >= (vga_vga_text_mem_base + (deviceData->vga_modes[VIDEO_MODE_TEXT].x_width *
+                                                    deviceData->vga_modes[VIDEO_MODE_TEXT].y_height * 2))) {
             return 0;
         }
 

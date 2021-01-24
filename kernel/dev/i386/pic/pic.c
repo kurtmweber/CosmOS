@@ -40,9 +40,12 @@ void pic_device_init(struct device* dev) {
     asm_out_b(PIC_SECONDARY_DATA, PIC_SECONDARY_VECTOR_OFFSET);
 
     // let PICs know how they are connected to one another
-    asm_out_b(PIC_PRIMARY_DATA, 0x04);    // set bit 2 (0-based) to inform primary PIC that a secondary PIC is connected at IRQ2
-    asm_out_b(PIC_SECONDARY_DATA, 0x02);  // for secondary, we use the value (rather than bit position) to let it know that it's connected to
-                                          // IRQ2 on the primary
+    asm_out_b(PIC_PRIMARY_DATA,
+              0x04);  // set bit 2 (0-based) to inform primary PIC that a secondary PIC is connected at IRQ2
+    asm_out_b(
+        PIC_SECONDARY_DATA,
+        0x02);  // for secondary, we use the value (rather than bit position) to let it know that it's connected to
+                // IRQ2 on the primary
 
     // and then set the PICs to 8086 mode
     asm_out_b(PIC_PRIMARY_DATA, PIC_MODE_8086);

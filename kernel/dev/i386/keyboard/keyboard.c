@@ -34,8 +34,7 @@
 
 struct ringbuffer* keyboard_ringbuffer;
 
-void keyboard_add_command_queue(uint8_t command) {
-}
+void keyboard_add_command_queue(uint8_t command) {}
 
 void keyboard_irq_read(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);
@@ -164,11 +163,9 @@ void keyboard_irq_read(stackFrame* frame) {
     return;
 }
 
-void keyboard_remove_command_queue() {
-}
+void keyboard_remove_command_queue() {}
 
-void keyboard_send_command_queue() {
-}
+void keyboard_send_command_queue() {}
 
 /*
  * perform device instance specific init here

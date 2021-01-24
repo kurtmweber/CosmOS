@@ -72,7 +72,8 @@ struct device* serial_console_attach(struct device* serial_device) {
     /*
      * device data
      */
-    struct serial_console_devicedata* deviceData = (struct serial_console_devicedata*)kmalloc(sizeof(struct serial_console_devicedata));
+    struct serial_console_devicedata* deviceData =
+        (struct serial_console_devicedata*)kmalloc(sizeof(struct serial_console_devicedata));
     deviceData->serial_device = serial_device;
     deviceinstance->deviceData = deviceData;
     /*

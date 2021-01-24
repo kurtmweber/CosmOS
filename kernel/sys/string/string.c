@@ -10,7 +10,7 @@
 #include <sys/string/string.h>
 #include <types.h>
 
-uint64_t strlen(const uint8_t *s) {
+uint64_t strlen(const uint8_t* s) {
     ASSERT_NOT_NULL(s);
     uint64_t i = 0;
 
@@ -21,12 +21,12 @@ uint64_t strlen(const uint8_t *s) {
     return i;
 }
 
-uint8_t *strtrim(const uint8_t *s) {
+uint8_t* strtrim(const uint8_t* s) {
     ASSERT_NOT_NULL(s);
     uint64_t i = 0;
     uint64_t j;
 
-    uint8_t *tgt;
+    uint8_t* tgt;
 
     i = strlen(s);
 
@@ -46,15 +46,16 @@ uint8_t *strtrim(const uint8_t *s) {
     return tgt;
 }
 
-uint8_t *strcpy(uint8_t *dest, const uint8_t *src) {
+uint8_t* strcpy(uint8_t* dest, const uint8_t* src) {
     ASSERT_NOT_NULL(dest);
     ASSERT_NOT_NULL(src);
     uint32_t i;
-    for (i = 0; src[i] != '\0'; i++) dest[i] = src[i];
+    for (i = 0; src[i] != '\0'; i++)
+        dest[i] = src[i];
     return dest;
 }
 
-uint8_t *strcat(uint8_t *dest, const uint8_t *src) {
+uint8_t* strcat(uint8_t* dest, const uint8_t* src) {
     ASSERT_NOT_NULL(dest);
     ASSERT_NOT_NULL(src);
 
@@ -71,7 +72,7 @@ uint8_t *strcat(uint8_t *dest, const uint8_t *src) {
     return dest;
 }
 
-uint8_t strcmp(const uint8_t *str1, const uint8_t *str2) {
+uint8_t strcmp(const uint8_t* str1, const uint8_t* str2) {
     ASSERT_NOT_NULL(str1);
     ASSERT_NOT_NULL(str2);
     for (int i = 0;; i++) {

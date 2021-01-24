@@ -10,7 +10,7 @@
 #include <sys/kprintf/kprintf.h>
 #include <types.h>
 
-void isrBreakpoint_handler(stackFrame *frame) {
+void isrBreakpoint_handler(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);
     kprintf("Breakpoint Exception\n");
 }

@@ -16,7 +16,10 @@
 
 #define MAX_DEVICE_NAME_LENGTH 64
 
-int8_t* DeviceTypeNames[] = {"None", "serial", "vga", "rtc", "keyboard", "nic", "bridge", "usb", "ata", "pic", "mouse", "floppy", "speaker", "pit", "dsp", "cmos", "dma", "cpu", "rd", "vnic", "vblock", "disk", "par", "bda", "ebda", "swap", "fs", "pt", "console", "part"};
+int8_t* DeviceTypeNames[] = {"None", "serial", "vga",   "rtc",    "keyboard", "nic",  "bridge", "usb",
+                             "ata",  "pic",    "mouse", "floppy", "speaker",  "pit",  "dsp",    "cmos",
+                             "dma",  "cpu",    "rd",    "vnic",   "vblock",   "disk", "par",    "bda",
+                             "ebda", "swap",   "fs",    "pt",     "console",  "part"};
 
 void devicemgr_init() {
     deviceregistry_init();
