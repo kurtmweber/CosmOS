@@ -1,4 +1,5 @@
-name: Build and publish the docker build env on Gh packages
+name: DockerBuildEnv
+
 on:
   workflow_dispatch:
 
