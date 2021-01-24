@@ -13,7 +13,7 @@
 struct mbr_pt_entry {
     uint8_t attributes;
     uint8_t chs_start[3];
-    uint8_t parition_type;
+    uint8_t partition_type;
     uint8_t chs_last[3];
     uint32_t lba_start;
     uint32_t total_sectors;

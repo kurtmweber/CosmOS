@@ -108,7 +108,7 @@ uint64_t mbr_pt_part_table_get_partition_type(struct device* dev, uint8_t partit
     ASSERT(partition < deviceData->num_partitions);
     struct mbr_pt_header header;
     mbr_pt_read_mbr_pt_header(deviceData->block_device, &header);
-    return header.partitions[partition].parition_type;
+    return header.partitions[partition].partition_type;
 }
 
 uint8_t mbr_pt_part_table_total_partitions(struct device* dev) {
