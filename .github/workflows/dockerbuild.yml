@@ -1,7 +1,7 @@
 name: DockerBuild
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 jobs:
   push_to_registry:
