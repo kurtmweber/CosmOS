@@ -33,6 +33,27 @@ For example presuming we have two nodes "bart" and "lisa"
 
 The CosmOS cluster will sync the VFS implementations on each node as nodes come online and go offline, and as devices are attached and detached
 
+## Nodes
+
+CosmOS will expose a `node` filesystem which contains information for each node in the system such as 
+
+* Uptime
+* Total RAM in the system
+* Total RAM in use
+* Total Processors in the system
+* Processor Usage
+* Network throughput
+
+This information will be useful for process migrations.
+
+For example
+
+```
+/node/bart
+/node/lisa
+
+```
+
 ## Processes
 
 In theory, CosmOS can also expose a `process` filesystem, similar to the `dev` filesystem which contains every process on every node.  For example
@@ -41,3 +62,4 @@ In theory, CosmOS can also expose a `process` filesystem, similar to the `dev` f
 /bart/process/process_abc
 /bart/process/process_def
 ```
+
