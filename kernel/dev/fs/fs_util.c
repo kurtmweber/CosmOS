@@ -5,7 +5,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
+#include <dev/fs/fat/fat.h>
 #include <dev/fs/fs_util.h>
+#include <dev/fs/tfs/tfs.h>
 #include <dev/partition/partition.h>
 #include <dev/partition_table/guid_partition_table.h>
 #include <dev/partition_table/mbr_partition_table.h>
@@ -47,7 +49,9 @@ void fsutil_detach_partitions(struct device* partition_table_dev) {
 }
 
 void fsutil_attach_fs(struct device* partition_dev) {
-    ASSERT_NOT_NULL(partition_dev);
+    if (0 == fat_attach(partition_dev)) {
+        tfs_attach(partition_dev);
+    }
 }
 
 void fsutil_detach_fs(struct device* partition_dev) {
