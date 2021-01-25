@@ -36,4 +36,6 @@ void tests_run() {
     test_bitmap();
 
     test_iobuffers();
+
+    test_ntree();
 }
