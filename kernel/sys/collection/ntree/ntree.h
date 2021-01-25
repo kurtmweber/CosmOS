@@ -13,11 +13,12 @@
  * an n-ary tree
  */
 
+#include <sys/collection/arraylist/arraylist.h>
 #include <types.h>
+
 struct ntree {
     void* data;
-    struct ntree** childen;
-    uint32_t childcount;
+    struct arraylist* children;
 };
 
 struct ntree* ntree_new();

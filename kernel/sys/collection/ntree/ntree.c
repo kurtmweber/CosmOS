@@ -12,8 +12,7 @@
 
 struct ntree* ntree_new() {
     struct ntree* ret = (struct ntree*)kmalloc(sizeof(struct ntree));
-    ret->childcount = 0;
-    ret->childen = 0;
+    ret->children = 0;
     ret->data = 0;
     return ret;
 }
@@ -21,9 +20,9 @@ struct ntree* ntree_new() {
 void ntree_delete(struct ntree* nt) {
     ASSERT_NOT_NULL(nt);
 
-    if (nt->childcount > 0) {
-        for (uint32_t i = 0; i < nt->childcount; i++) {
-            ntree_delete(nt->childen[i]);
+    if (0 != nt->children) {
+        for (uint32_t i = 0; i < arraylist_count(nt->children); i++) {
+            ntree_delete(arraylist_get(nt->children, i));
         }
     }
     kfree(nt);
@@ -31,17 +30,25 @@ void ntree_delete(struct ntree* nt) {
 
 uint32_t ntree_childcount(struct ntree* nt) {
     ASSERT_NOT_NULL(nt);
-    return nt->childcount;
+    if (0 != nt->children) {
+        return arraylist_count(nt->children);
+    } else {
+        return 0;
+    }
 }
 
 struct ntree* ntree_child(struct ntree* nt, uint32_t idx) {
     ASSERT_NOT_NULL(nt);
-    ASSERT(idx > 0);
-    ASSERT(idx < nt->childcount);
-    return nt->childen[idx];
+    ASSERT(idx >= 0);
+    ASSERT(idx < ntree_childcount(nt));
+    return arraylist_get(nt->children, idx);
 }
 
 void ntree_add_child(struct ntree* nt, struct ntree* child) {
     ASSERT_NOT_NULL(nt);
     ASSERT_NOT_NULL(child);
+    if (0 == nt->children) {
+        nt->children = arraylist_new();
+    }
+    arraylist_add(nt->children, child);
 }
