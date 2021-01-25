@@ -25,5 +25,6 @@ struct ntree* ntree_new();
 void ntree_delete(struct ntree* nt);
 uint32_t ntree_childcount(struct ntree* nt);
 struct ntree* ntree_child(struct ntree* nt, uint32_t idx);
+void ntree_remove_child(struct ntree* nt, uint32_t idx);
 
 #endif

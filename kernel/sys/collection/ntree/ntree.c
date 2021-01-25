@@ -52,3 +52,10 @@ void ntree_add_child(struct ntree* nt, struct ntree* child) {
     }
     arraylist_add(nt->children, child);
 }
+
+void ntree_remove_child(struct ntree* nt, uint32_t idx) {
+    ASSERT_NOT_NULL(nt);
+    ASSERT(idx >= 0);
+    ASSERT(idx < ntree_childcount(nt));
+    arraylist_remove(nt->children, idx);
+}
