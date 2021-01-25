@@ -140,7 +140,7 @@ void devicemgr_init_devices() {
 
 struct device* devicemgr_new_device() {
     struct device* ret = (struct device*)kmalloc(sizeof(struct device));
-    for (uint16_t i = 0; i < DEVICEMGR_MAX_DESCRIPTION; i++) {
+    for (uint16_t i = 0; i < DEVICE_MAX_DESCRIPTION; i++) {
         ret->description[i] = 0;
     }
     ret->init = 0;
@@ -156,10 +156,10 @@ struct device* devicemgr_new_device() {
 void devicemgr_set_device_description(struct device* dev, const uint8_t* description) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(description);
-    ASSERT(strlen(description) < DEVICEMGR_MAX_DESCRIPTION);
+    ASSERT(strlen(description) < DEVICE_MAX_DESCRIPTION);
     ASSERT(strlen(description) > 0);
 
-    strncpy(dev->description, description, DEVICEMGR_MAX_DESCRIPTION);
+    strncpy(dev->description, description, DEVICE_MAX_DESCRIPTION);
 
     //    kprintf("%s\n", dev->description);
 }
