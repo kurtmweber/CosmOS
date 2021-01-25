@@ -86,7 +86,7 @@ void vblock_irq_handler(stackFrame* frame) {
 /*
  * perform device instance specific init here
  */
-void vblock_init(struct device* dev) {
+uint8_t vblock_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
 
@@ -145,6 +145,8 @@ void vblock_init(struct device* dev) {
     // set the queue.  The API takes a 32 bit pointer, but we have a 64 bit pointer, so ... some conversions
     kprintf("   Queue Address: %#hX %#hX\n", q, q_shifted);
     asm_out_d(deviceData->base + VIRTIO_QUEUE_ADDRESS, q_shifted);
+
+    return 1;
 }
 
 void vblock_read(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {

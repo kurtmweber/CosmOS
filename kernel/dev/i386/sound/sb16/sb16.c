@@ -82,7 +82,7 @@ void sb16_handle_irq(stackFrame* frame) {
 /*
  * perform device instance specific init here
  */
-void sb16_device_init(struct device* dev) {
+uint8_t sb16_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct sb16_devicedata* sb16_data = (struct sb16_devicedata*)dev->deviceData;
     ASSERT_NOT_NULL(sb16_data);
@@ -90,6 +90,7 @@ void sb16_device_init(struct device* dev) {
     interrupt_router_register_interrupt_handler(sb16_data->irq, &sb16_handle_irq);
     sb16_data->dsp_version = sb16_get_dsp_version(dev);
     kprintf("   DSP Version: %llu\n", sb16_data->dsp_version);
+    return 1;
 }
 
 /*

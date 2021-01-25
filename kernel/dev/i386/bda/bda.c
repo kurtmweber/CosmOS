@@ -101,9 +101,10 @@ uint16_t bda_parallel2_base() {
 /*
  * perform device instance specific init here
  */
-void bda_device_init(struct device* dev) {
+uint8_t bda_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s (%s)\n", dev->description, dev->name);
+    return 1;
 }
 
 void bda_devicemgr_register_devices() {

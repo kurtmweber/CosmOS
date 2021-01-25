@@ -17,7 +17,8 @@ typedef uint8_t (*part_table_total_partitions_function)(struct device* dev);
 typedef uint64_t (*part_table_get_partition_lba_function)(struct device* dev, uint8_t partition);
 typedef uint64_t (*part_table_get_partition_type_function)(struct device* dev, uint8_t partition);
 typedef uint64_t (*part_table_get_sector_count_function)(struct device* dev, uint8_t partition);
-typedef uint8_t (*part_table_attachable_function)(struct device* dev);
+
+// return 1 if we are ok to detach this device
 typedef uint8_t (*part_table_detachable_function)(struct device* dev);
 
 struct deviceapi_part_table {
@@ -25,7 +26,6 @@ struct deviceapi_part_table {
     part_table_get_partition_lba_function lba;
     part_table_get_partition_type_function type;
     part_table_get_sector_count_function sectors;
-    part_table_attachable_function attachable;
     part_table_detachable_function detachable;
 };
 

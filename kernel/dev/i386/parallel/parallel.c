@@ -49,7 +49,7 @@ void parallel_device_ready(struct device* dev) {
 /*
  * perform device instance specific init here
  */
-void parallel_device_init(struct device* dev) {
+uint8_t parallel_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct parallel_devicedata* deviceData = (struct parallel_devicedata*)(dev->deviceData);
@@ -59,6 +59,7 @@ void parallel_device_init(struct device* dev) {
      * reset
      */
     asm_out_w(deviceData->address + PARALLEL_DEVICE_REGISTER_CONTROL, 0x00);
+    return 1;
 }
 
 void parallel_write(struct device* dev, uint8_t* data, uint16_t size) {

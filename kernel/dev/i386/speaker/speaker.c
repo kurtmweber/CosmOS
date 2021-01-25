@@ -20,9 +20,10 @@
 /*
  * perform device instance specific init here
  */
-void speaker_device_init(struct device* dev) {
+uint8_t speaker_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s (%s)\n", dev->description, dev->name);
+    return 1;
 }
 
 // make it shutup

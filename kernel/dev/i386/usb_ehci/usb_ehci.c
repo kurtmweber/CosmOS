@@ -21,12 +21,13 @@ struct usbcontroller_devicedata {
 /*
  * perform device instance specific init here
  */
-void usb_ehci_device_init(struct device* dev) {
+uint8_t usb_ehci_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct usbcontroller_devicedata* deviceData = (struct usbcontroller_devicedata*)dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
             dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
+    return 1;
 }
 
 void usb_ehci_search_cb(struct pci_device* dev) {

@@ -23,23 +23,25 @@ struct swap_devicedata {
 /*
  * perform device instance specific init here
  */
-void swap_init(struct device* dev) {
+uint8_t swap_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
     kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    return 1;
 }
 
 /*
  * perform device instance specific uninit here, like removing API structs and Device data
  */
-void swap_uninit(struct device* dev) {
+uint8_t swap_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct swap_devicedata* deviceData = (struct swap_devicedata*)dev->deviceData;
     kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
     kfree(dev->deviceData);
+    return 1;
 }
 
 void swap_read(struct device* dev, uint8_t* data, uint32_t block) {
@@ -99,12 +101,17 @@ struct device* swap_attach(struct device* block_device) {
     /*
      * register
      */
-    devicemgr_attach_device(deviceinstance);
-
-    /*
-     * return device
-     */
-    return deviceinstance;
+    if (0 != devicemgr_attach_device(deviceinstance)) {
+        /*
+        * return device
+        */
+        return deviceinstance;
+    } else {
+        kfree(deviceData);
+        kfree(api);
+        kfree(deviceinstance);
+        return 0;
+    }
 }
 
 void swap_detach(struct device* dev) {

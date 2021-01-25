@@ -10,6 +10,7 @@
 // https://en.wikipedia.org/wiki/Master_boot_record
 
 #include <dev/fs/block_util.h>
+#include <dev/fs/fs_util.h>
 #include <dev/partition/partition.h>
 #include <dev/partition_table/mbr_partition_table.h>
 #include <sys/debug/assert.h>
@@ -41,27 +42,29 @@ void mbr_pt_read_mbr_pt_header(struct device* dev, struct mbr_pt_header* header)
 /*
  * perform device instance specific init here
  */
-void mbr_pt_init(struct device* dev) {
+uint8_t mbr_pt_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
-    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 
     deviceData->num_partitions = mbr_pt_part_table_total_partitions(dev);
+    struct mbr_pt_header header;
+    mbr_pt_read_mbr_pt_header(deviceData->block_device, &header);
+    if ((header.signature[0] == 0x55) && (header.signature[1] == 0xAA)) {
+        kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 
-    /*
-     * mount partition devices
-     */
-    for (uint32_t i = 0; i < deviceData->num_partitions; i++) {
-        partition_attach(deviceData->block_device, mbr_pt_part_table_get_partition_lba(dev, i),
-                         mbr_part_table_get_sector_count_function(dev, i));
+        // attach partitions
+        fsutil_attach_partitions(dev);
+
+        return 1;
     }
+    return 0;
 }
 
 /*
  * perform device instance specific uninit here, like removing API structs and Device data
  */
-void mbr_pt_uninit(struct device* dev) {
+uint8_t mbr_pt_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
@@ -70,12 +73,14 @@ void mbr_pt_uninit(struct device* dev) {
     /*
      * unmount partitions
      */
-    // use a matching function
+    fsutil_detach_partitions(dev);
+
     /*
      * done w device
      */
     kfree(dev->api);
     kfree(dev->deviceData);
+    return 1;
 }
 
 uint64_t mbr_pt_part_table_get_partition_lba(struct device* dev, uint8_t partition) {
@@ -127,18 +132,11 @@ uint8_t mbr_pt_part_table_total_partitions(struct device* dev) {
     return ret;
 }
 
-uint8_t mbr_part_table_attachable(struct device* dev) {
-    ASSERT_NOT_NULL(dev);
-    struct mbr_pt_header header;
-    mbr_pt_read_mbr_pt_header(dev, &header);
-    if ((header.signature[0] == 0x55) && (header.signature[1] == 0xAA)) {
-        return 1;
-    }
-    return 0;
-}
-
 uint8_t mbr_part_table_detachable(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
+
     // check the partitions TODO
 }
 
@@ -161,7 +159,6 @@ struct device* mbr_pt_attach(struct device* block_device) {
     api->lba = &mbr_pt_part_table_get_partition_lba;
     api->type = &mbr_pt_part_table_get_partition_type;
     api->sectors = &mbr_part_table_get_sector_count_function;
-    api->attachable = &mbr_part_table_attachable;
     api->detachable = &mbr_part_table_detachable;
     deviceinstance->api = api;
     /*
@@ -174,12 +171,17 @@ struct device* mbr_pt_attach(struct device* block_device) {
     /*
      * register
      */
-    devicemgr_attach_device(deviceinstance);
-
-    /*
-     * return device
-     */
-    return deviceinstance;
+    if (0 != devicemgr_attach_device(deviceinstance)) {
+        /*
+        * return device
+        */
+        return deviceinstance;
+    } else {
+        kfree(deviceData);
+        kfree(api);
+        kfree(deviceinstance);
+        return 0;
+    }
 }
 
 void mbr_pt_detach(struct device* dev) {

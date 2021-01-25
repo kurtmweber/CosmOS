@@ -53,7 +53,7 @@ void rtc_handle_irq(stackFrame* frame) {
 /*
  * perform device instance specific init here
  */
-void rtc_device_init(struct device* dev) {
+uint8_t rtc_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu (%s)\n", dev->description, RTC_IRQ_NUMBER, dev->name);
 
@@ -69,6 +69,7 @@ void rtc_device_init(struct device* dev) {
     asm_sti();
 
     interrupt_router_register_interrupt_handler(RTC_IRQ_NUMBER, &rtc_handle_irq);
+    return 1;
 }
 
 rtc_time_t rtc_time(struct device* dev) {

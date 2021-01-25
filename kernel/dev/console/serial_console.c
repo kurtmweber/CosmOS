@@ -19,17 +19,18 @@ struct serial_console_devicedata {
 /*
  * perform device instance specific init here
  */
-void serial_console_dev_init(struct device* dev) {
+uint8_t serial_console_dev_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct serial_console_devicedata* deviceData = (struct serial_console_devicedata*)dev->deviceData;
     kprintf("Init %s on %s (%s)\n", dev->description, deviceData->serial_device->name, dev->name);
+    return 1;
 }
 
 /*
  * perform device instance specific uninit here, like removing API structs and Device data
  */
-void serial_console_uninit(struct device* dev) {
+uint8_t serial_console_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
 
@@ -37,6 +38,7 @@ void serial_console_uninit(struct device* dev) {
     kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->serial_device->name, dev->name);
     kfree(dev->api);
     kfree(dev->deviceData);
+    return 1;
 }
 
 uint8_t serial_console_setpos(struct device* dev, uint8_t x, uint8_t y) {
@@ -79,12 +81,17 @@ struct device* serial_console_attach(struct device* serial_device) {
     /*
      * register
      */
-    devicemgr_attach_device(deviceinstance);
-
-    /*
-     * return device
-     */
-    return deviceinstance;
+    if (0 != devicemgr_attach_device(deviceinstance)) {
+        /*
+        * return device
+        */
+        return deviceinstance;
+    } else {
+        kfree(deviceData);
+        kfree(api);
+        kfree(deviceinstance);
+        return 0;
+    }
 }
 
 void serial_console_detach(struct device* dev) {

@@ -70,7 +70,9 @@ uint16_t devicemgr_device_count() {
 
 void deviceInitIterator(struct device* dev) {
     if (0 != dev) {
-        dev->init(dev);
+        if (0 == dev->init(dev)) {
+            kprintf("Failed to Initialize %s\n", dev->name);
+        }
     } else {
         panic("um. why is there a null device?");
     }
@@ -239,7 +241,7 @@ void devicemgr_register_devices() {
 #endif
 
 // attach a device (non-fixed devices... like RAM disks and SWAP)
-void devicemgr_attach_device(struct device* dev) {
+uint8_t devicemgr_attach_device(struct device* dev) {
     /*
      * register
      */
@@ -247,11 +249,11 @@ void devicemgr_attach_device(struct device* dev) {
     /*
      * init
      */
-    dev->init(dev);
+    return dev->init(dev);
 }
 
 // detach a device (non-fixed devices... like RAM disks and SWAP)
-void devicemgr_detach_device(struct device* dev) {
+uint8_t devicemgr_detach_device(struct device* dev) {
     /*
      * unregister
      */
@@ -260,10 +262,16 @@ void devicemgr_detach_device(struct device* dev) {
      * uninit
      */
     if (0 != dev->uninit) {
-        dev->uninit(dev);
+        if (0 != dev->uninit(dev)) {
+            // free the device struct
+            kfree(dev);
+
+            // good!
+            return 1;
+        } else {
+            return 0;
+        }
+    } else {
+        return 1;
     }
-    /*
-     * free the device struct
-     */
-    kfree(dev);
 }

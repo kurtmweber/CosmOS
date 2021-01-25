@@ -27,7 +27,7 @@
 /*
  * perform device instance specific init here
  */
-void pic_device_init(struct device* dev) {
+uint8_t pic_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s (%s)\n", dev->description, dev->name);
 
@@ -50,6 +50,7 @@ void pic_device_init(struct device* dev) {
     // and then set the PICs to 8086 mode
     asm_out_b(PIC_PRIMARY_DATA, PIC_MODE_8086);
     asm_out_b(PIC_SECONDARY_DATA, PIC_MODE_8086);
+    return 1;
 }
 
 void pic_devicemgr_register_devices() {

@@ -48,13 +48,14 @@ void ac97_handle_irq(stackFrame* frame) {
 /*
  * perform device instance specific init here
  */
-void deviceInitAC97(struct device* dev) {
+uint8_t deviceInitAC97(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct ac97_devicedata* deviceData = (struct ac97_devicedata*)dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
             dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &ac97_handle_irq);
+    return 1;
 }
 
 void AC97PCISearchCB(struct pci_device* dev) {

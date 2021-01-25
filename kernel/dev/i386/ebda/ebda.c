@@ -72,11 +72,12 @@ struct rsdp_descriptor_2* ebda_get_rsdp() {
 /*
  * perform device instance specific init here
  */
-void ebda_device_init(struct device* dev) {
+uint8_t ebda_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     uint64_t ebda_address = bda_get_ebda_address();
 
     kprintf("Init %s (%s) at %#hX\n", dev->description, dev->name, ebda_address);
+    return 1;
 }
 
 void ebda_devicemgr_register_devices() {

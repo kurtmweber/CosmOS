@@ -384,7 +384,7 @@ uint64_t isadma_get_dma_block(uint8_t channel, uint32_t len) {
 /*
  * perform device instance specific init here
  */
-void isadma_device_init(struct device* dev) {
+uint8_t isadma_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     isadma_buf = iobuffers_request_buffer(ISA_DMA_BUFSIZ);
 
@@ -408,10 +408,12 @@ void isadma_device_init(struct device* dev) {
         isadma_show_dma_parameters(&channel_parameters);
     }
 #endif
+    return 1;
 }
 
-void isadma_device_uninit(struct device* dev) {
+uint8_t isadma_device_uninit(struct device* dev) {
     iobuffers_release_buffer(isadma_buf);
+    return 1;
 }
 
 void isadma_devicemgr_register_devices() {

@@ -5,6 +5,7 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#include <dev/fs/fs_util.h>
 #include <dev/i386/ata/ata.h>
 #include <dev/i386/ata/ata_disk.h>
 #include <dev/i386/ata/ata_util.h>
@@ -146,7 +147,7 @@ uint32_t ata_total_size(struct device* dev) {
     return disk->size;
 }
 
-void device_init_ata_disk(struct device* dev) {
+uint8_t device_init_ata_disk(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct ata_disk_devicedata* disk = (struct ata_disk_devicedata*)dev->deviceData;
@@ -155,6 +156,14 @@ void device_init_ata_disk(struct device* dev) {
 
     kprintf("Init %s serial '%s' on controller %s of size %llu (%s)\n", dev->description, dsk->serial,
             disk->device->name, dsk->size, dev->name);
+
+    // mount parition tables
+    fsutil_attach_partition_tables(dev);
+}
+
+uint8_t device_uninit_ata_disk(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    fsutil_detach_partition_tables(dev);
 }
 
 void ata_register_disk(struct device* controllerDevice, uint8_t channel, uint8_t disk) {
@@ -163,6 +172,7 @@ void ata_register_disk(struct device* controllerDevice, uint8_t channel, uint8_t
      */
     struct device* deviceinstance = devicemgr_new_device();
     deviceinstance->init = &device_init_ata_disk;
+    deviceinstance->uninit = &device_uninit_ata_disk;
     deviceinstance->devicetype = DISK;
     devicemgr_set_device_description(deviceinstance, "ATA Disk");
     /*

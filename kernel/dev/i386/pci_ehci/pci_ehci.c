@@ -24,10 +24,11 @@ void pci_ehci_handle_irq(stackFrame* frame) {
 /*
  * perform device instance specific init here
  */
-void pci_ehci_device_init(struct device* dev) {
+uint8_t pci_ehci_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu\n", dev->description, dev->pci->irq);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &pci_ehci_handle_irq);
+    return 1;
 }
 
 void pci_ehci_search_cb(struct pci_device* dev) {

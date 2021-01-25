@@ -20,12 +20,13 @@ struct intel8237_deviceddata {
 /*
  * perform device instance specific init here
  */
-void i982371_init(struct device* dev) {
+uint8_t i982371_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct intel8237_deviceddata* deviceData = (struct intel8237_deviceddata*)dev->deviceData;
     deviceData->base = pci_calcbar(dev->pci);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
             dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
+    return 1;
 }
 
 void i982371_search_cb(struct pci_device* dev) {

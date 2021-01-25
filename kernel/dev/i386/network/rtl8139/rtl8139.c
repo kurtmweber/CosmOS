@@ -128,7 +128,7 @@ void rtl8139_read_mac(struct device* dev) {
 /*
  * perform device instance specific init here
  */
-void rtl8139_init(struct device* dev) {
+uint8_t rtl8139_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*)dev->deviceData;
@@ -178,6 +178,7 @@ void rtl8139_init(struct device* dev) {
      * enable rx tx
      */
     rtl8139_enable_rx_tx(dev);
+    return 1;
 }
 
 void rtl8139_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {

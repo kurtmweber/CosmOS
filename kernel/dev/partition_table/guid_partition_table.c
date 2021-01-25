@@ -8,6 +8,7 @@
 // https://wiki.osdev.org/GPT
 
 #include <dev/fs/block_util.h>
+#include <dev/fs/fs_util.h>
 #include <dev/partition/partition.h>
 #include <dev/partition_table/guid_partition_table.h>
 #include <sys/debug/assert.h>
@@ -40,40 +41,64 @@ void guid_pt_read_guid_pt_header(struct device* dev, struct guid_pt_header* head
 /*
  * perform device instance specific init here
  */
-void guid_pt_init(struct device* dev) {
+uint8_t guid_pt_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
-    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
 
     deviceData->num_partitions = guid_pt_part_table_total_partitions(dev);
-    /*
-     * mount partition devices
-     */
-    for (uint32_t i = 0; i < deviceData->num_partitions; i++) {
-        partition_attach(deviceData->block_device, guid_pt_part_table_get_partition_lba(dev, i),
-                         guid_part_table_get_sector_count_function(dev, i));
+    struct guid_pt_header header;
+    guid_pt_read_guid_pt_header(deviceData->block_device, &header);
+    if (header.magic[0] == GUID_PT_EFI_PART[0]) {
+        return 0;
     }
+    if (header.magic[1] == GUID_PT_EFI_PART[1]) {
+        return 0;
+    }
+    if (header.magic[2] == GUID_PT_EFI_PART[2]) {
+        return 0;
+    }
+    if (header.magic[3] == GUID_PT_EFI_PART[3]) {
+        return 0;
+    }
+    if (header.magic[4] == GUID_PT_EFI_PART[4]) {
+        return 0;
+    }
+    if (header.magic[5] == GUID_PT_EFI_PART[5]) {
+        return 0;
+    }
+    if (header.magic[6] == GUID_PT_EFI_PART[6]) {
+        return 0;
+    }
+    if (header.magic[7] == GUID_PT_EFI_PART[7]) {
+        return 0;
+    }
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+
+    // attach partitions
+    fsutil_attach_partitions(dev);
+    return 1;
 }
 
 /*
  * perform device instance specific uninit here, like removing API structs and Device data
  */
-void guid_pt_uninit(struct device* dev) {
+uint8_t guid_pt_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
-    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    //   kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     /*
      * unmount partitions
      */
-
+    fsutil_detach_partitions(dev);
     /*
      * done w device
      */
 
     kfree(dev->api);
     kfree(dev->deviceData);
+    return 1;
 }
 
 uint64_t guid_part_table_get_sector_count_function(struct device* dev, uint8_t partition) {
@@ -124,40 +149,11 @@ uint8_t guid_pt_part_table_total_partitions(struct device* dev) {
     return header.num_partitions;
 }
 
-uint8_t guid_part_table_attachable(struct device* dev) {
-    ASSERT_NOT_NULL(dev);
-    struct guid_pt_header header;
-    guid_pt_read_guid_pt_header(dev, &header);
-    if (header.magic[0] == GUID_PT_EFI_PART[0]) {
-        return 0;
-    }
-    if (header.magic[1] == GUID_PT_EFI_PART[1]) {
-        return 0;
-    }
-    if (header.magic[2] == GUID_PT_EFI_PART[2]) {
-        return 0;
-    }
-    if (header.magic[3] == GUID_PT_EFI_PART[3]) {
-        return 0;
-    }
-    if (header.magic[4] == GUID_PT_EFI_PART[4]) {
-        return 0;
-    }
-    if (header.magic[5] == GUID_PT_EFI_PART[5]) {
-        return 0;
-    }
-    if (header.magic[6] == GUID_PT_EFI_PART[6]) {
-        return 0;
-    }
-    if (header.magic[7] == GUID_PT_EFI_PART[7]) {
-        return 0;
-    }
-    return 1;
-}
-
 uint8_t guid_part_table_detachable(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    // check partitions TODO
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    return 1;
 }
 
 struct device* guid_pt_attach(struct device* block_device) {
@@ -178,7 +174,6 @@ struct device* guid_pt_attach(struct device* block_device) {
     api->lba = &guid_pt_part_table_get_partition_lba;
     api->type = &guid_pt_part_table_get_partition_type;
     api->sectors = &guid_part_table_get_sector_count_function;
-    api->attachable = &guid_part_table_attachable;
     api->detachable = &guid_part_table_detachable;
     deviceinstance->api = api;
     /*
@@ -191,12 +186,17 @@ struct device* guid_pt_attach(struct device* block_device) {
     /*
      * register
      */
-    devicemgr_attach_device(deviceinstance);
-
-    /*
-     * return device
-     */
-    return deviceinstance;
+    if (0 != devicemgr_attach_device(deviceinstance)) {
+        /*
+        * return device
+        */
+        return deviceinstance;
+    } else {
+        kfree(deviceData);
+        kfree(api);
+        kfree(deviceinstance);
+        return 0;
+    }
 }
 
 void guid_pt_detach(struct device* dev) {

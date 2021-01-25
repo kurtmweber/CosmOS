@@ -17,9 +17,10 @@ void cpu_manufacturer_id(uint8_t* cpuid);
 /*
  * perform device instance specific init here
  */
-void cpu_device_init(struct device* dev) {
+uint8_t cpu_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s (%s)\n", dev->description, dev->name);
+    return 1;
 }
 
 // https://prodevsblog.com/questions/441449/checking-if-cpu-supports-rdrand/

@@ -88,12 +88,13 @@ void serial_init_port(uint64_t portAddress) {
 /*
  * perform device instance specific init here
  */
-void serial_device_init(struct device* dev) {
+uint8_t serial_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct serial_devicedata* deviceData = (struct serial_devicedata*)dev->deviceData;
     kprintf("Init %s at IRQ %llu Base %#hX (%s)\n", dev->description, deviceData->irq, deviceData->address, dev->name);
     interrupt_router_register_interrupt_handler(deviceData->irq, &serial_irq_handler);
     serial_init_port(deviceData->address);
+    return 1;
 }
 
 void serial_write(struct device* dev, const int8_t* c) {

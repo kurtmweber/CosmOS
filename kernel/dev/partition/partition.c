@@ -6,6 +6,7 @@
 // ****************************************************************
 
 #include <dev/fs/block_util.h>
+#include <dev/fs/fs_util.h>
 #include <dev/partition/partition.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_block.h>
@@ -21,24 +22,32 @@ struct partition_devicedata {
 /*
  * perform device instance specific init here
  */
-void partition_init(struct device* dev) {
+uint8_t partition_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct partition_devicedata* deviceData = (struct partition_devicedata*)dev->deviceData;
     kprintf("Init %s on %s at lba %llu with %llu sectors (%s)\n", dev->description, deviceData->block_device->name,
             deviceData->lba, deviceData->sector_count, dev->name);
+
+    // attach fs
+    fsutil_attach_fs(dev);
+    return 1;
 }
 
 /*
  * perform device instance specific uninit here, like removing API structs and Device data
  */
-void partition_uninit(struct device* dev) {
+uint8_t partition_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct partition_devicedata* deviceData = (struct partition_devicedata*)dev->deviceData;
     kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    // detach fs
+    fsutil_detach_fs(dev);
+
     kfree(dev->api);
     kfree(dev->deviceData);
+    return 1;
 }
 
 uint16_t partition_sector_size(struct device* dev) {
@@ -102,12 +111,17 @@ struct device* partition_attach(struct device* block_device, uint64_t lba, uint3
     /*
      * register
      */
-    devicemgr_attach_device(deviceinstance);
-
-    /*
-     * return device
-     */
-    return deviceinstance;
+    if (0 != devicemgr_attach_device(deviceinstance)) {
+        /*
+        * return device
+        */
+        return deviceinstance;
+    } else {
+        kfree(deviceData);
+        kfree(api);
+        kfree(deviceinstance);
+        return 0;
+    }
 }
 
 void partition_detach(struct device* dev) {

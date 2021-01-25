@@ -52,10 +52,11 @@ uint8_t adlib_read_status() {
 /*
  * perform device instance specific init here
  */
-void adlib_device_init(struct device* dev) {
+uint8_t adlib_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s\n", dev->description);
     //   interrupt_router_register_interrupt_handler(SB16_IRQ, &adlib_handle_irq);
+    return 1;
 }
 
 void adlib_devicemgr_register_devices() {

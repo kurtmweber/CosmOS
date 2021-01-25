@@ -302,23 +302,25 @@ struct fs_directory_listing* fat_list_dir(struct device* dev) {
 /*
  * perform device instance specific init here
  */
-void fat_init(struct device* dev) {
+uint8_t fat_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct fat_devicedata* deviceData = (struct fat_devicedata*)dev->deviceData;
     kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    return 1;
 }
 
 /*
  * perform device instance specific uninit here, like removing API structs and Device data
  */
-void fat_uninit(struct device* dev) {
+uint8_t fat_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct fat_devicedata* deviceData = (struct fat_devicedata*)dev->deviceData;
     kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
     kfree(dev->deviceData);
+    return 1;
 }
 
 struct device* fat_attach(struct device* block_device) {
@@ -347,12 +349,17 @@ struct device* fat_attach(struct device* block_device) {
     /*
      * register
      */
-    devicemgr_attach_device(deviceinstance);
-
-    /*
-     * return device
-     */
-    return deviceinstance;
+    if (0 != devicemgr_attach_device(deviceinstance)) {
+        /*
+        * return device
+        */
+        return deviceinstance;
+    } else {
+        kfree(deviceData);
+        kfree(api);
+        kfree(deviceinstance);
+        return 0;
+    }
 }
 
 void fat_detach(struct device* dev) {

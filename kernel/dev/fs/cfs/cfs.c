@@ -155,17 +155,18 @@ void cfs_format(struct device* dev) {
 /*
  * perform device instance specific init here
  */
-void cfs_init(struct device* dev) {
+uint8_t cfs_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct cfs_devicedata* deviceData = (struct cfs_devicedata*)dev->deviceData;
     kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    return 1;
 }
 
 /*
  * perform device instance specific uninit here, like removing API structs and Device data
  */
-void cfs_uninit(struct device* dev) {
+uint8_t cfs_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct cfs_devicedata* deviceData = (struct cfs_devicedata*)dev->deviceData;
@@ -173,6 +174,7 @@ void cfs_uninit(struct device* dev) {
     kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
     kfree(dev->deviceData);
+    return 1;
 }
 
 struct device* cfs_attach(struct device* block_device) {
@@ -200,12 +202,17 @@ struct device* cfs_attach(struct device* block_device) {
     /*
      * register
      */
-    devicemgr_attach_device(deviceinstance);
-
-    /*
-     * return device
-     */
-    return deviceinstance;
+    if (0 != devicemgr_attach_device(deviceinstance)) {
+        /*
+        * return device
+        */
+        return deviceinstance;
+    } else {
+        kfree(deviceData);
+        kfree(api);
+        kfree(deviceinstance);
+        return 0;
+    }
 }
 
 void cfs_detach(struct device* dev) {

@@ -70,7 +70,7 @@ void vnic_irq_handler(stackFrame* frame) {
 /*
  * perform device instance specific init here
  */
-void VNICInit(struct device* dev) {
+uint8_t VNICInit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
 
@@ -109,6 +109,7 @@ void VNICInit(struct device* dev) {
 
     kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n", virtio_mac[0], virtio_mac[1], virtio_mac[2], virtio_mac[3],
             virtio_mac[4], virtio_mac[5]);
+    return 1;
 }
 
 void vnic_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {

@@ -39,7 +39,7 @@ struct vga_devicedata {
 /*
  * perform device instance specific init here
  */
-void vga_device_init(struct device* dev) {
+uint8_t vga_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct vga_devicedata* deviceData = (struct vga_devicedata*)dev->deviceData;
@@ -49,6 +49,7 @@ void vga_device_init(struct device* dev) {
     deviceData->vga_modes[VIDEO_MODE_TEXT].x_width = 80;
     deviceData->vga_modes[VIDEO_MODE_TEXT].y_height = 25;
     deviceData->video_active_mode = VIDEO_MODE_TEXT;
+    return 1;
 }
 
 // api

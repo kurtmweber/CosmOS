@@ -119,17 +119,18 @@ void tfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uin
 /*
  * perform device instance specific init here
  */
-void tfs_init(struct device* dev) {
+uint8_t tfs_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
     kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    return 1;
 }
 
 /*
  * perform device instance specific uninit here, like removing API structs and Device data
  */
-void tfs_uninit(struct device* dev) {
+uint8_t tfs_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
 
@@ -137,6 +138,7 @@ void tfs_uninit(struct device* dev) {
     kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     kfree(dev->api);
     kfree(dev->deviceData);
+    return 1;
 }
 
 struct device* tfs_attach(struct device* block_device) {
@@ -171,12 +173,17 @@ struct device* tfs_attach(struct device* block_device) {
     /*
      * register
      */
-    devicemgr_attach_device(deviceinstance);
-
-    /*
-     * return device
-     */
-    return deviceinstance;
+    if (0 != devicemgr_attach_device(deviceinstance)) {
+        /*
+        * return device
+        */
+        return deviceinstance;
+    } else {
+        kfree(deviceData);
+        kfree(api);
+        kfree(deviceinstance);
+        return 0;
+    }
 }
 
 void tfs_detach(struct device* dev) {

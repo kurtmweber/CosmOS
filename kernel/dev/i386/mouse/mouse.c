@@ -106,7 +106,7 @@ uint8_t mouse_read() {
 /*
  * perform device instance specific init here
  */
-void mouse_device_init(struct device* dev) {
+uint8_t mouse_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu (%s)\n", dev->description, MOUSE_IRQ_NUMBER, dev->name);
     interrupt_router_register_interrupt_handler(MOUSE_IRQ_NUMBER, &mouse_irq_read);
@@ -136,6 +136,7 @@ void mouse_device_init(struct device* dev) {
     // enable the mouse
     mouse_write(ENABLE_DATA_REPORTING);
     mouse_read();  // Acknowledge
+    return 1;
 }
 
 struct mouse_status* ps2mouse_status(struct device* dev) {

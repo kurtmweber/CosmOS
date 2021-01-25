@@ -140,12 +140,13 @@ void ne2000isa_irq_handler(stackFrame* frame) {
 /*
  * perform device instance specific init here
  */
-void ne2000_isa_init(struct device* dev) {
+uint8_t ne2000_isa_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     interrupt_router_register_interrupt_handler(NE2000ISA_IRQ, &ne2000isa_irq_handler);
     kprintf("Init %s at IRQ %llu (%s)\n", dev->description, NE2000ISA_IRQ, dev->name);
     // do the init
     ne2000isa_init();
+    return 1;
 }
 
 void ne2000isa_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {

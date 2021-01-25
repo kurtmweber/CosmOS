@@ -16,8 +16,8 @@
 struct pci_device;
 struct device;
 
-typedef void (*deviceInit)(struct device* dev);
-typedef void (*deviceUnInit)(struct device* dev);
+typedef uint8_t (*deviceInit)(struct device* dev);
+typedef uint8_t (*deviceUnInit)(struct device* dev);
 
 typedef enum deviceType {
     NONE = 0x00,
@@ -129,10 +129,10 @@ void devicemgr_find_devices_by_description(deviceType dt, const uint8_t* descrip
 void devicemgr_find_devices_by_deviceType(deviceType dt, deviceSearchCallback cb);
 
 // attach a device (non-fixed devices... like RAM disks and SWAP)
-void devicemgr_attach_device(struct device* dev);
+uint8_t devicemgr_attach_device(struct device* dev);
 
 // detach a device (non-fixed devices... like RAM disks and SWAP)
 // be aware, this has the effect of deleting the dev struct!
-void devicemgr_detach_device(struct device* dev);
+uint8_t devicemgr_detach_device(struct device* dev);
 
 #endif

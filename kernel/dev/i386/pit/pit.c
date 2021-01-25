@@ -49,10 +49,11 @@ void pit_handle_irq(stackFrame* frame) {
  *  or 0 (which translates to 65536), which gives an output frequency of
  *  18.2065 Hz (or an IRQ every 54.9254 ms)"
  */
-void pit_init(struct device* dev) {
+uint8_t pit_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu (%s)\n", dev->description, PIT_IRQ, dev->name);
     interrupt_router_register_interrupt_handler(PIT_IRQ, &pit_handle_irq);
+    return 1;
 }
 
 uint64_t pit_tickcount(struct device* dev) {

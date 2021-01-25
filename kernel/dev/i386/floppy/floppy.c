@@ -168,7 +168,7 @@ void command(uint8_t commandByte) {
 /*
  * perform device instance specific init here
  */
-void floppy_device_init(struct device* dev) {
+uint8_t floppy_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct floppy_devicedata* deviceData = (struct floppy_devicedata*)dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n", dev->description, FLOPPY_IRQ_NUMBER, dev->name);
@@ -187,6 +187,7 @@ void floppy_device_init(struct device* dev) {
 
     // reset
     resetFloppy();
+    return 1;
 }
 
 /**

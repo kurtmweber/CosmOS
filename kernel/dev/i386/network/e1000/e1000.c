@@ -21,11 +21,13 @@ void e1000_irq_handler(stackFrame* frame) {
 /*
  * perform device instance specific init here
  */
-void e1000_init(struct device* dev) {
+uint8_t e1000_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX (%s)\n", dev->description, dev->pci->irq, dev->pci->vendor_id,
             dev->pci->device_id, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &e1000_irq_handler);
+        return 1;
+
 }
 
 void e1000_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {

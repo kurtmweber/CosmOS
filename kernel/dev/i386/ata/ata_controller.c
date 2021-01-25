@@ -59,7 +59,7 @@ void ata_detect_addresses(struct device* dev) {
 /*
  * init ATA controller
  */
-void device_init_ata(struct device* dev) {
+uint8_t device_init_ata(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct ata_controller* controller = (struct ata_controller*)dev->deviceData;
@@ -88,7 +88,7 @@ void device_init_ata(struct device* dev) {
 
     ata_detect_devices(dev, controller);
 
-    return;
+    return 1;
 }
 
 void ata_search_cb(struct pci_device* dev) {
