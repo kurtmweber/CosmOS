@@ -17,6 +17,11 @@
 #define MALLOC_MAGIC_4 'O'
 #define MALLOC_MAGIC_5 'S'
 
+// fwd decls
+kmalloc_block* find_avail_kmalloc_block_list(uint64_t size);
+kmalloc_block* new_kmalloc_block(kmalloc_block* last, uint64_t size);
+void* kmalloc_align_block_end(kmalloc_block* block, uint64_t alignment);
+
 kmalloc_block* kmalloc_block_list;
 kmalloc_block* kmalloc_block_list_end;
 
