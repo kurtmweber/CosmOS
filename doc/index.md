@@ -30,6 +30,7 @@
 * [Console](KernelTerminalConsole.txt)
 * [Keyboard](Keyboard.txt)
 * [IO Buffers](io_buffers.md)
+* [Strings](strings.md)
 
 ### File Systems
 
