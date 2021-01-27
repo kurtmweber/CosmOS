@@ -181,10 +181,9 @@ void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param)
 }
 
 void fat_format(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct fat_devicedata* deviceData = (struct fat_devicedata*)dev->deviceData;
-
-    ASSERT_NOT_NULL(dev);
 }
 
 /*

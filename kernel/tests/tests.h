@@ -26,6 +26,7 @@
 #include <tests/dev/test_vblock.h>
 #include <tests/dev/test_vga_console.h>
 #include <tests/fs/test_cfs.h>
+#include <tests/fs/test_cpm.h>
 #include <tests/fs/test_fat.h>
 #include <tests/fs/test_gpt.h>
 #include <tests/fs/test_mbr.h>
