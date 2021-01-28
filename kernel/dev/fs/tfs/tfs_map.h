@@ -12,8 +12,8 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <types.h>
 
-#define DFS_MAP_BLOCK_FREE 0
-#define DFS_MAP_BLOCK_USED 1
+#define TFS_MAP_BLOCK_FREE 0
+#define TFS_MAP_BLOCK_USED 1
 
 uint32_t tfs_map_find_free_block(struct device* dev, struct tfs_superblock_block* superblock);
 void tfs_map_release_block(struct device* dev, uint64_t block, struct tfs_superblock_block* superblock);

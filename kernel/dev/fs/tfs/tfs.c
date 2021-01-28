@@ -40,7 +40,7 @@ void tfs_format(struct device* dev) {
      */
     struct tfs_superblock_block superblock;
     memset((uint8_t*)&superblock, 0, sizeof(struct tfs_superblock_block));
-    superblock.magic = DFS_MAGIC_SUPERBLOCK;
+    superblock.magic = TFS_MAGIC_SUPERBLOCK;
     superblock.blocks_size = (uint64_t)block_get_sector_size(deviceData->block_device);
     superblock.blocks_count = (uint64_t)block_get_sector_count(deviceData->block_device);
     superblock.number_map_blocks = number_map_blocks;
@@ -76,7 +76,7 @@ void tfs_format(struct device* dev) {
 
 bool tfs_dir_list_iterator(struct tfs_file_block* file_block) {
     ASSERT_NOT_NULL(file_block);
-    kprintf("dfs file at block %s\n", file_block->name);
+    kprintf("tfs file at block %s\n", file_block->name);
     return true;
 }
 
@@ -90,7 +90,7 @@ void tfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(name);
     ASSERT_NOT_NULL(data);
-    ASSERT(strlen(name) < DFS_FILENAME_SIZE);
+    ASSERT(strlen(name) < TFS_FILENAME_SIZE);
     ASSERT_NOT_NULL(dev->deviceData);
     //   struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
 }
@@ -99,7 +99,7 @@ void tfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uin
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(name);
     ASSERT_NOT_NULL(data);
-    ASSERT(strlen(name) < DFS_FILENAME_SIZE);
+    ASSERT(strlen(name) < TFS_FILENAME_SIZE);
     ASSERT_NOT_NULL(dev->deviceData);
     //  struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
 
@@ -143,11 +143,11 @@ uint8_t tfs_uninit(struct device* dev) {
 }
 
 struct device* tfs_attach(struct device* block_device) {
-    ASSERT(sizeof(struct tfs_superblock_block) == DFS_BLOCK_SIZE);
-    ASSERT(sizeof(struct tfs_dir_block) == DFS_BLOCK_SIZE);
-    ASSERT(sizeof(struct tfs_file_block) == DFS_BLOCK_SIZE);
-    ASSERT(sizeof(struct tfs_file_allocation_block) == DFS_BLOCK_SIZE);
-    ASSERT(sizeof(struct tfs_map_block) == DFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct tfs_superblock_block) == TFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct tfs_dir_block) == TFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct tfs_file_block) == TFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct tfs_file_allocation_block) == TFS_BLOCK_SIZE);
+    ASSERT(sizeof(struct tfs_map_block) == TFS_BLOCK_SIZE);
 
     /*
      * register device

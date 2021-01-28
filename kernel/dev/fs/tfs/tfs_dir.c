@@ -18,7 +18,7 @@
 uint64_t tfs_dir_find_file(struct device* dev, uint8_t* filename) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(filename);
-    ASSERT(strlen(filename) < DFS_FILENAME_SIZE);
+    ASSERT(strlen(filename) < TFS_FILENAME_SIZE);
     return 0;
 }
 
@@ -27,7 +27,7 @@ uint64_t tfs_dir_find_file(struct device* dev, uint8_t* filename) {
  */
 uint64_t tfs_dir_add_file(struct device* dev, uint8_t* filename) {
     ASSERT_NOT_NULL(dev);
-    ASSERT(strlen(filename) < DFS_FILENAME_SIZE);
+    ASSERT(strlen(filename) < TFS_FILENAME_SIZE);
     ASSERT_NOT_NULL(filename);
     return 0;
 }
@@ -53,7 +53,7 @@ void tfs_dir_iterate_files(struct device* dev, tfs_file_iterator file_iterator) 
          */
         struct tfs_dir_block root_dir;
         tfs_read_dir_block(dev, &root_dir, block);
-        for (uint32_t i = 0; i < DFS_FILES_PER_DIR_BLOCK; i++) {
+        for (uint32_t i = 0; i < TFS_FILES_PER_DIR_BLOCK; i++) {
             uint64_t file_block_block = root_dir.files[i];
             /*
              * get the file for that one
@@ -78,6 +78,6 @@ void tfs_dir_iterate_files(struct device* dev, tfs_file_iterator file_iterator) 
 
 void tfs_dir_remove_file(struct device* dev, uint8_t* filename) {
     ASSERT_NOT_NULL(dev);
-    ASSERT(strlen(filename) < DFS_FILENAME_SIZE);
+    ASSERT(strlen(filename) < TFS_FILENAME_SIZE);
     ASSERT_NOT_NULL(filename);
 }
