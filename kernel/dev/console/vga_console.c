@@ -74,7 +74,7 @@ uint8_t vga_console_dev_setpos(struct device* dev, uint8_t x, uint8_t y) {
     return 1;
 }
 
-uint8_t vga_console_dev_write(struct device* dev, const char* c) {
+void vga_console_dev_write(struct device* dev, const char* c) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct vga_console_devicedata* deviceData = (struct vga_console_devicedata*)dev->deviceData;
@@ -131,8 +131,6 @@ uint8_t vga_console_dev_write(struct device* dev, const char* c) {
         deviceData->vga_console_xpos++;
         i++;
     }
-
-    return 1;
 }
 
 struct device* vga_console_attach(struct device* serial_device) {

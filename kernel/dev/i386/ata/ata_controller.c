@@ -119,7 +119,7 @@ void ata_devicemgr_register_devices() {
 void ata_detect_devices(struct device* device, struct ata_controller* controller) {
     uint8_t i, j;
     uint8_t status;
-    struct ata_device_t* tmp;
+    //  struct ata_device_t* tmp;
 
     for (i = 0; i < 2; i++) {
         controller->channels[i].selected_device = ATA_DRIVE_SELECT_NONE;

@@ -22,7 +22,7 @@ void fsutil_attach_partition_tables(struct device* block_dev) {
     struct device* mbr = mbr_pt_attach(block_dev);
     if (0 == mbr) {
         // maybe its guid
-        struct device* guid = guid_pt_attach(block_dev);
+        guid_pt_attach(block_dev);
     }
 }
 

@@ -209,8 +209,9 @@ uint16_t vaddr_ptt_index(void* address, ptt_levels level) {
 void* vaddr_to_physical(void* address, pttentry cr3) {
     ASSERT_NOT_NULL(address);
 
-    pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
-    uint16_t idx;
+    //  pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
+    //  pttentry* pt_base;
+    // uint16_t idx;
 
     // function does not work--need way to translate physical addresses in page tables to virtual addresses.
 
@@ -234,5 +235,7 @@ void* vaddr_to_physical(void* address, pttentry cr3) {
     pt_base = extract_pttentry_base_address(pd_base[idx]);
     idx = vaddr_ptt_index(address, PT);*/
 
-    return (void*)((uint64_t)pt_base[idx] * 4096);
+    //  return (void*)((uint64_t)pt_base[idx] * 4096);
+    panic("Not Implemented");
+    return 0;
 }

@@ -45,7 +45,8 @@ uint8_t serial_console_setpos(struct device* dev, uint8_t x, uint8_t y) {
     // do nothing
     return 0;
 }
-uint8_t serial_console_dev_write(struct device* dev, const char* s) {
+
+void serial_console_dev_write(struct device* dev, const char* s) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct serial_console_devicedata* deviceData = (struct serial_console_devicedata*)dev->deviceData;

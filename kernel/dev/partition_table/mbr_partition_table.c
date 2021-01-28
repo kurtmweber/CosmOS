@@ -135,9 +135,10 @@ uint8_t mbr_pt_part_table_total_partitions(struct device* dev) {
 uint8_t mbr_part_table_detachable(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
+    //    struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
 
     // check the partitions TODO
+    return 1;
 }
 
 struct device* mbr_pt_attach(struct device* block_device) {

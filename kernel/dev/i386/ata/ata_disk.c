@@ -159,11 +159,13 @@ uint8_t device_init_ata_disk(struct device* dev) {
 
     // mount parition tables
     fsutil_attach_partition_tables(dev);
+    return 1;
 }
 
 uint8_t device_uninit_ata_disk(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     fsutil_detach_partition_tables(dev);
+    return 1;
 }
 
 void ata_register_disk(struct device* controllerDevice, uint8_t channel, uint8_t disk) {

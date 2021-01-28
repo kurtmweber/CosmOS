@@ -149,7 +149,7 @@ void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param)
     block_read(dev, 0, buffer);
 
     struct fat_BS* fat_boot = (struct fat_BS*)buffer;
-    struct fat_extBS_16* fat_boot_ext_16 = (struct fat_extBS_16*)&(fat_boot->extended_section);
+    //   struct fat_extBS_16* fat_boot_ext_16 = (struct fat_extBS_16*)&(fat_boot->extended_section);
     struct fat_extBS_32* fat_boot_ext_32 = (struct fat_extBS_32*)&(fat_boot->extended_section);
 
     param->sectors_per_cluster = fat_boot->sectors_per_cluster;
@@ -183,7 +183,7 @@ void fat_read_fs_parameters(struct device* dev, struct fat_fs_parameters* param)
 void fat_format(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct fat_devicedata* deviceData = (struct fat_devicedata*)dev->deviceData;
+    //   struct fat_devicedata* deviceData = (struct fat_devicedata*)dev->deviceData;
 }
 
 /*

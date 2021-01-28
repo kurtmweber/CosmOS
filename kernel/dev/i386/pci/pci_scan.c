@@ -72,10 +72,10 @@ void pci_found_device(uint8_t bus, uint8_t device, uint8_t function) {
 
 void pci_scan() {
     ASSERT_NOT_NULL(pci_devices);
-    uint16_t bus = 0, device = 0, function = 0;
-    uint32_t register_dword;
-    uint16_t device_id, vendor_id;
-    uint8_t class_code, subclass_code, header_code;
+    //   uint16_t bus = 0, device = 0, function = 0;
+    //  uint32_t register_dword;
+    //   uint16_t device_id, vendor_id;
+    //   uint8_t class_code, subclass_code, header_code;
     uint16_t i;
 
     kprintf("Scanning for PCI devices...\n");

@@ -83,6 +83,7 @@ bool tfs_dir_list_iterator(struct tfs_file_block* file_block) {
 struct fs_directory_listing* tfs_list_dir(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     tfs_dir_iterate_files(dev, &tfs_dir_list_iterator);
+    return 0;
 }
 
 void tfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size) {
@@ -91,7 +92,7 @@ void tfs_read(struct device* dev, const uint8_t* name, const uint8_t* data, uint
     ASSERT_NOT_NULL(data);
     ASSERT(strlen(name) < DFS_FILENAME_SIZE);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
+    //   struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
 }
 
 void tfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uint32_t size) {
@@ -100,7 +101,7 @@ void tfs_write(struct device* dev, const uint8_t* name, const uint8_t* data, uin
     ASSERT_NOT_NULL(data);
     ASSERT(strlen(name) < DFS_FILENAME_SIZE);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
+    //  struct tfs_devicedata* deviceData = (struct tfs_devicedata*)dev->deviceData;
 
     kprintf("write file: %s of length %llu\n", name, size);
     /*

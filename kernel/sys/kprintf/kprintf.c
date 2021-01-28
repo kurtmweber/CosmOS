@@ -13,6 +13,8 @@
 #include <sys/string/string.h>
 #include <types.h>
 
+uint64_t kprintf_proc_format_string(const char* s, uint64_t* chars_written, __builtin_va_list ap);
+
 uint64_t kprintf(const char* s, ...) {
     __builtin_va_list ap;
     uint64_t idx_in = 0, idx_out = 0;
@@ -97,8 +99,6 @@ uint64_t kprintf_proc_format_string(const char* s, uint64_t* chars_written, __bu
     bool hex_prefix = false;
 
     // conversion variables
-    unsigned int conv_uint;
-    unsigned long conv_ulong;
     const char* conv_str;
 
     while (s[i]) {
@@ -149,6 +149,7 @@ uint64_t kprintf_proc_format_string(const char* s, uint64_t* chars_written, __bu
                 return consumed;
         }
     }
+    return 0;
 }
 
 #endif

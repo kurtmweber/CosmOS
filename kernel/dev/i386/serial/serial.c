@@ -44,7 +44,7 @@ void serial_write_char(const uint8_t c) {
 void serial_irq_handler_for_device(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct serial_devicedata* deviceData = (struct serial_devicedata*)dev->deviceData;
+    //    struct serial_devicedata* deviceData = (struct serial_devicedata*)dev->deviceData;
 
     // TODO figure out if it was THIS dev that made the interrupt and respond accordingly (like by putting the data into the ringbuffer)
     struct rs232_16550* comport = (struct rs232_16550*)COM1_ADDRESS;

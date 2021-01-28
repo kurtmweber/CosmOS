@@ -131,7 +131,7 @@ void sfs_format(struct device* dev) {
     struct sfs_devicedata* deviceData = (struct sfs_devicedata*)dev->deviceData;
 
     // device parameters
-    uint64_t total_size = block_get_total_size(deviceData->block_device);
+    //    uint64_t total_size = block_get_total_size(deviceData->block_device);
     uint32_t sector_size = block_get_sector_size(deviceData->block_device);
     uint32_t total_sectors = block_get_sector_count(deviceData->block_device);
 

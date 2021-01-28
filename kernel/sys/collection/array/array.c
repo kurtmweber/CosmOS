@@ -51,6 +51,7 @@ void* array_get(struct array* arr, uint32_t position) {
     } else {
         kprintf("Index %llu", position);
         panic("invalid array index passed to array_get\n");
+        return 0;
     }
 }
 

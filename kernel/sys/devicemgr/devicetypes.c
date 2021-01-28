@@ -26,6 +26,7 @@ struct arraylist* devicetypes_get_devicelist(deviceType dt) {
     } else {
         panic("Invalid device type passed to devicetypes_get_devicelist");
     }
+    return 0;
 }
 
 void devicetypes_set_devicelist(deviceType dt, struct arraylist* lst) {

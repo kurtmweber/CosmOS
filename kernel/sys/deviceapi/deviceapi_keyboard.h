@@ -26,7 +26,7 @@ typedef struct key_action_t {
     keypress_state state;
 } key_action_t;
 
-typedef key_action_t (*keyboard_read_key)(struct device* dev);
+typedef key_action_t* (*keyboard_read_key)(struct device* dev);
 
 struct deviceapi_keyboard {
     keyboard_read_key read;

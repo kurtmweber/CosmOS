@@ -65,6 +65,7 @@ uint16_t deviceregistry_devicecount_type(deviceType dt) {
     } else {
         panic("Invalid device type passed to deviceregistry_devicecount_type");
     }
+    return 0;
 }
 
 struct device* deviceregistry_get_device(deviceType dt, uint16_t idx) {
@@ -78,6 +79,7 @@ struct device* deviceregistry_get_device(deviceType dt, uint16_t idx) {
     } else {
         panic("Invalid device type passed to deviceregistry_get_device");
     }
+    return 0;
 }
 
 void deviceregistry_iterate(DeviceIterator deviceIterator) {

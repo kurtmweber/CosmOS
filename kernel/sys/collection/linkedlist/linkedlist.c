@@ -14,6 +14,7 @@ struct linkedlist* linkedlist_new() {
     struct linkedlist* ret = kmalloc(sizeof(struct linkedlist));
     ret->data = 0;
     ret->next = 0;
+    return ret;
 }
 
 /*

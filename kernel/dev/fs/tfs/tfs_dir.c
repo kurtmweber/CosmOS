@@ -19,6 +19,7 @@ uint64_t tfs_dir_find_file(struct device* dev, uint8_t* filename) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(filename);
     ASSERT(strlen(filename) < DFS_FILENAME_SIZE);
+    return 0;
 }
 
 /*
@@ -28,6 +29,7 @@ uint64_t tfs_dir_add_file(struct device* dev, uint8_t* filename) {
     ASSERT_NOT_NULL(dev);
     ASSERT(strlen(filename) < DFS_FILENAME_SIZE);
     ASSERT_NOT_NULL(filename);
+    return 0;
 }
 
 void tfs_dir_iterate_files(struct device* dev, tfs_file_iterator file_iterator) {
@@ -43,7 +45,7 @@ void tfs_dir_iterate_files(struct device* dev, tfs_file_iterator file_iterator) 
     /*
      * iterate directory blocks
      */
-    bool more = true;
+    //  bool more = true;
     uint64_t block = superblock.root_dir;
     while (block) {
         /*

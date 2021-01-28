@@ -14,7 +14,7 @@
 #include <types.h>
 
 typedef uint8_t (*console_setpos_function)(struct device* dev, uint8_t x, uint8_t y);
-typedef uint8_t (*console_write_function)(struct device* dev, const char* s);
+typedef void (*console_write_function)(struct device* dev, const char* s);
 
 struct deviceapi_console {
     console_setpos_function setpos;

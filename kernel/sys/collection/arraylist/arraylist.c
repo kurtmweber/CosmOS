@@ -16,6 +16,7 @@ struct arraylist* arraylist_new() {
     struct arraylist* ret = (struct arraylist*)kmalloc(sizeof(struct arraylist));
     ret->arr = array_new(START_SIZE);
     ret->count = 0;
+    return ret;
 }
 
 void arraylist_delete(struct arraylist* lst) {
@@ -87,6 +88,7 @@ void* arraylist_get(struct arraylist* lst, uint32_t position) {
     } else {
         panic("invalid list index passed to arraylist_get\n");
     }
+    return 0;
 }
 
 void arraylist_iterate(struct arraylist* lst, listIterator iter) {

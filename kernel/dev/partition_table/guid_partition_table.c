@@ -86,7 +86,7 @@ uint8_t guid_pt_init(struct device* dev) {
 uint8_t guid_pt_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    //   struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
     //   kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     /*
      * unmount partitions
@@ -152,7 +152,7 @@ uint8_t guid_pt_part_table_total_partitions(struct device* dev) {
 uint8_t guid_part_table_detachable(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    //   struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
     return 1;
 }
 

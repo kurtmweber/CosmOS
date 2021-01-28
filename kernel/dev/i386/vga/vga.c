@@ -56,7 +56,7 @@ uint8_t vga_device_init(struct device* dev) {
 uint8_t vga_device_set_mode(struct device* dev, enum vga_video_mode mode) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    struct vga_devicedata* deviceData = (struct vga_devicedata*)dev->deviceData;
+    //   struct vga_devicedata* deviceData = (struct vga_devicedata*)dev->deviceData;
 
     ASSERT_NOT_NULL(dev);
     if (mode == VIDEO_MODE_TEXT) {

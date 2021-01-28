@@ -170,7 +170,7 @@ void command(uint8_t commandByte) {
  */
 uint8_t floppy_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    struct floppy_devicedata* deviceData = (struct floppy_devicedata*)dev->deviceData;
+    //   struct floppy_devicedata* deviceData = (struct floppy_devicedata*)dev->deviceData;
     kprintf("Init %s at IRQ %llu (%s)\n", dev->description, FLOPPY_IRQ_NUMBER, dev->name);
     //	printDriveType(deviceData->type);
     interrupt_router_register_interrupt_handler(FLOPPY_IRQ_NUMBER, &floppy_irq_read);

@@ -96,7 +96,7 @@ uint8_t sb16_device_init(struct device* dev) {
 /*
  * stereo
  */
-uint8_t sb16_set_stereo_output(struct device* dev) {
+void sb16_set_stereo_output(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct sb16_devicedata* sb16_data = (struct sb16_devicedata*)dev->deviceData;
     ASSERT_NOT_NULL(sb16_data);

@@ -74,8 +74,8 @@ uint8_t iobuffers_is_free_pages(uint32_t start, uint32_t count) {
         if (bitmap_get(map, start + i) > 0) {
             return 0;
         }
-        return 1;
     }
+    return 1;
 }
 
 uint32_t iobuffers_calc_num_pages(uint32_t size) {
@@ -97,7 +97,8 @@ uint32_t iobuffers_calc_num_pages(uint32_t size) {
 void* iobuffers_address(uint32_t start) {
     return (void*)(((uint64_t)io_buf) + (start * IOBUFFERS_BUFFER_SIZE));
 }
-void* iobuffers_mark_pages_free(uint32_t start, uint32_t count) {
+
+void iobuffers_mark_pages_free(uint32_t start, uint32_t count) {
     ASSERT_NOT_NULL(count);
     ASSERT_NOT_NULL(map);
     ASSERT_NOT_NULL(buffer_list);
@@ -144,6 +145,7 @@ void* iobuffers_request_buffer(uint32_t size) {
             return b->address;
         }
     }
+    return 0;
 }
 
 void iobuffers_release_buffer(void* buffer) {

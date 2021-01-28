@@ -143,7 +143,7 @@ uint8_t rtl8139_init(struct device* dev) {
     /*
      * allocate rx buffer
      */
-    extern void* isadma_buf;
+    //  extern void* isadma_buf;
     devicedata->rx_buffer = iobuffers_request_buffer(RTL8139_RX_BUFFERSIZE);
     kprintf("   RX buffer %#hX-%#llX\n", devicedata->rx_buffer, RTL8139_RX_BUFFERSIZE + devicedata->rx_buffer);
     // check that rxbuffer is in lower 2^32 bytes of RAM
@@ -186,7 +186,7 @@ void rtl8139_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
     ASSERT_NOT_NULL(data);
     ASSERT_NOT_NULL(dev->deviceData);
 
-    struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*)dev->deviceData;
+    //   struct rtl8139_devicedata* devicedata = (struct rtl8139_devicedata*)dev->deviceData;
 
     panic("Ethernet read not implemented yet");
 }

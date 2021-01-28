@@ -17,8 +17,8 @@ uint64_t future_pt_expansion[3];
 void mmu_init() {
     int_15_map* map;
     uint8_t num_blocks, lrg_block;
-    uint8_t i;
-    mem_block* b;
+    //  uint8_t i;
+    //   mem_block* b;
     page_directory_t* page_directory_start;
 
     brk = &_end;

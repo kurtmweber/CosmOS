@@ -29,6 +29,7 @@ struct kernelstring* string_new_sized(uint32_t size) {
     } else {
         panic("invalid string size\n");
     }
+    return 0;
 }
 
 void string_delete(struct kernelstring* str) {
@@ -48,6 +49,7 @@ uint32_t string_length(const struct kernelstring* str) {
     } else {
         panic("null kernelstring\n");
     }
+    return 0;
 }
 
 struct kernelstring* string_from_cstr(const int8_t* str) {
@@ -87,6 +89,7 @@ const int8_t* string_get_cstr(const struct kernelstring* str) {
     } else {
         panic("null kernelstring\n");
     }
+    return 0;
 }
 
 /*****************************************************************
@@ -136,6 +139,7 @@ struct kernelstring* string_itoa3(uint64_t n, uint8_t base) {
     } else {
         panic("illegal base\n");
     }
+    return 0;
 }
 
 struct kernelstring* string_concat(const struct kernelstring* str1, const struct kernelstring* str2) {
@@ -153,6 +157,7 @@ struct kernelstring* string_concat(const struct kernelstring* str1, const struct
     } else {
         panic("null kernelstring\n");
     }
+    return 0;
 }
 
 struct kernelstring* string_copy(const struct kernelstring* str) {
@@ -168,6 +173,7 @@ struct kernelstring* string_copy(const struct kernelstring* str) {
     } else {
         panic("null kernelstring\n");
     }
+    return 0;
 }
 
 /*****************************************************************
@@ -182,7 +188,7 @@ struct kernelstring* string_trim(const struct kernelstring* str) {
         uint32_t i = str->length;
         uint32_t j = i - 1;
 
-        uint8_t* tgt;
+        //     uint8_t* tgt;
 
         // walk backwards....
         while ((str->str[j] == ' ') || (str->str[j] == '\t')) {
@@ -202,4 +208,5 @@ struct kernelstring* string_trim(const struct kernelstring* str) {
     } else {
         panic("null kernelstring\n");
     }
+    return 0;
 }

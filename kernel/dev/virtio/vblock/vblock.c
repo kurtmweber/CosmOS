@@ -101,7 +101,7 @@ uint8_t vblock_init(struct device* dev) {
     asm_out_b(deviceData->base + VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED);
 
     // get the feature bits
-    uint32_t features = asm_in_b(deviceData->base + VIRTIO_DEVICE_FEATURES);
+    //   uint32_t features = asm_in_b(deviceData->base + VIRTIO_DEVICE_FEATURES);
 
     // we kinda care about geometry and block size
     asm_out_b(deviceData->base + VIRTIO_GUEST_FEATURES, VIRTIO_BLK_F_GEOMETRY | VIRTIO_BLK_F_BLK_SIZE);
