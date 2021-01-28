@@ -41,7 +41,7 @@ void parallel_device_ready(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct parallel_devicedata* deviceData = (struct parallel_devicedata*)(dev->deviceData);
-    while (!asm_in_b(deviceData->address + PARALLEL_DEVICE_REGISTER_STATUS) & 0x80) {
+    while (!(asm_in_b(deviceData->address + PARALLEL_DEVICE_REGISTER_STATUS) & 0x80)) {
         sleep_wait(10);
     }
 }

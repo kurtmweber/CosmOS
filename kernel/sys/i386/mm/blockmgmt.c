@@ -23,7 +23,7 @@ mem_block* find_containing_block(void* addr, mem_block* list) {
             return tmp;
         }
 
-    } while (tmp = tmp->next);
+    } while ((tmp = tmp->next));
 
     return NULL;
 }

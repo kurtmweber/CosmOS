@@ -207,6 +207,6 @@ void ata_wait_busy(struct ata_controller* controller, uint8_t channel) {
     };
 }
 void ata_wait_drq(struct ata_controller* controller, uint8_t channel) {
-    while (!ata_register_read(controller, channel, ATA_REGISTER_STATUS) & ATA_STATUS_DRQ) {
+    while (!(ata_register_read(controller, channel, ATA_REGISTER_STATUS) & ATA_STATUS_DRQ)) {
     };
 }
