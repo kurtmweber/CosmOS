@@ -73,7 +73,8 @@ uint8_t guid_pt_init(struct device* dev) {
     if (header.magic[7] == GUID_PT_EFI_PART[7]) {
         return 0;
     }
-    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    kprintf("Init %s on %s (%s) with %llu partitions\n", dev->description, deviceData->block_device->name, dev->name,
+            deviceData->num_partitions);
 
     // attach partitions
     fsutil_attach_partitions(dev);
@@ -165,7 +166,7 @@ struct device* guid_pt_attach(struct device* block_device) {
     deviceinstance->uninit = &guid_pt_uninit;
     deviceinstance->pci = 0;
     deviceinstance->devicetype = PARTITION_TABLE;
-    devicemgr_set_device_description(deviceinstance, "GUID parition table");
+    devicemgr_set_device_description(deviceinstance, "GUID partition table");
     /*
      * the device api
      */

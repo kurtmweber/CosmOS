@@ -51,7 +51,8 @@ uint8_t mbr_pt_init(struct device* dev) {
     struct mbr_pt_header header;
     mbr_pt_read_mbr_pt_header(deviceData->block_device, &header);
     if ((header.signature[0] == 0x55) && (header.signature[1] == 0xAA)) {
-        kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+        kprintf("Init %s on %s (%s) with %llu partitions\n", dev->description, deviceData->block_device->name,
+                dev->name, deviceData->num_partitions);
 
         // attach partitions
         fsutil_attach_partitions(dev);
@@ -151,7 +152,7 @@ struct device* mbr_pt_attach(struct device* block_device) {
     deviceinstance->uninit = &mbr_pt_uninit;
     deviceinstance->pci = 0;
     deviceinstance->devicetype = PARTITION_TABLE;
-    devicemgr_set_device_description(deviceinstance, "MBR parition table");
+    devicemgr_set_device_description(deviceinstance, "MBR partition table");
     /*
      * the device api
      */
