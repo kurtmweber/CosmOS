@@ -4,7 +4,11 @@ BOOTIMAGE=img/hda.img
 BLANK_DISK=img/blank.img
 SRC_FILES=$(shell find . -type f \( -name "*.c" -o -name "*.h" \))
 
+CRUFT_FILES=$(shell find . -type f \( -name "dump.dat" -o \
+									  -name "qemu.log" \))
+
 all: subsystems
+.PHONY: clean
 
 bootimage: subsystems
 	$(DD) if=/dev/zero of=$(BOOTIMAGE) bs=32768 count=129024
@@ -24,17 +28,15 @@ boot-subsystem:
 kernel-subsystem:
 	cd kernel && $(MAKE) all
 	
-clean: boot-clean kernel-clean log-clean
+clean: boot-clean kernel-clean
 	$(RM) $(BOOTIMAGE)
+	$(RM) $(CRUFT_FILES)
 
 kernel-clean:
 	cd kernel && $(MAKE) clean
 
 boot-clean:
 	cd boot/x86-64 && $(MAKE) clean
-
-log-clean:
-	rm -f qemu.log dump.dat
 
 qemu: bootimage
 	$(QEMU) $(QEMUARGS)
