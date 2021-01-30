@@ -24,7 +24,7 @@ boot-subsystem:
 kernel-subsystem:
 	cd kernel && $(MAKE) all
 	
-clean: boot-clean kernel-clean
+clean: boot-clean kernel-clean log-clean
 	$(RM) $(BOOTIMAGE)
 
 kernel-clean:
@@ -32,6 +32,9 @@ kernel-clean:
 
 boot-clean:
 	cd boot/x86-64 && $(MAKE) clean
+
+log-clean:
+	rm -f qemu.log dump.dat
 
 qemu: bootimage
 	$(QEMU) $(QEMUARGS)
