@@ -37,7 +37,7 @@ uint32_t ntree_childcount(struct ntree* nt) {
     }
 }
 
-struct ntree* ntree_child(struct ntree* nt, uint32_t idx) {
+struct ntree* ntree_get_child(struct ntree* nt, uint32_t idx) {
     ASSERT_NOT_NULL(nt);
     ASSERT(idx >= 0);
     ASSERT(idx < ntree_childcount(nt));

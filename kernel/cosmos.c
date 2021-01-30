@@ -24,6 +24,7 @@
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/sync/sync.h>
+#include <sys/vfs/vfs.h>
 #include <tests/tests.h>
 #include <types.h>
 
@@ -54,6 +55,9 @@ void CosmOS() {
 
     kprintf("Initializing Interrupt Routing...\n");
     interrupt_router_init();
+
+    kprintf("Initializing VFS\n");
+    vfs_init();
 
     kprintf("Initializing IO buffers...\n");
     iobuffers_init();
