@@ -37,7 +37,6 @@
 #include <tests/sys/test_bitmap.h>
 #include <tests/sys/test_debug.h>
 #include <tests/sys/test_iobuffers.h>
-#include <tests/sys/test_kernel_string.h>
 #include <tests/sys/test_linkedlist.h>
 #include <tests/sys/test_malloc.h>
 #include <tests/sys/test_mm.h>
