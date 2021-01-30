@@ -6,10 +6,10 @@
  *****************************************************************/
 
 #include <sys/debug/assert.h>
-#include <sys/i386/interrupts/exceptions.h>
+#include <sys/i386/idt/exceptions.h>
 #include <types.h>
 
-void isrGPF_handler(stackFrame* frame) {
+void isrGeneric_handler(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);
-    panic("GPF Exception\n");
+    panic("Unhandled Exception");
 }

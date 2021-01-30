@@ -6,7 +6,7 @@
  *****************************************************************/
 
 #include <dev/i386/pic/pic.h>
-#include <sys/i386/interrupts/irq.h>
+#include <sys/i386/idt/irq.h>
 #include <sys/interrupt_router/interrupt_router.h>
 
 void irq0_handler(stackFrame* frame) {

@@ -1,22 +1,21 @@
 /*****************************************************************
  * This file is part of CosmOS                                   *
- * Copyright (C) 2019-2020 Kurt M. Weber                         *
+ * Copyright (C) 2021 Kurt M. Weber                              *
  * Released under the stated terms in the file LICENSE           *
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#ifndef _DE_H
-#define _DE_H
-
+#include <sys/asm/misc.h>
 #include <sys/debug/assert.h>
-#include <sys/i386/interrupts/irq.h>
+#include <sys/i386/idt/exceptions.h>
+#include <sys/kmalloc/kmalloc.h>
+#include <sys/kprintf/kprintf.h>
 #include <types.h>
 
-void isrDE(stackFrame* frame);
-void isrPFE(stackFrame* frame, uint64_t error);
-void isrGeneric(stackFrame* frame);
-void isrGPF(stackFrame* frame);
-void isrDebug(stackFrame* frame);
-void isrBreakpoint(stackFrame* frame);
+void isrPFE_handler(stackFrame* frame, uint64_t error) {
+    ASSERT_NOT_NULL(frame);
 
-#endif
+    page_fault_handler(error, asm_cr2_read(), asm_cr3_read());
+
+    return;
+}

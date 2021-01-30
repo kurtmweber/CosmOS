@@ -17,8 +17,8 @@
 #include <sys/deviceapi/deviceapi_serial.h>
 #include <sys/deviceapi/deviceapi_speaker.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/i386/interrupts/idt.h>
-#include <sys/i386/process/gdt.h>
+#include <sys/i386/gdt/gdt.h>
+#include <sys/i386/idt/idt.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/iobuffers/iobuffers.h>
 #include <sys/kmalloc/kmalloc.h>

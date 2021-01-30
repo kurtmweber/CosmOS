@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <sys/debug/assert.h>
-#include <sys/i386/process/gdt.h>
+#include <sys/i386/gdt/gdt.h>
 
 // https://github.com/hach-que/Kernel
 

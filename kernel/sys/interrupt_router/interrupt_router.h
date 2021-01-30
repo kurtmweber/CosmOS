@@ -8,7 +8,7 @@
 #ifndef _INTERRUPT_ROUTER_H
 #define _INTERRUPT_ROUTER_H
 
-#include <sys/i386/interrupts/irq.h>
+#include <sys/i386/idt/irq.h>
 
 /**
  * interrupt routing to be used by device drivers

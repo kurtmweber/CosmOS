@@ -7,9 +7,9 @@
 
 #include <sys/asm/asm.h>
 #include <sys/debug/assert.h>
-#include <sys/i386/interrupts/exceptions.h>
-#include <sys/i386/interrupts/idt.h>
-#include <sys/i386/interrupts/irq.h>
+#include <sys/i386/idt/exceptions.h>
+#include <sys/i386/idt/idt.h>
+#include <sys/i386/idt/irq.h>
 #include <types.h>
 
 #define IDT_SIZE 256

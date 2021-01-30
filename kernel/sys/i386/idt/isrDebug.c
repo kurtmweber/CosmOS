@@ -6,11 +6,11 @@
  *****************************************************************/
 
 #include <sys/debug/assert.h>
-#include <sys/i386/interrupts/exceptions.h>
+#include <sys/i386/idt/exceptions.h>
 #include <sys/kprintf/kprintf.h>
 #include <types.h>
 
-void isrBreakpoint_handler(stackFrame* frame) {
+void isrDebug_handler(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);
-    kprintf("Breakpoint Exception\n");
+    kprintf("Debug Exception\n");
 }

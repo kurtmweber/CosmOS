@@ -6,10 +6,11 @@
  *****************************************************************/
 
 #include <sys/debug/assert.h>
-#include <sys/i386/interrupts/exceptions.h>
+#include <sys/i386/idt/exceptions.h>
+#include <sys/kprintf/kprintf.h>
 #include <types.h>
 
-void isrGeneric_handler(stackFrame* frame) {
+void isrBreakpoint_handler(stackFrame* frame) {
     ASSERT_NOT_NULL(frame);
-    panic("Unhandled Exception");
+    kprintf("Breakpoint Exception\n");
 }
