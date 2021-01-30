@@ -6,19 +6,30 @@ on:
   pull_request:
     branches: '*'
 jobs:
+  check-links:
+  runs-on: ubuntu-latest
+  name: Check markdown links
+  steps:
+    - uses: actions/checkout@v2
+    - uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        config-file: '.github/workflows/.mlc_config.json'
+      continue-on-error: true
+
   build-ubuntu:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: nasm
-      run: sudo apt install nasm
-    
-    - name: build
-      run: make
+      - name: nasm
+        run: sudo apt install nasm
+
+      - name: build
+        run: make
 
   build-osx:
     runs-on: macos-10.15
@@ -26,16 +37,16 @@ jobs:
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: make
-      run: brew install make
+      - name: make
+        run: brew install make
 
-    - name: gcc
-      run: brew install x86_64-elf-gcc
+      - name: gcc
+        run: brew install x86_64-elf-gcc
 
-    - name: nasm
-      run: brew install nasm
-    
-    - name: build
-      run: make
+      - name: nasm
+        run: brew install nasm
+
+      - name: build
+        run: make
