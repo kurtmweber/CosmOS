@@ -3,6 +3,7 @@ include ../scripts/mk/build.mk
 ARCHIVE_FILE=kernel.a
 KERNEL_ELF=cosmos.elf
 KERNEL_BIN=cosmos.bin
+KERNEL_MAP=cosmos.map
 
 EXTRA_CFLAGS= -I.
 
@@ -57,3 +58,4 @@ clean:
 	$(RM) $(ARCHIVE_FILE)
 	$(RM) $(KERNEL_ELF)
 	$(RM) $(KERNEL_BIN)
+	$(RM) $(KERNEL_MAP)
