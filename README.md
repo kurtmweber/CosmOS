@@ -16,7 +16,7 @@ CosmOS will be an [SSI](https://en.wikipedia.org/wiki/Single_system_image) opera
 
 ## Build and Run CosmOS
 
-- [Building and Running CosmOS](doc/developer/build.md)
+- [Building and Running CosmOS](doc/developer/buildd.md)
 
 ## Kernel Documentation
 
