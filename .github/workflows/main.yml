@@ -48,5 +48,8 @@ jobs:
       - name: nasm
         run: brew install nasm
 
+      - name: clang-format
+        run: brew install clang-format
+
       - name: build
         run: make
