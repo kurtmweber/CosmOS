@@ -9,6 +9,7 @@
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/string/string.h>
+#include <sys/vfs/folder_vfs.h>
 #include <sys/vfs/vfs.h>
 
 struct vfs* cosmos_vfs = 0;
@@ -30,19 +31,6 @@ void vfs_init() {
     cosmos_vfs = vfs_new_folder("/");
     struct vfs* dev_folder = vfs_new_folder("dev");
     vfs_add_child(cosmos_vfs, dev_folder);
-}
-
-struct vfs* vfs_new_folder(uint8_t* name) {
-    ASSERT_NOT_NULL(name);
-    struct vfs* ret = (struct vfs*)kmalloc(sizeof(struct vfs));
-    ret->children = 0;
-    ret->type = folder;
-    ret->close = &vfs_close;
-    ret->open = &vfs_open;
-    ret->read = &vfs_read;
-    ret->write = &vfs_write;
-    vfs_set_name(ret, name);
-    return ret;
 }
 
 void vfs_delete(struct vfs* v) {

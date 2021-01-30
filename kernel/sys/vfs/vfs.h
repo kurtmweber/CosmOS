@@ -19,6 +19,7 @@ typedef void (*vfs_open_function)(struct vfs* v);
 typedef void (*vfs_read_function)(struct vfs* v);
 typedef void (*vfs_write_function)(struct vfs* v);
 typedef void (*vfs_close_function)(struct vfs* v);
+typedef void (*vfs_close_readdir_function)(struct vfs* v);
 
 struct vfs {
     enum vfs_type type;
@@ -34,11 +35,11 @@ struct vfs {
     vfs_read_function read;
     vfs_write_function write;
     vfs_close_function close;
+    vfs_close_readdir_function readdir;
 };
 
 void vfs_init();
 
-struct vfs* vfs_new_folder(uint8_t* name);
 void vfs_delete(struct vfs* v);
 void vfs_set_name(struct vfs* v, uint8_t* name);
 void vfs_add_child(struct vfs* v, struct vfs* child);

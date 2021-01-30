@@ -11,28 +11,35 @@
 #include <sys/string/string.h>
 #include <sys/vfs/dev_vfs.h>
 
-void dev_vfs_open(struct vfs* v) {
-    ASSERT_NOT_NULL(v);
-}
-void dev_vfs_read(struct vfs* v) {
-    ASSERT_NOT_NULL(v);
-}
-void dev_vfs_write(struct vfs* v) {
-    ASSERT_NOT_NULL(v);
-}
-void dev_vfs_close(struct vfs* v) {
+void folder_vfs_open(struct vfs* v) {
     ASSERT_NOT_NULL(v);
 }
 
-struct vfs* vfs_new_dev(uint8_t* devicename) {
-    ASSERT_NOT_NULL(devicename);
+void folder_vfs_read(struct vfs* v) {
+    ASSERT_NOT_NULL(v);
+}
+
+void folder_vfs_write(struct vfs* v) {
+    ASSERT_NOT_NULL(v);
+}
+
+void folder_vfs_close(struct vfs* v) {
+    ASSERT_NOT_NULL(v);
+}
+
+void folder_vfs_readdir(struct vfs* v) {
+    ASSERT_NOT_NULL(v);
+}
+
+struct vfs* vfs_new_folder(uint8_t* name) {
+    ASSERT_NOT_NULL(name);
     struct vfs* ret = (struct vfs*)kmalloc(sizeof(struct vfs));
-    ret->children = 0;
-    ret->type = device;
-    ret->close = &dev_vfs_close;
-    ret->open = &dev_vfs_open;
-    ret->read = &dev_vfs_read;
-    ret->write = &dev_vfs_write;
-    vfs_set_name(ret, devicename);
+    ret->type = folder;
+    ret->close = &folder_vfs_close;
+    ret->open = &folder_vfs_open;
+    ret->read = &folder_vfs_read;
+    ret->write = &folder_vfs_write;
+    ret->readdir = &folder_vfs_readdir;
+    vfs_set_name(ret, name);
     return ret;
 }
