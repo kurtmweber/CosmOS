@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <sys/deviceapi/deviceapi_dsp.h>
-#include <sys/i386/sound/tone.h>
-#include <sys/i386/sound/wav.h>
 #include <sys/kprintf/kprintf.h>
+#include <sys/sound/tone.h>
+#include <sys/sound/wav.h>
 #include <tests/dev/test_sb16.h>
 
 void test_sb16() {

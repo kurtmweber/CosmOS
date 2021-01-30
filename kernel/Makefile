@@ -36,7 +36,7 @@ $(KERNEL_BIN): $(KERNEL_ELF)
 
 $(KERNEL_ELF): $(ARCHIVE_FILE)
 ifeq ($(TARGET_PLATFORM),TARGET_PLATFORM_i386)
-	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE) sys/i386/rawdata/rawdata.o
+	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE) sys/rawdata/rawdata.o
 else
 	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE)
 endif

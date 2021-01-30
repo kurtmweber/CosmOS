@@ -5,13 +5,12 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/debug/assert.h>
-#include <sys/i386/sound/wav.h>
-#include <sys/kprintf/kprintf.h>
+#ifndef _TONE_H
+#define _TONE_H
 
-uint8_t* wav_pcm_start(struct wav_header* header) {
-    ASSERT_NOT_NULL(header);
-    uint8_t* ret = (uint8_t*)((uint64_t)header) + sizeof(struct wav_header);
-    kprintf("PCM start %#llX\n", (uint64_t)ret);
-    return ret;
-}
+#include <sys/sound/wav.h>
+#include <types.h>
+
+struct wav_header* sound_get_tone();
+
+#endif
