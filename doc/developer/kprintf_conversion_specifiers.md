@@ -1,11 +1,13 @@
-KPRINTF CONVERSION SPECIFIERS DOCUMENTATION
+# kprintf Conversion Specifiers Documentation
+
 ACCURATE AS OF: 2020-08-16
 
 These conversion specifiers are modelled on standard C printf, but do not
-exactly mirror them, as the situational needs are different.  Some features
+exactly mirror them, as the situational needs are different. Some features
 will not exist, some new ones will be added, and some conversion specifiers
 may not function exactly like they do in standard C printf.
 
+<pre>
 %%	literal "%"
 %hu	uint8_t converted to unsigned decimal notation
 %u	uint16_t converted to unsigned decimal notation
@@ -16,3 +18,4 @@ may not function exactly like they do in standard C printf.
 %X	uint16_t converted to unsigned hexadecimal notation
 %lX	uint32_t converted to unsigned hexadecimal notation
 %llX	uint64_t converted to unsigned hexadecimal notation
+</pre>

@@ -16,26 +16,26 @@ CosmOS will be an [SSI](https://en.wikipedia.org/wiki/Single_system_image) opera
 
 ## Build and Run CosmOS
 
-- [Building and Running CosmOS](doc/developer/buildd.md)
+- [Building and Running CosmOS](doc/developer/build.md)
 
 ## Kernel Documentation
 
-- [Devices](doc/developer/Devices.md)
+- [Devices](doc/developer/devices.md)
 - [Device Status](doc/developer/device_status.md)
 - [Block Devices](doc/developer/block_devices.md)
 - [VFS](doc/developer/cosmos_vfs.md)
 - [Memory Map](doc/developer/memory_map.md)
-- [Collections](doc/developer/Collections.md)
+- [Collections](doc/developer/collections.md)
 - [Assertions](doc/developer/assertions.md)
-- [kprintf](doc/developer/KPrintfConversionSpecifiers.txt)
+- [kprintf](doc/developer/kprintf_conversion_specifiers.md)
 - [Interrupts](doc/developer/interrupts.md)
-- [Console](doc/developer/KernelTerminalConsole.txt)
-- [Keyboard](doc/developer/Keyboard.txt)
+- [Console](doc/developer/kernel_terminal_console.md)
+- [Keyboard](doc/developer/keyboard.md)
 - [IO Buffers](doc/developer/io_buffers.md)
 - [Strings](doc/developer/strings.md)
 - File Systems
-  - [Trivial File System (TFS)](doc/developer/filesystems/tfs.md)
-  - [Cosmos File System (CFS) Disk Format](doc/developer/filesystems/CosmOSDiskFormat.txt)
+  - [Trivial File System (TFS)](doc/developer/filesystems/trivial_file_system.md)
+  - [Cosmos File System (CFS) Disk Format](doc/developer/filesystems/cosmos_disk_format.md)
 
 ## Debugging
 
@@ -43,7 +43,7 @@ CosmOS will be an [SSI](https://en.wikipedia.org/wiki/Single_system_image) opera
 
 ## Contributing
 
-- [CosmOS coding standards](doc/contributing/CodingStandards.md)
+- [CosmOS coding standards](doc/contributing/coding_standards.md)
 - [Operating System Development Resources](doc/contributing/osdev_resources.md)
 
 ## License
