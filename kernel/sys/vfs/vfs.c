@@ -66,3 +66,26 @@ void vfs_add_child(struct vfs* v, struct vfs* child) {
     }
     arraylist_add(v->children, child);
 }
+
+struct vfs* vfs_find(struct vfs* v, uint8_t* name) {
+    ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(name);
+    panic("Not Implemented");
+
+    if (0 == strcmp(name, v->name)) {
+        // its this node
+        return v;
+    } else {
+        if (0 != v->children) {
+            // recurse
+            uint32_t idx = strstr(name, "/");
+            if (-1 != idx) {
+                //     uint8_t* n = &(name[idx]);
+            }
+            return 0;
+        } else {
+            // no luck
+            return 0;
+        }
+    }
+}

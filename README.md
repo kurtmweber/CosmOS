@@ -20,6 +20,7 @@ CosmOS will be an [SSI](https://en.wikipedia.org/wiki/Single_system_image) opera
 
 ## Kernel Documentation
 
+- [Source Tree](doc/developer/source_tree.md)
 - [Devices](doc/developer/devices.md)
 - [Device Status](doc/developer/device_status.md)
 - [Block Devices](doc/developer/block_devices.md)

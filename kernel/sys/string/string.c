@@ -84,3 +84,36 @@ uint8_t strcmp(const uint8_t* str1, const uint8_t* str2) {
         }
     }
 }
+
+uint32_t strstr(const uint8_t* str1, const uint8_t* str2) {
+    ASSERT_NOT_NULL(str1);
+    ASSERT_NOT_NULL(str2);
+    uint32_t str1_len = strlen(str1);
+    uint32_t str2_len = strlen(str2);
+    if (str2_len > str1_len) {
+        return -1;
+    } else if (str2_len == str1_len) {
+        if (0 == strcmp(str1, str2)) {
+            return 0;
+        }
+        return -1;
+    }
+
+    for (uint32_t i = 0; i < (str1_len - str2_len); i++) {
+        uint8_t ok = 1;
+        for (uint32_t j = 0; j < str2_len; j++) {
+            if (str2[j] != str1[i + j]) {
+                ok = 0;
+                break;
+            }
+        }
+        if (ok == 1) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+uint8_t* substr(const uint8_t* str1, uint32_t start, uint32_t end, const uint8_t* str2, uint32_t size) {
+    return 0;
+}

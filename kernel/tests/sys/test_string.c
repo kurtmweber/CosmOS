@@ -11,6 +11,14 @@
 #include <sys/string/string.h>
 #include <tests/sys/test_string.h>
 
+void test_strstr() {
+    uint8_t source1[] = {"the rain in spain"};
+    ASSERT(-1 == strstr(source1, "the rain in spain falls"));
+    ASSERT(4 == strstr(source1, "rain"));
+    ASSERT(-1 == strstr(source1, "beer"));
+    ASSERT(0 == strstr(source1, "the rain in spain"));
+}
+
 void test_strtrim() {
     uint8_t source1[] = {"england expects   "};
     uint8_t* trimmed1 = strtrim(source1);
@@ -74,4 +82,5 @@ void test_string() {
     test_strncpy();
     test_strncat();
     test_strtrim();
+    test_strstr();
 }
