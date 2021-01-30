@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM ubuntu:18.04
 
 ARG BINUTILS_VERSION=2.35
 ARG GCC_VERSION=10.2.0
