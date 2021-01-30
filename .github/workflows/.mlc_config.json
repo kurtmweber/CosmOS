@@ -8,6 +8,9 @@
         },
         {
             "pattern": "^http://proxyserver"
+        },
+        {
+            "pattern": "../../workflows/Build/badge.svg"
         }
     ]
 }
