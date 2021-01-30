@@ -1,4 +1,4 @@
-include ../mk/build.mk
+include ../scripts/mk/build.mk
 
 ARCHIVE_FILE=kernel.a
 KERNEL_ELF=cosmos.elf
