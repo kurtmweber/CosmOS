@@ -67,6 +67,13 @@ void vfs_add_child(struct vfs* v, struct vfs* child) {
     arraylist_add(v->children, child);
 }
 
+/*
+* internal find function
+*/
+struct vfs* vfs_find_internal(struct vfs* v, uint8_t* name) {
+    return 0;
+}
+
 struct vfs* vfs_find(struct vfs* v, uint8_t* name) {
     ASSERT_NOT_NULL(v);
     ASSERT_NOT_NULL(name);
