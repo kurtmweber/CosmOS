@@ -49,7 +49,8 @@ typedef enum deviceType {
     PARTITION_TABLE = 0x1B,  // pt0, deviceapi_part_table
     CONSOLE = 0x1C,          // console0, deviceapi_console
     PARTITION = 0x1D,        // parition0, deviceapi_block
-    NULL0 = 0x1E             // null0, deviceapi_null
+    NULL0 = 0x1E,            // null0, deviceapi_null
+    TICK = 0X1F              // tick0, deviceapi_tick
 } deviceType;
 
 /*

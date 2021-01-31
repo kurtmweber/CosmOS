@@ -27,7 +27,6 @@
 struct arraylist* pitEvents;
 
 uint64_t tickcount = 0;
-;
 
 #define PIT_HZ 1  // 10 interrupts per second
 
