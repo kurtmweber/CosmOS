@@ -16,6 +16,7 @@
 #include <tests/dev/test_parallel.h>
 #include <tests/dev/test_pit.h>
 #include <tests/dev/test_ramdisk.h>
+#include <tests/dev/test_rand.h>
 #include <tests/dev/test_rtc.h>
 #include <tests/dev/test_rtl8139.h>
 #include <tests/dev/test_sb16.h>

@@ -10,6 +10,8 @@
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
 
+uint64_t RAND_MAX = (1 << 31);
+
 struct rand_devicedata {
     uint64_t last;
 } __attribute__((packed));
@@ -35,11 +37,15 @@ uint8_t rand_uninit(struct device* dev) {
     kfree(dev->api);
     return 1;
 }
-
+/*
+* https://rosettacode.org/wiki/Linear_congruential_generator#C
+*/
 uint64_t rand_read(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    return 0;
+    struct rand_devicedata* deviceData = (struct rand_devicedata*)dev->deviceData;
+    deviceData->last = (deviceData->last * 214013 + 2531011) & RAND_MAX >> 16;
+    return deviceData->last;
 }
 
 struct device* rand_attach() {
@@ -62,7 +68,7 @@ struct device* rand_attach() {
      * device data
      */
     struct rand_devicedata* deviceData = (struct rand_devicedata*)kmalloc(sizeof(struct rand_devicedata));
-    deviceData->last = 0;
+    deviceData->last = 7;
     deviceinstance->deviceData = deviceData;
     /*
      * register

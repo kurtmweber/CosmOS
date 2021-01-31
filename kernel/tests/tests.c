@@ -40,4 +40,6 @@ void tests_run() {
     test_ntree();
 
     test_vfs();
+
+    //  test_rand();
 }
