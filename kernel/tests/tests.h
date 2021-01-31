@@ -45,6 +45,7 @@
 #include <tests/sys/test_string.h>
 #include <tests/sys/test_trap.h>
 #include <tests/sys/test_tree.h>
+#include <tests/sys/test_vfs.h>
 
 #include <types.h>
 

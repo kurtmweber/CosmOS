@@ -8,7 +8,6 @@
 #include <sys/debug/assert.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/string.h>
-#include <types.h>
 
 uint64_t strlen(const uint8_t* s) {
     ASSERT_NOT_NULL(s);
@@ -85,11 +84,12 @@ uint8_t strcmp(const uint8_t* str1, const uint8_t* str2) {
     }
 }
 
-uint32_t strstr(const uint8_t* str1, const uint8_t* str2) {
+uint32_t strstr(const uint8_t* str1, uint32_t start, const uint8_t* str2) {
     ASSERT_NOT_NULL(str1);
     ASSERT_NOT_NULL(str2);
     uint32_t str1_len = strlen(str1);
     uint32_t str2_len = strlen(str2);
+    ASSERT(start < str1_len);
     if (str2_len > str1_len) {
         return -1;
     } else if (str2_len == str1_len) {
@@ -99,7 +99,7 @@ uint32_t strstr(const uint8_t* str1, const uint8_t* str2) {
         return -1;
     }
 
-    for (uint32_t i = 0; i < (str1_len - str2_len); i++) {
+    for (uint32_t i = start; i < (str1_len - str2_len) + 1; i++) {
         uint8_t ok = 1;
         for (uint32_t j = 0; j < str2_len; j++) {
             if (str2[j] != str1[i + j]) {
@@ -119,14 +119,14 @@ uint8_t* substr(const uint8_t* str1, uint32_t start, uint32_t end, uint8_t* str2
     ASSERT_NOT_NULL(str2);
     ASSERT_NOT_NULL(size);
     uint32_t str1_len = strlen(str1);
-    uint32_t str2_len = (end - start) + 1;
+    uint32_t str2_len = (end - start);
     ASSERT(start < str1_len);
-    ASSERT(end < str1_len);
+    ASSERT(end <= str1_len);
     ASSERT(end > start);
-    ASSERT((str2_len + 1) <= size);
+    ASSERT((str2_len) <= size);
     for (uint32_t i = 0; i < str2_len; i++) {
         str2[i] = str1[i + start];
     }
-    str2[str2_len + 1] = 0;
+    str2[str2_len] = 0;
     return str2;
 }

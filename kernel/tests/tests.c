@@ -38,4 +38,6 @@ void tests_run() {
     test_iobuffers();
 
     test_ntree();
+
+    test_vfs();
 }

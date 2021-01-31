@@ -78,9 +78,11 @@ struct vfs* vfs_find(struct vfs* v, uint8_t* name) {
     } else {
         if (0 != v->children) {
             // recurse
-            uint32_t idx = strstr(name, "/");
+            uint32_t idx = strstr(name, 0, "/");
             if (-1 != idx) {
-                //     uint8_t* n = &(name[idx]);
+                uint8_t left[idx + 1];
+                substr(name, 0, idx, left, idx + 1);
+                kprintf("left : %s\n", left);
             }
             return 0;
         } else {

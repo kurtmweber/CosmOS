@@ -8,31 +8,63 @@
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/kprintf/kprintf.h>
+#include <sys/string/split_string.h>
 #include <sys/string/string.h>
+
 #include <tests/sys/test_string.h>
+
+void test_split_string() {
+    // test 1
+    struct arraylist* al1 = arraylist_new();
+    split_string("/a/bb/ccc/dddd/", "/", al1);
+    ASSERT(4 == arraylist_count(al1));
+    delete_string_list(al1);
+
+    // test 2
+    struct arraylist* al2 = arraylist_new();
+    split_string("/a/bb/ccc/dddd", "/", al2);
+    ASSERT(4 == arraylist_count(al2));
+    delete_string_list(al2);
+
+    // test 3
+    struct arraylist* al3 = arraylist_new();
+    split_string("a/bb/ccc/dddd", "/", al3);
+    ASSERT(4 == arraylist_count(al3));
+    delete_string_list(al3);
+}
 
 void test_substr() {
     uint8_t source1[] = {"the rain in spain"};
 
     // test 1
     uint8_t s1[4];
-    substr(source1, 0, 2, s1, 4);
+    substr(source1, 0, 3, s1, 4);
     ASSERT(3 == strlen(s1));
     ASSERT(0 == strcmp(s1, "the"));
 
     // test 2
     uint8_t s2[30];
-    substr(source1, 12, 16, s2, 30);
+    substr(source1, 12, 17, s2, 30);
     ASSERT(5 == strlen(s2));
     ASSERT(0 == strcmp(s2, "spain"));
+
+    // test 3
+    uint8_t s3[4];
+    substr(source1, 0, 1, s3, 4);
+    ASSERT(1 == strlen(s3));
+    ASSERT(0 == strcmp(s3, "t"));
 }
 
 void test_strstr() {
     uint8_t source1[] = {"the rain in spain"};
-    ASSERT(-1 == strstr(source1, "the rain in spain falls"));
-    ASSERT(4 == strstr(source1, "rain"));
-    ASSERT(-1 == strstr(source1, "beer"));
-    ASSERT(0 == strstr(source1, "the rain in spain"));
+    ASSERT(-1 == strstr(source1, 0, "the rain in spain falls"));
+    ASSERT(4 == strstr(source1, 0, "rain"));
+    ASSERT(-1 == strstr(source1, 0, "beer"));
+    ASSERT(0 == strstr(source1, 0, "the rain in spain"));
+    ASSERT(4 == strstr(source1, 2, "rain"));
+
+    uint8_t source2[] = {"abc"};
+    ASSERT(2 == strstr(source2, 0, "c"));
 }
 
 void test_strtrim() {
@@ -99,4 +131,6 @@ void test_string() {
     test_strncat();
     test_strtrim();
     test_strstr();
+    test_substr();
+    test_split_string();
 }
