@@ -11,6 +11,22 @@
 #include <sys/string/string.h>
 #include <tests/sys/test_string.h>
 
+void test_substr() {
+    uint8_t source1[] = {"the rain in spain"};
+
+    // test 1
+    uint8_t s1[4];
+    substr(source1, 0, 2, s1, 4);
+    ASSERT(3 == strlen(s1));
+    ASSERT(0 == strcmp(s1, "the"));
+
+    // test 2
+    uint8_t s2[30];
+    substr(source1, 12, 16, s2, 30);
+    ASSERT(5 == strlen(s2));
+    ASSERT(0 == strcmp(s2, "spain"));
+}
+
 void test_strstr() {
     uint8_t source1[] = {"the rain in spain"};
     ASSERT(-1 == strstr(source1, "the rain in spain falls"));
