@@ -13,7 +13,9 @@
 #include <sys/string/string.h>
 
 void deviceregistry_init() {
-    //   kprintf("Init Device Registry\n");
+    /*
+    * init the types
+    */
     devicetypes_init();
 }
 
@@ -21,23 +23,38 @@ void deviceregistry_registerdevice(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->devicetype);
 
+    /*
+    * get the list for the device type
+    */
     struct arraylist* lst = devicetypes_get_devicelist(dev->devicetype);
     if (0 == lst) {
         lst = arraylist_new();
         devicetypes_set_devicelist(dev->devicetype, lst);
     }
+    /*
+    * add to the list
+    */
     arraylist_add(lst, dev);
 }
 
 void deviceregistry_unregisterdevice(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->devicetype);
+    /*
+    * get the list for the device type
+    */
     struct arraylist* lst = devicetypes_get_devicelist(dev->devicetype);
     ASSERT_NOT_NULL(lst);
+    /*
+    * find the device
+    */
     for (uint32_t i = 0; i < arraylist_count(lst); i++) {
         struct device* d = (struct device*)arraylist_get(lst, i);
         ASSERT_NOT_NULL(d);
         if (0 == strcmp(d->name, dev->name)) {
+            /*
+            * remove the device
+            */
             arraylist_remove(lst, i);
             return;
         }
