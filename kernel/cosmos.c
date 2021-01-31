@@ -9,6 +9,7 @@
 #include <dev/console/vga_console.h>
 #include <dev/null/null.h>
 #include <dev/ramdisk/ramdisk.h>
+#include <dev/rand/rand.h>
 #include <dev/tick/tick.h>
 #include <sys/asm/asm.h>
 #include <sys/deviceapi/deviceapi_console.h>
@@ -34,6 +35,7 @@ void dev_tests();
 void mount_ramdisks();
 void mount_null();
 void mount_tick();
+void mount_rand();
 
 void create_consoles();
 void video_write(const uint8_t* s);
@@ -93,6 +95,7 @@ void CosmOS() {
     mount_ramdisks();
     mount_null();
     mount_tick();
+    mount_rand();
     /*
      * create consoles
      */
@@ -166,6 +169,10 @@ void mount_ramdisks() {
 
 void mount_null() {
     null_attach();
+}
+
+void mount_rand() {
+    rand_attach();
 }
 
 void mount_tick() {

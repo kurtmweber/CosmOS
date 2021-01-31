@@ -50,7 +50,8 @@ typedef enum deviceType {
     CONSOLE = 0x1C,          // console0, deviceapi_console
     PARTITION = 0x1D,        // parition0, deviceapi_block
     NULL0 = 0x1E,            // null0, deviceapi_null
-    TICK = 0X1F              // tick0, deviceapi_tick
+    TICK = 0x1F,             // tick0, deviceapi_tick
+    RAND = 0x20              // rand0, deviceapi_rand
 } deviceType;
 
 /*
