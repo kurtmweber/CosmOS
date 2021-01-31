@@ -17,20 +17,21 @@ QEMUARGS=                                                 \
   -drive file=img/mbr_fat.img,index=1,format=raw           \
   -drive file=img/gpt_fat.img,index=2,format=raw          \
   -drive file=img/blank.img,index=3,format=raw          \
-  -netdev user,id=n0,hostfwd=tcp::8080-:80  \
-  -device rtl8139,netdev=n0       \
-  -object filter-dump,id=f1,netdev=n0,file=dump.dat      \
+  -nic user,model=virtio-net-pci \
   -serial stdio                                           \
   -audiodev coreaudio,id=audio0                           \
   -device adlib,audiodev=audio0                          \
   -monitor telnet::45454,server,nowait                    \
   -D qemu.log
 
+  # -object filter-dump,id=f1,netdev=virtio,file=dump.dat      \
+
  #  -device usb-ehci                                        \
 
 #  -drive if=virtio,file=img/hda.img,format=raw                \
 #  -device sb16,audiodev=audio0                            \
 # -nic user,model=virtio-net-pci                          \
+  -netdev user,id=n0,hostfwd=tcp::8080-:80  \
  
 #   -nic user,model=rtl8139,net=192.168.76.0/24,dhcpstart=192.168.76.9,id=net1 \
 
