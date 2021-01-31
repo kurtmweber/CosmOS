@@ -80,5 +80,7 @@ struct vnic_devicedata {
 } __attribute__((packed));
 
 void devicemgr_register_vnic_devices();
+uint32_t vnic_read_register(uint16_t reg);
+void vnic_write_register(uint16_t reg, uint32_t data);
 
 #endif

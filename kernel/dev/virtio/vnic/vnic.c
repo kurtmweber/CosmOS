@@ -41,7 +41,7 @@ inline uint32_t vnic_read_register(uint16_t reg) {
     }
 }
 
-inline uint32_t vnic_write_register(uint16_t reg, uint32_t data) {
+inline void vnic_write_register(uint16_t reg, uint32_t data) {
     // if 4-byte register
     if (reg < VIRTIO_QUEUE_SIZE) {
         asm_out_d(vnet_base_port + reg, data);
@@ -55,7 +55,7 @@ inline uint32_t vnic_write_register(uint16_t reg, uint32_t data) {
 }
 
 void vnic_init_virtqueue(struct virtq* virtqueue, uint16_t queueIndex) {
-    int16_t queue_size = -1;
+    uint16_t queue_size = -1;
 
     // get queue size from the device register
     vnic_write_register(VIRTIO_QUEUE_SELECT, queueIndex);
@@ -64,7 +64,7 @@ void vnic_init_virtqueue(struct virtq* virtqueue, uint16_t queueIndex) {
     if (!queue_size)
         panic("Can't get Virtio network queue size");
 
-    kprintf("\n      queue %d has %d elements", queueIndex, queue_size);
+    kprintf("   vnet queue %u has %u elements", queueIndex, queue_size);
 
     // make the queue
     struct virtq* q = virtq_new(queue_size);
@@ -76,7 +76,7 @@ void vnic_init_virtqueue(struct virtq* virtqueue, uint16_t queueIndex) {
     // The API takes a 32 bit pointer, but we have a 64 bit pointer, so ... some conversions
     uint32_t q_shifted = (uint64_t)q >> 12;
 
-    kprintf("       Queue Address(%d): %#hX %#hX\n", queueIndex, q, q_shifted);
+    kprintf("  Queue Address(%u): %#hX, shifted %#hX\n", queueIndex, q, q_shifted);
 
     // Write addresses (divided by 4096) to address registers
     vnic_write_register(VIRTIO_QUEUE_ADDRESS, q_shifted);
@@ -84,12 +84,17 @@ void vnic_init_virtqueue(struct virtq* virtqueue, uint16_t queueIndex) {
 
 uint8_t vnic_initialize_device(struct device* dev) {
     struct vnic_devicedata* deviceData = (struct vnic_devicedata*)dev->deviceData;
+    uint8_t device_status;
 
     // get the I/O port
     deviceData->base = pci_calcbar(dev->pci);
     vnet_base_port = deviceData->base;
 
-    kprintf("    Initializing virtio-net driver... Base address: %#hX", vnet_base_port);
+    kprintf("Initializing virtio-net driver... Base address: %#hX\n", vnet_base_port);
+
+    // get starting device status
+    device_status = (uint8_t)vnic_read_register(VIRTIO_DEVICE_STATUS);
+    kprintf("   device status is %hX\n", device_status);
 
     // Reset the virtio-network device
     vnic_write_register(VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_RESET_DEVICE);
@@ -102,13 +107,13 @@ uint8_t vnic_initialize_device(struct device* dev) {
 
     // Read the feature bits
     uint32_t features = vnic_read_register(VIRTIO_DEVICE_FEATURES);
+    kprintf("   device features: %lX", features);
 
     // Make sure the features we need are supported
     if ((features & VIRTIO_NET_REQUIRED_FEATURES) != VIRTIO_NET_REQUIRED_FEATURES) {
         // uh-oh
         kprintf("Required features are not supported by virtio network device. Aborting.\n");
         vnic_write_register(VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ERROR);
-        return;
     }
 
     // Tell the device what features we'll be using
@@ -121,9 +126,8 @@ uint8_t vnic_initialize_device(struct device* dev) {
     // Make sure the device is ok with those features
     if ((vnic_read_register(VIRTIO_DEVICE_STATUS) & VIRTIO_STATUS_FEATURES_OK) != VIRTIO_STATUS_FEATURES_OK) {
         // uh-oh
-        kprinf("Failed to negotiate features with virtio net device. Aborting.");
+        kprintf("Failed to negotiate features with virtio net device. Aborting.");
         vnic_write_register(VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ERROR);
-        return;
     }
 
     // store the MAC address
@@ -144,7 +148,7 @@ uint8_t vnic_initialize_device(struct device* dev) {
 
     // Setup an interrupt handler for this device
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
+    kprintf("   init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
             dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
 
     // Tell the device it's initialized
@@ -157,7 +161,12 @@ uint8_t vnic_initialize_device(struct device* dev) {
     //ARP_SendRequest(IPv4_PackIP(10, 0, 2, 4), mac_addr);
     // DHCP_Send_Discovery(mac_addr);
 
-    kprintf("virtio-net driver initialized.");
+    // get ending device status
+    device_status = (uint8_t)vnic_read_register(VIRTIO_DEVICE_STATUS);
+    kprintf("   device status is %hX\n", device_status);
+
+    kprintf("   virtio-net driver initialized.\n");
+    return 1;
 }
 
 void vnic_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
