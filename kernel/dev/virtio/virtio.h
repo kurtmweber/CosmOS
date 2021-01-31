@@ -35,6 +35,7 @@
 #define VIRTIO_ISR_STATUS 0x13
 
 // generic status flags
+#define VIRTIO_STATUS_RESET_DEVICE 0 /* reset by writing 0 to the status register. */
 #define VIRTIO_STATUS_DEVICE_ACKNOWLEGED 0x01
 #define VIRTIO_STATUS_DRIVER_LOADED 0x02
 #define VIRTIO_STATUS_DRIVER_READY 0x04

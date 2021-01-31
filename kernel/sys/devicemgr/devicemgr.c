@@ -224,7 +224,7 @@ void devicemgr_register_devices() {
     speaker_devicemgr_register_devices();
     sound_devicemgr_register_devices();
     cpu_devicemgr_register_devices();
-    //  virtio_devicemgr_register_devices();
+    virtio_devicemgr_register_devices();
     //  ramdisk_devicemgr_register_devices();
     pci_ehci_devicemgr_register_devices();
     parallel_devicemgr_register_devices();
