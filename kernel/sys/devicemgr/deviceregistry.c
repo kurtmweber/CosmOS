@@ -21,6 +21,30 @@ void deviceregistry_init() {
     devicetypes_init();
 }
 
+/*
+* add device to VFS
+*/
+void deviceregistry_add_to_vfs(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
+    ASSERT_NOT_NULL(dev_vfs);
+    struct vfs* this_dev_vfs = vfs_new_dev(dev->name);
+    vfs_add_child(dev_vfs, this_dev_vfs);
+}
+
+/*
+* remove device from VFS
+*/
+void deviceregistry_remove_from_vfs(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
+    ASSERT_NOT_NULL(dev_vfs);
+    vfs_remove_child(dev_vfs, dev->name);
+}
+
+/*
+* register a device
+*/
 void deviceregistry_registerdevice(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->devicetype);
@@ -40,12 +64,12 @@ void deviceregistry_registerdevice(struct device* dev) {
     /*
     * add to VFS
     */
-    struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
-    ASSERT_NOT_NULL(dev_vfs);
-    struct vfs* this_dev_vfs = vfs_new_dev(dev->name);
-    vfs_add_child(dev_vfs, this_dev_vfs);
+    deviceregistry_add_to_vfs(dev);
 }
 
+/*
+* unregister a device
+*/
 void deviceregistry_unregisterdevice(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->devicetype);
@@ -64,9 +88,7 @@ void deviceregistry_unregisterdevice(struct device* dev) {
             /*
             * remove from vfs
             */
-            struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
-            ASSERT_NOT_NULL(dev_vfs);
-            vfs_remove_child(dev_vfs, dev->name);
+            deviceregistry_remove_from_vfs(dev);
             /*
             * remove the device
             */
