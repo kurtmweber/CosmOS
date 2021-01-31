@@ -179,6 +179,9 @@ uint8_t sfs_uninit(struct device* dev) {
 }
 
 struct device* sfs_attach(struct device* block_device) {
+    ASSERT_NOT_NULL(block_device);
+    ASSERT(block_device->devicetype == PARTITION);
+
     /*
      * register device
      */

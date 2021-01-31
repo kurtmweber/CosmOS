@@ -323,6 +323,9 @@ uint8_t fat_uninit(struct device* dev) {
 }
 
 struct device* fat_attach(struct device* block_device) {
+    ASSERT_NOT_NULL(block_device);
+    ASSERT(block_device->devicetype == PARTITION);
+
     /*
      * register device
      */

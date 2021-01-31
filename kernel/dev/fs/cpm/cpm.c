@@ -115,6 +115,9 @@ uint8_t cpm_uninit(struct device* dev) {
 
 struct device* cpm_attach(struct device* block_device) {
     ASSERT(sizeof(struct cpm_file_entry) == CPM_FILE_ENTRY_LEN);
+    ASSERT_NOT_NULL(block_device);
+    ASSERT(block_device->devicetype == PARTITION);
+
     /*
      * register device
      */
