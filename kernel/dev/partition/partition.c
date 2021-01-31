@@ -81,6 +81,9 @@ void partition_write_sector(struct device* dev, uint32_t sector, uint8_t* data, 
 }
 
 struct device* partition_attach(struct device* block_device, uint64_t lba, uint32_t sector_count) {
+    ASSERT_NOT_NULL(block_device);
+    ASSERT(block_device->devicetype == PARTITION_TABLE);
+
     /*
      * register device
      */

@@ -144,6 +144,9 @@ uint8_t mbr_part_table_detachable(struct device* dev) {
 
 struct device* mbr_pt_attach(struct device* block_device) {
     ASSERT(sizeof(struct mbr_pt_entry) == 16);
+    ASSERT_NOT_NULL(block_device);
+    ASSERT(block_device->devicetype == DISK);
+
     /*
      * register device
      */

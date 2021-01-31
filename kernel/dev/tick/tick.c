@@ -48,6 +48,8 @@ uint64_t tick_read(struct device* dev) {
 }
 
 struct device* tick_attach(struct device* pit_device) {
+    ASSERT_NOT_NULL(pit_device);
+    ASSERT(pit_device->devicetype == PIT);
     /*
      * register device
      */

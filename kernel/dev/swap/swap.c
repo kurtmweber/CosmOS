@@ -73,6 +73,9 @@ uint16_t swap_block_count(struct device* dev) {
 }
 
 struct device* swap_attach(struct device* block_device) {
+    ASSERT_NOT_NULL(block_device);
+    ASSERT(block_device->devicetype == DISK);
+
     /*
      * register device
      */

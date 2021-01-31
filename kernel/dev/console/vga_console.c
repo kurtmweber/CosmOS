@@ -133,7 +133,10 @@ void vga_console_dev_write(struct device* dev, const char* c) {
     }
 }
 
-struct device* vga_console_attach(struct device* serial_device) {
+struct device* vga_console_attach(struct device* vga_device) {
+    ASSERT_NOT_NULL(vga_device);
+    ASSERT(vga_device->devicetype == VGA);
+
     /*
      * register device
      */
@@ -155,7 +158,7 @@ struct device* vga_console_attach(struct device* serial_device) {
      */
     struct vga_console_devicedata* deviceData =
         (struct vga_console_devicedata*)kmalloc(sizeof(struct vga_console_devicedata));
-    deviceData->vga_device = serial_device;
+    deviceData->vga_device = vga_device;
     deviceinstance->deviceData = deviceData;
     /*
      * register

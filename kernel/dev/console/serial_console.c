@@ -56,6 +56,9 @@ void serial_console_dev_write(struct device* dev, const char* s) {
 }
 
 struct device* serial_console_attach(struct device* serial_device) {
+    ASSERT_NOT_NULL(serial_device);
+    ASSERT(serial_device->devicetype == SERIAL);
+
     /*
      * register device
      */
