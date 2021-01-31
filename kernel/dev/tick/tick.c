@@ -58,7 +58,7 @@ struct device* tick_attach(struct device* pit_device) {
     deviceinstance->uninit = &tick_uninit;
     deviceinstance->pci = 0;
     deviceinstance->devicetype = TICK;
-    devicemgr_set_device_description(deviceinstance, "tick");
+    devicemgr_set_device_description(deviceinstance, "Tick Count");
     /*
      * the device api
      */

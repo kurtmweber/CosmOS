@@ -57,7 +57,7 @@ struct device* rand_attach() {
     deviceinstance->uninit = &rand_uninit;
     deviceinstance->pci = 0;
     deviceinstance->devicetype = RAND;
-    devicemgr_set_device_description(deviceinstance, "rand");
+    devicemgr_set_device_description(deviceinstance, "LCG Random Number Generator");
     /*
      * the device api
      */

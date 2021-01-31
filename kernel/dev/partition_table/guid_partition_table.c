@@ -159,7 +159,7 @@ uint8_t guid_part_table_detachable(struct device* dev) {
 
 struct device* guid_pt_attach(struct device* block_device) {
     ASSERT_NOT_NULL(block_device);
-    ASSERT(block_device->devicetype == DISK);
+    ASSERT((block_device->devicetype == DISK) || (block_device->devicetype == RAMDISK));
 
     /*
      * register device
