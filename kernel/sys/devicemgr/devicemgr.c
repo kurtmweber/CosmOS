@@ -19,7 +19,7 @@
 int8_t* DeviceTypeNames[] = {"None", "serial", "vga",   "rtc",    "keyboard", "nic",  "bridge", "usb",
                              "ata",  "pic",    "mouse", "floppy", "speaker",  "pit",  "dsp",    "cmos",
                              "dma",  "cpu",    "rd",    "vnic",   "vblock",   "disk", "par",    "bda",
-                             "ebda", "swap",   "fs",    "pt",     "console",  "part"};
+                             "ebda", "swap",   "fs",    "pt",     "console",  "part", "null"};
 
 void devicemgr_init() {
     deviceregistry_init();

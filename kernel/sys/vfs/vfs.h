@@ -44,6 +44,8 @@ void vfs_init();
 void vfs_delete(struct vfs* v);
 void vfs_set_name(struct vfs* v, uint8_t* name);
 void vfs_add_child(struct vfs* v, struct vfs* child);
+void vfs_remove_child(struct vfs* v, uint8_t* name);
+uint32_t vfs_count(struct vfs* v);
 struct vfs* vfs_find(struct vfs* v, uint8_t* name);
 void vfs_traverse(struct vfs* v, vfs_traverse_function f);
 void vfs_dump(struct vfs* v);

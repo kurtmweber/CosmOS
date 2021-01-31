@@ -68,15 +68,31 @@ void vfs_add_child(struct vfs* v, struct vfs* child) {
     arraylist_add(v->children, child);
 }
 
+void vfs_remove_child(struct vfs* v, uint8_t* name) {
+    ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(v->children);
+    ASSERT_NOT_NULL(name);
+    uint32_t idx = -1;
+    for (uint32_t i = 0; i < arraylist_count(v->children); i++) {
+        struct vfs* vv = (struct vfs*)arraylist_get(v->children, i);
+        if (0 == strcmp(vv->name, name)) {
+            idx = i;
+            break;
+        }
+    }
+    if (-1 != idx) {
+        arraylist_remove(v->children, idx);
+    } else {
+        panic("Did not find child\n");
+    }
+}
+
 /*
 * internal find function
 */
 struct vfs* vfs_find_internal(struct vfs* v, struct arraylist* al, uint32_t depth) {
     ASSERT_NOT_NULL(v);
     ASSERT_NOT_NULL(al);
-
-    //  kprintf("al size %llu, depth %llu vfs node %s\n", arraylist_count(al), depth, v->name);
-
     if (arraylist_count(al) == depth) {
         /*
         * last node, return it
@@ -90,8 +106,6 @@ struct vfs* vfs_find_internal(struct vfs* v, struct arraylist* al, uint32_t dept
             for (uint32_t i = 0; i < arraylist_count(v->children); i++) {
                 uint8_t* t = arraylist_get(al, depth);
                 uint8_t* child = ((struct vfs*)arraylist_get(v->children, i))->name;
-                //     kprintf("t %s child %s\n", t, child);
-
                 if (0 == strcmp(t, child)) {
                     return vfs_find_internal(arraylist_get(v->children, i), al, depth + 1);
                 }
@@ -146,4 +160,13 @@ void vfs_dump_traverse_function(struct vfs* v, uint32_t depth) {
 void vfs_dump(struct vfs* v) {
     ASSERT_NOT_NULL(v);
     vfs_traverse(v, &vfs_dump_traverse_function);
+}
+
+uint32_t vfs_count(struct vfs* v) {
+    ASSERT_NOT_NULL(v);
+    if (0 == v->children) {
+        return 0;
+    } else {
+        return arraylist_count(v->children);
+    }
 }
