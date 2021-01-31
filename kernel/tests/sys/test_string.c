@@ -39,6 +39,13 @@ void test_split_string() {
     split_string("/", "/", al4);
     ASSERT(0 == arraylist_count(al4));
     delete_string_list(al4);
+
+    // test 5
+    struct arraylist* al5 = arraylist_new();
+    split_string("/dev", "/", al5);
+    ASSERT(1 == arraylist_count(al5));
+    ASSERT(0 == strcmp("dev", arraylist_get(al5, 0)));
+    delete_string_list(al5);
 }
 
 void test_substr() {

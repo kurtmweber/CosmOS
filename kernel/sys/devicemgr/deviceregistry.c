@@ -11,6 +11,8 @@
 #include <sys/devicemgr/devicetypes.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/string/string.h>
+#include <sys/vfs/dev_vfs.h>
+#include <sys/vfs/vfs.h>
 
 void deviceregistry_init() {
     /*
@@ -35,6 +37,14 @@ void deviceregistry_registerdevice(struct device* dev) {
     * add to the list
     */
     arraylist_add(lst, dev);
+    /*
+    * add to VFS
+    */
+    //    struct vfs* dev_vfs = vfs_find(cosmos_vfs, "/dev");
+    //    ASSERT_NOT_NULL(dev_vfs);
+    //    struct vfs* this_dev_vfs = vfs_new_dev(dev->name);
+    //    vfs_add_child(dev_vfs, this_dev_vfs);
+    //    kprintf("dev_vfs %s\n", dev_vfs->name);
 }
 
 void deviceregistry_unregisterdevice(struct device* dev) {
@@ -52,6 +62,11 @@ void deviceregistry_unregisterdevice(struct device* dev) {
         struct device* d = (struct device*)arraylist_get(lst, i);
         ASSERT_NOT_NULL(d);
         if (0 == strcmp(d->name, dev->name)) {
+            /*
+            * remove from vfs
+            */
+            //           struct vfs* dev_vfs = vfs_find(cosmos_vfs, "/dev");
+            //         ASSERT_NOT_NULL(dev_vfs);
             /*
             * remove the device
             */

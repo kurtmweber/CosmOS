@@ -77,8 +77,8 @@ struct vfs* vfs_find_internal(struct vfs* v, struct arraylist* al, uint32_t dept
 
     if (arraylist_count(al) == depth) {
         /*
-            * last node, return it
-            */
+        * last node, return it
+        */
         return v;
     } else {
         if (0 != v->children) {
@@ -102,6 +102,7 @@ struct vfs* vfs_find(struct vfs* v, uint8_t* name) {
     ASSERT_NOT_NULL(name);
     struct arraylist* al = arraylist_new();
     split_string(name, "/", al);
+    kprintf("al size %llu %s\n", arraylist_count(al), name);
     struct vfs* ret = vfs_find_internal(v, al, 0);
     delete_string_list(al);
     return ret;

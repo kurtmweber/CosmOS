@@ -37,15 +37,18 @@ void split_string(uint8_t* str, uint8_t* delim, struct arraylist* al) {
         prev = idx + 1;
         if (prev < strlen(str)) {
             idx = strstr(str, prev, delim);
-            if (idx == -1) {
-                uint32_t remaining = (strlen(str) - prev);
-                uint8_t* t = kmalloc(remaining + 1);
-                substr(str, prev, prev + remaining, t, remaining + 1);
-                arraylist_add(al, t);
-            }
         } else {
             idx = -1;
         }
+    }
+    /*
+    * remaining
+    */
+    uint32_t remaining = (strlen(str) - prev);
+    if (remaining > 0) {
+        uint8_t* t = kmalloc(remaining + 1);
+        substr(str, prev, prev + remaining, t, remaining + 1);
+        arraylist_add(al, t);
     }
 }
 

@@ -16,4 +16,13 @@ void test_vfs() {
 
     struct vfs* v = vfs_new_folder((uint8_t*)"/");
     ASSERT(v == vfs_find(v, "/"));
+    ASSERT(0 == strcmp(v->name, "/"));
+
+    v = vfs_find(cosmos_vfs, "/");
+    ASSERT_NOT_NULL(v);
+    ASSERT(0 == strcmp(v->name, "/"));
+
+    v = vfs_find(cosmos_vfs, "/dev");
+    ASSERT_NOT_NULL(v);
+    ASSERT(0 == strcmp(v->name, "dev"));
 }
