@@ -14,6 +14,8 @@
 #include <tests/sys/test_string.h>
 
 void test_split_string() {
+    //   kprintf("Testing split_string\n");
+
     // test 1
     struct arraylist* al1 = arraylist_new();
     split_string("/a/bb/ccc/dddd/", "/", al1);
@@ -31,9 +33,17 @@ void test_split_string() {
     split_string("a/bb/ccc/dddd", "/", al3);
     ASSERT(4 == arraylist_count(al3));
     delete_string_list(al3);
+
+    // test 4
+    struct arraylist* al4 = arraylist_new();
+    split_string("/", "/", al4);
+    ASSERT(0 == arraylist_count(al4));
+    delete_string_list(al4);
 }
 
 void test_substr() {
+    //  kprintf("Testing substr\n");
+
     uint8_t source1[] = {"the rain in spain"};
 
     // test 1
@@ -56,6 +66,9 @@ void test_substr() {
 }
 
 void test_strstr() {
+    //   kprintf("Testing strstr\n");
+
+    // test 1
     uint8_t source1[] = {"the rain in spain"};
     ASSERT(-1 == strstr(source1, 0, "the rain in spain falls"));
     ASSERT(4 == strstr(source1, 0, "rain"));
@@ -63,11 +76,17 @@ void test_strstr() {
     ASSERT(0 == strstr(source1, 0, "the rain in spain"));
     ASSERT(4 == strstr(source1, 2, "rain"));
 
+    // test2
     uint8_t source2[] = {"abc"};
     ASSERT(2 == strstr(source2, 0, "c"));
+
+    // test3
+    uint8_t source3[] = {"/"};
+    ASSERT(0 == strstr(source3, 0, "/"));
 }
 
 void test_strtrim() {
+    //    kprintf("Testing strtrim\n");
     uint8_t source1[] = {"england expects   "};
     uint8_t* trimmed1 = strtrim(source1);
     ASSERT_NOT_NULL(trimmed1);
@@ -75,6 +94,7 @@ void test_strtrim() {
 }
 
 void test_strncpy() {
+    //   kprintf("Testing strncpy\n");
     uint8_t source[] = {"this is a test"};
     //   kprintf("source %llu\n", strlen(source));
 
@@ -93,6 +113,8 @@ void test_strncpy() {
     ASSERT(strcmp(source, dest2) == 0);
 }
 void test_strncat() {
+    //   kprintf("Testing strncat\n");
+
     uint8_t source1[] = {"england expects"};
     uint8_t source2[] = {" every man"};
 

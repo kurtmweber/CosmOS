@@ -17,11 +17,20 @@ void split_string(uint8_t* str, uint8_t* delim, struct arraylist* al) {
     uint32_t prev = 0;
     uint32_t idx = strstr(str, prev, delim);
     if (0 == idx) {
+        /*
+        * if the delim appears at the start, skip it
+        */
         prev++;
-        idx = strstr(str, prev, delim);
+        if (prev < strlen(str)) {
+            idx = strstr(str, prev, delim);
+        } else {
+            idx = -1;
+        }
     }
-
     while (-1 != idx) {
+        /*
+        * get the current string
+        */
         uint8_t* s = kmalloc((idx - prev) + 1);
         substr(str, prev, idx, s, (idx - prev) + 1);
         arraylist_add(al, s);

@@ -8,6 +8,7 @@
 #include <sys/debug/assert.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
+#include <sys/string/split_string.h>
 #include <sys/string/string.h>
 #include <sys/vfs/folder_vfs.h>
 #include <sys/vfs/vfs.h>
@@ -48,13 +49,13 @@ void vfs_delete(struct vfs* v) {
 void vfs_set_name(struct vfs* v, uint8_t* name) {
     ASSERT_NOT_NULL(v);
     ASSERT_NOT_NULL(name);
-
     if (0 != v->name) {
         kfree(v->name);
     }
     uint32_t size = strlen(name) + 1;
-    v->name = kmalloc(size);
-    strncpy(v->name, name, size);
+    uint8_t* s = kmalloc(size);
+    strncpy(s, name, size);
+    v->name = s;
 }
 
 void vfs_add_child(struct vfs* v, struct vfs* child) {
@@ -70,33 +71,40 @@ void vfs_add_child(struct vfs* v, struct vfs* child) {
 /*
 * internal find function
 */
-struct vfs* vfs_find_internal(struct vfs* v, uint8_t* name) {
-    return 0;
+struct vfs* vfs_find_internal(struct vfs* v, struct arraylist* al, uint32_t depth) {
+    ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(al);
+
+    if (arraylist_count(al) == depth) {
+        /*
+            * last node, return it
+            */
+        return v;
+    } else {
+        if (0 != v->children) {
+            /*
+            * more nodes, recurse
+            */
+            for (uint32_t i = 0; i < arraylist_count(v->children); i++) {
+                uint8_t* t = arraylist_get(al, depth);
+                kprintf("t %s\n");
+                if (0 == strcmp(t, arraylist_get(v->children, i))) {
+                    return vfs_find_internal(arraylist_get(v->children, i), al, depth + 1);
+                }
+            }
+        }
+        return 0;
+    }
 }
 
 struct vfs* vfs_find(struct vfs* v, uint8_t* name) {
     ASSERT_NOT_NULL(v);
     ASSERT_NOT_NULL(name);
-    panic("Not Implemented");
-
-    if (0 == strcmp(name, v->name)) {
-        // its this node
-        return v;
-    } else {
-        if (0 != v->children) {
-            // recurse
-            uint32_t idx = strstr(name, 0, "/");
-            if (-1 != idx) {
-                uint8_t left[idx + 1];
-                substr(name, 0, idx, left, idx + 1);
-                kprintf("left : %s\n", left);
-            }
-            return 0;
-        } else {
-            // no luck
-            return 0;
-        }
-    }
+    struct arraylist* al = arraylist_new();
+    split_string(name, "/", al);
+    struct vfs* ret = vfs_find_internal(v, al, 0);
+    delete_string_list(al);
+    return ret;
 }
 
 void vfs_traverse_internal(struct vfs* v, vfs_traverse_function f, uint32_t depth) {

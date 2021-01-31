@@ -12,8 +12,8 @@
 #include <sys/vfs/vfs.h>
 
 void test_vfs() {
-    //  kprintf("Testing vfs\n");
+    kprintf("Testing vfs\n");
 
-    //   struct vfs* v = vfs_new_folder((uint8_t*)"/");
-    //   ASSERT(v == vfs_find(v, "/"));
+    struct vfs* v = vfs_new_folder((uint8_t*)"/");
+    ASSERT(v == vfs_find(v, "/"));
 }

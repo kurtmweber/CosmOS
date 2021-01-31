@@ -8,6 +8,7 @@
 #include <sys/debug/assert.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
+#include <sys/string/mem.h>
 #include <sys/string/string.h>
 #include <sys/vfs/dev_vfs.h>
 
@@ -36,6 +37,7 @@ void folder_vfs_readdir(struct vfs* v, uint32_t index) {
 struct vfs* vfs_new_folder(uint8_t* name) {
     ASSERT_NOT_NULL(name);
     struct vfs* ret = (struct vfs*)kmalloc(sizeof(struct vfs));
+    memset((uint8_t*)ret, 0, sizeof(struct vfs));
     ret->type = folder;
     ret->close = &folder_vfs_close;
     ret->open = &folder_vfs_open;
