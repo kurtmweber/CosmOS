@@ -30,8 +30,18 @@ void vfs_close(struct vfs* v) {
 
 void vfs_init() {
     cosmos_vfs = vfs_new_folder("/");
+
+    // local subtree
+    struct vfs* local_folder = vfs_new_folder("localhost");
+    vfs_add_child(cosmos_vfs, local_folder);
+
+    // dev subtree
     struct vfs* dev_folder = vfs_new_folder("dev");
-    vfs_add_child(cosmos_vfs, dev_folder);
+    vfs_add_child(local_folder, dev_folder);
+
+    // fs subtree
+    struct vfs* fs_folder = vfs_new_folder("fs");
+    vfs_add_child(local_folder, fs_folder);
 }
 
 void vfs_delete(struct vfs* v) {

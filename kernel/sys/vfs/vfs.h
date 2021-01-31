@@ -11,6 +11,9 @@
 #include <sys/collection/arraylist/arraylist.h>
 #include <types.h>
 
+#define VFS_DEV_TREE "/localhost/dev"
+#define VFS_FS_TREE "/localhost/fs"
+
 enum vfs_type { file = 0x01, folder = 0x02, device = 0x03 };
 
 struct vfs;

@@ -40,7 +40,7 @@ void deviceregistry_registerdevice(struct device* dev) {
     /*
     * add to VFS
     */
-    struct vfs* dev_vfs = vfs_find(cosmos_vfs, "/dev");
+    struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
     ASSERT_NOT_NULL(dev_vfs);
     struct vfs* this_dev_vfs = vfs_new_dev(dev->name);
     vfs_add_child(dev_vfs, this_dev_vfs);
@@ -64,7 +64,7 @@ void deviceregistry_unregisterdevice(struct device* dev) {
             /*
             * remove from vfs
             */
-            struct vfs* dev_vfs = vfs_find(cosmos_vfs, "/dev");
+            struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
             ASSERT_NOT_NULL(dev_vfs);
             vfs_remove_child(dev_vfs, dev->name);
             /*

@@ -23,7 +23,7 @@ void test_vfs() {
     ASSERT_NOT_NULL(v);
     ASSERT(0 == strcmp(v->name, "/"));
 
-    struct vfs* devv = vfs_find(cosmos_vfs, "/dev");
+    struct vfs* devv = vfs_find(cosmos_vfs, "/localhost/dev");
     ASSERT_NOT_NULL(devv);
     ASSERT(0 == strcmp(devv->name, "dev"));
 
