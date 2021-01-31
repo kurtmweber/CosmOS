@@ -1,4 +1,32 @@
 
+# CosmOS Virtual File System
+
+CosmOS has a hierarchical file system, similar to POSIX. A VFS node is defined as:
+
+```java
+struct vfs {
+    enum vfs_type type;
+    struct arraylist* children;
+
+    /*
+    This is a filename or a folder name
+    For a device, or a fs, it's the dev name, since a fs is a dev
+    */
+    uint8_t* name;
+
+    vfs_open_function open;
+    vfs_read_function read;
+    vfs_write_function write;
+    vfs_close_function close;
+    vfs_close_readdir_function readdir;
+};
+```
+
+CosmoS VFS nodes can be files, folders, or devices.  CosmOS OS uses devices for file systems, and therefore does not need mount points represented in vfs's.
+
+## Design
+
+
 # CosmOS VFS (Virtual File System)
 
 A core design goal of CosmOS is that it exposes a single root file system that includes all devices and filesystems on all nodes
@@ -62,4 +90,3 @@ In theory, CosmOS can also expose a `process` filesystem, similar to the `dev` f
 /bart/process/process_abc
 /bart/process/process_def
 ```
-
