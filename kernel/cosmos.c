@@ -123,6 +123,10 @@ void CosmOS() {
     // any dev tests we want to run
     dev_tests();
 
+    // show the vfs
+    kprintf("***** VFS *****\n");
+    vfs_dump(cosmos_vfs);
+
     while (1) {
         asm_hlt();
     }

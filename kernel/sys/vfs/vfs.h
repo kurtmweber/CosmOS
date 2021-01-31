@@ -15,6 +15,7 @@ enum vfs_type { file = 0x01, folder = 0x02, device = 0x03 };
 
 struct vfs;
 
+typedef void (*vfs_traverse_function)(struct vfs* v, uint32_t depth);
 typedef void (*vfs_open_function)(struct vfs* v, uint8_t read, uint8_t write);
 typedef uint32_t (*vfs_read_function)(struct vfs* v, uint32_t offset, uint32_t size, uint8_t* buffer);
 typedef uint32_t (*vfs_write_function)(struct vfs* v, uint32_t offset, uint32_t size, uint8_t* buffer);
@@ -44,6 +45,8 @@ void vfs_delete(struct vfs* v);
 void vfs_set_name(struct vfs* v, uint8_t* name);
 void vfs_add_child(struct vfs* v, struct vfs* child);
 struct vfs* vfs_find(struct vfs* v, uint8_t* name);
+void vfs_traverse(struct vfs* v, vfs_traverse_function f);
+void vfs_dump(struct vfs* v);
 extern struct vfs* cosmos_vfs;
 
 #endif

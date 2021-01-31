@@ -98,3 +98,40 @@ struct vfs* vfs_find(struct vfs* v, uint8_t* name) {
         }
     }
 }
+
+void vfs_traverse_internal(struct vfs* v, vfs_traverse_function f, uint32_t depth) {
+    ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(f);
+    // call the callback
+    (*f)(v, depth);
+
+    // children
+    if (0 != v->children) {
+        for (uint32_t i = 0; i < arraylist_count(v->children); i++) {
+            struct vfs* c = (struct vfs*)arraylist_get(v->children, i);
+            vfs_traverse_internal(c, f, depth + 1);
+        }
+    }
+}
+
+/*
+* traverse
+*/
+void vfs_traverse(struct vfs* v, vfs_traverse_function f) {
+    ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(f);
+    vfs_traverse_internal(v, f, 0);
+}
+
+void vfs_dump_traverse_function(struct vfs* v, uint32_t depth) {
+    ASSERT_NOT_NULL(v);
+    for (int32_t i = 0; i < depth; i++) {
+        kprintf(" ");
+    }
+    kprintf("%s\n", v->name);
+}
+
+void vfs_dump(struct vfs* v) {
+    ASSERT_NOT_NULL(v);
+    vfs_traverse(v, &vfs_dump_traverse_function);
+}
