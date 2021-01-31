@@ -8,7 +8,7 @@
 #ifndef _KPRINTF_C
 #define _KPRINTF_C
 
-#include <dev/i386/serial/serial.h>
+#include <dev/x86-64/serial/serial.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/string/string.h>
 #include <types.h>

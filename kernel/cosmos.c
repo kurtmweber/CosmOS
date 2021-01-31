@@ -17,14 +17,14 @@
 #include <sys/deviceapi/deviceapi_serial.h>
 #include <sys/deviceapi/deviceapi_speaker.h>
 #include <sys/devicemgr/devicemgr.h>
-#include <sys/i386/gdt/gdt.h>
-#include <sys/i386/idt/idt.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/iobuffers/iobuffers.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/sync/sync.h>
 #include <sys/vfs/vfs.h>
+#include <sys/x86-64/gdt/gdt.h>
+#include <sys/x86-64/idt/idt.h>
 #include <tests/tests.h>
 #include <types.h>
 

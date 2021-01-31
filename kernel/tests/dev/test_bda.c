@@ -5,9 +5,9 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <dev/i386/bda/bda.h>
-#include <dev/i386/ebda/acpi.h>
-#include <dev/i386/ebda/ebda.h>
+#include <dev/x86-64/bda/bda.h>
+#include <dev/x86-64/ebda/acpi.h>
+#include <dev/x86-64/ebda/ebda.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
 #include <sys/kprintf/kprintf.h>

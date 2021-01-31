@@ -11,7 +11,7 @@
 
 // normally this including from /dev is not encouraged and instead the devivemgr should be used
 // however, for debug, this might actually be a better approach
-#include <dev/i386/serial/com1.h>
+#include <dev/x86-64/serial/com1.h>
 
 #define DEBUG_LINE_WIDTH 32
 #define BYTE_WIDTH 5  // "0x" plus 2 nybbles, plus a space

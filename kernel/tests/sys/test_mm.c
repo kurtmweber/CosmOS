@@ -6,9 +6,9 @@
 // ****************************************************************
 
 #include <sys/debug/debug.h>
-#include <sys/i386/mm/pagetables.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
+#include <sys/x86-64/mm/pagetables.h>
 #include <tests/sys/test_mm.h>
 
 void test_mm() {

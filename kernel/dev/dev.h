@@ -14,28 +14,28 @@
 
 #ifdef TARGET_PLATFORM_i386
 
-#include <dev/i386/ata/ata_controller.h>
-#include <dev/i386/bda/bda.h>
-#include <dev/i386/bridge/bridge.h>
-#include <dev/i386/cmos/cmos.h>
-#include <dev/i386/cpu/cpu.h>
-#include <dev/i386/ebda/ebda.h>
-#include <dev/i386/floppy/floppy.h>
-#include <dev/i386/isadma/isadma.h>
-#include <dev/i386/keyboard/keyboard.h>
-#include <dev/i386/mouse/mouse.h>
-#include <dev/i386/network/network.h>
-#include <dev/i386/parallel/parallel.h>
-#include <dev/i386/pci/pci.h>
-#include <dev/i386/pci_ehci/pci_ehci.h>
-#include <dev/i386/pic/pic.h>
-#include <dev/i386/pit/pit.h>
-#include <dev/i386/rtc/rtc.h>
-#include <dev/i386/serial/serial.h>
-#include <dev/i386/sound/sound.h>
-#include <dev/i386/speaker/speaker.h>
-#include <dev/i386/usb_ehci/usb_ehci.h>
-#include <dev/i386/vga/vga.h>
+#include <dev/x86-64/ata/ata_controller.h>
+#include <dev/x86-64/bda/bda.h>
+#include <dev/x86-64/bridge/bridge.h>
+#include <dev/x86-64/cmos/cmos.h>
+#include <dev/x86-64/cpu/cpu.h>
+#include <dev/x86-64/ebda/ebda.h>
+#include <dev/x86-64/floppy/floppy.h>
+#include <dev/x86-64/isadma/isadma.h>
+#include <dev/x86-64/keyboard/keyboard.h>
+#include <dev/x86-64/mouse/mouse.h>
+#include <dev/x86-64/network/network.h>
+#include <dev/x86-64/parallel/parallel.h>
+#include <dev/x86-64/pci/pci.h>
+#include <dev/x86-64/pci_ehci/pci_ehci.h>
+#include <dev/x86-64/pic/pic.h>
+#include <dev/x86-64/pit/pit.h>
+#include <dev/x86-64/rtc/rtc.h>
+#include <dev/x86-64/serial/serial.h>
+#include <dev/x86-64/sound/sound.h>
+#include <dev/x86-64/speaker/speaker.h>
+#include <dev/x86-64/usb_ehci/usb_ehci.h>
+#include <dev/x86-64/vga/vga.h>
 #else
 
 #include <dev/arm/pl101/pl101.h>

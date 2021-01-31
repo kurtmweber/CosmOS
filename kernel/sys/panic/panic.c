@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <dev/i386/serial/serial.h>
+#include <dev/x86-64/serial/serial.h>
 #include <sys/asm/asm.h>
 
 void panic(const char* s) {

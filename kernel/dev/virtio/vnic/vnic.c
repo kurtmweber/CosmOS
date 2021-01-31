@@ -7,10 +7,10 @@
 
 // https://wiki.osdev.org/Virtio
 
-#include <dev/i386/pci/pci.h>
 #include <dev/virtio/virtio.h>
 #include <dev/virtio/virtqueue.h>
 #include <dev/virtio/vnic/vnic.h>
+#include <dev/x86-64/pci/pci.h>
 #include <sys/asm/asm.h>
 #include <sys/asm/io.h>
 #include <sys/debug/assert.h>

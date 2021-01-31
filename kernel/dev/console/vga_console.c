@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <dev/console/vga_console.h>
-#include <dev/i386/serial/serial.h>
+#include <dev/x86-64/serial/serial.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_console.h>
 #include <sys/deviceapi/deviceapi_vga.h>

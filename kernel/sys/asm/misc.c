@@ -5,7 +5,7 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
-#include <sys/i386/mm/mm.h>
+#include <sys/x86-64/mm/mm.h>
 #include <types.h>
 
 #ifdef TARGET_PLATFORM_i386
