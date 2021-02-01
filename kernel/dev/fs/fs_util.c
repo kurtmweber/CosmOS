@@ -24,7 +24,7 @@ void fsutil_attach_partition_tables(struct device* block_dev) {
         // maybe its mbr
         mbr_pt_attach(block_dev);
     } else {
-        guid_pt_dump(gpt);
+        //   guid_pt_dump(gpt);
     }
 }
 
