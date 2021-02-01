@@ -97,6 +97,7 @@ struct device* partition_attach(struct device* block_device, uint64_t lba, uint3
      * the device api
      */
     struct deviceapi_block* api = (struct deviceapi_block*)kmalloc(sizeof(struct deviceapi_block));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_block));
     api->sector_size = &partition_sector_size;
     api->total_size = &partition_total_size;
     api->read = &partition_read_sector;

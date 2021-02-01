@@ -174,6 +174,7 @@ struct device* guid_pt_attach(struct device* block_device) {
      * the device api
      */
     struct deviceapi_part_table* api = (struct deviceapi_part_table*)kmalloc(sizeof(struct deviceapi_part_table));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_part_table));
     api->partitions = &guid_pt_part_table_total_partitions;
     api->lba = &guid_pt_part_table_get_partition_lba;
     api->type = &guid_pt_part_table_get_partition_type;

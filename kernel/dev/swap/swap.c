@@ -89,6 +89,7 @@ struct device* swap_attach(struct device* block_device) {
      * the device api
      */
     struct deviceapi_swap* api = (struct deviceapi_swap*)kmalloc(sizeof(struct deviceapi_swap));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_swap));
     api->write = &swap_write;
     api->read = &swap_read;
     api->block_count = &swap_block_count;

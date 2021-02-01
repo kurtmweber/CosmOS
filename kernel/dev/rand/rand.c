@@ -62,6 +62,7 @@ struct device* rand_attach() {
      * the device api
      */
     struct deviceapi_rand* api = (struct deviceapi_rand*)kmalloc(sizeof(struct deviceapi_rand));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_rand));
     api->read = &rand_read;
     deviceinstance->api = api;
     /*
