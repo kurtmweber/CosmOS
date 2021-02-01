@@ -12,6 +12,10 @@
 
 struct device;
 
+// https://en.wikipedia.org/wiki/GUID_Partition_Table
+#define GUID_PARTIION_ID_MBR "024DEE41-33E7-11D3-9D69-0008C781F39F"
+#define GUID_PARTIION_ID_EFI "C12A7328-F81F-11D2-BA4B-00A0C93EC93B"
+
 struct guid_pt_header {
     uint8_t magic[64];
     uint32_t gpt_revision;

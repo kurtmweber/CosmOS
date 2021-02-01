@@ -26,7 +26,7 @@ struct ip_header {
     uint16_t csum;
     uint32_t saddr;
     uint32_t daddr;
-} __attribute__((packed));
+} __attribute__((packed)) __attribute__((aligned(8)));
 
 typedef void (*ip_read_function)(struct device* dev, uint8_t* data, uint16_t size);
 typedef void (*ip_write_function)(struct device* dev, uint8_t* data, uint16_t size);
