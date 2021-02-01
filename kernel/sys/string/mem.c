@@ -28,3 +28,7 @@ uint8_t* memset(uint8_t* bufptr, uint8_t value, uint64_t size) {
         bufptr[i] = (unsigned char)value;
     return bufptr;
 }
+
+uint8_t* memzero(uint8_t* bufptr, uint64_t size) {
+    return memset(bufptr, 0, size);
+}

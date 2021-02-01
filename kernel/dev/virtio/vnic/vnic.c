@@ -18,6 +18,7 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/kprintf/kprintf.h>
+#include <sys/string/mem.h>
 #include <types.h>
 
 uint16_t vnet_base_port;
@@ -202,6 +203,7 @@ void devicemgr_register_pci_vnic(struct pci_device* dev) {
 
     // define an api
     struct deviceapi_ethernet* api = (struct deviceapi_ethernet*)kmalloc(sizeof(struct deviceapi_ethernet));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_ethernet));
     api->write = &vnic_ethernet_write;
     api->read = &vnic_ethernet_read;
     deviceinstance->api = api;

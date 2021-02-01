@@ -48,6 +48,7 @@ struct device* null_attach() {
      * the device api
      */
     struct deviceapi_null* api = (struct deviceapi_null*)kmalloc(sizeof(struct deviceapi_null));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_null));
     api->read = &null_read;
     deviceinstance->api = api;
     /*

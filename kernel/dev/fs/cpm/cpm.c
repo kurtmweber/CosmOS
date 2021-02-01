@@ -131,6 +131,7 @@ struct device* cpm_attach(struct device* block_device) {
      * the device api
      */
     struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_filesystem));
     api->format = &cpm_format;
     deviceinstance->api = api;
     /*

@@ -195,6 +195,7 @@ struct device* sfs_attach(struct device* block_device) {
      * the device api
      */
     struct deviceapi_filesystem* api = (struct deviceapi_filesystem*)kmalloc(sizeof(struct deviceapi_filesystem));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_filesystem));
     api->format = &sfs_format;
     deviceinstance->api = api;
     /*

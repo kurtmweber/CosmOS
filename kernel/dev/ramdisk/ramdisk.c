@@ -117,6 +117,7 @@ struct device* ramdisk_attach(uint16_t sector_size, uint16_t sector_count) {
      * the device api
      */
     struct deviceapi_block* api = (struct deviceapi_block*)kmalloc(sizeof(struct deviceapi_block));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_block));
     api->write = &ramdisk_write;
     api->read = &ramdisk_read;
     api->sector_size = &ramdisk_sector_size;

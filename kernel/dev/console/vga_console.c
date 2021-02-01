@@ -11,6 +11,7 @@
 #include <sys/deviceapi/deviceapi_console.h>
 #include <sys/deviceapi/deviceapi_vga.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/string/mem.h>
 
 #define CONSOLE_TAB_WIDTH 5
 
@@ -150,6 +151,7 @@ struct device* vga_console_attach(struct device* vga_device) {
      * the device api
      */
     struct deviceapi_console* api = (struct deviceapi_console*)kmalloc(sizeof(struct deviceapi_console));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_console));
     api->setpos = &vga_console_dev_setpos;
     api->write = &vga_console_dev_write;
     deviceinstance->api = api;

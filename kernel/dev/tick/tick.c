@@ -63,6 +63,7 @@ struct device* tick_attach(struct device* pit_device) {
      * the device api
      */
     struct deviceapi_tick* api = (struct deviceapi_tick*)kmalloc(sizeof(struct deviceapi_tick));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_tick));
     api->read = &tick_read;
     deviceinstance->api = api;
     /*

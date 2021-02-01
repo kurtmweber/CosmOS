@@ -20,6 +20,7 @@
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/sleep/sleep.h>
+#include <sys/string/mem.h>
 #include <types.h>
 
 // registers
@@ -226,6 +227,7 @@ void vblock_search_cb(struct pci_device* dev) {
      * the device api
      */
     struct deviceapi_block* api = (struct deviceapi_block*)kmalloc(sizeof(struct deviceapi_block));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_block));
     api->write = &vblock_write;
     api->read = &vblock_read;
     api->sector_size = &vblock_sector_size;

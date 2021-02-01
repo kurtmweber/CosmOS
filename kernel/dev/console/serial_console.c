@@ -11,6 +11,7 @@
 #include <sys/deviceapi/deviceapi_console.h>
 #include <sys/deviceapi/deviceapi_serial.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/string/mem.h>
 
 struct serial_console_devicedata {
     struct device* serial_device;
@@ -72,6 +73,7 @@ struct device* serial_console_attach(struct device* serial_device) {
      * the device api
      */
     struct deviceapi_console* api = (struct deviceapi_console*)kmalloc(sizeof(struct deviceapi_console));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_console));
     api->setpos = &serial_console_setpos;
     api->write = &serial_console_dev_write;
     deviceinstance->api = api;
