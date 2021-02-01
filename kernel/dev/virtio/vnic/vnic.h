@@ -85,6 +85,6 @@ uint32_t vnic_read_register(uint16_t reg);
 
 void vnic_write_register(uint16_t reg, uint32_t data);
 
-void vnic_setup_receive_buffers(struct virtq* receiveQueue)
+void vnic_setup_receive_buffers(struct virtq* receiveQueue);
 
 #endif

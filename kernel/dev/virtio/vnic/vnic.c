@@ -145,7 +145,7 @@ uint8_t vnic_initialize_device(struct device* dev) {
     vnic_init_virtqueue(deviceData->send_queue, VIRTQ_NET_TRANSMIT_INDEX);
 
     // Setup the receive queue
-    vnic_setup_receive_buffers(deviceData->receive_queue);
+    // vnic_setup_receive_buffers(deviceData->receive_queue);
 
     // Setup an interrupt handler for this device
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);
