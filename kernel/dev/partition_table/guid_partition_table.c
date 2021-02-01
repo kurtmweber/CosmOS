@@ -110,6 +110,8 @@ uint64_t guid_part_table_get_sector_count_function(struct device* dev, uint8_t p
     ASSERT(partition < deviceData->num_partitions);
 
     struct guid_pt_header header;
+    memzero((uint8_t*)&header, sizeof(struct guid_pt_header));
+
     guid_pt_read_guid_pt_header(deviceData->block_device, &header);
 
     return 0;
@@ -123,6 +125,8 @@ uint64_t guid_pt_part_table_get_partition_lba(struct device* dev, uint8_t partit
     ASSERT(partition < deviceData->num_partitions);
 
     struct guid_pt_header header;
+    memzero((uint8_t*)&header, sizeof(struct guid_pt_header));
+
     guid_pt_read_guid_pt_header(deviceData->block_device, &header);
 
     return 0;
@@ -136,6 +140,8 @@ uint64_t guid_pt_part_table_get_partition_type(struct device* dev, uint8_t parti
     ASSERT(partition < deviceData->num_partitions);
 
     struct guid_pt_header header;
+    memzero((uint8_t*)&header, sizeof(struct guid_pt_header));
+
     guid_pt_read_guid_pt_header(deviceData->block_device, &header);
     return 0;
 }
@@ -145,6 +151,7 @@ uint8_t guid_pt_part_table_total_partitions(struct device* dev) {
     ASSERT_NOT_NULL(dev->deviceData);
     struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
     struct guid_pt_header header;
+    memzero((uint8_t*)&header, sizeof(struct guid_pt_header));
     guid_pt_read_guid_pt_header(deviceData->block_device, &header);
 
     return header.num_partitions;
@@ -207,4 +214,27 @@ struct device* guid_pt_attach(struct device* block_device) {
 void guid_pt_detach(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     devicemgr_detach_device(dev);
+}
+
+void guid_pt_dump(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    struct guid_pt_header header;
+    memzero((uint8_t*)&header, sizeof(struct guid_pt_header));
+    guid_pt_read_guid_pt_header(deviceData->block_device, &header);
+    kprintf("   ");
+    for (uint8_t i = 0; i < 8; i++) {
+        kprintf("%#llX ", header.magic[i]);
+    }
+    kprintf("\n");
+    kprintf("   gpt_revision %llu\n", header.gpt_revision);
+    kprintf("   header_size %llu\n", header.header_size);
+    kprintf("   gpt_lba %llu\n", header.gpt_lba);
+    kprintf("   alt_gpt_lba %llu\n", header.alt_gpt_lba);
+    kprintf("   first_block %llu\n", header.first_block);
+    kprintf("   last_block %llu\n", header.last_block);
+    kprintf("   gpt_array_lba %llu\n", header.gpt_array_lba);
+    kprintf("   num_partitions %llu\n", header.num_partitions);
+    kprintf("   entry_size %llu\n", header.entry_size);
 }

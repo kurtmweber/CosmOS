@@ -17,7 +17,7 @@ struct device;
 #define GUID_PARTIION_ID_EFI "C12A7328-F81F-11D2-BA4B-00A0C93EC93B"
 
 struct guid_pt_header {
-    uint8_t magic[64];
+    uint8_t magic[8];
     uint32_t gpt_revision;
     uint32_t header_size;
     uint32_t crc32;
@@ -46,5 +46,7 @@ struct device;
 
 struct device* guid_pt_attach(struct device* block_device);
 void guid_pt_detach(struct device* dev);
+
+void guid_pt_dump(struct device* dev);
 
 #endif

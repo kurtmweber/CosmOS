@@ -23,6 +23,8 @@ void fsutil_attach_partition_tables(struct device* block_dev) {
     if (0 == gpt) {
         // maybe its mbr
         mbr_pt_attach(block_dev);
+    } else {
+        guid_pt_dump(gpt);
     }
 }
 
@@ -40,7 +42,9 @@ void fsutil_attach_partitions(struct device* partition_table_dev) {
     for (uint32_t i = 0; i < num_partitions; i++) {
         uint32_t lba = (*api->lba)(partition_table_dev, i);
         uint32_t sector_count = (*api->sectors)(partition_table_dev, i);
-        partition_attach(partition_table_dev, lba, sector_count);
+        if (sector_count > 0) {
+            partition_attach(partition_table_dev, lba, sector_count);
+        }
     }
 }
 
