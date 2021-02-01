@@ -26,10 +26,16 @@ void deviceregistry_init() {
 */
 void deviceregistry_add_to_vfs(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
-    ASSERT_NOT_NULL(dev_vfs);
     struct vfs* this_dev_vfs = vfs_new_dev(dev->name);
-    vfs_add_child(dev_vfs, this_dev_vfs);
+    if (dev->devicetype == FILESYSTEM) {
+        struct vfs* fs_vfs = vfs_find(cosmos_vfs, VFS_FS_TREE);
+        ASSERT_NOT_NULL(fs_vfs);
+        vfs_add_child(fs_vfs, this_dev_vfs);
+    } else {
+        struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
+        ASSERT_NOT_NULL(dev_vfs);
+        vfs_add_child(dev_vfs, this_dev_vfs);
+    }
 }
 
 /*
@@ -37,9 +43,15 @@ void deviceregistry_add_to_vfs(struct device* dev) {
 */
 void deviceregistry_remove_from_vfs(struct device* dev) {
     ASSERT_NOT_NULL(dev);
-    struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
-    ASSERT_NOT_NULL(dev_vfs);
-    vfs_remove_child(dev_vfs, dev->name);
+    if (dev->devicetype == FILESYSTEM) {
+        struct vfs* fs_vfs = vfs_find(cosmos_vfs, VFS_FS_TREE);
+        ASSERT_NOT_NULL(fs_vfs);
+        vfs_remove_child(fs_vfs, dev->name);
+    } else {
+        struct vfs* dev_vfs = vfs_find(cosmos_vfs, VFS_DEV_TREE);
+        ASSERT_NOT_NULL(dev_vfs);
+        vfs_remove_child(dev_vfs, dev->name);
+    }
 }
 
 /*
