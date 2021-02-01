@@ -8,6 +8,7 @@
 #ifndef __TESTS_H
 #define __TESTS_H
 
+#include <tests/dev/test_arp.h>
 #include <tests/dev/test_ata.h>
 #include <tests/dev/test_bda.h>
 #include <tests/dev/test_cpu.h>

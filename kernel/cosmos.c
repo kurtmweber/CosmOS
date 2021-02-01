@@ -200,6 +200,9 @@ void mount_tcpip() {
         struct device* ip_dev = ip_attach(vnic);
         tcp_attach(ip_dev);
         udp_attach(ip_dev);
+
+        // test arp!
+        //        test_arp();
     }
 }
 
