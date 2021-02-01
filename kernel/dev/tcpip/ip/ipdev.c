@@ -112,3 +112,18 @@ uint16_t ip_checksum(uint16_t* addr, int count) {
     }
     return ~ret;
 }
+
+void ip_header_init(struct ip_header* header, uint16_t total_length, uint16_t protocol, uint32_t source,
+                    uint32_t dest) {
+    ASSERT_NOT_NULL(header);
+    ASSERT(sizeof(struct ip_header) == 20);  // ip_header should be 20 bytes
+    memzero((uint8_t*)header, sizeof(struct ip_header));
+    header->version = 4;
+    header->ihl = 5;  // 20 bytes = 160 bits = 5x 32-bits
+    header->len = total_length;
+    header->ttl = 64;
+    header->proto = protocol;
+    header->saddr = source;
+    header->daddr = dest;
+    header->csum = ip_checksum((uint16_t*)header, sizeof(struct ip_header));
+}

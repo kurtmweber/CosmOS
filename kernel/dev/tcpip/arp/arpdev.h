@@ -8,6 +8,7 @@
 #ifndef _ARPDEV_H
 #define _ARPDEV_H
 
+#include <sys/deviceapi/deviceapi_arp.h>
 #include <types.h>
 
 struct device;
@@ -15,6 +16,6 @@ struct device;
 struct device* arp_attach(struct device* ethernet_device);
 void arp_detach(struct device* dev);
 
-struct arp* arp_new(uint16_t opcode);
+void arp_packet_init(struct arp* a, uint16_t opcode);
 
 #endif
