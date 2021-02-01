@@ -6,6 +6,7 @@
 // ****************************************************************
 
 #include <sys/debug/assert.h>
+#include <sys/devicemgr/devicemgr.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/kprintf/kprintf.h>
 #include <sys/string/mem.h>
@@ -14,24 +15,37 @@
 
 void dev_vfs_open(struct vfs* v, uint8_t read, uint8_t write) {
     ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(v->name);
+    struct device* dev = devicemgr_find_device(v->name);
+    ASSERT_NOT_NULL(dev);
 }
 
 uint32_t dev_vfs_read(struct vfs* v, uint32_t offset, uint32_t size, uint8_t* buffer) {
     ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(v->name);
+    struct device* dev = devicemgr_find_device(v->name);
+    ASSERT_NOT_NULL(dev);
     return 0;
 }
 
 uint32_t dev_vfs_write(struct vfs* v, uint32_t offset, uint32_t size, uint8_t* buffer) {
     ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(v->name);
+    struct device* dev = devicemgr_find_device(v->name);
+    ASSERT_NOT_NULL(dev);
     return 0;
 }
 
 void dev_vfs_close(struct vfs* v) {
-    ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(v->name);
+    struct device* dev = devicemgr_find_device(v->name);
+    ASSERT_NOT_NULL(dev);
 }
 
 void dev_vfs_readdir(struct vfs* v, uint32_t index) {
-    ASSERT_NOT_NULL(v);
+    ASSERT_NOT_NULL(v->name);
+    struct device* dev = devicemgr_find_device(v->name);
+    ASSERT_NOT_NULL(dev);
 }
 
 struct vfs* vfs_new_dev(uint8_t* devicename) {
