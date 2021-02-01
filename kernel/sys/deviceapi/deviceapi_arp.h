@@ -34,12 +34,10 @@ struct arp {
     uint8_t dest_protocol[ARP_PLEN];    // Destination protocol address
 };
 
-typedef void (*arp_read_function)(struct device* dev, uint8_t* data, uint16_t size);
-typedef void (*arp_write_function)(struct device* dev, uint8_t* data, uint16_t size);
+typedef void (*arp_request_function)(struct device* dev, struct arp* request, struct arp* response);
 
 struct deviceapi_arp {
-    arp_read_function read;
-    arp_write_function write;
+    arp_request_function request;
 };
 
 #endif

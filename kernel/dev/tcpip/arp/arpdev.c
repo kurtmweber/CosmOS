@@ -35,15 +35,10 @@ uint8_t arp_uninit(struct device* dev) {
     return 1;
 }
 
-void arp_read(struct device* dev, uint8_t* data, uint16_t size) {
+void arp_request(struct device* dev, struct arp* request, struct arp* response) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     //  struct arp_devicedata* deviceData = (struct arp_devicedata*)dev->deviceData;
-}
-void arp_write(struct device* dev, uint8_t* data, uint16_t size) {
-    ASSERT_NOT_NULL(dev);
-    ASSERT_NOT_NULL(dev->deviceData);
-    //   struct arp_devicedata* deviceData = (struct arp_devicedata*)dev->deviceData;
 }
 
 struct device* arp_attach(struct device* ethernet_device) {
@@ -64,9 +59,7 @@ struct device* arp_attach(struct device* ethernet_device) {
      */
     struct deviceapi_arp* api = (struct deviceapi_arp*)kmalloc(sizeof(struct deviceapi_arp));
     memzero((uint8_t*)api, sizeof(struct deviceapi_arp));
-    api->read = &arp_read;
-    api->write = &arp_write;
-
+    api->request = &arp_request;
     deviceinstance->api = api;
     /*
      * device data
