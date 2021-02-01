@@ -94,3 +94,21 @@ void ip_detach(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     devicemgr_detach_device(dev);
 }
+
+// https://www.saminiir.com/lets-code-tcp-ip-stack-2-ipv4-icmpv4/
+// https://tools.ietf.org/html/rfc1071
+
+uint16_t ip_checksum(uint16_t* addr, int count) {
+    uint32_t ret = 0;
+    while (count > 1) {
+        ret += *addr++;
+        count -= 2;
+    }
+    if (count > 0) {
+        ret += *(uint8_t*)addr;
+    }
+    while (ret >> 16) {
+        ret = (ret & 0xffff) + (ret >> 16);
+    }
+    return ~ret;
+}

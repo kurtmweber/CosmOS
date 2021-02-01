@@ -15,4 +15,6 @@ struct device;
 struct device* arp_attach(struct device* ethernet_device);
 void arp_detach(struct device* dev);
 
+struct arp* arp_new(uint16_t opcode);
+
 #endif

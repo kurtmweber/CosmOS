@@ -94,3 +94,14 @@ void arp_detach(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     devicemgr_detach_device(dev);
 }
+
+struct arp* arp_new(uint16_t opcode) {
+    struct arp* ret = (struct arp*)kmalloc(sizeof(struct arp));
+    memset((uint8_t*)ret, 0, sizeof(struct arp));
+    ret->htype = ARP_ETHERNET;
+    ret->ptype = ARP_IP;
+    ret->hlen = ARP_HLEN;
+    ret->plen = ARP_PLEN;
+    ret->opcode = opcode;
+    return ret;
+}

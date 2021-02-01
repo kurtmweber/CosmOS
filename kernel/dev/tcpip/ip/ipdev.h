@@ -15,4 +15,6 @@ struct device;
 struct device* ip_attach(struct device* ethernet_device);
 void ip_detach(struct device* dev);
 
+uint16_t ip_checksum(uint16_t* addr, int count);
+
 #endif

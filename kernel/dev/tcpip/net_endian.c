@@ -6,7 +6,7 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/net/net_endian.h>
+#include <dev/tcpip/net_endian.h>
 
 uint16_t switch_endian16(uint16_t nb) {
     return (nb >> 8) | (nb << 8);
