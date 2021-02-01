@@ -76,11 +76,15 @@ typedef struct virtio_net_hdr {
 struct vnic_devicedata {
     uint64_t base;
     struct virtq* send_queue;
-    struct virtq* recieve_queue;
+    struct virtq* receive_queue;
 } __attribute__((packed));
 
 void devicemgr_register_vnic_devices();
+
 uint32_t vnic_read_register(uint16_t reg);
+
 void vnic_write_register(uint16_t reg, uint32_t data);
+
+void vnic_setup_receive_buffers(struct virtq* receiveQueue)
 
 #endif

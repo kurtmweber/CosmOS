@@ -141,11 +141,11 @@ uint8_t vnic_initialize_device(struct device* dev) {
             mac_addr[5]);
 
     // Init virtqueues (see 4.1.5.1.3 of virtio-v1.0-cs04.pdf)
-    vnic_init_virtqueue(deviceData->recieve_queue, VIRTQ_NET_RECEIVE_INDEX);
+    vnic_init_virtqueue(deviceData->receive_queue, VIRTQ_NET_RECEIVE_INDEX);
     vnic_init_virtqueue(deviceData->send_queue, VIRTQ_NET_TRANSMIT_INDEX);
 
     // Setup the receive queue
-    // VirtIO_Net_SetupReceiveBuffers();
+    vnic_setup_receive_buffers(deviceData->receive_queue);
 
     // Setup an interrupt handler for this device
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);
@@ -168,6 +168,20 @@ uint8_t vnic_initialize_device(struct device* dev) {
 
     kprintf("   virtio-net driver initialized.\n");
     return 1;
+}
+
+void vnic_setup_receive_buffers(struct virtq* receiveQueue) {
+    const uint16_t bufferSize = 1526;  // as per virtio specs
+
+    // Allocate and add 16 buffers to receive queue
+    for (uint16_t i = 0; i < 16; ++i) {
+        uint8_t* buffer = kmalloc(bufferSize);
+        struct virtq_descriptor* desc = virtq_descriptor_new(buffer, bufferSize, true);
+
+        virtq_enqueue_descriptor(receiveQueue, desc);
+    }
+
+    vnic_write_register(VIRTIO_QUEUE_NOTIFY, VIRTQ_NET_RECEIVE_INDEX);
 }
 
 void vnic_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
