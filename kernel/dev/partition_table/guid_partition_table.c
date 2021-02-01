@@ -173,8 +173,9 @@ uint64_t guid_pt_part_table_get_partition_lba(struct device* dev, uint8_t partit
     return entry.start_lba;
 }
 
-uint64_t guid_pt_part_table_get_partition_type(struct device* dev, uint8_t partition) {
+void guid_pt_part_table_get_partition_type(struct device* dev, uint8_t partition, uint8_t* parititon_type) {
     ASSERT(partition >= 0);
+    ASSERT_NOT_NULL(parititon_type);
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     //  struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
@@ -189,7 +190,7 @@ uint64_t guid_pt_part_table_get_partition_type(struct device* dev, uint8_t parti
     /*
     * done
     */
-    return entry.partition_type;
+    memcpy(parititon_type, (uint8_t*)&(entry.partition_type), 16);
 }
 
 uint8_t guid_pt_part_table_total_partitions(struct device* dev) {

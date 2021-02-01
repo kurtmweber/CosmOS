@@ -106,15 +106,16 @@ uint64_t mbr_part_table_get_sector_count_function(struct device* dev, uint8_t pa
     return header.partitions[partition].total_sectors;
 }
 
-uint64_t mbr_pt_part_table_get_partition_type(struct device* dev, uint8_t partition) {
+void mbr_pt_part_table_get_partition_type(struct device* dev, uint8_t partition, uint8_t* parititon_type) {
     ASSERT(partition >= 0);
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
+    ASSERT_NOT_NULL(parititon_type);
     struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
     ASSERT(partition < deviceData->num_partitions);
     struct mbr_pt_header header;
     mbr_pt_read_mbr_pt_header(deviceData->block_device, &header);
-    return header.partitions[partition].partition_type;
+    memcpy(parititon_type, &(header.partitions[partition].partition_type), 1);
 }
 
 uint8_t mbr_pt_part_table_total_partitions(struct device* dev) {

@@ -23,9 +23,9 @@ void test_mbr() {
         uint8_t number_partitions = (*api->partitions)(dev);
         kprintf("number_partitions %llu\n", number_partitions);
 
-        uint64_t lba = (*api->lba)(dev, 0);
-        uint64_t type = (*api->type)(dev, 0);
-        kprintf("partition 0 type %llu lba %llu\n", type, lba);
+        //    uint64_t lba = (*api->lba)(dev, 0);
+        //      uint64_t type = (*api->type)(dev, 0);
+        //    kprintf("partition 0 type %llu lba %llu\n", type, lba);
 
         mbr_pt_detach(dev);
     } else {
