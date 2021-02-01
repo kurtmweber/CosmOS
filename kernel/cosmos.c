@@ -10,6 +10,7 @@
 #include <dev/null/null.h>
 #include <dev/ramdisk/ramdisk.h>
 #include <dev/rand/rand.h>
+#include <dev/tcpip/arp/arpdev.h>
 #include <dev/tcpip/ip/ipdev.h>
 #include <dev/tcpip/tcp/tcpdev.h>
 #include <dev/tick/tick.h>
@@ -192,6 +193,7 @@ void mount_tick() {
 void mount_tcpip() {
     struct device* vnic = devicemgr_find_device("vnic0");
     if (0 != vnic) {
+        arp_attach(vnic);
         struct device* ip_dev = ip_attach(vnic);
         tcp_attach(ip_dev);
     }
