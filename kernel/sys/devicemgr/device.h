@@ -54,7 +54,8 @@ typedef enum deviceType {
     RAND = 0x20,             // rand0, deviceapi_rand
     IP = 0x21,               // ip0, deviceapi_ip
     TCP = 0x22,              // tcp0, deviceapi_tcp
-    ARP = 0x23               // arp0, deviceapi_arp
+    ARP = 0x23,              // arp0, deviceapi_arp
+    UDP = 0x24               // udp0, deviceapi_udp
 } deviceType;
 
 /*
