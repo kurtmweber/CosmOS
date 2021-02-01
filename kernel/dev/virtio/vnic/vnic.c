@@ -55,7 +55,9 @@ inline void vnic_write_register(uint16_t reg, uint32_t data) {
     }
 }
 
-void vnic_init_virtqueue(struct virtq* virtqueue, uint16_t queueIndex) {
+void vnic_init_virtqueue(struct virtq** virtqueue, uint16_t queueIndex) {
+    ASSERT_NOT_NULL(virtqueue);
+
     uint16_t queue_size = -1;
 
     // get queue size from the device register
@@ -71,7 +73,7 @@ void vnic_init_virtqueue(struct virtq* virtqueue, uint16_t queueIndex) {
     struct virtq* q = virtq_new(queue_size);
     bool q_aligned = virtio_isAligned(((uint64_t)q), 4096);
     ASSERT(q_aligned);
-    virtqueue = q;
+    *virtqueue = q;
 
     // divide by 4096
     // The API takes a 32 bit pointer, but we have a 64 bit pointer, so ... some conversions
@@ -141,11 +143,11 @@ uint8_t vnic_initialize_device(struct device* dev) {
             mac_addr[5]);
 
     // Init virtqueues (see 4.1.5.1.3 of virtio-v1.0-cs04.pdf)
-    vnic_init_virtqueue(deviceData->receive_queue, VIRTQ_NET_RECEIVE_INDEX);
-    vnic_init_virtqueue(deviceData->send_queue, VIRTQ_NET_TRANSMIT_INDEX);
+    vnic_init_virtqueue(&(deviceData->receive_queue), VIRTQ_NET_RECEIVE_INDEX);
+    vnic_init_virtqueue(&(deviceData->send_queue), VIRTQ_NET_TRANSMIT_INDEX);
 
     // Setup the receive queue
-    // vnic_setup_receive_buffers(deviceData->receive_queue);
+    vnic_setup_receive_buffers(deviceData->receive_queue);
 
     // Setup an interrupt handler for this device
     interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);
