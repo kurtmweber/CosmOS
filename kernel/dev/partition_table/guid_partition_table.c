@@ -49,28 +49,28 @@ uint8_t guid_pt_init(struct device* dev) {
     deviceData->num_partitions = guid_pt_part_table_total_partitions(dev);
     struct guid_pt_header header;
     guid_pt_read_guid_pt_header(deviceData->block_device, &header);
-    if (header.magic[0] == GUID_PT_EFI_PART[0]) {
+    if (header.magic[0] != GUID_PT_EFI_PART[0]) {
         return 0;
     }
-    if (header.magic[1] == GUID_PT_EFI_PART[1]) {
+    if (header.magic[1] != GUID_PT_EFI_PART[1]) {
         return 0;
     }
-    if (header.magic[2] == GUID_PT_EFI_PART[2]) {
+    if (header.magic[2] != GUID_PT_EFI_PART[2]) {
         return 0;
     }
-    if (header.magic[3] == GUID_PT_EFI_PART[3]) {
+    if (header.magic[3] != GUID_PT_EFI_PART[3]) {
         return 0;
     }
-    if (header.magic[4] == GUID_PT_EFI_PART[4]) {
+    if (header.magic[4] != GUID_PT_EFI_PART[4]) {
         return 0;
     }
-    if (header.magic[5] == GUID_PT_EFI_PART[5]) {
+    if (header.magic[5] != GUID_PT_EFI_PART[5]) {
         return 0;
     }
-    if (header.magic[6] == GUID_PT_EFI_PART[6]) {
+    if (header.magic[6] != GUID_PT_EFI_PART[6]) {
         return 0;
     }
-    if (header.magic[7] == GUID_PT_EFI_PART[7]) {
+    if (header.magic[7] != GUID_PT_EFI_PART[7]) {
         return 0;
     }
     kprintf("Init %s on %s (%s) with %llu partitions\n", dev->description, deviceData->block_device->name, dev->name,
@@ -87,8 +87,8 @@ uint8_t guid_pt_init(struct device* dev) {
 uint8_t guid_pt_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
-    //   struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
-    //   kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    // struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    // kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
     /*
      * unmount partitions
      */

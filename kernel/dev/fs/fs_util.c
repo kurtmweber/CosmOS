@@ -18,11 +18,11 @@
 void fsutil_attach_partition_tables(struct device* block_dev) {
     ASSERT_NOT_NULL(block_dev);
 
-    // try to attach MBR
-    struct device* mbr = mbr_pt_attach(block_dev);
-    if (0 == mbr) {
-        // maybe its guid
-        guid_pt_attach(block_dev);
+    // try to attach gpt
+    struct device* gpt = guid_pt_attach(block_dev);
+    if (0 == gpt) {
+        // maybe its mbr
+        mbr_pt_attach(block_dev);
     }
 }
 

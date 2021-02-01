@@ -250,7 +250,17 @@ uint8_t devicemgr_attach_device(struct device* dev) {
     /*
      * init
      */
-    return dev->init(dev);
+    uint8_t ret = dev->init(dev);
+    /*
+    * unregister if we need to
+    */
+    if (0 == ret) {
+        devicemgr_unregister_device(dev);
+    }
+    /*
+    * done
+    */
+    return ret;
 }
 
 // detach a device (non-fixed devices... like RAM disks and SWAP)
