@@ -181,7 +181,7 @@ void vnic_setup_receive_buffers(struct virtq* receiveQueue) {
         virtq_enqueue_descriptor(receiveQueue, desc);
     }
 
-    VNet_Write_Register(VIRTIO_QUEUE_NOTIFY, VIRTQ_NET_RECEIVE_INDEX);
+    vnic_write_register(VIRTIO_QUEUE_NOTIFY, VIRTQ_NET_RECEIVE_INDEX);
 }
 
 void vnic_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
