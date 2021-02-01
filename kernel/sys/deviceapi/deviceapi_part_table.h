@@ -15,7 +15,7 @@
 
 typedef uint8_t (*part_table_total_partitions_function)(struct device* dev);
 typedef uint64_t (*part_table_get_partition_lba_function)(struct device* dev, uint8_t partition);
-// parititon_type 16 bytes
+// partition type 16 bytes
 typedef void (*part_table_get_partition_type_function)(struct device* dev, uint8_t partition, uint8_t* parititon_type);
 typedef uint64_t (*part_table_get_sector_count_function)(struct device* dev, uint8_t partition);
 
