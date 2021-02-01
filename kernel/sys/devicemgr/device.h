@@ -55,7 +55,8 @@ typedef enum deviceType {
     IP = 0x21,               // ip0, deviceapi_ip
     TCP = 0x22,              // tcp0, deviceapi_tcp
     ARP = 0x23,              // arp0, deviceapi_arp
-    UDP = 0x24               // udp0, deviceapi_udp
+    UDP = 0x24,              // udp0, deviceapi_udp
+    ICMP = 0x25              // icmp0, deviceapi_icmp
 } deviceType;
 
 /*
