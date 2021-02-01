@@ -52,7 +52,8 @@ typedef enum deviceType {
     NULL0 = 0x1E,            // null0, deviceapi_null
     TICK = 0x1F,             // tick0, deviceapi_tick
     RAND = 0x20,             // rand0, deviceapi_rand
-    IP = 0x21                // ip0, deviceapi_ip
+    IP = 0x21,               // ip0, deviceapi_ip
+    TCP = 0x22               // tcp0, deviceapi_tcp
 } deviceType;
 
 /*

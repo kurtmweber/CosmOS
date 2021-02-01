@@ -7,10 +7,11 @@
 
 #include <dev/console/serial_console.h>
 #include <dev/console/vga_console.h>
-#include <dev/ip/ipdev.h>
 #include <dev/null/null.h>
 #include <dev/ramdisk/ramdisk.h>
 #include <dev/rand/rand.h>
+#include <dev/tcpip/ip/ipdev.h>
+#include <dev/tcpip/tcp/tcpdev.h>
 #include <dev/tick/tick.h>
 #include <sys/asm/asm.h>
 #include <sys/deviceapi/deviceapi_console.h>
@@ -37,7 +38,7 @@ void mount_ramdisks();
 void mount_null();
 void mount_tick();
 void mount_rand();
-void mount_ip();
+void mount_tcpip();
 
 void create_consoles();
 void video_write(const uint8_t* s);
@@ -98,7 +99,7 @@ void CosmOS() {
     mount_null();
     mount_tick();
     mount_rand();
-    mount_ip();
+    mount_tcpip();
     /*
      * create consoles
      */
@@ -188,10 +189,11 @@ void mount_tick() {
 /*
 * if vnic0 is there, mount IP on it
 */
-void mount_ip() {
+void mount_tcpip() {
     struct device* vnic = devicemgr_find_device("vnic0");
     if (0 != vnic) {
-        ip_attach(vnic);
+        struct device* ip_dev = ip_attach(vnic);
+        tcp_attach(ip_dev);
     }
 }
 
