@@ -101,7 +101,9 @@ void initrd_write_filetable(struct device* dev, struct initrd_filetable* filetab
     memzero(datablock, sector_size * filetable->header_sectors);
     memcpy(datablock, (uint8_t*)&filetable, sizeof(struct initrd_filetable));
     block_write_sectors(deviceData->partition_device, 0, datablock, filetable->header_sectors);
-
+    /*
+    * read it back
+    */
     struct initrd_filetable filetable2;
     memzero((uint8_t*)&filetable2, sizeof(struct initrd_filetable));
     initrd_read_filetable(dev, &filetable2);
