@@ -149,7 +149,9 @@ struct device* tfs_attach(struct device* partition_device) {
     ASSERT(sizeof(struct tfs_file_allocation_block) == TFS_BLOCK_SIZE);
     ASSERT(sizeof(struct tfs_map_block) == TFS_BLOCK_SIZE);
     ASSERT_NOT_NULL(partition_device);
-    ASSERT(partition_device->devicetype == PARTITION);
+    // basically the device needs to implement deviceapi_block
+    ASSERT((partition_device->devicetype == PARTITION) || (partition_device->devicetype == VBLOCK) ||
+           (partition_device->devicetype == DISK) || (partition_device->devicetype == RAMDISK));
 
     /*
      * register device

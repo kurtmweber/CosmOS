@@ -239,4 +239,5 @@ void dev_tests() {
     // test_trap();
     //  test_sb16();
     // test_gpt();
+    // test_initrd();
 }

@@ -30,6 +30,7 @@
 #include <tests/fs/test_cpm.h>
 #include <tests/fs/test_fat.h>
 #include <tests/fs/test_gpt.h>
+#include <tests/fs/test_initrd.h>
 #include <tests/fs/test_mbr.h>
 #include <tests/fs/test_sfs.h>
 #include <tests/fs/test_swap.h>
