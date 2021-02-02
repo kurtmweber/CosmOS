@@ -14,7 +14,7 @@
 #include <sys/asm/asm.h>
 #include <sys/asm/io.h>
 #include <sys/debug/assert.h>
-#include <sys/deviceapi/deviceapi_ethernet.h>
+#include <sys/deviceapi/deviceapi_nic.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/kprintf/kprintf.h>
@@ -218,8 +218,8 @@ void devicemgr_register_pci_vnic(struct pci_device* dev) {
     devicemgr_set_device_description(deviceinstance, "Virtio NIC");
 
     // define an api
-    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*)kmalloc(sizeof(struct deviceapi_ethernet));
-    memzero((uint8_t*)api, sizeof(struct deviceapi_ethernet));
+    struct deviceapi_nic* api = (struct deviceapi_nic*)kmalloc(sizeof(struct deviceapi_nic));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_nic));
     api->write = &vnic_ethernet_write;
     api->read = &vnic_ethernet_read;
     deviceinstance->api = api;

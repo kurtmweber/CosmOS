@@ -13,7 +13,7 @@
 #include <sys/asm/asm.h>
 #include <sys/debug/assert.h>
 #include <sys/debug/debug.h>
-#include <sys/deviceapi/deviceapi_ethernet.h>
+#include <sys/deviceapi/deviceapi_nic.h>
 #include <sys/devicemgr/devicemgr.h>
 #include <sys/interrupt_router/interrupt_router.h>
 #include <sys/iobuffers/iobuffers.h>
@@ -249,7 +249,7 @@ void rtl8139_search_cb(struct pci_device* dev) {
     /*
      * the device api
      */
-    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*)kmalloc(sizeof(struct deviceapi_ethernet));
+    struct deviceapi_nic* api = (struct deviceapi_nic*)kmalloc(sizeof(struct deviceapi_nic));
     api->write = &rtl8139_ethernet_read;
     api->read = &rtl8139_ethernet_write;
     deviceinstance->api = api;

@@ -5,17 +5,14 @@
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
-#include <sys/debug/debug.h>
-#include <sys/deviceapi/deviceapi_nic.h>
-#include <sys/kprintf/kprintf.h>
-#include <tests/dev/test_rtl8139.h>
+#ifndef _ETHERNET_H
+#define _ETHERNET_H
 
-void test_rtl8139() {
-    uint8_t devicename[] = {"nic0"};
+#include <types.h>
 
-    struct device* ethernet = devicemgr_find_device(devicename);
-    if (0 != ethernet) {
-    } else {
-        kprintf("Unable to find %s\n", devicename);
-    }
-}
+struct device;
+
+struct device* ethernet_attach(struct device* ethernet_device);
+void ethernet_detach(struct device* dev);
+
+#endif

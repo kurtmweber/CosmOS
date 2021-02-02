@@ -24,7 +24,7 @@ typedef enum deviceType {
     VGA = 0x02,              // vga0, deviceapi_vga
     RTC = 0x03,              // rtc0, deviceapi_rtc
     KEYBOARD = 0x04,         // keyboard0, deviceapi_keyboard
-    NIC = 0x05,              // nic0, deviceapi_ethernet
+    NIC = 0x05,              // nic0, deviceapi_nic
     BRIDGE = 0x06,           // bridge0, deviceapi_bridge
     USB = 0x07,              // usb0, deviceapi_usb
     ATA = 0x08,              // ata0
@@ -38,7 +38,7 @@ typedef enum deviceType {
     DMA = 0x10,              // dma0
     CPU = 0x11,              // cpu0, deviceapi_cpu
     RAMDISK = 0x12,          // rd0, deviceapi_block
-    VNIC = 0x13,             // vnic0, deviceapi_ethernet
+    VNIC = 0x13,             // vnic0, deviceapi_nic
     VBLOCK = 0x14,           // vblock0, deviceapi_block
     DISK = 0x15,             // disk0, deviceapi_block
     PARALLEL = 0x16,         // parallel0, deviceapi_parallel
