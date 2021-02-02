@@ -103,3 +103,17 @@ void ethernet_detach(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     devicemgr_detach_device(dev);
 }
+
+void ethernet_init_eth(struct eth_hdr* eth, uint8_t* hw_source, uint8_t* hw_dest, uint8_t* data,
+                       uint16_t payload_size) {
+    ASSERT_NOT_NULL(eth);
+    ASSERT_NOT_NULL(hw_source);
+    ASSERT_NOT_NULL(hw_dest);
+    ASSERT_NOT_NULL(data);
+    ASSERT(payload_size <= 1500);
+    memzero((uint8_t*)eth, sizeof(struct eth_hdr));
+    memcpy((uint8_t*)&(eth->dest_hw), hw_dest, 6);
+    memcpy((uint8_t*)&(eth->source_hw), hw_source, 6);
+    eth->data = data;
+    eth->type = payload_size;
+}
