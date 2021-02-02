@@ -133,9 +133,8 @@ void show_cpu_data() {
 //	playsb16();
 //	floppyread();	
 
-//	test_ata();
 //	test_vblock();
-	test_ata();
+//	test_ata();
 //	test_ramdisk();
 
 	while (1){

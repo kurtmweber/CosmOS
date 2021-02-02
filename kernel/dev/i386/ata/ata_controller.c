@@ -52,7 +52,7 @@ void ata_detect_addresses(struct device* dev){
 
 	bar_result = pci_header_read_bar4(bus, device, function);
 
-	kprintf("BusMaster base: 0x%llX\n", (uint64_t)controller->dma_addr);
+	kprintf("BusMaster base: 0x%lX\n", (uint64_t)bar_result);
 }
 
 /*
