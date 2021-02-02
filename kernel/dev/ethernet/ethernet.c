@@ -33,21 +33,27 @@ uint8_t ethernet_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Uninit %s (%s)\n", dev->description, dev->name);
     kfree(dev->api);
+    kfree(dev->deviceData);
+
     return 1;
 }
 
-void ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
+void ethernet_read(struct device* dev, struct eth_hdr* eth, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
+    ASSERT_NOT_NULL(eth);
     struct ethernet_devicedata* deviceData = (struct ethernet_devicedata*)dev->deviceData;
-    panic("Not Implemented");
+    struct deviceapi_nic* nic_api = (struct deviceapi_nic*)deviceData->nic_device->api;
+    (*nic_api->read)(deviceData->nic_device, (uint8_t*)eth, size);
 }
 
-void ethernet_write(struct device* dev, uint8_t* data, uint16_t size) {
+void ethernet_write(struct device* dev, struct eth_hdr* eth, uint16_t size) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
+    ASSERT_NOT_NULL(eth);
     struct ethernet_devicedata* deviceData = (struct ethernet_devicedata*)dev->deviceData;
-    panic("Not Implemented");
+    struct deviceapi_nic* nic_api = (struct deviceapi_nic*)deviceData->nic_device->api;
+    (*nic_api->read)(deviceData->nic_device, (uint8_t*)eth, size);
 }
 
 struct device* ethernet_attach(struct device* nic_device) {

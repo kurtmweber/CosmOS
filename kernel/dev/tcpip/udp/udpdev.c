@@ -32,6 +32,8 @@ uint8_t udp_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     kprintf("Uninit %s (%s)\n", dev->description, dev->name);
     kfree(dev->api);
+    kfree(dev->deviceData);
+
     return 1;
 }
 
