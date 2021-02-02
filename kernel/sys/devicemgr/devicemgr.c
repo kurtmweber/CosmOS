@@ -127,6 +127,7 @@ void devicemgr_init_devices() {
     deviceregistry_iterate_type(SPEAKER, deviceInitIterator);
     deviceregistry_iterate_type(DSP, deviceInitIterator);
     deviceregistry_iterate_type(DISK, deviceInitIterator);
+    deviceregistry_iterate_type(SDHCI, deviceInitIterator);
 
     //  deviceregistry_iterate_type(RAMDISK, deviceInitIterator);
     deviceregistry_iterate_type(PARALLEL, deviceInitIterator);
@@ -213,6 +214,7 @@ void devicemgr_register_devices() {
     usb_ehci_devicemgr_register_devices();
     network_devicemgr_register_devices();
     bridge_devicemgr_register_devices();
+    sdhci_devicemgr_register_devices();
     ata_devicemgr_register_devices();
     mouse_devicemgr_register_devices();
     // floppy_devicemgr_register_devices();

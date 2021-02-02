@@ -17,7 +17,8 @@ QEMUARGS=                                                 \
   -drive file=img/mbr_fat.img,index=1,format=raw           \
   -drive file=img/gpt_fat.img,index=2,format=raw          \
   -drive file=img/blank.img,index=3,format=raw          \
-  -nic user,model=virtio-net-pci \
+  -device sdhci-pci                                     \
+  -nic user,model=virtio-net-pci                         \
   -serial stdio                                           \
   -audiodev coreaudio,id=audio0                           \
   -device adlib,audiodev=audio0                          \
