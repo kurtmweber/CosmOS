@@ -40,7 +40,7 @@ struct cpm_dir {
 } __attribute__((packed));
 
 struct cpm_devicedata {
-    struct device* block_device;
+    struct device* partition_device;
     uint16_t block_device_sector_size;
     uint8_t sectors_needed_for_dir;
     uint32_t byte_size_dir;
@@ -67,7 +67,7 @@ void cpm_format(struct device* dev) {
     memset(buffer, 0, deviceData->byte_size_dir);
     memcpy(buffer, (uint8_t*)&dir, sizeof(struct cpm_dir));
     for (uint8_t i = 0; i < deviceData->sectors_needed_for_dir; i++) {
-        block_write(deviceData->block_device, i, &(buffer[i]));
+        block_write(deviceData->partition_device, i, &(buffer[i]));
     }
     kfree(buffer);
 }
@@ -80,7 +80,7 @@ void cpm_read_dir(struct device* dev, struct cpm_dir* dir) {
     uint8_t* buffer = kmalloc(deviceData->byte_size_dir);
     memset(buffer, 0, deviceData->byte_size_dir);
     for (uint8_t i = 0; i < deviceData->sectors_needed_for_dir; i++) {
-        block_read(deviceData->block_device, i, &(buffer[i]));
+        block_read(deviceData->partition_device, i, &(buffer[i]));
     }
 
     // copy to dest
@@ -96,7 +96,7 @@ uint8_t cpm_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct cpm_devicedata* deviceData = (struct cpm_devicedata*)dev->deviceData;
-    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->partition_device->name, dev->name);
     return 1;
 }
 
@@ -107,16 +107,16 @@ uint8_t cpm_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct cpm_devicedata* deviceData = (struct cpm_devicedata*)dev->deviceData;
-    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->partition_device->name, dev->name);
     kfree(dev->api);
     kfree(dev->deviceData);
     return 1;
 }
 
-struct device* cpm_attach(struct device* block_device) {
+struct device* cpm_attach(struct device* partition_device) {
     ASSERT(sizeof(struct cpm_file_entry) == CPM_FILE_ENTRY_LEN);
-    ASSERT_NOT_NULL(block_device);
-    ASSERT(block_device->devicetype == PARTITION);
+    ASSERT_NOT_NULL(partition_device);
+    ASSERT(partition_device->devicetype == PARTITION);
 
     /*
      * register device
@@ -138,8 +138,8 @@ struct device* cpm_attach(struct device* block_device) {
      * device data
      */
     struct cpm_devicedata* deviceData = (struct cpm_devicedata*)kmalloc(sizeof(struct cpm_devicedata));
-    deviceData->block_device = block_device;
-    deviceData->block_device_sector_size = block_get_sector_size(deviceData->block_device);
+    deviceData->partition_device = partition_device;
+    deviceData->block_device_sector_size = block_get_sector_size(deviceData->partition_device);
     // blocks needed for dir
     uint8_t sectors_needed = sizeof(struct cpm_dir) / deviceData->block_device_sector_size;
     if (0 != (sizeof(struct cpm_dir) % deviceData->block_device_sector_size)) {

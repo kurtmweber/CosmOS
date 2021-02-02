@@ -11,11 +11,15 @@
 #include <sys/devicemgr/devicemgr.h>
 
 uint16_t block_get_sector_count(struct device* dev) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT((dev->devicetype == DISK) || (dev->devicetype == VBLOCK) || (dev->devicetype == RAMDISK));
     return block_get_total_size(dev) / block_get_sector_size(dev);
 }
 
 uint16_t block_get_sector_size(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    ASSERT((dev->devicetype == DISK) || (dev->devicetype == VBLOCK) || (dev->devicetype == RAMDISK));
+
     struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
     ASSERT_NOT_NULL(block_api);
 
@@ -24,6 +28,8 @@ uint16_t block_get_sector_size(struct device* dev) {
 
 uint32_t block_get_total_size(struct device* dev) {
     ASSERT_NOT_NULL(dev);
+    ASSERT((dev->devicetype == DISK) || (dev->devicetype == VBLOCK) || (dev->devicetype == RAMDISK));
+
     struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
     ASSERT_NOT_NULL(block_api);
 
@@ -32,6 +38,8 @@ uint32_t block_get_total_size(struct device* dev) {
 
 void block_write(struct device* dev, uint32_t sector, uint8_t* data) {
     ASSERT_NOT_NULL(dev);
+    ASSERT((dev->devicetype == DISK) || (dev->devicetype == VBLOCK) || (dev->devicetype == RAMDISK));
+
     ASSERT_NOT_NULL(data);
     struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
     ASSERT_NOT_NULL(block_api);
@@ -41,6 +49,8 @@ void block_write(struct device* dev, uint32_t sector, uint8_t* data) {
 
 void block_read(struct device* dev, uint32_t sector, uint8_t* data) {
     ASSERT_NOT_NULL(dev);
+    ASSERT((dev->devicetype == DISK) || (dev->devicetype == VBLOCK) || (dev->devicetype == RAMDISK));
+
     ASSERT_NOT_NULL(data);
     struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
     ASSERT_NOT_NULL(block_api);
@@ -49,6 +59,8 @@ void block_read(struct device* dev, uint32_t sector, uint8_t* data) {
 
 void block_write_sectors(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
     ASSERT_NOT_NULL(dev);
+    ASSERT((dev->devicetype == DISK) || (dev->devicetype == VBLOCK) || (dev->devicetype == RAMDISK));
+
     ASSERT_NOT_NULL(data);
     struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
     ASSERT_NOT_NULL(block_api);
@@ -58,6 +70,8 @@ void block_write_sectors(struct device* dev, uint32_t sector, uint8_t* data, uin
 
 void block_read_sectors(struct device* dev, uint32_t sector, uint8_t* data, uint32_t count) {
     ASSERT_NOT_NULL(dev);
+    ASSERT((dev->devicetype == DISK) || (dev->devicetype == VBLOCK) || (dev->devicetype == RAMDISK));
+
     ASSERT_NOT_NULL(data);
     struct deviceapi_block* block_api = (struct deviceapi_block*)dev->api;
     ASSERT_NOT_NULL(block_api);

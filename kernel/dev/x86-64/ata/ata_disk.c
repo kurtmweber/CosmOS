@@ -158,7 +158,7 @@ uint8_t device_init_ata_disk(struct device* dev) {
     kprintf("Init %s serial '%s' on controller %s of size %llu (%s)\n", dev->description, dsk->serial,
             disk->device->name, dsk->size, dev->name);
 
-    // mount parition tables
+    // mount partition_index tables
     fsutil_attach_partition_tables(dev);
     return 1;
 }

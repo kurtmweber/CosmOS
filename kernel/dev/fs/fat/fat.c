@@ -108,7 +108,7 @@ struct fat_fs_parameters {
 };
 
 struct fat_devicedata {
-    struct device* block_device;
+    struct device* partition_device;
 } __attribute__((packed));
 
 void fat_dump_fat_fs_parameters(struct fat_fs_parameters* param) {
@@ -305,7 +305,7 @@ uint8_t fat_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct fat_devicedata* deviceData = (struct fat_devicedata*)dev->deviceData;
-    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->partition_device->name, dev->name);
     return 1;
 }
 
@@ -316,15 +316,15 @@ uint8_t fat_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct fat_devicedata* deviceData = (struct fat_devicedata*)dev->deviceData;
-    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->partition_device->name, dev->name);
     kfree(dev->api);
     kfree(dev->deviceData);
     return 1;
 }
 
-struct device* fat_attach(struct device* block_device) {
-    ASSERT_NOT_NULL(block_device);
-    ASSERT(block_device->devicetype == PARTITION);
+struct device* fat_attach(struct device* partition_device) {
+    ASSERT_NOT_NULL(partition_device);
+    ASSERT(partition_device->devicetype == PARTITION);
 
     /*
      * register device
@@ -346,7 +346,7 @@ struct device* fat_attach(struct device* block_device) {
      * device data
      */
     struct fat_devicedata* deviceData = (struct fat_devicedata*)kmalloc(sizeof(struct fat_devicedata));
-    deviceData->block_device = block_device;
+    deviceData->partition_device = partition_device;
     deviceinstance->deviceData = deviceData;
 
     /*

@@ -4,13 +4,15 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-
-#ifndef _SFS_H
-#define _SFS_H
+/*
+* http://www.jamesmolloy.co.uk/tutorial_html/8.-The%20VFS%20and%20the%20initrd.html
+*/
+#ifndef _INITRD_H
+#define _INITRD_H
 
 #include <types.h>
 
-struct device* sfs_attach(struct device* partition_device);
-void sfs_detach(struct device* dev);
+struct device* initrd_attach(struct device* partition_device);
+void initrd_detach(struct device* dev);
 
 #endif

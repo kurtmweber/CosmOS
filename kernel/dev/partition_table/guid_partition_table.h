@@ -49,4 +49,8 @@ void guid_pt_detach(struct device* dev);
 
 void guid_pt_dump(struct device* dev);
 
+// string must be 16*4 + some in legnth so lets presume 128 bytes
+// type is 16 bytes for GPT
+void guid_partition_type_to_string(uint8_t* type, uint8_t* string, uint16_t len);
+
 #endif

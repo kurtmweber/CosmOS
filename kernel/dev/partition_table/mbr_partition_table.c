@@ -18,6 +18,7 @@
 #include <sys/deviceapi/deviceapi_part_table.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
+#include <sys/string/string.h>
 
 #define MBR_HEADER_LBA 0
 
@@ -106,7 +107,8 @@ uint64_t mbr_part_table_get_sector_count_function(struct device* dev, uint8_t pa
     return header.partitions[partition].total_sectors;
 }
 
-void mbr_pt_part_table_get_partition_type(struct device* dev, uint8_t partition, uint8_t* parititon_type) {
+void mbr_pt_part_table_get_partition_type(struct device* dev, uint8_t partition, uint8_t* parititon_type,
+                                          uint16_t len) {
     ASSERT(partition >= 0);
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
@@ -115,7 +117,7 @@ void mbr_pt_part_table_get_partition_type(struct device* dev, uint8_t partition,
     ASSERT(partition < deviceData->num_partitions);
     struct mbr_pt_header header;
     mbr_pt_read_mbr_pt_header(deviceData->block_device, &header);
-    memcpy(parititon_type, &(header.partitions[partition].partition_type), 1);
+    uitoa3(header.partitions[partition].partition_type, parititon_type, len, 16);
 }
 
 uint8_t mbr_pt_part_table_total_partitions(struct device* dev) {
@@ -143,10 +145,44 @@ uint8_t mbr_part_table_detachable(struct device* dev) {
     return 1;
 }
 
+void mbr_part_read_sector(struct device* dev, uint8_t partition_index, uint32_t sector, uint8_t* data, uint32_t count) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
+    uint64_t lba = mbr_pt_part_table_get_partition_lba(dev, partition_index);
+    block_read_sectors(deviceData->block_device, lba + sector, data, count);
+}
+
+void mbr_part_write_sector(struct device* dev, uint8_t partition_index, uint32_t sector, uint8_t* data,
+                           uint32_t count) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
+    uint64_t lba = mbr_pt_part_table_get_partition_lba(dev, partition_index);
+    block_write_sectors(deviceData->block_device, lba + sector, data, count);
+}
+
+uint16_t mbr_part_sector_size(struct device* dev, uint8_t partition_index) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    //    struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
+    panic("not implemented");
+    return 0;
+}
+
+uint32_t mbr_part_total_size(struct device* dev, uint8_t partition_index) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    //    struct mbr_pt_devicedata* deviceData = (struct mbr_pt_devicedata*)dev->deviceData;
+    panic("not implemented");
+    return 0;
+}
+
 struct device* mbr_pt_attach(struct device* block_device) {
     ASSERT(sizeof(struct mbr_pt_entry) == 16);
     ASSERT_NOT_NULL(block_device);
-    ASSERT((block_device->devicetype == DISK) || (block_device->devicetype == RAMDISK));
+    ASSERT((block_device->devicetype == DISK) || (block_device->devicetype == RAMDISK) ||
+           (block_device->devicetype == VBLOCK));
 
     /*
      * register device
@@ -167,6 +203,10 @@ struct device* mbr_pt_attach(struct device* block_device) {
     api->type = &mbr_pt_part_table_get_partition_type;
     api->sectors = &mbr_part_table_get_sector_count_function;
     api->detachable = &mbr_part_table_detachable;
+    api->read = &mbr_part_read_sector;
+    api->write = &mbr_part_write_sector;
+    api->sector_size = &mbr_part_sector_size;
+    api->total_size = &mbr_part_total_size;
     deviceinstance->api = api;
     /*
      * device data

@@ -4,7 +4,9 @@
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
-
+/*
+* note that partitions implement the deviceapi_block API.
+*/
 #ifndef _PARTITION_H
 #define _PARTITION_H
 
@@ -12,7 +14,7 @@
 
 struct device;
 
-struct device* partition_attach(struct device* block_device, uint64_t lba, uint32_t sector_count);
+struct device* partition_attach(struct device* partition_table_device, uint8_t partition_index);
 void partition_detach(struct device* dev);
 
 #endif

@@ -15,6 +15,7 @@
 #include <sys/deviceapi/deviceapi_part_table.h>
 #include <sys/kmalloc/kmalloc.h>
 #include <sys/string/mem.h>
+#include <sys/string/string.h>
 
 #define GUID_PT_HEADER_LBA 1
 
@@ -99,7 +100,7 @@ uint8_t guid_pt_uninit(struct device* dev) {
 }
 
 /*
-* read a specific parition table entry
+* read a specific partition_index table entry
 */
 void guid_pt_read_guid_pt_entry(struct device* dev, struct guid_pt_entry* entry, uint8_t partition) {
     ASSERT(partition >= 0);
@@ -116,7 +117,7 @@ void guid_pt_read_guid_pt_entry(struct device* dev, struct guid_pt_entry* entry,
     guid_pt_read_guid_pt_header(deviceData->block_device, &header);
 
     /*
-    * offset of 1st byte of parition entry, starting from the start of the parition data array
+    * offset of 1st byte of partition_index entry, starting from the start of the partition_index data array
     */
     uint64_t sector_size = block_get_sector_size(deviceData->block_device);
     uint64_t offset = partition * sizeof(struct guid_pt_entry);
@@ -173,7 +174,8 @@ uint64_t guid_pt_part_table_get_partition_lba(struct device* dev, uint8_t partit
     return entry.start_lba;
 }
 
-void guid_pt_part_table_get_partition_type(struct device* dev, uint8_t partition, uint8_t* parititon_type) {
+void guid_pt_part_table_get_partition_type(struct device* dev, uint8_t partition, uint8_t* parititon_type,
+                                           uint16_t len) {
     ASSERT(partition >= 0);
     ASSERT_NOT_NULL(parititon_type);
     ASSERT_NOT_NULL(dev);
@@ -186,11 +188,10 @@ void guid_pt_part_table_get_partition_type(struct device* dev, uint8_t partition
     struct guid_pt_entry entry;
     memzero((uint8_t*)&entry, sizeof(struct guid_pt_entry));
     guid_pt_read_guid_pt_entry(dev, &entry, partition);
-
     /*
-    * done
+    * string
     */
-    memcpy(parititon_type, (uint8_t*)&(entry.partition_type), 16);
+    guid_partition_type_to_string((uint8_t*)&(entry.partition_type), parititon_type, len);
 }
 
 uint8_t guid_pt_part_table_total_partitions(struct device* dev) {
@@ -218,9 +219,44 @@ uint8_t guid_part_table_detachable(struct device* dev) {
     return 1;
 }
 
+void guid_part_read_sector(struct device* dev, uint8_t partition_index, uint32_t sector, uint8_t* data,
+                           uint32_t count) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    uint64_t lba = guid_pt_part_table_get_partition_lba(dev, partition_index);
+    block_read_sectors(deviceData->block_device, lba + sector, data, count);
+}
+
+void guid_part_write_sector(struct device* dev, uint8_t partition_index, uint32_t sector, uint8_t* data,
+                            uint32_t count) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    uint64_t lba = guid_pt_part_table_get_partition_lba(dev, partition_index);
+    block_write_sectors(deviceData->block_device, lba + sector, data, count);
+}
+
+uint16_t guid_part_sector_size(struct device* dev, uint8_t partition_index) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    //  struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    panic("not implemented");
+    return 0;
+}
+
+uint32_t guid_part_total_size(struct device* dev, uint8_t partition_index) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(dev->deviceData);
+    //    struct guid_pt_devicedata* deviceData = (struct guid_pt_devicedata*)dev->deviceData;
+    panic("not implemented");
+    return 0;
+}
+
 struct device* guid_pt_attach(struct device* block_device) {
     ASSERT_NOT_NULL(block_device);
-    ASSERT((block_device->devicetype == DISK) || (block_device->devicetype == RAMDISK));
+    ASSERT((block_device->devicetype == DISK) || (block_device->devicetype == RAMDISK) ||
+           (block_device->devicetype == VBLOCK));
     ASSERT(sizeof(struct guid_pt_entry) == 128);
     /*
      * register device
@@ -241,6 +277,10 @@ struct device* guid_pt_attach(struct device* block_device) {
     api->type = &guid_pt_part_table_get_partition_type;
     api->sectors = &guid_part_table_get_sector_count_function;
     api->detachable = &guid_part_table_detachable;
+    api->read = &guid_part_read_sector;
+    api->write = &guid_part_write_sector;
+    api->sector_size = &guid_part_sector_size;
+    api->total_size = &guid_part_total_size;
     deviceinstance->api = api;
     /*
      * device data
@@ -296,4 +336,54 @@ void guid_pt_dump(struct device* dev) {
     kprintf("   gpt_array_lba %llu\n", header.gpt_array_lba);
     kprintf("   num_partitions %llu\n", header.num_partitions);
     kprintf("   entry_size %llu\n", header.entry_size);
+}
+
+void guid_partition_type_to_string(uint8_t* type, uint8_t* string, uint16_t len) {
+    ASSERT_NOT_NULL(type);
+    ASSERT_NOT_NULL(string);
+    memzero(string, len);
+    ASSERT(len >= 37);  // total length we need
+    uint8_t i = 0;
+
+    uitoa3(type[3], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[2], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[1], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[0], &(string[i]), 2, 16);
+    i += 2;
+    string[i] = '-';
+    i += 1;
+    uitoa3(type[5], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[4], &(string[i]), 2, 16);
+    i += 2;
+    string[i] = '-';
+    i += 1;
+    uitoa3(type[7], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[6], &(string[i]), 2, 16);
+    i += 2;
+    string[i] = '-';
+    i += 1;
+    uitoa3(type[8], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[9], &(string[i]), 2, 16);
+    i += 2;
+    string[i] = '-';
+    i += 1;
+    uitoa3(type[10], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[11], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[12], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[13], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[14], &(string[i]), 2, 16);
+    i += 2;
+    uitoa3(type[15], &(string[i]), 2, 16);
+    i += 2;
+    ASSERT(i == 36);  // total length we need, minus null
 }

@@ -24,7 +24,6 @@
 #include <tests/dev/test_serial.h>
 #include <tests/dev/test_serial_console.h>
 #include <tests/dev/test_speaker.h>
-#include <tests/dev/test_swap.h>
 #include <tests/dev/test_vblock.h>
 #include <tests/dev/test_vga_console.h>
 #include <tests/fs/test_cfs.h>
@@ -33,6 +32,7 @@
 #include <tests/fs/test_gpt.h>
 #include <tests/fs/test_mbr.h>
 #include <tests/fs/test_sfs.h>
+#include <tests/fs/test_swap.h>
 #include <tests/fs/test_tfs.h>
 #include <tests/sys/test_array.h>
 #include <tests/sys/test_arraylist.h>

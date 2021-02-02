@@ -21,7 +21,7 @@
 * BDA (Bios Data Area)
 * Parallel port
 * Swap device
-* MBR partition table and paritions
+* MBR partition table and partitions
 
 ## In Development
 

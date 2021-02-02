@@ -48,7 +48,7 @@ typedef enum deviceType {
     FILESYSTEM = 0x1A,       // fs0, deviceapi_filesytem
     PARTITION_TABLE = 0x1B,  // pt0, deviceapi_part_table
     CONSOLE = 0x1C,          // console0, deviceapi_console
-    PARTITION = 0x1D,        // parition0, deviceapi_block
+    PARTITION = 0x1D,        // partition0, deviceapi_block
     NULL0 = 0x1E,            // null0, deviceapi_null
     TICK = 0x1F,             // tick0, deviceapi_tick
     RAND = 0x20,             // rand0, deviceapi_rand

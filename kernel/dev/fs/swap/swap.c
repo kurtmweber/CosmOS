@@ -6,7 +6,7 @@
 // ****************************************************************
 
 #include <dev/fs/block_util.h>
-#include <dev/swap/swap.h>
+#include <dev/fs/swap/swap.h>
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_swap.h>
 #include <sys/devicemgr/devicemgr.h>

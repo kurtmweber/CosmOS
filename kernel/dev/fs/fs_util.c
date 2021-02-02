@@ -17,6 +17,7 @@
 
 void fsutil_attach_partition_tables(struct device* block_dev) {
     ASSERT_NOT_NULL(block_dev);
+    ASSERT((block_dev->devicetype == DISK) || (block_dev->devicetype == VBLOCK) || (block_dev->devicetype == RAMDISK));
 
     // try to attach gpt
     struct device* gpt = guid_pt_attach(block_dev);
@@ -30,29 +31,35 @@ void fsutil_attach_partition_tables(struct device* block_dev) {
 
 void fsutil_detach_partition_tables(struct device* block_dev) {
     ASSERT_NOT_NULL(block_dev);
+    ASSERT((block_dev->devicetype == DISK) || (block_dev->devicetype == VBLOCK) || (block_dev->devicetype == RAMDISK));
 }
 
 void fsutil_attach_partitions(struct device* partition_table_dev) {
     ASSERT_NOT_NULL(partition_table_dev);
+    ASSERT(partition_table_dev->devicetype == PARTITION_TABLE);
+
     /*
      * mount partition devices
      */
     struct deviceapi_part_table* api = (struct deviceapi_part_table*)partition_table_dev->api;
     uint32_t num_partitions = (*api->partitions)(partition_table_dev);
     for (uint32_t i = 0; i < num_partitions; i++) {
-        uint32_t lba = (*api->lba)(partition_table_dev, i);
         uint32_t sector_count = (*api->sectors)(partition_table_dev, i);
         if (sector_count > 0) {
-            partition_attach(partition_table_dev, lba, sector_count);
+            partition_attach(partition_table_dev, i);
         }
     }
 }
 
 void fsutil_detach_partitions(struct device* partition_table_dev) {
     ASSERT_NOT_NULL(partition_table_dev);
+    ASSERT(partition_table_dev->devicetype == PARTITION_TABLE);
 }
 
 void fsutil_attach_fs(struct device* partition_dev) {
+    ASSERT_NOT_NULL(partition_dev);
+    ASSERT(partition_dev->devicetype == PARTITION);
+
     if (0 == fat_attach(partition_dev)) {
         tfs_attach(partition_dev);
     }
@@ -60,4 +67,5 @@ void fsutil_attach_fs(struct device* partition_dev) {
 
 void fsutil_detach_fs(struct device* partition_dev) {
     ASSERT_NOT_NULL(partition_dev);
+    ASSERT(partition_dev->devicetype == PARTITION);
 }

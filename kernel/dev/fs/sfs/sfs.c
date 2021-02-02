@@ -106,7 +106,7 @@ struct sfs_continuation_entry {
 } __attribute__((packed));
 
 struct sfs_devicedata {
-    struct device* block_device;
+    struct device* partition_device;
 } __attribute__((packed));
 
 /*
@@ -132,8 +132,8 @@ void sfs_format(struct device* dev) {
 
     // device parameters
     //    uint64_t total_size = block_get_total_size(deviceData->block_device);
-    uint32_t sector_size = block_get_sector_size(deviceData->block_device);
-    uint32_t total_sectors = block_get_sector_count(deviceData->block_device);
+    uint32_t sector_size = block_get_sector_size(deviceData->partition_device);
+    uint32_t total_sectors = block_get_sector_count(deviceData->partition_device);
 
     // create a superblock struct
     struct sfs_superblock superblock;
@@ -150,7 +150,7 @@ void sfs_format(struct device* dev) {
     superblock.block_size = (sector_size / 512) + 1;
 
     // write superblock
-    block_write(deviceData->block_device, 0, (uint8_t*)&superblock);
+    block_write(deviceData->partition_device, 0, (uint8_t*)&superblock);
 }
 
 /*
@@ -160,7 +160,7 @@ uint8_t sfs_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     struct sfs_devicedata* deviceData = (struct sfs_devicedata*)dev->deviceData;
-    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    kprintf("Init %s on %s (%s)\n", dev->description, deviceData->partition_device->name, dev->name);
     return 1;
 }
 
@@ -172,15 +172,15 @@ uint8_t sfs_uninit(struct device* dev) {
     ASSERT_NOT_NULL(dev->deviceData);
 
     struct sfs_devicedata* deviceData = (struct sfs_devicedata*)dev->deviceData;
-    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->block_device->name, dev->name);
+    kprintf("Uninit %s on %s (%s)\n", dev->description, deviceData->partition_device->name, dev->name);
     kfree(dev->api);
     kfree(dev->deviceData);
     return 1;
 }
 
-struct device* sfs_attach(struct device* block_device) {
-    ASSERT_NOT_NULL(block_device);
-    ASSERT(block_device->devicetype == PARTITION);
+struct device* sfs_attach(struct device* partition_device) {
+    ASSERT_NOT_NULL(partition_device);
+    ASSERT(partition_device->devicetype == PARTITION);
 
     /*
      * register device
@@ -202,7 +202,7 @@ struct device* sfs_attach(struct device* block_device) {
      * device data
      */
     struct sfs_devicedata* deviceData = (struct sfs_devicedata*)kmalloc(sizeof(struct sfs_devicedata));
-    deviceData->block_device = block_device;
+    deviceData->partition_device = partition_device;
     deviceinstance->deviceData = deviceData;
 
     /*
