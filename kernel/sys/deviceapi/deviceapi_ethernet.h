@@ -13,6 +13,15 @@
 #include <sys/devicemgr/devicemgr.h>
 #include <types.h>
 
+#define ETHERNET_HW_LEN 6
+
+struct eth_hdr {
+    uint8_t dest_hw[ETHERNET_HW_LEN];
+    uint8_t source_hw[ETHERNET_HW_LEN];
+    uint16_t type;
+    uint8_t* data;
+} __attribute__((packed));
+
 typedef void (*ethernet_read_function)(struct device* dev, uint8_t* data, uint16_t size);
 typedef void (*ethernet_write_function)(struct device* dev, uint8_t* data, uint16_t size);
 
