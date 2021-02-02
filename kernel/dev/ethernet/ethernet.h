@@ -12,7 +12,7 @@
 
 struct device;
 
-struct device* ethernet_attach(struct device* ethernet_device);
+struct device* ethernet_attach(struct device* nic_device);
 void ethernet_detach(struct device* dev);
 
 #endif

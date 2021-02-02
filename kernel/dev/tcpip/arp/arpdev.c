@@ -54,7 +54,7 @@ void arp_request(struct device* dev, struct arp* request, struct arp* response) 
 
 struct device* arp_attach(struct device* ethernet_device) {
     ASSERT_NOT_NULL(ethernet_device);
-    ASSERT((ethernet_device->devicetype == NIC) || (ethernet_device->devicetype == VNIC));
+    ASSERT(ethernet_device->devicetype == ETHERNET);
 
     /*
      * register device

@@ -7,6 +7,7 @@
 
 #include <dev/console/serial_console.h>
 #include <dev/console/vga_console.h>
+#include <dev/ethernet/ethernet.h>
 #include <dev/null/null.h>
 #include <dev/ramdisk/ramdisk.h>
 #include <dev/rand/rand.h>
@@ -195,9 +196,10 @@ void mount_tick() {
 void mount_tcpip() {
     struct device* vnic = devicemgr_find_device("vnic0");
     if (0 != vnic) {
-        arp_attach(vnic);
-        icmp_attach(vnic);
-        struct device* ip_dev = ip_attach(vnic);
+        struct device* eth = ethernet_attach(vnic);
+        arp_attach(eth);
+        icmp_attach(eth);
+        struct device* ip_dev = ip_attach(eth);
         tcp_attach(ip_dev);
         udp_attach(ip_dev);
 

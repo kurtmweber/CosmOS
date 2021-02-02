@@ -48,7 +48,7 @@ void icmp_write(struct device* dev, uint8_t* data, uint16_t size) {
 
 struct device* icmp_attach(struct device* ethernet_device) {
     ASSERT_NOT_NULL(ethernet_device);
-    ASSERT((ethernet_device->devicetype == NIC) || (ethernet_device->devicetype == VNIC));
+    ASSERT(ethernet_device->devicetype == ETHERNET);
 
     /*
      * register device
