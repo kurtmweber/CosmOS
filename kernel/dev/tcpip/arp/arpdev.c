@@ -7,8 +7,9 @@
 
 #include <sys/debug/assert.h>
 #include <sys/deviceapi/deviceapi_arp.h>
-#include <sys/deviceapi/deviceapi_nic.h>
+#include <sys/deviceapi/deviceapi_ethernet.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/panic/panic.h>
 #include <sys/string/mem.h>
 
 struct arp_devicedata {
@@ -47,7 +48,8 @@ void arp_request(struct device* dev, struct arp* request, struct arp* response) 
     // get our device data for this device
     struct arp_devicedata* deviceData = (struct arp_devicedata*)dev->deviceData;
     // get the api for the underlying ethernet device
-    struct deviceapi_nic* ether_api = (struct deviceapi_nic*)deviceData->ethernet_device->api;
+    struct deviceapi_ethernet* ether_api = (struct deviceapi_ethernet*)deviceData->ethernet_device->api;
+    panic("Um, what HW addresses do I put in here?");
     // send
     (*ether_api->write)(deviceData->ethernet_device, (uint8_t*)request, sizeof(struct arp));
     // receive. I presume this blocks?
