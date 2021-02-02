@@ -33,7 +33,7 @@ void sdhci_irq_handler(stackFrame* frame) {
 uint8_t sdhci_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct sdhci_devicedata* deviceData = (struct sdhci_devicedata*)dev->deviceData;
-    deviceData->base = pci_calcbar(dev->pci);
+    deviceData->base = dev->pci->bars[0] >> 16;
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
             dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &sdhci_irq_handler);
