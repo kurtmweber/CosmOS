@@ -25,20 +25,17 @@ struct ata_device {
     const char* identity;
 };
 
-typedef enum ata_dma_address_types{
-	ATA_DMA_ADDR_PIO,
-	ATA_DMA_ADDR_MMIO
-} ata_dma_address_types;
+typedef enum ata_dma_address_types { ATA_DMA_ADDR_PIO, ATA_DMA_ADDR_MMIO } ata_dma_address_types;
 
-typedef struct ata_dma_address{
-	ata_dma_address_types addr_type;
+typedef struct ata_dma_address {
+    ata_dma_address_types addr_type;
 } ata_dma_address;
 
-struct ide_channel{
-	uint16_t base_io;
-	uint16_t base_io_ctrl;
-	struct ata_device devices[2];
-	ata_drive_selector selected_device;
+struct ide_channel {
+    uint16_t base_io;
+    uint16_t base_io_ctrl;
+    struct ata_device devices[2];
+    ata_drive_selector selected_device;
 };
 
 struct ata_controller {
