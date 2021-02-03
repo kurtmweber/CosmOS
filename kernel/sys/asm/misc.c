@@ -5,67 +5,53 @@
  * See the file "LICENSE" in the source distribution for details *
  *****************************************************************/
 
+#include <sys/x86-64/mm/mm.h>
 #include <types.h>
-#include <sys/i386/mm/mm.h>
 
 #ifdef TARGET_PLATFORM_i386
 
-void asm_hlt(){
-	asm volatile(
-		"hlt"
-	    );
-	
-	return;
+void asm_hlt() {
+    asm volatile("hlt");
+
+    return;
 }
 
-void asm_cli(){
-	asm volatile(
-		"cli"
-	    );
-	
-	return;
+void asm_cli() {
+    asm volatile("cli");
+
+    return;
 }
 
-void *asm_cr2_read(){
-	void *ret;
+void* asm_cr2_read() {
+    void* ret;
 
-	asm volatile(
-		"mov %%cr2, %0"
-		: "=r" (ret)
-	);
+    asm volatile("mov %%cr2, %0" : "=r"(ret));
 
-	return ret;
+    return ret;
 }
 
-pttentry asm_cr3_read(){
-	pttentry cr3;
-	
-	asm volatile(
-		"mov %%cr3 ,%0"
-		: "=r" (cr3)
-	    );
-	
-	return cr3;
+pttentry asm_cr3_read() {
+    pttentry cr3;
+
+    asm volatile("mov %%cr3 ,%0" : "=r"(cr3));
+
+    return cr3;
 }
 
-void asm_cr3_reload(){
-	asm volatile(
-		"mov %%cr3, %%rax\n"
-   		"mov %%rax, %%cr3"
-		:
-		:
-		: "%eax"
-		);
+void asm_cr3_reload() {
+    asm volatile("mov %%cr3, %%rax\n"
+                 "mov %%rax, %%cr3"
+                 :
+                 :
+                 : "%eax");
 
-	return;
+    return;
 }
 
-void asm_sti(){
-	asm volatile(
-		"sti"
-	    );
-	
-	return;
+void asm_sti() {
+    asm volatile("sti");
+
+    return;
 }
 
 #endif

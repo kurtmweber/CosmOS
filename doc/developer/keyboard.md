@@ -1,0 +1,59 @@
+# Keyboard Interface Documentation
+
+ACCURATE AS OF: 2020-07-12
+
+Keyboard inputs pass through a number of stages before they are made available
+to the task that currently controls the system console. This is done to
+streamline the inclusion of support for additional keyboard layouts.  
+Eventually this will be made even more configurable by making it possible to
+define keyboard layouts externally to the kernel, but for now they are compiled
+in but modularized.
+
+At the lowest level, the keyboard interrupt handler reads scan codes and
+converts them to a set of logical indices into an 8x32 array that serves as an
+abstract physical keyboard layout. At this level no distinction is made
+between character or control keys, and therefore there is no association made
+between keys and specific character or control functions. This array is
+encoded as 3x5 bits, packed into a single byte. The higher-order three bits
+address the row, and the lower-order five bits address the column, of the
+abstract keyboard.
+
+Rows are numbered starting from zero, with row zero at the top of the keyboard
+(typically containing the F-function keys) and row 5 at the bottom (typically
+including the spacebar, among other keys). Row 6 is used for ACPI keys, and
+Row 7 for Windows Media keyboard extensions. Columns are numbered 0-32, though
+generally not all columns will be used and rows do not necessarily all span the
+same number of columns. It is important to understand that this row-column
+layout is an abstraction, and does not necessarily reflect the actual alignment
+of keys on the physical keyboard. For example, on the US 104-key QWERTY
+layout, the keys "3," "E," "D,", "C", and the space bar all occupy column
+position 4 in their respective rows, even though they are not typically
+vertically aligned with one another. Similarly, "F7," "7," "M," and the left
+arrow on the directional keypad all occupy column 5. Meanwhile, the "+" key on
+the numeric keypad is solely in row 2 even though the physical key often spans
+two rows; the numeric keypad "Enter" or "Return" key is therefore in row 4,
+because it aligns vertically with the row that begins at its leftmost with the
+left Shift key.
+
+One special case is the key that on US 104-key QWERTY is labeled "Enter" or
+"Return." On some keyboards it is a simple, straight wide key; on others, it
+is shaped similarly to a reversed capital "L." Its logical position in the
+array is determined as if it were the straight key (regardless of its physical
+outline), thus putting it at row 3, column 12.
+
+Some key presses are identified by multi-byte scan codes; the interrupt handler
+reads and interprets these as part of identifying the activated key and placing
+it in the abstract keyboard array.
+
+Keyboard scan codes encode not just the key that was activated, but also whether
+it was pressed (sometimes referred to as "make") or released ("break"). The
+interrupt handler separates these into two values for easier processing
+upstream, using a key_action_t struct (defined in console/console.h) to hold the
+information, as follows:
+
+```c
+	typedef struct key_action_t{
+		uint8_t key;		    // encoded row-col position on abstract keyboard
+		keypress_state state;	// MAKE or BREAK
+		} key_action_t;
+```

@@ -1,158 +1,239 @@
 //*****************************************************************
 // This file is part of CosmOS                                    *
-// Copyright (C) 2020 Tom Everett                                 *
+// Copyright (C) 2020-2021 Tom Everett                            *
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
 
 // https://wiki.osdev.org/Virtio
 
-#include <dev/virtio/vnic/vnic.h>
-#include <sys/interrupt_router/interrupt_router.h>
-#include <sys/asm/asm.h>
-#include <sys/devicemgr/devicemgr.h>
-#include <sys/console/console.h>
-#include <types.h>
-#include <sys/asm/io.h>
-#include <sys/sleep/sleep.h>
-#include <dev/i386/pci/pci.h>
-#include <sys/debug/assert.h>
 #include <dev/virtio/virtio.h>
-#include <sys/deviceapi/deviceapi_ethernet.h>
 #include <dev/virtio/virtqueue.h>
+#include <dev/virtio/vnic/vnic.h>
+#include <dev/x86-64/pci/pci.h>
+#include <sys/asm/asm.h>
+#include <sys/asm/io.h>
+#include <sys/debug/assert.h>
+#include <sys/deviceapi/deviceapi_nic.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/interrupt_router/interrupt_router.h>
+#include <sys/kprintf/kprintf.h>
+#include <sys/string/mem.h>
+#include <types.h>
 
-#define VNIC_QUEUE_SIZE 255
+uint16_t vnet_base_port;
+uint8_t mac_addr[6];
 
-// virtio NIC flags
-#define VIRTIO_NIC_MAC1             0x14
-#define VIRTIO_NIC_MAC2             0x15
-#define VIRTIO_NIC_MAC3             0x16
-#define VIRTIO_NIC_MAC4             0x17
-#define VIRTIO_NIC_MAC5             0x18
-#define VIRTIO_NIC_MAC6             0x19
-#define VIRTIO_NIC_STATUS           0x1A
-
-struct VirtioPacketHeader {
-  uint8_t Flags;                // Bit 0: Needs checksum; Bit 1: Received packet has valid data;
-                                // Bit 2: If VIRTIO_NET_F_RSC_EXT was negotiated, the device processes
-                                // duplicated ACK segments, reports number of coalesced TCP segments in ChecksumStart
-                                // field and number of duplicated ACK segments in ChecksumOffset field,
-                                // and sets bit 2 in Flags(VIRTIO_NET_HDR_F_RSC_INFO) 
-  uint8_t SegmentationOffload;  // 0:None 1:TCPv4 3:UDP 4:TCPv6 0x80:ECN
-  uint16_t HeaderLength;        // Size of header to be used during segmentation.
-  uint16_t SegmentLength;       // Maximum segment size (not including header).
-  uint16_t ChecksumStart;       // The position to begin calculating the checksum.
-  uint16_t ChecksumOffset;      // The position after ChecksumStart to store the checksum.
-  uint16_t BufferCount;         // Used when merging buffers.
-};
-/*
-* vnic instance specific data
-*/
-struct vnic_devicedata {
-    uint64_t base;
-    struct virtq* send_queue;
-    struct virtq* recieve_queue;
-} __attribute__((packed));
-
-void vnic_irq_handler(stackFrame *frame){
-	ASSERT_NOT_NULL(frame, "stackFrame cannot be null");
-	kprintf("#");
+void vnic_irq_handler(stackFrame* frame) {
+    ASSERT_NOT_NULL(frame);
+    kprintf("#");
 }
 
-//void vinc_write_queue_notify_register(uint16_t status){
-//    asm_out_w(deviceData->base+VIRTIO_QUEUE_NOTIFY,status);
-//}
+inline uint32_t vnic_read_register(uint16_t reg) {
+    // if 4-byte register
+    if (reg < VIRTIO_QUEUE_SIZE) {
+        return asm_in_d(vnet_base_port + reg);
+    } else {
+        // if 2-byte register
+        if (reg <= VIRTIO_QUEUE_NOTIFY)
+            return asm_in_w(vnet_base_port + reg);
+        else  // 1-byte register
+            return asm_in_b(vnet_base_port + reg);
+    }
+}
 
-//uint8_t vnic_get_status(){
-//  return asm_in_b(deviceData->base+VIRTIO_NIC_STATUS);
-//}
+inline void vnic_write_register(uint16_t reg, uint32_t data) {
+    // if 4-byte register
+    if (reg < VIRTIO_QUEUE_SIZE) {
+        asm_out_d(vnet_base_port + reg, data);
+    } else {
+        // if 2-byte register
+        if (reg <= VIRTIO_QUEUE_NOTIFY)
+            asm_out_w(vnet_base_port + reg, (uint16_t)data);
+        else  // 1-byte register
+            asm_out_b(vnet_base_port + reg, (uint8_t)data);
+    }
+}
 
-/*
-* perform device instance specific init here
-*/
-void VNICInit(struct device* dev){
-	  ASSERT_NOT_NULL(dev, "dev cannot be null");
-	  ASSERT_NOT_NULL(dev->deviceData, "dev->deviceData cannot be null");
+void vnic_init_virtqueue(struct virtq** virtqueue, uint16_t queueIndex) {
+    ASSERT_NOT_NULL(virtqueue);
 
-    struct vnic_devicedata* deviceData = (struct vnic_devicedata*) dev->deviceData;
-    interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);    
+    uint16_t queue_size = -1;
+
+    // get queue size from the device register
+    vnic_write_register(VIRTIO_QUEUE_SELECT, queueIndex);
+    queue_size = (uint16_t)vnic_read_register(VIRTIO_QUEUE_SIZE);
+
+    if (!queue_size)
+        panic("Can't get Virtio network queue size");
+
+    kprintf("   vnet queue %u has %u elements", queueIndex, queue_size);
+
+    // make the queue
+    struct virtq* q = virtq_new(queue_size);
+    bool q_aligned = virtio_isAligned(((uint64_t)q), 4096);
+    ASSERT(q_aligned);
+    *virtqueue = q;
+
+    // divide by 4096
+    // The API takes a 32 bit pointer, but we have a 64 bit pointer, so ... some conversions
+    uint32_t q_shifted = (uint64_t)q >> 12;
+
+    kprintf("  Queue Address(%u): %#hX, shifted %#hX\n", queueIndex, q, q_shifted);
+
+    // Write addresses (divided by 4096) to address registers
+    vnic_write_register(VIRTIO_QUEUE_ADDRESS, q_shifted);
+}
+
+uint8_t vnic_initialize_device(struct device* dev) {
+    struct vnic_devicedata* deviceData = (struct vnic_devicedata*)dev->deviceData;
+    uint8_t device_status;
+
+    // get the I/O port
     deviceData->base = pci_calcbar(dev->pci);
-    kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n",dev->description, dev->pci->irq,dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
+    vnet_base_port = deviceData->base;
 
-    // make the recieve queue
-    struct virtq* recieve_q = virtq_new(VNIC_QUEUE_SIZE);
-    bool recieve_q_aligned = virtio_isAligned(((uint64_t)recieve_q),4096);
-    ASSERT(recieve_q_aligned, "recieve_q is not 4096 byte aligned");
-    deviceData->recieve_queue = recieve_q;
-    
-    // make the send queue
-    struct virtq* send_q = virtq_new(VNIC_QUEUE_SIZE);
-    bool send_q_aligned = virtio_isAligned(((uint64_t)send_q),4096);
-    ASSERT(send_q_aligned, "send_q is not 4096 byte aligned");
-    deviceData->send_queue = send_q;
+    kprintf("Initializing virtio-net driver... Base address: %#hX\n", vnet_base_port);
 
-    uint8_t virtio_mac[6];
-    virtio_mac[0] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC1);
-    virtio_mac[1] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC2);
-    virtio_mac[2] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC3);
-    virtio_mac[3] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC4);
-    virtio_mac[4] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC5);
-    virtio_mac[5] = asm_in_b(deviceData->base+VIRTIO_NIC_MAC6);
+    // get starting device status
+    device_status = (uint8_t)vnic_read_register(VIRTIO_DEVICE_STATUS);
+    kprintf("   device status is %hX\n", device_status);
 
-    /*
-    * should start with 0x52, 0x54
-    */
-    if ((virtio_mac[0] !=0x52) ||(virtio_mac[1] !=0x54)){
-      panic("Unexpected virtio MAC address");
+    // Reset the virtio-network device
+    vnic_write_register(VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_RESET_DEVICE);
+
+    // Set the acknowledge status bit
+    vnic_write_register(VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED);
+
+    // Set the driver status bit
+    vnic_write_register(VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ACKNOWLEGED | VIRTIO_STATUS_DRIVER_LOADED);
+
+    // Read the feature bits
+    uint32_t features = vnic_read_register(VIRTIO_DEVICE_FEATURES);
+    kprintf("   device features: %lX", features);
+
+    // Make sure the features we need are supported
+    if ((features & VIRTIO_NET_REQUIRED_FEATURES) != VIRTIO_NET_REQUIRED_FEATURES) {
+        // uh-oh
+        kprintf("Required features are not supported by virtio network device. Aborting.\n");
+        vnic_write_register(VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ERROR);
     }
 
-	  kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n",virtio_mac[0],virtio_mac[1],virtio_mac[2],virtio_mac[3],virtio_mac[4],virtio_mac[5]);
+    // Tell the device what features we'll be using
+    vnic_write_register(VIRTIO_GUEST_FEATURES, VIRTIO_NET_REQUIRED_FEATURES);
+
+    // Tell the device the features have been negotiated
+    vnic_write_register(VIRTIO_DEVICE_STATUS,
+                        VIRTIO_STATUS_DEVICE_ACKNOWLEGED | VIRTIO_STATUS_DRIVER_LOADED | VIRTIO_STATUS_FEATURES_OK);
+
+    // Make sure the device is ok with those features
+    if ((vnic_read_register(VIRTIO_DEVICE_STATUS) & VIRTIO_STATUS_FEATURES_OK) != VIRTIO_STATUS_FEATURES_OK) {
+        // uh-oh
+        kprintf("Failed to negotiate features with virtio net device. Aborting.");
+        vnic_write_register(VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DEVICE_ERROR);
+    }
+
+    // store the MAC address
+    // TODO: store mac in the device struct
+    uint16_t macReg = REG_MAC_1;
+    for (int i = 0; i < 6; ++i, ++macReg)
+        mac_addr[i] = (uint8_t)vnic_read_register(macReg);
+
+    kprintf("   MAC %#hX:%#hX:%#hX:%#hX:%#hX:%#hX\n", mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4],
+            mac_addr[5]);
+
+    // Init virtqueues (see 4.1.5.1.3 of virtio-v1.0-cs04.pdf)
+    vnic_init_virtqueue(&(deviceData->receive_queue), VIRTQ_NET_RECEIVE_INDEX);
+    vnic_init_virtqueue(&(deviceData->send_queue), VIRTQ_NET_TRANSMIT_INDEX);
+
+    // Setup the receive queue
+    vnic_setup_receive_buffers(deviceData->receive_queue);
+
+    // Setup an interrupt handler for this device
+    interrupt_router_register_interrupt_handler(dev->pci->irq, &vnic_irq_handler);
+    kprintf("   init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
+            dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
+
+    // Tell the device it's initialized
+    vnic_write_register(VIRTIO_DEVICE_STATUS, VIRTIO_STATUS_DRIVER_READY);
+
+    // Remind the device that it has receive buffers.
+    vnic_write_register(VIRTIO_QUEUE_NOTIFY, VIRTQ_NET_RECEIVE_INDEX);
+
+    // kprintf("\n     Requesting IP address via DHCP...");
+    //ARP_SendRequest(IPv4_PackIP(10, 0, 2, 4), mac_addr);
+    // DHCP_Send_Discovery(mac_addr);
+
+    // get ending device status
+    device_status = (uint8_t)vnic_read_register(VIRTIO_DEVICE_STATUS);
+    kprintf("   device status is %hX\n", device_status);
+
+    kprintf("   virtio-net driver initialized.\n");
+    return 1;
 }
 
-void vnic_ethernet_read(struct device* dev, uint8_t* data, uint32_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
-	panic("vnic read not implemented yet");
+void vnic_setup_receive_buffers(struct virtq* receiveQueue) {
+    const uint16_t bufferSize = 1526;  // as per virtio specs
+
+    // Allocate and add 16 buffers to receive queue
+    for (uint16_t i = 0; i < 16; ++i) {
+        uint8_t* buffer = kmalloc(bufferSize);
+        struct virtq_descriptor* desc = virtq_descriptor_new(buffer, bufferSize, true);
+
+        virtq_enqueue_descriptor(receiveQueue, desc);
+    }
+
+    vnic_write_register(VIRTIO_QUEUE_NOTIFY, VIRTQ_NET_RECEIVE_INDEX);
 }
 
-void vnic_ethernet_write(struct device* dev, uint8_t* data, uint32_t size) {
-	ASSERT_NOT_NULL(dev, "dev cannot be null");
-	ASSERT_NOT_NULL(data, "data cannot be null");
-
-	panic("vnic write not implemented yet");
+void vnic_ethernet_read(struct device* dev, uint8_t* data, uint16_t size) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(data);
+    panic("vnic read not implemented yet");
 }
 
-void vnic_search_cb(struct pci_device* dev){
-    ASSERT_NOT_NULL(dev, "dev cannot be null");
-    /*
-    * register device
-    */
+void vnic_ethernet_write(struct device* dev, uint8_t* data, uint16_t size) {
+    ASSERT_NOT_NULL(dev);
+    ASSERT_NOT_NULL(data);
+
+    panic("vnic write not implemented yet");
+}
+
+// As part of PCI discovery, devicemgr calls this to register us as an instance of type VNIC.
+// We create a device instance, attach an API and data storage, and register it.
+void devicemgr_register_pci_vnic(struct pci_device* dev) {
+    ASSERT_NOT_NULL(dev);
+
+    // create a new device
     struct device* deviceinstance = devicemgr_new_device();
-    deviceinstance->init =  &VNICInit;
+
+    // bind an initialization function to the device (called by devicemgr during startup)
+    deviceinstance->init = &vnic_initialize_device;
+
+    // pci device info (including IRQ)
     deviceinstance->pci = dev;
+
+    // set properties
     deviceinstance->devicetype = VNIC;
     devicemgr_set_device_description(deviceinstance, "Virtio NIC");
-    /*
-    * the device api
-    */
-    struct deviceapi_ethernet* api = (struct deviceapi_ethernet*) kmalloc(sizeof(struct deviceapi_ethernet));
-    api->write = &vnic_ethernet_read;
-    api->read = &vnic_ethernet_write;
+
+    // define an api
+    struct deviceapi_nic* api = (struct deviceapi_nic*)kmalloc(sizeof(struct deviceapi_nic));
+    memzero((uint8_t*)api, sizeof(struct deviceapi_nic));
+    api->write = &vnic_ethernet_write;
+    api->read = &vnic_ethernet_read;
     deviceinstance->api = api;
-  	/*
-    * device data
-    */
-    struct vnic_devicedata* deviceData = (struct vnic_devicedata*) kmalloc(sizeof(struct vnic_devicedata));
+
+    // reserve for device-specific data
+    struct vnic_devicedata* deviceData = (struct vnic_devicedata*)kmalloc(sizeof(struct vnic_devicedata));
     deviceinstance->deviceData = deviceData;
-    /*
-    * register
-    */
+
+    // register
     devicemgr_register_device(deviceinstance);
 }
 
-/**
-* find all virtio ethernet devices and register them
-*/
-void vnic_devicemgr_register_devices() {
-    pci_devicemgr_search_device(PCI_CLASS_NETWORK,PCI_NETWORK_SUBCLASS_ETHERNET,VIRTIO_PCI_MANUFACTURER,VIRTIO_PCI_DEVICED_NETWORK, &vnic_search_cb);
+// find all virtio ethernet devices and register them
+void devicemgr_register_vnic_devices() {
+    pci_devicemgr_search_device(PCI_CLASS_NETWORK, PCI_NETWORK_SUBCLASS_ETHERNET, VIRTIO_PCI_MANUFACTURER,
+                                VIRTIO_PCI_DEVICED_NETWORK, &devicemgr_register_pci_vnic);
 }

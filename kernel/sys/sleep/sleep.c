@@ -6,42 +6,42 @@
  *****************************************************************/
 
 #include <sys/asm/asm.h>
-#include <sys/console/console.h>
-#include <sys/devicemgr/devicemgr.h>
 #include <sys/debug/assert.h>
+#include <sys/devicemgr/devicemgr.h>
+#include <sys/kprintf/kprintf.h>
 
 volatile uint64_t sleep_countdown;
 
 #define RTC_FREQ 1024
 uint16_t rtc_freq = RTC_FREQ;
 
-void sleep_update(){
-	if (sleep_countdown){
-		sleep_countdown--;
-		//kprintf("%llu\n", sleep_countdown);
-	}
-	
-	return;
+void sleep_update() {
+    if (sleep_countdown) {
+        sleep_countdown--;
+        // kprintf("%llu\n", sleep_countdown);
+    }
+
+    return;
 }
 
 void sleep_wait(uint64_t milliseconds) {
-	uint64_t tc;	// temporary count while we're working up to full value
-	
-	// to avoid getting progressively farther off due to the effects of integer division, we start by finding out
-	// how many full seconds we're waiting for, and multiply that by the frequency
-	tc = rtc_freq * (milliseconds / 1000);
-	
-	// and then we add the fractional seconds
-	// TODO: handle rounding error better
-	tc += ((milliseconds % 1000) * (rtc_freq / 1000));
-	
-	sleep_countdown = tc;
-	
-	//rtc_subscribe(&sleep_update);
+    uint64_t tc;  // temporary count while we're working up to full value
 
-	while (sleep_countdown){
-		asm_hlt();
-	}
-	
-	return;
+    // to avoid getting progressively farther off due to the effects of integer division, we start by finding out
+    // how many full seconds we're waiting for, and multiply that by the frequency
+    tc = rtc_freq * (milliseconds / 1000);
+
+    // and then we add the fractional seconds
+    // TODO: handle rounding error better
+    tc += ((milliseconds % 1000) * (rtc_freq / 1000));
+
+    sleep_countdown = tc;
+
+    // rtc_subscribe(&sleep_update);
+
+    while (sleep_countdown) {
+        asm_hlt();
+    }
+
+    return;
 }
