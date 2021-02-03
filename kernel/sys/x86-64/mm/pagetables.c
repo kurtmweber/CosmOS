@@ -206,36 +206,31 @@ uint16_t vaddr_ptt_index(void* address, ptt_levels level) {
     return ((uint64_t)address & mask) >> shift;
 }
 
-void* vaddr_to_physical(void* address, pttentry cr3) {
-    ASSERT_NOT_NULL(address);
+void *vaddr_to_physical(void *address, pttentry cr3){
+	ASSERT_NOT_NULL(address, "address must not be null");
 
-    //  pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
-    //  pttentry* pt_base;
-    // uint16_t idx;
+	pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
+	uint16_t idx;
 
-    // function does not work--need way to translate physical addresses in page tables to virtual addresses.
+	void *phys_addr;
 
-    /*pml4_base = extract_cr3_base_address(cr3);
-    idx = vaddr_ptt_index(address, PML4);
-    kprintf("PML4 idx: %u\n", idx);
-    kprintf("PML4 entry: %llX\n", (uint64_t)pml4_base[idx]);
+	// function does not work--need way to translate physical addresses in page tables to virtual addresses.
 
-    pdp_base = extract_pttentry_base_address(pml4_base[idx]);
-    idx = vaddr_ptt_index(address, PDP);
-    kprintf("PDP base: %llX\n", (uint64_t)pdp_base);
-    kprintf("PDP idx: %u\n", idx);
-    kprintf("PDP entry: %llX\n", (uint64_t)pdp_base[idx]);
+	pml4_base = extract_cr3_base_address(cr3);
+	idx = vaddr_ptt_index(address, PML4);
 
-    pd_base = extract_pttentry_base_address(pdp_base[idx]);
-    idx = vaddr_ptt_index(address, PD);
-    kprintf("PD base: %llX\n", (uint64_t)pd_base);
-    kprintf("PD idx: %u\n", idx);
-    kprintf("PD entry: %llX\n", (uint64_t)pd_base[idx]);
+	pdp_base = extract_pttentry_base_address(pml4_base[idx]);
+	idx = vaddr_ptt_index(address, PDP);
 
-    pt_base = extract_pttentry_base_address(pd_base[idx]);
-    idx = vaddr_ptt_index(address, PT);*/
+	pd_base = extract_pttentry_base_address(pdp_base[idx]);
+	idx = vaddr_ptt_index(address, PD);
 
-    //  return (void*)((uint64_t)pt_base[idx] * 4096);
-    panic("Not Implemented");
-    return 0;
+	pt_base = extract_pttentry_base_address(pd_base[idx]);
+	idx = vaddr_ptt_index(address, PT);
+
+	phys_addr = (void *)((pt_base[idx] >> 12) << 12);
+
+	phys_addr += ((uint64_t)address % PAGE_SIZE);
+
+	return phys_addr;
 }
