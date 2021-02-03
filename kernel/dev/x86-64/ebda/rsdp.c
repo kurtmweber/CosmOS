@@ -37,7 +37,7 @@ struct rsdt* rsdp_get_acpi_rsdt(struct rsdp_descriptor_2* rsdp) {
     // the lower 1MB which is identity mapped.  Therefore we need to
     // map it into our virtual memory space
     uint64_t acpi_sdt_header_physical_address = (uint64_t)rsdp->firstPart.rsdt_address;
-    uint64_t acpi_sdt_header_virtual_address = CONV_PHYS_ADDR(acpi_sdt_header_physical_address);
+    uint64_t acpi_sdt_header_virtual_address = (uint64_t)CONV_PHYS_ADDR(acpi_sdt_header_physical_address);
     //   kprintf("RADT physical %#llX virtual %#llX\n", acpi_sdt_header_physical_address, acpi_sdt_header_virtual_address);
     return (struct rsdt*)acpi_sdt_header_virtual_address;
 }

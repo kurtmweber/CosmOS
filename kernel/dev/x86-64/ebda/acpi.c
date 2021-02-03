@@ -33,7 +33,7 @@ struct fadt* acpi_get_fadt(struct rsdt* rsdt) {
         uint32_t ptr = rsdt->pointerToOtherSDT[i];
         kprintf("ptr %llu\n", ptr);
 
-        struct acpi_sdt_header* h = (struct acpi_sdt_header*)CONV_PHYS_ADDR(ptr);
+        struct acpi_sdt_header* h = (struct acpi_sdt_header*)CONV_PHYS_ADDR((uint64_t)ptr);
         if (!strncmp(h->signature, "FADT", 4))
             return (void*)h;
     }
