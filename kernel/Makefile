@@ -1,8 +1,9 @@
-include ../mk/build.mk
+include ../scripts/mk/build.mk
 
 ARCHIVE_FILE=kernel.a
 KERNEL_ELF=cosmos.elf
 KERNEL_BIN=cosmos.bin
+KERNEL_MAP=cosmos.map
 
 EXTRA_CFLAGS= -I.
 
@@ -36,7 +37,7 @@ $(KERNEL_BIN): $(KERNEL_ELF)
 
 $(KERNEL_ELF): $(ARCHIVE_FILE)
 ifeq ($(TARGET_PLATFORM),TARGET_PLATFORM_i386)
-	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE) sys/i386/rawdata/rawdata.o
+	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE) sys/rawdata/rawdata.o
 else
 	$(LD) $(LDFLAGS) -o $(KERNEL_ELF) $(ARCHIVE_FILE)
 endif
@@ -57,3 +58,4 @@ clean:
 	$(RM) $(ARCHIVE_FILE)
 	$(RM) $(KERNEL_ELF)
 	$(RM) $(KERNEL_BIN)
+	$(RM) $(KERNEL_MAP)

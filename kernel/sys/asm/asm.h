@@ -8,8 +8,8 @@
 #ifndef _ASM_H
 #define _ASM_H
 
+#include <sys/asm/byte.h>
 #include <sys/asm/io.h>
 #include <sys/asm/misc.h>
-#include <sys/asm/byte.h>
 
 #endif

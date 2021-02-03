@@ -1,7 +1,7 @@
 
 //*****************************************************************
 // This file is part of CosmOS                                    *
-// Copyright (C) 2020 Tom Everett                                 *
+// Copyright (C) 2020-2021 Tom Everett                            *
 // Released under the stated terms in the file LICENSE            *
 // See the file "LICENSE" in the source distribution for details  *
 // ****************************************************************
@@ -20,19 +20,20 @@
 /**
  * array is zero-indexed
  */
-typedef struct array {
-	void** data;
+struct array {
+    void** data;
     uint32_t size;
-} array_t;
+    uint32_t byte_size;
+};
 
 /*
-* array iterator
-*/
+ * array iterator
+ */
 typedef void (*arrayIterator)(void* value);
 
 struct array* array_new(uint32_t size);
 void array_delete(struct array* arr);
-void  array_set(struct array* arr, uint32_t position, void* value);
+void array_set(struct array* arr, uint32_t position, void* value);
 void* array_get(struct array* arr, uint32_t position);
 uint32_t array_size(struct array* arr);
 void array_resize(struct array* arr, uint32_t size);

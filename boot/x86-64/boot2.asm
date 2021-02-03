@@ -359,7 +359,7 @@ GDT64:                           ; Global Descriptor Table (64-bit).
     db 1                         ; Granularity.
     db 0                         ; Base (high).
     .Code: equ $ - GDT64         ; The code descriptor.
-    dw 0xFFFF                         ; Limit (low).
+    dw 0xFFFF                    ; Limit (low).
     dw 0                         ; Base (low).
     db 0                         ; Base (middle)
     db 10011010b                 ; Access (exec/read).
