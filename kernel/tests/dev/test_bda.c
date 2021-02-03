@@ -28,9 +28,13 @@ void test_bda() {
 
         kprintf("version %#llX\n", rsdp_get_acpi_version(rsdp));
 
-        struct acpi_sdt_header* acpi = rsdp_get_acpi_header(rsdp);
-        kprintf("ACPI %#llX\n", acpi);
-        debug_show_memblock((uint8_t*)acpi, 32);
+        struct rsdt* rsdt = rsdp_get_acpi_rsdt(rsdp);
+        kprintf("RSDT %#llX\n", rsdt);
+        debug_show_memblock((uint8_t*)rsdt, 128);
+        debug_show_memblock((uint8_t*)&(rsdt->pointerToOtherSDT), 32);
+
+        struct fadt* fadt = acpi_get_fadt(rsdt);
+        debug_show_memblock((uint8_t*)fadt, 32);
 
     } else {
         kprintf("Invalid RSDP\n");

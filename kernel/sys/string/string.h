@@ -24,6 +24,8 @@ uint8_t* strncpy(uint8_t* dest, const uint8_t* src, uint64_t len);
 // len is the byte size of the dest buffer
 uint8_t* strncat(uint8_t* dest, const uint8_t* src, uint64_t len);
 uint8_t strcmp(const uint8_t* str1, const uint8_t* str2);
+uint8_t strncmp(const uint8_t* str1, const uint8_t* str2, uint64_t len);
+
 // returns -1 if unable to find
 uint32_t strstr(const uint8_t* str1, uint32_t start, const uint8_t* str2);
 uint8_t* substr(const uint8_t* str1, uint32_t start, uint32_t end, uint8_t* str2, uint32_t size);

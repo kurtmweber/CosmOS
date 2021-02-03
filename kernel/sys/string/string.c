@@ -84,6 +84,19 @@ uint8_t strcmp(const uint8_t* str1, const uint8_t* str2) {
     }
 }
 
+uint8_t strncmp(const uint8_t* str1, const uint8_t* str2, uint64_t len) {
+    ASSERT_NOT_NULL(str1);
+    ASSERT_NOT_NULL(str2);
+    for (uint64_t i = 0;; i++) {
+        if (str1[i] != str2[i]) {
+            return str1[i] < str2[i] ? -1 : 1;
+        }
+        if (i == len - 1) {
+            return 0;
+        }
+    }
+}
+
 uint32_t strstr(const uint8_t* str1, uint32_t start, const uint8_t* str2) {
     ASSERT_NOT_NULL(str1);
     ASSERT_NOT_NULL(str2);

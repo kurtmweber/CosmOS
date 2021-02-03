@@ -9,6 +9,7 @@
 #include <sys/asm/byte.h>
 #include <sys/debug/assert.h>
 #include <sys/string/mem.h>
+#include <sys/x86-64/mm/pagetables.h>
 
 void rsdp_get_signature(struct rsdp_descriptor_2* rsdp, uint8_t* buffer) {
     ASSERT_NOT_NULL(rsdp);
@@ -29,16 +30,16 @@ uint8_t rsdp_get_acpi_version(struct rsdp_descriptor_2* rsdp) {
     return rsdp->firstPart.revision;
 }
 
-struct acpi_sdt_header* rsdp_get_acpi_header(struct rsdp_descriptor_2* rsdp) {
+struct rsdt* rsdp_get_acpi_rsdt(struct rsdp_descriptor_2* rsdp) {
     ASSERT_NOT_NULL(rsdp);
-    // not implemented
-    kprintf("RADT %#llX\n", rsdp->firstPart.rsdt_address);
 
-    ASSERT(0);
     // this returns a PHYSICAL address, which happens to not be in
     // the lower 1MB which is identity mapped.  Therefore we need to
     // map it into our virtual memory space
-    return (struct acpi_sdt_header*)(uint64_t)rsdp->firstPart.rsdt_address;
+    uint64_t acpi_sdt_header_physical_address = (uint64_t)rsdp->firstPart.rsdt_address;
+    uint64_t acpi_sdt_header_virtual_address = CONV_PHYS_ADDR(acpi_sdt_header_physical_address);
+    //   kprintf("RADT physical %#llX virtual %#llX\n", acpi_sdt_header_physical_address, acpi_sdt_header_virtual_address);
+    return (struct rsdt*)acpi_sdt_header_virtual_address;
 }
 
 uint8_t rsdp_is_valid(struct rsdp_descriptor_2* rsdp) {
