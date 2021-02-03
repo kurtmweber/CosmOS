@@ -10,7 +10,6 @@
 #ifndef _RSDP_H
 #define _RSDP_H
 
-#include <dev/x86-64/acpi/acpi.h>
 #include <types.h>
 
 struct rsdp_descriptor {
