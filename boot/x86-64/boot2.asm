@@ -267,7 +267,8 @@ Realm64:
 	; load kernel PT area
 	mov edi, [ptKernelBase]
 	mov ecx, 512
-	mov ebx, 0x00900003
+	mov ebx, [loadTarget]
+	add ebx, 3
 
 	; map the two megabytes starting at 0x900000 to the bottom of the available
 	; higher-half area
@@ -280,7 +281,9 @@ Realm64:
 
 	mov edi, [ptKernelBase2]
 	mov ecx, 512
-	mov ebx, 0x00B00003
+	mov ebx, [loadTarget]
+	add ebx, 0x200000
+	add ebx, 3
 	
 	.mapKernel2:
 		mov DWORD [edi], ebx
