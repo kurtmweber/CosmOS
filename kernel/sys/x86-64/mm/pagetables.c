@@ -206,31 +206,29 @@ uint16_t vaddr_ptt_index(void* address, ptt_levels level) {
     return ((uint64_t)address & mask) >> shift;
 }
 
-void *vaddr_to_physical(void *address, pttentry cr3){
-	ASSERT_NOT_NULL(address, "address must not be null");
+void* vaddr_to_physical(void* address, pttentry cr3) {
+    ASSERT_NOT_NULL(address);
 
-	pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
-	uint16_t idx;
+    pttentry *pml4_base, *pdp_base, *pd_base, *pt_base;
+    uint16_t idx;
 
-	void *phys_addr;
+    void* phys_addr;
 
-	// function does not work--need way to translate physical addresses in page tables to virtual addresses.
+    // function does not work--need way to translate physical addresses in page tables to virtual addresses.
 
-	pml4_base = extract_cr3_base_address(cr3);
-	idx = vaddr_ptt_index(address, PML4);
+    pml4_base = extract_cr3_base_address(cr3);
+    idx = vaddr_ptt_index(address, PML4);
+    pdp_base = extract_pttentry_base_address(pml4_base[idx]);
+    idx = vaddr_ptt_index(address, PDP);
+    pd_base = extract_pttentry_base_address(pdp_base[idx]);
+    idx = vaddr_ptt_index(address, PD);
 
-	pdp_base = extract_pttentry_base_address(pml4_base[idx]);
-	idx = vaddr_ptt_index(address, PDP);
+    pt_base = extract_pttentry_base_address(pd_base[idx]);
+    idx = vaddr_ptt_index(address, PT);
 
-	pd_base = extract_pttentry_base_address(pdp_base[idx]);
-	idx = vaddr_ptt_index(address, PD);
+    phys_addr = (void*)((pt_base[idx] >> 12) << 12);
 
-	pt_base = extract_pttentry_base_address(pd_base[idx]);
-	idx = vaddr_ptt_index(address, PT);
+    phys_addr += ((uint64_t)address % PAGE_SIZE);
 
-	phys_addr = (void *)((pt_base[idx] >> 12) << 12);
-
-	phys_addr += ((uint64_t)address % PAGE_SIZE);
-
-	return phys_addr;
+    return phys_addr;
 }
