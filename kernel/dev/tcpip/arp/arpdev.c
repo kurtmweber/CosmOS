@@ -46,14 +46,14 @@ void arp_request(struct device* dev, struct arp* request, struct arp* response) 
     ASSERT_NOT_NULL(dev);
     ASSERT_NOT_NULL(dev->deviceData);
     // get our device data for this device
-    struct arp_devicedata* deviceData = (struct arp_devicedata*)dev->deviceData;
+    //   struct arp_devicedata* deviceData = (struct arp_devicedata*)dev->deviceData;
     // get the api for the underlying ethernet device
-    struct deviceapi_ethernet* ether_api = (struct deviceapi_ethernet*)deviceData->ethernet_device->api;
+    //   struct deviceapi_ethernet* ether_api = (struct deviceapi_ethernet*)deviceData->ethernet_device->api;
     panic("Um, what HW addresses do I put in here?");
     // send
-    (*ether_api->write)(deviceData->ethernet_device, (uint8_t*)request, sizeof(struct arp));
+    //  (*ether_api->write)(deviceData->ethernet_device, (uint8_t*)request, sizeof(struct arp));
     // receive. I presume this blocks?
-    (*ether_api->read)(deviceData->ethernet_device, (uint8_t*)response, sizeof(struct arp));
+    // (*ether_api->read)(deviceData->ethernet_device, (uint8_t*)response, sizeof(struct arp));
 }
 
 struct device* arp_attach(struct device* ethernet_device) {
