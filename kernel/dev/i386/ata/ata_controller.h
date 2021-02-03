@@ -24,6 +24,15 @@ struct ata_device {
 	uint32_t bytes_per_sector;
 };
 
+typedef enum ata_dma_address_types{
+	ATA_DMA_ADDR_PIO,
+	ATA_DMA_ADDR_MMIO
+} ata_dma_address_types;
+
+typedef struct ata_dma_address{
+	ata_dma_address_types addr_type;
+} ata_dma_address;
+
 struct ide_channel{
 	uint16_t base_io;
 	uint16_t base_io_ctrl;
@@ -34,7 +43,6 @@ struct ide_channel{
 struct ata_controller {
 	struct ide_channel channels[2];
 	const char* identity;
-	uint32_t dma_addr;
 };
 
 /*
