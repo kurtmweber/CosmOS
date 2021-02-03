@@ -51,9 +51,7 @@ void ata_detect_addresses(struct device* dev) {
     controller->channels[ATA_SECONDARY].base_io_ctrl = (((bar_result == 0) || (bar_result == 1)) ? 0x376 : bar_result);
 
     bar_result = pci_header_read_bar4(bus, device, function);
-    //  kprintf("bar4 %#llX\n", bar_result);
-    controller->channels[ATA_PRIMARY].dma_bus_master_register = bar_result;
-    controller->channels[ATA_SECONDARY].dma_bus_master_register = bar_result + 0x08;
+    kprintf("bar4 %#llX\n", bar_result);
 }
 
 /*
