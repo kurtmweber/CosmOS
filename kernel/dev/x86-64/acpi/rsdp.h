@@ -10,7 +10,7 @@
 #ifndef _RSDP_H
 #define _RSDP_H
 
-#include <dev/x86-64/ebda/acpi.h>
+#include <dev/x86-64/acpi/acpi.h>
 #include <types.h>
 
 struct rsdp_descriptor {
@@ -33,7 +33,6 @@ struct rsdp_descriptor_2 {
 void rsdp_get_signature(struct rsdp_descriptor_2* rsdp, uint8_t* buffer);
 void rsdp_get_oem_id(struct rsdp_descriptor_2* rsdp, uint8_t* buffer);
 uint8_t rsdp_get_acpi_version(struct rsdp_descriptor_2* rsdp);
-uint8_t rsdp_is_valid(struct rsdp_descriptor_2* rsdp);
 
-struct rsdt* rsdp_get_acpi_rsdt(struct rsdp_descriptor_2* rsdp);
+struct rsdt* rsdp_get_acpi_rsdt();
 #endif

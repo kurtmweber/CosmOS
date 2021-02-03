@@ -43,7 +43,7 @@ typedef enum deviceType {
     DISK = 0x15,             // disk0, deviceapi_block
     PARALLEL = 0x16,         // parallel0, deviceapi_parallel
     BDA = 0x17,              // bda0
-    EBDA = 0x18,             // ebda0
+    ACPI = 0x18,             // acpi0
     SWAP = 0x19,             // swap0, deviceapi_swap
     FILESYSTEM = 0x1A,       // fs0, deviceapi_filesytem
     PARTITION_TABLE = 0x1B,  // pt0, deviceapi_part_table

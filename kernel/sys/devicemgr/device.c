@@ -10,5 +10,5 @@
 int8_t* DeviceTypeNames[] = {"None", "serial", "vga",   "rtc",    "keyboard", "nic",  "bridge", "usb",
                              "ata",  "pic",    "mouse", "floppy", "speaker",  "pit",  "dsp",    "cmos",
                              "dma",  "cpu",    "rd",    "vnic",   "vblock",   "disk", "par",    "bda",
-                             "ebda", "swap",   "fs",    "pt",     "console",  "part", "null",   "tick",
+                             "acpi", "swap",   "fs",    "pt",     "console",  "part", "null",   "tick",
                              "rand", "ip",     "tcp",   "arp",    "udp",      "icmp", "eth",    "sdhci"};

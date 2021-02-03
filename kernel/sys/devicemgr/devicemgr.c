@@ -86,7 +86,7 @@ void devicemgr_init_devices() {
      * BDA, EBDA
      */
     deviceregistry_iterate_type(BDA, deviceInitIterator);
-    deviceregistry_iterate_type(EBDA, deviceInitIterator);
+    deviceregistry_iterate_type(ACPI, deviceInitIterator);
     /*
      * PIC first
      */
@@ -226,7 +226,7 @@ void devicemgr_register_devices() {
     pci_ehci_devicemgr_register_devices();
     parallel_devicemgr_register_devices();
     bda_devicemgr_register_devices();
-    ebda_devicemgr_register_devices();
+    acpi_devicemgr_register_devices();
 }
 
 #else

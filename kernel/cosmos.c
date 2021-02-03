@@ -228,7 +228,7 @@ void dev_tests() {
     //  test_tfs();
     //  test_fat();
     //	test_list();
-    // test_bda();
+    //
     //  test_parallel();
     //    test_rtl8139();
     // test_gpt();
@@ -242,4 +242,5 @@ void dev_tests() {
     //  test_sb16();
     // test_gpt();
     // test_initrd();
+    //  test_acpi();
 }

@@ -41,5 +41,6 @@ void tests_run() {
 
     test_vfs();
     test_gpt();
+    test_bda();
     //  test_rand();
 }

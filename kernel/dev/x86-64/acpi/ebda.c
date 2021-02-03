@@ -68,33 +68,3 @@ struct rsdp_descriptor_2* ebda_get_rsdp() {
     }
     return (struct rsdp_descriptor_2*)loc;
 }
-
-/*
- * perform device instance specific init here
- */
-uint8_t ebda_device_init(struct device* dev) {
-    ASSERT_NOT_NULL(dev);
-    uint64_t ebda_address = bda_get_ebda_address();
-
-    kprintf("Init %s (%s) at %#hX\n", dev->description, dev->name, ebda_address);
-    return 1;
-}
-
-void ebda_devicemgr_register_devices() {
-    /*
-     * register device
-     */
-    struct device* deviceinstance = devicemgr_new_device();
-    devicemgr_set_device_description(deviceinstance, "Extended BIOS Data Area");
-    deviceinstance->devicetype = EBDA;
-    deviceinstance->init = &ebda_device_init;
-    /*
-     * api
-     */
-    //   struct deviceapi_bda* api = (struct deviceapi_bda*)kmalloc(sizeof(struct deviceapi_bda));
-    //  deviceinstance->api = api;
-    /*
-     * register
-     */
-    devicemgr_register_device(deviceinstance);
-}

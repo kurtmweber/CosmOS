@@ -109,5 +109,7 @@ struct fadt {
     struct GenericAddressStructure X_GPE1Block;
 } __attribute__((packed));
 
-struct fadt* acpi_get_fadt(struct rsdt* rsdt);
+void acpi_devicemgr_register_devices();
+
+struct fadt* acpi_get_fadt();
 #endif
