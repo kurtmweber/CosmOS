@@ -91,7 +91,7 @@ uint8_t strncmp(const uint8_t* str1, const uint8_t* str2, uint64_t len) {
         if (str1[i] != str2[i]) {
             return str1[i] < str2[i] ? -1 : 1;
         }
-        if (i == len - 1) {
+        if (i >= len - 1) {
             return 0;
         }
     }
