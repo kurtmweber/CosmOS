@@ -8,6 +8,7 @@
 #include <sys/collection/arraylist/arraylist.h>
 #include <sys/debug/assert.h>
 #include <sys/kmalloc/kmalloc.h>
+#include <sys/string/string.h>
 
 #define EXPAND_SIZE 64
 #define START_SIZE 16
@@ -120,4 +121,82 @@ void arraylist_remove(struct arraylist* lst, uint32_t position) {
     } else {
         panic("invalid list index passed to arraylist_remove\n");
     }
+}
+
+/*
+* swap values
+*/
+void arraylist_swap(struct arraylist* lst, uint32_t idx1, uint32_t idx2) {
+    ASSERT_NOT_NULL(lst);
+    ASSERT_NOT_NULL(lst->arr);
+    ASSERT(idx1 < lst->count);
+    ASSERT(idx2 < lst->count);
+
+    void* v1 = array_get(lst->arr, idx1);
+    void* v2 = array_get(lst->arr, idx2);
+    array_set(lst->arr, idx1, v2);
+    array_set(lst->arr, idx2, v1);
+}
+
+int arraylist_partition(struct arraylist* lst, list_comparator comparator, uint32_t low, uint32_t high) {
+    ASSERT_NOT_NULL(lst);
+    ASSERT_NOT_NULL(lst->arr);
+    ASSERT(low < lst->count);
+    ASSERT(high < lst->count);
+
+    // Select the pivot element
+    void* pivot = array_get(lst->arr, high);
+    uint32_t i = (low - 1);
+
+    // Put the elements smaller than pivot on the left
+    // and greater than pivot on the right of pivot
+    for (uint32_t j = low; j < high; j++) {
+        void* this_element = array_get(lst->arr, j);
+        if ((*comparator)(pivot, this_element)) {
+            i++;
+            arraylist_swap(lst, i, j);
+        }
+    }
+
+    arraylist_swap(lst, i + 1, high);
+    return (i + 1);
+}
+
+void arraylist_sort_internal(struct arraylist* lst, list_comparator comparator, uint32_t low, uint32_t high) {
+    if (low < high) {
+        // Select pivot position and put all the elements smaller
+        // than pivot on left and greater than pivot on right
+        int pi = arraylist_partition(lst, comparator, low, high);
+
+        // Sort the elements on the left of pivot
+        arraylist_sort_internal(lst, comparator, low, pi - 1);
+
+        // Sort the elements on the right of pivot
+        arraylist_sort_internal(lst, comparator, pi + 1, high);
+    }
+}
+
+/*
+* quicksort
+*/
+void arraylist_sort(struct arraylist* lst, list_comparator comparator) {
+    ASSERT_NOT_NULL(lst);
+    ASSERT_NOT_NULL(comparator);
+    if ((lst->arr != 0) && (lst->count > 1)) {
+        arraylist_sort_internal(lst, comparator, 0, lst->count - 1);
+    }
+}
+
+/*
+* a comparator for strings
+*/
+uint8_t arraylist_string_comparator(void* e1, void* e2) {
+    ASSERT_NOT_NULL(e1);
+    ASSERT_NOT_NULL(e2);
+    if (strcmp((uint8_t*)e1, (uint8_t*)e2) == 1) {
+        kprintf("compare %s %s 1\n", (uint8_t*)e1, (uint8_t*)e2);
+        return 1;
+    }
+    kprintf("compare %s %s 0\n", (uint8_t*)e1, (uint8_t*)e2);
+    return 0;
 }

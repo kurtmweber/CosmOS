@@ -30,6 +30,12 @@ struct arraylist {
 typedef void (*list_iterator)(void* value);
 
 /*
+ * comparator
+ */
+typedef uint8_t (*list_comparator)(void* value1, void* value2);
+uint8_t arraylist_string_comparator(void* e1, void* e2);
+
+/*
  * new list
  */
 struct arraylist* arraylist_new();
@@ -65,5 +71,9 @@ void arraylist_iterate(struct arraylist* lst, list_iterator iter);
  * remove element at index
  */
 void arraylist_remove(struct arraylist* lst, uint32_t position);
+/*
+* sort
+*/
+void arraylist_sort(struct arraylist* lst, list_comparator comparator);
 
 #endif
