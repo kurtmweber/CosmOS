@@ -12,11 +12,11 @@
 #include <sys/x86-64/mm/pagetables.h>
 #include <types.h>
 
-// How much physical address space the bootloader has mapped
-#define BOOT_MAPPED_PHYS 0x1100000
+// Start of physical memory region after kernel + kernel stack areas
+#define BOOT_MAPPED_PHYS 0x2000000
 
 #define PTTENTRY_BASE_MASK 0x000FFFFFFFFFF000
-#define INIT_UNMAPPED_PHYS_BASE 0xB00000
+//#define INIT_UNMAPPED_PHYS_BASE 0xB00000
 
 // AND these masks w/virtual addresses and then shift them right to get the index into the respective level of the page translation tables
 #define PML4_INDEX_MASK 0x0000FF8000000000
