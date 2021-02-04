@@ -101,9 +101,9 @@ ptKstackBase2	dq	0x00023000
 ptKstackBase3	dq	0x00024000
 ptKstackBase4	dq	0x00025000
 
-kStackLoc1	dq	0x00100000
-kStackLoc2	dq	0x00300000
-kStackLoc3	dq	0x00500000
-kStackLoc4	dq	0x00700000
+kStackLoc1	dq	0x001000000
+kStackLoc2	dq	0x001200000
+kStackLoc3	dq	0x001400000
+kStackLoc4	dq	0x001600000
 
 times 512 - ($-$$) db 0

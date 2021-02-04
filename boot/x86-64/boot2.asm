@@ -185,16 +185,16 @@ mov eax, [pdtEntry]
 mov DWORD [edi], eax
 add edi, 0x1000
 
-; identity-map first megabyte
+; identity-map first sixteen megabytes
 mov ebx, 0x00000003
-mov ecx, 256
+mov ecx, 512
  
-.SetEntry:
+.SetEntry1:
     mov DWORD [edi], ebx         ; Set the uint32_t at the destination index to the B-register.
     add ebx, 0x1000              ; Add 0x1000 to the B-register.
     add edi, 8                   ; Add eight to the destination index.
-    loop .SetEntry               ; Set the next entry.
-    
+    loop .SetEntry1               ; Set the next entry.
+
 mov eax, cr4                 ; Set the A-register to control register 4.
 or eax, 1 << 5               ; Set the PAE-bit, which is the 6th bit (bit 5).
 mov cr4, eax                 ; Set control register 4 to the A-register.
@@ -293,7 +293,9 @@ Realm64:
 
 	mov edi, [ptKernelBase3]
 	mov ecx, 512
-	mov ebx, 0x00D00003
+	mov ebx, [loadTarget]
+	add ebx, 0x400000
+	add ebx, 3
 	
 	.mapKernel3:
 		mov DWORD [edi], ebx
@@ -303,7 +305,9 @@ Realm64:
 
 	mov edi, [ptKernelBase4]
 	mov ecx, 512
-	mov ebx, 0x00F00003
+	mov ebx, [loadTarget]
+	add ebx, 0x600000
+	add ebx, 3
 	
 	.mapKernel4:
 		mov DWORD [edi], ebx
@@ -328,7 +332,7 @@ curLoadHead		db	0
 curLoadCylinder		dw	0
 numHeads		db	16
 secPerTrack		db	63
-loadTarget		dd	0x900000
+loadTarget		dd	0x1800000
 boot3			dq	0x8200
 
 pml4Base	dd	0x00010000
