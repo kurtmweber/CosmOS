@@ -184,6 +184,7 @@ void arraylist_sort_internal(struct arraylist* lst, list_comparator comparator, 
 /*
 * quicksort
 */
+// https://www.programiz.com/dsa/quick-sort
 void arraylist_sort(struct arraylist* lst, list_comparator comparator) {
     ASSERT_NOT_NULL(lst);
     ASSERT_NOT_NULL(comparator);
