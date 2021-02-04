@@ -128,6 +128,7 @@ void devicemgr_init_devices() {
     deviceregistry_iterate_type(DSP, deviceInitIterator);
     deviceregistry_iterate_type(DISK, deviceInitIterator);
     deviceregistry_iterate_type(SDHCI, deviceInitIterator);
+    deviceregistry_iterate_type(SMBIOS, deviceInitIterator);
 
     //  deviceregistry_iterate_type(RAMDISK, deviceInitIterator);
     deviceregistry_iterate_type(PARALLEL, deviceInitIterator);
@@ -227,6 +228,7 @@ void devicemgr_register_devices() {
     parallel_devicemgr_register_devices();
     bda_devicemgr_register_devices();
     acpi_devicemgr_register_devices();
+    smbios_devicemgr_register_devices();
 }
 
 #else

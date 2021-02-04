@@ -33,6 +33,7 @@
 #include <dev/x86-64/rtc/rtc.h>
 #include <dev/x86-64/sdhci/sdhci.h>
 #include <dev/x86-64/serial/serial.h>
+#include <dev/x86-64/smbios/smbios.h>
 #include <dev/x86-64/sound/sound.h>
 #include <dev/x86-64/speaker/speaker.h>
 #include <dev/x86-64/usb_ehci/usb_ehci.h>

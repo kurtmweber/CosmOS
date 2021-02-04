@@ -24,6 +24,7 @@
 #include <tests/dev/test_sb16.h>
 #include <tests/dev/test_serial.h>
 #include <tests/dev/test_serial_console.h>
+#include <tests/dev/test_smbios.h>
 #include <tests/dev/test_speaker.h>
 #include <tests/dev/test_vblock.h>
 #include <tests/dev/test_vga_console.h>
