@@ -36,6 +36,7 @@ struct ide_channel {
     uint16_t base_io_ctrl;
     struct ata_device devices[2];
     ata_drive_selector selected_device;
+    ata_dma_address dma_address;
 };
 
 struct ata_controller {

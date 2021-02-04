@@ -21,8 +21,11 @@
 #define PCI_BAR4_OFFSET 0x20
 #define PCI_BAR5_OFFSET 0x24
 
+typedef enum pci_bar_type { PCI_BAR_PORT, PCI_BAR_MMIO } pci_bar_type;
+
 uint32_t pci_config_address_build(uint8_t bus, uint8_t device, uint8_t function, uint8_t offset, uint8_t enabled);
 
+pci_bar_type pci_get_bar_type(uint32_t bar);
 uint32_t pci_header_read_bar0(uint8_t bus, uint8_t device, uint8_t function);
 uint32_t pci_header_read_bar1(uint8_t bus, uint8_t device, uint8_t function);
 uint32_t pci_header_read_bar2(uint8_t bus, uint8_t device, uint8_t function);

@@ -52,6 +52,7 @@ void ata_detect_addresses(struct device* dev) {
 
     bar_result = pci_header_read_bar4(bus, device, function);
     kprintf("bar4 %#llX\n", bar_result);
+    kprintf("bar4 type: %llu\n", (uint64_t)pci_get_bar_type(bar_result));
 }
 
 /*
