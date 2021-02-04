@@ -29,7 +29,7 @@ struct array {
 /*
  * array iterator
  */
-typedef void (*arrayIterator)(void* value);
+typedef void (*array_iterator)(void* value);
 
 struct array* array_new(uint32_t size);
 void array_delete(struct array* arr);
@@ -38,6 +38,6 @@ void* array_get(struct array* arr, uint32_t position);
 uint32_t array_size(struct array* arr);
 void array_resize(struct array* arr, uint32_t size);
 void array_grow(struct array* arr, uint32_t increment);
-void array_iterate(struct array* arr, arrayIterator iter);
+void array_iterate(struct array* arr, array_iterator iter);
 
 #endif

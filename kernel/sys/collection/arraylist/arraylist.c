@@ -91,7 +91,7 @@ void* arraylist_get(struct arraylist* lst, uint32_t position) {
     return 0;
 }
 
-void arraylist_iterate(struct arraylist* lst, listIterator iter) {
+void arraylist_iterate(struct arraylist* lst, list_iterator iter) {
     ASSERT_NOT_NULL(lst);
     ASSERT_NOT_NULL(iter);
     if (0 == lst->arr) {

@@ -27,7 +27,7 @@ struct arraylist {
 /*
  * list iterator
  */
-typedef void (*listIterator)(void* value);
+typedef void (*list_iterator)(void* value);
 
 /*
  * new list
@@ -60,7 +60,7 @@ void* arraylist_get(struct arraylist* lst, uint32_t position);
 /*
  * iterate
  */
-void arraylist_iterate(struct arraylist* lst, listIterator iter);
+void arraylist_iterate(struct arraylist* lst, list_iterator iter);
 /*
  * remove element at index
  */

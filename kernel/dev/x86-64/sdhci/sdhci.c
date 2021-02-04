@@ -18,7 +18,7 @@
 
 #define SDHCI_COMMAND 0x00
 #define SDHCI_RESPONSE 0x10
-#define SDHCI_RESPONSE 0x20
+#define SDHCI_BUFFER 0x20
 #define SDHCI_HOST_CONTROL 0x24
 #define SDHCI_INTERRUPT 0x30
 
@@ -39,7 +39,7 @@ void sdhci_irq_handler(stackFrame* frame) {
 uint8_t sdhci_device_init(struct device* dev) {
     ASSERT_NOT_NULL(dev);
     struct sdhci_devicedata* deviceData = (struct sdhci_devicedata*)dev->deviceData;
-    deviceData->base = CONV_PHYS_ADDR(pci_calcbar(dev->pci));
+    deviceData->base = (uint64_t)CONV_PHYS_ADDR(pci_calcbar(dev->pci));
     kprintf("Init %s at IRQ %llu Vendor %#hX Device %#hX Base %#hX (%s)\n", dev->description, dev->pci->irq,
             dev->pci->vendor_id, dev->pci->device_id, deviceData->base, dev->name);
     interrupt_router_register_interrupt_handler(dev->pci->irq, &sdhci_irq_handler);

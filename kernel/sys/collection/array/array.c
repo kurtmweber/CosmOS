@@ -81,7 +81,7 @@ void array_grow(struct array* arr, uint32_t increment) {
     array_resize(arr, increment + (arr->size));
 }
 
-void array_iterate(struct array* arr, arrayIterator iter) {
+void array_iterate(struct array* arr, array_iterator iter) {
     ASSERT_NOT_NULL(arr);
     ASSERT_NOT_NULL(iter);
 
