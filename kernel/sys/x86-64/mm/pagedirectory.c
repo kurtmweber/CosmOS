@@ -133,8 +133,8 @@ void setup_page_directory(void* start, int_15_map* phys_map, uint8_t num_blocks)
      * And now we update the system-reserved pages, starting with the ID-mapped
      * first megabyte.
      */
-    const uint64_t ONE_MB = (1024 * 1024) - 1;
-    for (i = 0; i < (ONE_MB / PAGE_SIZE); i++) {
+    const uint64_t SIXTEEN_MB = (1024 * 1024 * 16) - 1;
+    for (i = 0; i < (SIXTEEN_MB / PAGE_SIZE); i++) {
         /*
          * If a page is hardware-reserved, bad, or a hole, we don't mark it as
          * system-reserved.
@@ -162,7 +162,7 @@ void setup_page_directory(void* start, int_15_map* phys_map, uint8_t num_blocks)
     io_buf = io_space_start;
 
     // Now the kernel text, heap, and stack space
-    for (i = (ONE_MB / PAGE_SIZE); i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
+    for (i = (SIXTEEN_MB / PAGE_SIZE); i < (BOOT_MAPPED_PHYS / PAGE_SIZE); i++) {
         if (page_directory[i].type == PDT_PHYS_AVAIL) {
             page_directory[i].type = PDT_SYSTEM_RESERVED;
         }
