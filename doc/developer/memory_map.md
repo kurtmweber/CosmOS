@@ -5,14 +5,16 @@ Cosmos boots from boot.asm, at location 0x7C00.  The second stage boot loader, b
 
 At kernel load, physical memory is mapped as follows:
 
-| Start      | End        | Size  | Description                       |
-|------------|------------|-------|-----------------------------------|
-| 0x00000000 | 0x001FFFFF | 1MB   | Identity mapped                   |
-| 0x500      |            |       | INT 15h memory map                |
-| 0x10000    | 0x7FFFF    | 448KB | Early kernel page tables          |
-| 0x00100000 | 0x00FFFFFF | 15MB  | Unused, accessible via direct map |
-| 0x01000000 | 0x017FFFFF | 8MB   | Kernel stack			          |
-| 0x01800000 | 0x01FFFFFF | 8MB   | Kernel heap + text.               |
+| Start      | End        | Size    | Description                       |
+|------------|------------|---------|-----------------------------------|
+| 0x00000000 | 0x001FFFFF | 1MB     | Identity mapped                   |
+| 0x500      |            |         | INT 15h memory map                |
+| 0x10000    | 0x0007FFFF | 448KB   | Early kernel page tables          |
+| 0x00100000 | 0x0017FFFF | 512k    | IO Buffers, identity mapped.      |
+| 0x00180000 | 0x001FFFFF | 512k    | Unused, identity mapped.          |
+| 0x00200000 | 0x00FFFFFF | ~14MB   | Unused, accessible via direct map |
+| 0x01000000 | 0x017FFFFF | 8MB     | Kernel stack			            |
+| 0x01800000 | 0x01FFFFFF | 8MB     | Kernel heap + text.               |
 
 
 *The identity mapped region 0x00000000 - 0x000FFFFF includes many page tables and system data, and should not be used for any other purposes without serious discussion and planning
@@ -20,3 +22,5 @@ At kernel load, physical memory is mapped as follows:
 *The kernel stack is mapped at 0xFFFFFFFFFF800000
 
 *The kernel heap is mapped at 0xFFFF800000000000
+
+*The first 2MB of RAM are memory mapped
