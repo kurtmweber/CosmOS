@@ -12,7 +12,7 @@
 #include <sys/collection/arraylist/arraylist.h>
 #include <sys/devicemgr/devicemgr.h>
 
-#define MAX_DEVICE_TYPES 64
+#define MAX_DEVICE_TYPES 256
 
 void devicetypes_init();
 struct arraylist* devicetypes_get_devicelist(deviceType dt);
