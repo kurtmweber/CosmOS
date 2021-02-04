@@ -141,7 +141,7 @@ void arraylist_swap(struct arraylist* lst, uint32_t idx1, uint32_t idx2) {
 int arraylist_partition(struct arraylist* lst, list_comparator comparator, uint32_t low, uint32_t high) {
     ASSERT_NOT_NULL(lst);
     ASSERT_NOT_NULL(lst->arr);
-    ASSERT(low < lst->count);
+    ASSERT(low <= lst->count);
     ASSERT(high < lst->count);
 
     // Select the pivot element
@@ -163,13 +163,18 @@ int arraylist_partition(struct arraylist* lst, list_comparator comparator, uint3
 }
 
 void arraylist_sort_internal(struct arraylist* lst, list_comparator comparator, uint32_t low, uint32_t high) {
+    ASSERT(low <= lst->count);
+    ASSERT(high < lst->count);
+
     if (low < high) {
         // Select pivot position and put all the elements smaller
         // than pivot on left and greater than pivot on right
         int pi = arraylist_partition(lst, comparator, low, high);
 
         // Sort the elements on the left of pivot
-        arraylist_sort_internal(lst, comparator, low, pi - 1);
+        if (pi > 0) {
+            arraylist_sort_internal(lst, comparator, low, pi - 1);
+        }
 
         // Sort the elements on the right of pivot
         arraylist_sort_internal(lst, comparator, pi + 1, high);
@@ -194,9 +199,7 @@ uint8_t arraylist_string_comparator(void* e1, void* e2) {
     ASSERT_NOT_NULL(e1);
     ASSERT_NOT_NULL(e2);
     if (strcmp((uint8_t*)e1, (uint8_t*)e2) == 1) {
-        kprintf("compare %s %s 1\n", (uint8_t*)e1, (uint8_t*)e2);
         return 1;
     }
-    kprintf("compare %s %s 0\n", (uint8_t*)e1, (uint8_t*)e2);
     return 0;
 }

@@ -57,17 +57,6 @@ void test_arraylist_main() {
     arraylist_delete(lst);
 }
 
-uint8_t arraylist_string_compare(void* e1, void* e2) {
-    ASSERT_NOT_NULL(e1);
-    ASSERT_NOT_NULL(e2);
-    if (strcmp((uint8_t*)e1, (uint8_t*)e2) == 1) {
-        kprintf("compare %s %s 1\n", (uint8_t*)e1, (uint8_t*)e2);
-        return 1;
-    }
-    kprintf("compare %s %s 0\n", (uint8_t*)e1, (uint8_t*)e2);
-    return 0;
-}
-
 void test_arraylist_sort() {
     struct arraylist* lst = arraylist_new();
     arraylist_add(lst, C_A);
@@ -81,7 +70,7 @@ void test_arraylist_sort() {
         //        kprintf("%llu : %s\n", i, (uint8_t*)arraylist_get(lst, i));
     }
 
-    arraylist_sort(lst, &arraylist_string_compare);
+    arraylist_sort(lst, &arraylist_string_comparator);
 
     for (uint8_t i = 0; i < arraylist_count(lst); i++) {
         //      kprintf("%llu : %s\n", i, (uint8_t*)arraylist_get(lst, i));

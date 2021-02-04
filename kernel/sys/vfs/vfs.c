@@ -68,6 +68,21 @@ void vfs_set_name(struct vfs* v, uint8_t* name) {
     v->name = s;
 }
 
+/*
+* a comparator for vfs nodes
+*/
+uint8_t vfs_comparator(void* e1, void* e2) {
+    ASSERT_NOT_NULL(e1);
+    ASSERT_NOT_NULL(e2);
+    struct vfs* v1 = (struct vfs*)e1;
+    struct vfs* v2 = (struct vfs*)e2;
+
+    if (strcmp(v1->name, v2->name) == 1) {
+        return 1;
+    }
+    return 0;
+}
+
 void vfs_add_child(struct vfs* v, struct vfs* child) {
     ASSERT_NOT_NULL(v);
     ASSERT_NOT_NULL(child);
@@ -76,6 +91,10 @@ void vfs_add_child(struct vfs* v, struct vfs* child) {
         v->children = arraylist_new();
     }
     arraylist_add(v->children, child);
+    /*
+    * sort on every insert.  It's a bit of overkill, but it makes finding things later much faster
+    */
+    arraylist_sort(v->children, &vfs_comparator);
 }
 
 void vfs_remove_child(struct vfs* v, uint8_t* name) {
